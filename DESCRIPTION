@@ -28,7 +28,6 @@ Imports:
     stringdist (>= 0.9.10),
     stringr (>= 1.5.0),
     dplyr (>= 1.1.4),
-    icd (>= 4.0.9),
     comorbidity (>= 1.0.4),
     gt (>= 0.9.0),
     httr2 (>= 0.2.2),
@@ -37,6 +36,7 @@ Imports:
     rlang (>= 1.1.1),
     tools
 Suggests: 
+    icd (>= 4.0.9),
     testthat (>= 3.2.0),
     knitr (>= 1.45),
     rmarkdown (>= 2.25),

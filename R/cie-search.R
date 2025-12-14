@@ -26,9 +26,15 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
   
   # Obtener todos los codigos desde SQLite
   con <- get_cie10_db()
-  base <- DBI::dbGetQuery(con, 
-    sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
-  ) %>% tibble::as_tibble()
+  
+  # Construir query SQL evitando duplicados
+  if (campo == "descripcion") {
+    query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+  } else {
+    query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+  }
+  
+  base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
   DBI::dbDisconnect(con)
   
   # Normalizar texto busqueda
