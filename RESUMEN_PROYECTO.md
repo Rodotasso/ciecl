@@ -252,9 +252,9 @@ Los datos CIE-10 son de dominio publico segun legislacion chilena.
 
 ## RECURSOS
 
-- Repositorio GitHub: https://github.com/rtasso/ciecl (crear)
+- Repositorio GitHub: https://github.com/RodoTasso/ciecl (crear)
 - CRAN: https://cran.r-project.org/package=ciecl (futuro)
-- Issues: https://github.com/rtasso/ciecl/issues (crear)
+- Issues: https://github.com/RodoTasso/ciecl/issues (crear)
 - Datos MINSAL: https://repositoriodeis.minsal.cl
 
 ---

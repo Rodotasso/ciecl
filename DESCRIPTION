@@ -42,7 +42,7 @@ Suggests:
     rmarkdown (>= 2.25),
     covr
 VignetteBuilder: knitr
-URL: https://github.com/rtasso/ciecl
-BugReports: https://github.com/rtasso/ciecl/issues
+URL: https://github.com/RodoTasso/ciecl
+BugReports: https://github.com/RodoTasso/ciecl/issues
 Config/testthat/edition: 3
 Language: es

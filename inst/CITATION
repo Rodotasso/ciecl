@@ -4,7 +4,7 @@ Para citar el paquete ciecl en publicaciones, usar:
 
   Tasso Suazo R (2025). ciecl: Clasificacion Internacional de Enfermedades 
   CIE-10/11 para Chile. R package version 0.1.0.
-  https://github.com/rtasso/ciecl
+  https://github.com/RodoTasso/ciecl
 
 Para citar los datos CIE-10 Chile MINSAL/DEIS:
 
@@ -20,5 +20,5 @@ Entrada BibTeX para usuarios de LaTeX:
   author = {Rodolfo Tasso Suazo},
   year = {2025},
   note = {R package version 0.1.0},
-  url = {https://github.com/rtasso/ciecl},
+  url = {https://github.com/RodoTasso/ciecl},
 }

@@ -26,7 +26,7 @@ library(ciecl)
 install.packages("ciecl")
 
 # Desarrollo
-devtools::install_github("rtasso/ciecl")
+devtools::install_github("RodoTasso/ciecl")
 ```
 
 ## Busqueda SQL rapida
