@@ -7,8 +7,10 @@
 #' @examples
 #' cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
 cie_validate_vector <- function(codigos, strict = FALSE) {
-  # Regex CIE-10 basico: [A-Z]\d{2}(\.\d{1,2})?
-  patron <- "^[A-Z]\\d{2}(\\.\\d{1,2})?$"
+  # Regex CIE-10 Chile: acepta formato MINSAL (E110) y estandar (E11.0)
+  # MINSAL: [A-Z]\d{2}\d? (3-4 chars: E11, E110)
+  # Estandar: [A-Z]\d{2}\.\d{1,2} (con punto: E11.0, E11.00)
+  patron <- "^[A-Z]\\d{2}(\\d|\\.\\d{1,2})?$"
   
   validos_formato <- stringr::str_detect(codigos, patron)
   
