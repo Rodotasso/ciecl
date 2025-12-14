@@ -30,7 +30,7 @@ SQL optimizado + fuzzy search + comorbilidades Charlson/Elixhauser + CIE-11 API 
 install.packages("ciecl")
 
 # GitHub (desarrollo)
-devtools::install_github("rtasso/ciecl")
+devtools::install_github("RodoTasso/ciecl")
 ```
 
 ## Uso rapido
