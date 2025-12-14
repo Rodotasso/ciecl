@@ -41,6 +41,10 @@ library(ciecl)
 # SQL directo
 cie10_sql("SELECT * FROM cie10 WHERE descripcion LIKE '%diabetes%' LIMIT 3")
 
+# Busqueda exacta de codigos (ahora soporta vectores!)
+cie_lookup("E11.0")  # Un solo codigo
+cie_lookup(c("E11.0", "I10", "Z00"))  # Multiples codigos
+
 # Fuzzy search con errores tipograficos
 cie_search("neumonia bactereana")  # Encuentra "neumonia bacteriana"
 

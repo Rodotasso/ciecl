@@ -11,6 +11,7 @@
 ^ESTADO_PAQUETE\.md$
 ^INSTRUCCIONES\.md$
 ^RESUMEN_PROYECTO\.md$
+^SOLUCION_VECTORIZACION\.md$
 ^cran-comments\.md$
 ^generar_dataset\.R$
 ^prueba_final\.R$
