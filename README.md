@@ -1,31 +1,22 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # ciecl
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-**Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile para R**.
+**Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile
+para R**.
 
-SQL optimizado + fuzzy search + comorbilidades Charlson/Elixhauser + CIE-11 API OMS.
+SQL optimizado + fuzzy search + comorbilidades Charlson/Elixhauser +
+CIE-11 API OMS.
 
 ## Instalacion
 
-```{r eval=FALSE}
+``` r
 # CRAN (pendiente)
 install.packages("ciecl")
 
@@ -35,7 +26,7 @@ devtools::install_github("RodoTasso/ciecl")
 
 ## Uso rapido
 
-```{r example, eval=FALSE}
+``` r
 library(ciecl)
 
 # SQL directo
@@ -59,4 +50,4 @@ MIT + datos MINSAL dominio publico (Decreto 356/2017)
 
 ## Autor
 
-Rodolfo Tasso Suazo (rtasso@uchile.cl)
+Rodolfo Tasso Suazo (<rtasso@uchile.cl>)
