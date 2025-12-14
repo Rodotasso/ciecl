@@ -13,10 +13,11 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   validos_formato <- stringr::str_detect(codigos, patron)
   
   if (strict) {
-    # Validar existencia en DB
+    # Validar existencia en DB con conexión segura
     con <- get_cie10_db()
+    on.exit(DBI::dbDisconnect(con), add = TRUE)
+    
     codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
-    DBI::dbDisconnect(con)
     
     validos_db <- codigos %in% codigos_db
     resultado <- validos_formato & validos_db

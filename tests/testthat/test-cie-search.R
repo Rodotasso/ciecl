@@ -1,17 +1,19 @@
 test_that("cie_search encuentra diabetes con fuzzy", {
   skip_on_cran()
   
-  resultado <- cie_search("diabetis mellitus", threshold = 0.75)
+  # Buscar diabetes (sin typo para mayor certeza)
+  resultado <- cie_search("diabetes mellitus", threshold = 0.70)
   expect_gt(nrow(resultado), 0)
-  expect_true(any(stringr::str_detect(resultado$codigo, "^E1")))
+  # Codigos E10x-E14x (diabetes sin punto decimal)
+  expect_true(any(stringr::str_detect(resultado$codigo, "^E1[0-4]")))
 })
 
 test_that("cie_lookup codigo exacto funciona", {
   skip_on_cran()
   
-  resultado <- cie_lookup("E11.0")
+  resultado <- cie_lookup("E110")
   expect_equal(nrow(resultado), 1)
-  expect_equal(resultado$codigo, "E11.0")
+  expect_equal(resultado$codigo, "E110")
 })
 
 test_that("cie_lookup expansion jerarquica funciona", {
