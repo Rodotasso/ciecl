@@ -23,25 +23,25 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.1.0)
 Imports: 
-    DBI (>= 1.1.3),
-    RSQLite (>= 2.3.1),
-    stringdist (>= 0.9.10),
-    stringr (>= 1.5.0),
-    dplyr (>= 1.1.4),
-    comorbidity (>= 1.0.4),
-    gt (>= 0.9.0),
-    httr2 (>= 0.2.2),
-    readxl (>= 1.4.3),
-    tibble (>= 3.2.1),
+    DBI,
+    RSQLite,
+    stringdist,
+    stringr,
+    dplyr,
+    comorbidity,
+    gt,
+    httr2,
+    readxl,
+    tibble,
     tools,
-    usethis (>= 2.2.0),
-    magrittr (>= 2.0.3),
+    usethis,
+    magrittr,
     utils
 Suggests: 
-    icd (>= 4.0.9),
-    testthat (>= 3.2.0),
-    knitr (>= 1.45),
-    rmarkdown (>= 2.25),
+    icd,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
     covr
 VignetteBuilder: knitr
 URL: https://github.com/RodoTasso/ciecl
