@@ -1,0 +1,48 @@
+Package: ciecl
+Title: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile
+Version: 0.1.0
+Authors@R: 
+    person("Rodolfo", "Tasso Suazo", 
+           email = "rtasso@uchile.cl",
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0000-0000-0000"))
+Description: Herramientas para trabajar con Clasificacion Internacional de 
+    Enfermedades (CIE-10 Chile oficial MINSAL/DEIS v2018). Incluye busqueda 
+    SQL optimizada con SQLite, matching difuso de terminos medicos (fuzzy 
+    Jaro-Winkler), calculo de comorbilidades Charlson y Elixhauser adaptadas 
+    a codigos chilenos, integracion con API CIE-11 OMS, validacion y expansion 
+    de codigos jerarquicos. Datos parseados del repositorio publico DEIS 
+    <https://repositoriodeis.minsal.cl>. Disenado para vigilancia 
+    epidemiologica, analisis de registros medicos y estudios de salud publica 
+    en Chile y Latinoamerica.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    DBI (>= 1.1.3),
+    RSQLite (>= 2.3.1),
+    stringdist (>= 0.9.10),
+    stringr (>= 1.5.0),
+    dplyr (>= 1.1.4),
+    icd (>= 4.0.9),
+    comorbidity (>= 1.0.4),
+    gt (>= 0.9.0),
+    httr2 (>= 0.2.2),
+    readxl (>= 1.4.3),
+    tibble (>= 3.2.1),
+    rlang (>= 1.1.1),
+    tools
+Suggests: 
+    testthat (>= 3.2.0),
+    knitr (>= 1.45),
+    rmarkdown (>= 2.25),
+    covr
+VignetteBuilder: knitr
+URL: https://github.com/rtasso/ciecl
+BugReports: https://github.com/rtasso/ciecl/issues
+Config/testthat/edition: 3
+Language: es
