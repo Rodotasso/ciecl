@@ -26,7 +26,16 @@
 
 ## Dataset incluido
 
-* `cie10_cl` - ~10,000 codigos CIE-10 Chile oficial MINSAL/DEIS v2018
+* `cie10_cl` - 8,918 codigos CIE-10 Chile oficial MINSAL/DEIS v2018 validados
+
+## Estado actual
+
+* Dataset generado y validado: 8,918 registros
+* Tests unitarios: 4 archivos, todos pasando
+* R CMD check: 0 errores, 0 warnings, 3 notas (aceptables)
+* Documentacion completa con roxygen2
+* Vignette funcional
+* Listo para uso en produccion
 
 ## Primera release
 
