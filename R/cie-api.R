@@ -5,9 +5,12 @@
 #'   Obtener en: https://icd.who.int/icdapi
 #' @param lang Character, idioma respuesta ("es" o "en")
 #' @param max_results Integer, maximo resultados (default 10)
-#' @return tibble con codigos CIE-11 + titulos
+#' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @export
-#' @importFrom httr2 request req_url_query req_perform resp_body_json
+#' @importFrom httr2 request req_url_query req_perform resp_body_json req_headers
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr slice_head select matches
+#' @importFrom magrittr %>%
 #' @examples
 #' \dontrun{
 #' # Requiere credenciales OMS gratuitas
@@ -53,12 +56,21 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
         )
       return(resultados)
     } else {
-      message("x Sin resultados CIE-11 para: ", texto)
-      return(tibble::tibble())
+      message("Sin resultados CIE-11 para: ", texto)
+      return(tibble::tibble(
+        codigo = character(), 
+        titulo = character(), 
+        url = character()
+      ))
     }
     
   }, error = function(e) {
-    warning("Error API CIE-11: ", e$message, "\nUsando fallback local CIE-10")
-    return(cie_search(texto, threshold = 0.75))
+    warning("Error API CIE-11: ", e$message, "\nRetornando resultado vacio. ",
+            "Usa cie_search() para fallback local CIE-10")
+    return(tibble::tibble(
+      codigo = character(), 
+      titulo = character(), 
+      url = character()
+    ))
   })
 }

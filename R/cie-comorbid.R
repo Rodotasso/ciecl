@@ -25,14 +25,20 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     stop("Columnas '", id, "' o '", code, "' no existen en data")
   }
   
+  # Mapear a nomenclatura comorbidity package
+  map_full <- switch(map,
+    "charlson" = "charlson_icd10_quan",
+    "elixhauser" = "elixhauser_icd10_quan"
+  )
+  
   # Mapeo Charlson adaptado Chile (usa comorbidity::comorbidity)
+  # Nota: version mas reciente de comorbidity no requiere argumento 'icd'
   resultado <- comorbidity::comorbidity(
     x = data,
     id = id,
     code = code,
-    map = map,
+    map = map_full,
     assign0 = assign0,
-    icd = "icd10",  # CIE-10 compatible ICD-10
     labelled = FALSE
   )
   

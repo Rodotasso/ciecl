@@ -1,12 +1,23 @@
+#' @importFrom stringr str_trim str_replace_all str_detect str_extract
+#' @importFrom dplyr select mutate filter all_of any_of
+#' @importFrom tibble as_tibble
+#' @importFrom usethis use_data
+NULL
+
+# Declarar variables NSE globales
+utils::globalVariables(c("codigo", "descripcion", "score", "."))
+
 #' Busqueda difusa (fuzzy) de terminos medicos CIE-10
 #'
 #' @param texto String termino medico en espanol (ej. "diabetes con coma")
-#' @param threshold Numeric [0-1], umbral similitud Jaro-Winkler (default 0.80)
+#' @param threshold Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.80)
 #' @param max_results Integer, maximo resultados a retornar (default 20)
 #' @param campo Character, campo busqueda ("descripcion" o "inclusion")
 #' @return tibble ordenado por score descendente
 #' @export
 #' @importFrom stringdist stringsim
+#' @importFrom dplyr mutate filter arrange desc slice_head select everything
+#' @importFrom magrittr %>%
 #' @examples
 #' # Buscar con typos
 #' cie_search("diabetis mellitus")
@@ -24,8 +35,9 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
     stop("Texto minimo 3 caracteres")
   }
   
-  # Obtener todos los codigos desde SQLite
+  # Conexión segura con auto-cierre
   con <- get_cie10_db()
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
   
   # Construir query SQL evitando duplicados
   if (campo == "descripcion") {
@@ -35,11 +47,13 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
   }
   
   base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
-  DBI::dbDisconnect(con)
   
   # Normalizar texto busqueda
   texto_norm <- tolower(stringr::str_trim(texto))
   base_texto <- tolower(stringr::str_trim(base[[campo]]))
+  
+  # Manejar NAs en columna buscada
+  base_texto[is.na(base_texto)] <- ""
   
   # Calcular similitud Jaro-Winkler (0-1, 1=identico)
   scores <- stringdist::stringsim(texto_norm, base_texto, method = "jw")

@@ -5,6 +5,8 @@
 #' @return Objeto gt table HTML
 #' @export
 #' @importFrom gt gt tab_header tab_spanner cols_label fmt_markdown
+#' @importFrom dplyr select everything
+#' @importFrom magrittr %>%
 #' @examples
 #' \dontrun{
 #' cie_table("E11")  # Diabetes tipo 2 completo
