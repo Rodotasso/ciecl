@@ -73,10 +73,10 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
   return(resultado)
 }
 
-#' Busqueda exacta por codigo CIE-10
+#' Búsqueda exacta por código CIE-10
 #'
-#' @param codigo Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
-#'   o rango (ej. "E10-E14"). Acepta vectores de multiples codigos.
+#' @param codigo Character vector de códigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
+#'   o rango (ej. "E10-E14"). Acepta vectores de múltiples códigos.
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
@@ -109,7 +109,7 @@ cie_lookup <- function(codigo, expandir = FALSE) {
   }
 }
 
-#' Busqueda interna de un solo codigo CIE-10
+#' Búsqueda interna de un solo código CIE-10
 #' @keywords internal
 #' @noRd
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {

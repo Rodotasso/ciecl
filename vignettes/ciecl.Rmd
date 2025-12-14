@@ -36,7 +36,7 @@ devtools::install_github("RodoTasso/ciecl")
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 ```
 
-## Busqueda por codigo
+## Búsqueda por código
 
 ```{r eval=FALSE}
 # Busqueda de un solo codigo

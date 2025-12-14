@@ -1,4 +1,4 @@
-# Solucion: Vectorizacion de cie_lookup()
+# Solución: Vectorización de cie_lookup()
 
 ## Problema Original
 
@@ -21,7 +21,7 @@ Cuando `codigo_norm` es un vector de multiples codigos (ej. `c("E11.0", "Z00", "
 Error: the condition has length > 1
 ```
 
-## Solucion Implementada
+## Solución Implementada
 
 ### 1. Refactorizacion de la Funcion Principal
 
