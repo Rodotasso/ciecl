@@ -1,8 +1,16 @@
+#' @importFrom readxl read_excel excel_sheets
+#' @importFrom stringr str_trim str_replace_all str_detect str_extract
+#' @importFrom dplyr select mutate filter all_of any_of
+#' @importFrom tibble as_tibble
+#' @importFrom usethis use_data
+NULL
+
 #' Parsear datos CIE-10 MINSAL/DEIS desde XLS
 #' 
 #' @description
 #' Funcion interna para procesar Lista-Tabular-CIE-10-1-1.xls oficial DEIS.
 #' Estructura columnas: codigo, descripcion, categoria, inclusion, exclusion.
+#' Detecta columnas automaticamente para mayor robustez.
 #' 
 #' @param xls_path Ruta al archivo XLS descargado DEIS
 #' @return tibble con ~10,000 codigos CIE-10 Chile limpios
@@ -13,7 +21,7 @@ parsear_cie10_minsal <- function(xls_path) {
     stop("Archivo XLS no encontrado: ", xls_path)
   }
   
-  # Leer XLS MINSAL (ajustar columnas segun estructura real)
+  # Leer XLS con deteccion automatica columnas
   raw <- readxl::read_excel(
     xls_path,
     sheet = 1,
@@ -22,30 +30,42 @@ parsear_cie10_minsal <- function(xls_path) {
     .name_repair = "minimal"
   )
   
-  # Normalizar nombres (ajustar si nombres reales difieren)
+  # Normalizar nombres
   names(raw) <- tolower(stringr::str_trim(names(raw)))
+  names(raw) <- stringr::str_replace_all(names(raw), "\\s+", "_")
   
-  # Estructura esperada MINSAL:
-  # Codigo | Descripcion | Categoria | Inclusion | Exclusion | Capitulo
+  # Detectar columnas dinamicamente
+  col_codigo <- names(raw)[stringr::str_detect(names(raw), "cod|clave")]
+  col_desc <- names(raw)[stringr::str_detect(names(raw), "desc|titulo")]
+  
+  if (length(col_codigo) == 0 || length(col_desc) == 0) {
+    stop("No se detectaron columnas codigo/descripcion. Columnas: ", 
+         paste(names(raw), collapse = ", "))
+  }
+  
+  # Construir dataset
   cie10_limpio <- raw %>%
     dplyr::select(
-      codigo = dplyr::matches("cod|clave"),
-      descripcion = dplyr::matches("desc|titulo"),
-      categoria = dplyr::matches("cat|tipo"),
-      inclusion = dplyr::matches("incl"),
-      exclusion = dplyr::matches("excl"),
-      capitulo = dplyr::matches("cap")
+      codigo = dplyr::all_of(col_codigo[1]),
+      descripcion = dplyr::all_of(col_desc[1]),
+      categoria = dplyr::any_of(
+        names(raw)[stringr::str_detect(names(raw), "cat|tipo")]
+      ),
+      inclusion = dplyr::any_of(
+        names(raw)[stringr::str_detect(names(raw), "incl")]
+      ),
+      exclusion = dplyr::any_of(
+        names(raw)[stringr::str_detect(names(raw), "excl")]
+      )
     ) %>%
     dplyr::mutate(
-      codigo = stringr::str_trim(codigo),
-      descripcion = stringr::str_trim(descripcion),
-      # Extraer capitulo (ej. "A00-B99")
+      codigo = stringr::str_trim(as.character(codigo)),
+      descripcion = stringr::str_trim(as.character(descripcion)),
       capitulo = stringr::str_extract(codigo, "^[A-Z]\\d{1,2}"),
-      # Flag cruz/daga MINSAL
       es_daga = stringr::str_detect(codigo, "\u2020"),
       es_cruz = stringr::str_detect(codigo, "\\*")
     ) %>%
-    dplyr::filter(!is.na(codigo), !is.na(descripcion)) %>%
+    dplyr::filter(!is.na(codigo), !is.na(descripcion), nchar(codigo) >= 3) %>%
     tibble::as_tibble()
   
   return(cie10_limpio)
@@ -55,18 +75,32 @@ parsear_cie10_minsal <- function(xls_path) {
 #' 
 #' @description
 #' EJECUTAR UNA VEZ para crear data/cie10_cl.rda desde XLS padre.
-#' Ruta relativa: ../Lista-Tabular-CIE-10-1-1.xls (en 01_Paquete_R/)
+#' Ruta automatica: busca en ../ o directorio actual
 #' 
+#' @param xls_path Ruta al archivo XLS (opcional, deteccion automatica)
 #' @examples
 #' \dontrun{
 #' # Desde ciecl/ ejecutar:
-#' source("R/cie-data.R")
 #' generar_cie10_cl()
 #' }
 #' @keywords internal
 #' @export
-generar_cie10_cl <- function() {
-  xls_path <- normalizePath("../Lista-Tabular-CIE-10-1-1.xls", mustWork = TRUE)
+generar_cie10_cl <- function(xls_path = NULL) {
+  # Deteccion automatica si no se proporciona ruta
+  if (is.null(xls_path)) {
+    xls_parent <- normalizePath("../Lista-Tabular-CIE-10-1-1.xls", mustWork = FALSE)
+    xls_actual <- normalizePath("Lista-Tabular-CIE-10-1-1.xls", mustWork = FALSE)
+    
+    if (file.exists(xls_parent)) {
+      xls_path <- xls_parent
+    } else if (file.exists(xls_actual)) {
+      xls_path <- xls_actual
+    } else {
+      stop("XLS no encontrado. Proporcionar ruta con xls_path = '...'")
+    }
+  }
+  
+  message("Parseando: ", xls_path)
   cie10_cl <- parsear_cie10_minsal(xls_path)
   
   # Guardar en data/
