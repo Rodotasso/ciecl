@@ -10,7 +10,10 @@
 ^\.gitignore$
 ^ESTADO_PAQUETE\.md$
 ^INSTRUCCIONES\.md$
+^INSTRUCCIONES_FINALES\.md$
 ^RESUMEN_PROYECTO\.md$
+^SOLUCION_VECTORIZACION\.md$
+^RESUMEN_ERRORES\.md$
 ^cran-comments\.md$
 ^generar_dataset\.R$
 ^prueba_final\.R$
