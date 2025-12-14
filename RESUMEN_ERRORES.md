@@ -1,4 +1,4 @@
-# RESUMEN: Solucion de Errores en ciecl
+# RESUMEN: Solución de Errores en ciecl
 
 ## Problemas Identificados y Solucionados
 
@@ -24,7 +24,7 @@ if (expandir) {
 
 Cuando `codigo_norm` es un vector (ej. `c("E11.0", "Z00", "I10")`), `str_detect()` retorna un vector logico de la misma longitud, pero `if` solo puede evaluar un valor escalar, causando el error.
 
-**Solucion Implementada:**
+**Solución Implementada:**
 
 1. **Refactorizacion de `cie_lookup()`**: Se modifico para detectar vectores y procesarlos iterativamente
 2. **Nueva funcion interna `cie_lookup_single()`**: Extrae la logica original para procesar un codigo a la vez
@@ -37,7 +37,7 @@ Cuando `codigo_norm` es un vector (ej. `c("E11.0", "Z00", "I10")`), `str_detect(
 **Problema:**
 El paquete no podia procesar multiples codigos simultaneamente, limitando su uso en analisis de datos donde se necesita buscar cientos o miles de codigos.
 
-**Solucion:**
+**Solución:**
 Ahora `cie_lookup()` acepta tanto un codigo individual como un vector de codigos:
 
 ```r
@@ -61,7 +61,7 @@ Segun `ESTADO_PAQUETE.md`, el paquete tenia 3 notas en R CMD check:
 2. **License stub**: formato no estandar (aceptable - ya fue corregido en commit anterior)
 3. **Archivos no estandar**: Scripts de desarrollo en raiz (aceptable - ya estan en .Rbuildignore)
 
-**Solucion:**
+**Solución:**
 - Los archivos de desarrollo ya estan excluidos via `.Rbuildignore`
 - Las notas son aceptables para un paquete en desarrollo
 - Se agrego `SOLUCION_VECTORIZACION.md` a `.Rbuildignore`
@@ -163,7 +163,7 @@ Para completar la integracion de estos cambios, el mantenedor del paquete debe:
    devtools::build()
    ```
 
-## Verificacion de la Solucion
+## Verificación de la Solución
 
 Para verificar que la solucion funciona correctamente:
 
