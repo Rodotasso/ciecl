@@ -8,3 +8,10 @@
 ^pkgdown$
 ^\.git$
 ^\.gitignore$
+^ESTADO_PAQUETE\.md$
+^INSTRUCCIONES\.md$
+^RESUMEN_PROYECTO\.md$
+^cran-comments\.md$
+^generar_dataset\.R$
+^prueba_final\.R$
+^test_paquete\.R$
