@@ -36,6 +36,20 @@ devtools::install_github("RodoTasso/ciecl")
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 ```
 
+## Busqueda por codigo
+
+```{r eval=FALSE}
+# Busqueda de un solo codigo
+cie_lookup("E11.0")
+
+# Busqueda vectorizada - multiples codigos a la vez
+codigos <- c("E11.0", "I10", "Z00", "J44.0")
+resultados <- cie_lookup(codigos)
+
+# Expansion jerarquica
+cie_lookup("E11", expandir = TRUE)  # Retorna todos los E11.x
+```
+
 ## Busqueda fuzzy con typos
 
 ```{r eval=FALSE}
