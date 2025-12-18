@@ -13,7 +13,7 @@ tibble con ~10,000 filas:
 \item{inclusion}{Terminos incluidos}
 \item{exclusion}{Terminos excluidos}
 \item{capitulo}{Capitulo CIE-10 (A-Z)}
-\item{es_daga}{Logical, codigo daga (†)}
+\item{es_daga}{Logical, codigo daga (+)}
 \item{es_cruz}{Logical, codigo asterisco (*)}
 }
 }

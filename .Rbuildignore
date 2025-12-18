@@ -15,6 +15,7 @@
 ^SOLUCION_VECTORIZACION\.md$
 ^RESUMEN_ERRORES\.md$
 ^cran-comments\.md$
+^DEPENDENCIAS\.md$
 ^generar_dataset\.R$
 ^prueba_final\.R$
 ^test_paquete\.R$
