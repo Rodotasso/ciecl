@@ -66,3 +66,19 @@ test_that("cie_lookup vectorizado elimina duplicados", {
   expect_equal(nrow(resultado), length(unique(resultado$codigo)))
 })
 
+test_that("cie_lookup acepta multiples formatos de codigo", {
+  skip_on_cran()
+  
+  # Probar con punto
+  resultado_punto <- cie_lookup("E11.0")
+  expect_equal(nrow(resultado_punto), 1)
+  expect_equal(resultado_punto$codigo, "E110")
+  
+  # Probar sin punto
+  resultado_sin_punto <- cie_lookup("E110")
+  expect_equal(nrow(resultado_sin_punto), 1)
+  expect_equal(resultado_sin_punto$codigo, "E110")
+  
+  # Ambos deben dar el mismo resultado
+  expect_equal(resultado_punto$codigo, resultado_sin_punto$codigo)
+})

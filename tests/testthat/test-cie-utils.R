@@ -1,3 +1,18 @@
+test_that("cie_normalizar convierte formatos correctamente", {
+  skip_on_cran()
+  
+  # Con punto
+  expect_equal(cie_normalizar("E11.0", buscar_db = FALSE), "E110")
+  
+  # Sin punto
+  expect_equal(cie_normalizar("E110", buscar_db = FALSE), "E110")
+  
+  # Vectorizado
+  codigos <- c("E11.0", "I10.0", "Z00")
+  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  expect_equal(resultado, c("E110", "I100", "Z00"))
+})
+
 test_that("cie_validate_vector detecta formatos invalidos", {
   validos <- cie_validate_vector(c("E11.0", "Z00", "INVALIDO"))
   expect_equal(validos, c(TRUE, TRUE, FALSE))
