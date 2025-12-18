@@ -1,7 +1,6 @@
 #' @importFrom stringr str_trim str_replace_all str_detect str_extract str_split
-#' @importFrom dplyr select mutate filter all_of any_of bind_rows distinct
+#' @importFrom dplyr select mutate filter all_of any_of bind_rows distinct %>%
 #' @importFrom tibble as_tibble
-#' @importFrom usethis use_data
 NULL
 
 # Declarar variables NSE globales
@@ -16,8 +15,7 @@ utils::globalVariables(c("codigo", "descripcion", "score", "."))
 #' @return tibble ordenado por score descendente
 #' @export
 #' @importFrom stringdist stringsim
-#' @importFrom dplyr mutate filter arrange desc slice_head select everything
-#' @importFrom magrittr %>%
+#' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
 #' @examples
 #' # Buscar con typos
 #' cie_search("diabetis mellitus")

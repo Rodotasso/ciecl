@@ -9,6 +9,7 @@
 #' @importFrom DBI dbConnect dbExistsTable dbWriteTable dbDisconnect
 #' @importFrom RSQLite SQLite
 #' @importFrom utils data
+#' @importFrom dplyr %>%
 #' @noRd
 get_cie10_db <- function() {
   cache_dir <- tools::R_user_dir("ciecl", "data")
