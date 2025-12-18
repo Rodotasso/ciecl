@@ -18,6 +18,12 @@
 #' }
 cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
                          assign0 = TRUE) {
+  # Verificar que comorbidity esté instalado
+  if (!requireNamespace("comorbidity", quietly = TRUE)) {
+    stop("El paquete 'comorbidity' es necesario para esta función.\n",
+         "Instálalo con: install.packages('comorbidity')")
+  }
+  
   map <- match.arg(map)
   
   # Validar columnas existen

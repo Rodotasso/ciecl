@@ -18,6 +18,12 @@
 #' cie11_search("depresion mayor")
 #' }
 cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
+  # Verificar que httr2 esté instalado
+  if (!requireNamespace("httr2", quietly = TRUE)) {
+    stop("El paquete 'httr2' es necesario para esta función.\n",
+         "Instálalo con: install.packages('httr2')")
+  }
+  
   # Obtener API key (env var o argumento)
   if (is.null(api_key)) {
     api_key <- Sys.getenv("ICD_API_KEY", unset = NA)

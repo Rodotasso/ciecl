@@ -17,6 +17,12 @@ NULL
 #' @keywords internal
 #' @noRd
 parsear_cie10_minsal <- function(xls_path) {
+  # Verificar que readxl esté instalado
+  if (!requireNamespace("readxl", quietly = TRUE)) {
+    stop("El paquete 'readxl' es necesario para generar el dataset.\n",
+         "Instálalo con: install.packages('readxl')")
+  }
+  
   if (!file.exists(xls_path)) {
     stop("Archivo XLS no encontrado: ", xls_path)
   }
@@ -86,6 +92,12 @@ parsear_cie10_minsal <- function(xls_path) {
 #' @keywords internal
 #' @export
 generar_cie10_cl <- function(xls_path = NULL) {
+  # Verificar que usethis esté instalado
+  if (!requireNamespace("usethis", quietly = TRUE)) {
+    stop("El paquete 'usethis' es necesario para generar el dataset.\n",
+         "Instálalo con: install.packages('usethis')")
+  }
+  
   # Deteccion automatica si no se proporciona ruta
   if (is.null(xls_path)) {
     xls_parent <- normalizePath("../Lista-Tabular-CIE-10-1-1.xls", mustWork = FALSE)
