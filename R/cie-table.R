@@ -4,7 +4,7 @@
 #' @param interactive Logical, tabla gt reactable (default TRUE)
 #' @return Objeto gt table HTML
 #' @export
-#' @importFrom gt gt tab_header tab_spanner cols_label fmt_markdown
+#' @importFrom gt gt tab_header tab_spanner cols_label fmt_markdown tab_options
 #' @importFrom dplyr select everything
 #' @importFrom magrittr %>%
 #' @examples
