@@ -82,3 +82,16 @@ test_that("cie_lookup acepta multiples formatos de codigo", {
   # Ambos deben dar el mismo resultado
   expect_equal(resultado_punto$codigo, resultado_sin_punto$codigo)
 })
+
+test_that("cie_lookup puede generar descripcion_completa", {
+  skip_on_cran()
+  
+  # Sin descripcion_completa
+  resultado_normal <- cie_lookup("E110")
+  expect_false("descripcion_completa" %in% names(resultado_normal))
+  
+  # Con descripcion_completa
+  resultado_completo <- cie_lookup("E110", descripcion_completa = TRUE)
+  expect_true("descripcion_completa" %in% names(resultado_completo))
+  expect_true(stringr::str_detect(resultado_completo$descripcion_completa, "E110 - "))
+})
