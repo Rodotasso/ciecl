@@ -16,7 +16,7 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
   # Normalizar a mayusculas y trim
   codigos_norm <- stringr::str_trim(toupper(codigos))
   
-  # Remover puntos (E11.0 → E110)
+  # Remover puntos (E11.0 -> E110)
   codigos_norm <- stringr::str_replace_all(codigos_norm, "\\.", "")
   
   if (buscar_db) {
@@ -65,7 +65,7 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   validos_formato <- stringr::str_detect(toupper(codigos), patron)
   
   if (strict) {
-    # Validar existencia en DB con conexión segura
+    # Validar existencia en DB con conexion segura
     con <- get_cie10_db()
     on.exit(DBI::dbDisconnect(con), add = TRUE)
     
@@ -85,7 +85,7 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   }
 }
 
-#' Expandir codigo jerarquico (ej. E11 → E11.0-E11.9)
+#' Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 #'
 #' @param codigo String codigo padre (ej. "E11")
 #' @return Character vector codigos hijos

@@ -90,10 +90,10 @@ parsear_cie10_minsal <- function(xls_path) {
 #' @keywords internal
 #' @export
 generar_cie10_cl <- function(xls_path = NULL) {
-  # Verificar que usethis esté instalado
+  # Verificar que usethis este instalado
   if (!requireNamespace("usethis", quietly = TRUE)) {
     stop("El paquete 'usethis' es necesario para generar el dataset.\n",
-         "Instálalo con: install.packages('usethis')")
+         "Inst\u00e1lalo con: install.packages('usethis')")
   }
   
   # Deteccion automatica si no se proporciona ruta
@@ -130,7 +130,7 @@ generar_cie10_cl <- function(xls_path = NULL) {
 #'   \item{inclusion}{Terminos incluidos}
 #'   \item{exclusion}{Terminos excluidos}
 #'   \item{capitulo}{Capitulo CIE-10 (A-Z)}
-#'   \item{es_daga}{Logical, codigo daga (†)}
+#'   \item{es_daga}{Logical, codigo daga (+)}
 #'   \item{es_cruz}{Logical, codigo asterisco (*)}
 #' }
 #' @source \url{https://repositoriodeis.minsal.cl}

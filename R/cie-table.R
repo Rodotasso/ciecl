@@ -10,7 +10,7 @@
 #' cie_table("E11")  # Diabetes tipo 2 completo
 #' }
 cie_table <- function(codigo, interactive = TRUE) {
-  # Verificar que gt esté instalado
+  # Verificar que gt este instalado
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop("El paquete 'gt' es necesario para esta funci\u00f3n.\n",
          "Inst\u00e1lalo con: install.packages('gt')")
