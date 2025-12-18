@@ -94,9 +94,13 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   # Normalizar entrada
   codigo_input <- stringr::str_trim(toupper(codigo))
   
-  # Normalizar formato si se solicita
+  # Normalizar formato si se solicita: agregar punto si falta (E110 -> E11.0)
   if (normalizar) {
-    codigo_norm <- stringr::str_replace_all(codigo_input, "\\.", "")
+    codigo_norm <- ifelse(
+      stringr::str_detect(codigo_input, "^[A-Z]\\d{3,}$") & !stringr::str_detect(codigo_input, "\\."),
+      stringr::str_replace(codigo_input, "^([A-Z]\\d{2})(\\d.*)$", "\\1.\\2"),
+      codigo_input
+    )
   } else {
     codigo_norm <- codigo_input
   }

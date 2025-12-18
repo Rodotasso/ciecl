@@ -1,23 +1,28 @@
-#' Normalizar codigos CIE-10 a formato MINSAL
+#' Normalizar codigos CIE-10 a formato con punto
 #'
 #' @description
-#' Convierte codigos CIE-10 de diferentes formatos al formato MINSAL (sin punto).
+#' Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
 #' Acepta codigos con punto (E11.0), sin punto (E110), o solo categoria (E11).
 #' 
 #' @param codigos Character vector de codigos en cualquier formato
 #' @param buscar_db Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)
-#' @return Character vector con codigos normalizados al formato MINSAL
+#' @return Character vector con codigos normalizados al formato con punto
 #' @export
 #' @examples
-#' cie_normalizar("E11.0")  # Retorna "E110"
+#' cie_normalizar("E110")   # Retorna "E11.0"
 #' cie_normalizar("E11")    # Retorna "E11" (categoria)
-#' cie_normalizar(c("E11.0", "I10.0", "Z00"))  # Vectorizado
+#' cie_normalizar(c("E110", "I100", "Z00"))  # Vectorizado
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
   # Normalizar a mayusculas y trim
   codigos_norm <- stringr::str_trim(toupper(codigos))
   
-  # Remover puntos (E11.0 -> E110)
-  codigos_norm <- stringr::str_replace_all(codigos_norm, "\\.", "")
+  # Agregar punto si no lo tiene (E110 -> E11.0)
+  # Solo para códigos de 4+ caracteres sin punto: [A-Z]\d{3,}
+  codigos_norm <- ifelse(
+    stringr::str_detect(codigos_norm, "^[A-Z]\\d{3,}$") & !stringr::str_detect(codigos_norm, "\\."),
+    stringr::str_replace(codigos_norm, "^([A-Z]\\d{2})(\\d.*)$", "\\1.\\2"),
+    codigos_norm
+  )
   
   if (buscar_db) {
     # Verificar que existan en la base de datos

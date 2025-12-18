@@ -11,9 +11,9 @@ test_that("cie_search encuentra diabetes con fuzzy", {
 test_that("cie_lookup codigo exacto funciona", {
   skip_on_cran()
   
-  resultado <- cie_lookup("E110")
+  resultado <- cie_lookup("E11.0")
   expect_equal(nrow(resultado), 1)
-  expect_equal(resultado$codigo, "E110")
+  expect_equal(resultado$codigo, "E11.0")
 })
 
 test_that("cie_lookup expansion jerarquica funciona", {
@@ -28,7 +28,7 @@ test_that("cie_lookup acepta vectores de multiples codigos", {
   skip_on_cran()
   
   # Vector con multiples codigos
-  codigos <- c("E110", "Z00", "I10")
+  codigos <- c("E11.0", "Z00", "I10")
   resultado <- cie_lookup(codigos)
   
   # Debe retornar resultados para al menos algunos codigos
@@ -43,7 +43,7 @@ test_that("cie_lookup vectorizado maneja codigos invalidos", {
   skip_on_cran()
   
   # Mezcla de codigos validos e invalidos
-  codigos <- c("E110", "INVALIDO", "Z00")
+  codigos <- c("E11.0", "INVALIDO", "Z00")
   
   # Capturar mensajes de advertencia
   suppressMessages({
@@ -52,14 +52,14 @@ test_that("cie_lookup vectorizado maneja codigos invalidos", {
   
   # Debe retornar solo los codigos validos
   expect_gt(nrow(resultado), 0)
-  expect_true(all(resultado$codigo %in% c("E110", "Z00")))
+  expect_true(all(resultado$codigo %in% c("E11.0", "Z00")))
 })
 
 test_that("cie_lookup vectorizado elimina duplicados", {
   skip_on_cran()
   
   # Vector con codigos duplicados
-  codigos <- c("E110", "E110", "Z00")
+  codigos <- c("E11.0", "E11.0", "Z00")
   resultado <- cie_lookup(codigos)
   
   # No debe haber duplicados en resultado
@@ -72,12 +72,12 @@ test_that("cie_lookup acepta multiples formatos de codigo", {
   # Probar con punto
   resultado_punto <- cie_lookup("E11.0")
   expect_equal(nrow(resultado_punto), 1)
-  expect_equal(resultado_punto$codigo, "E110")
+  expect_equal(resultado_punto$codigo, "E11.0")
   
-  # Probar sin punto
+  # Probar sin punto (debe normalizar)
   resultado_sin_punto <- cie_lookup("E110")
   expect_equal(nrow(resultado_sin_punto), 1)
-  expect_equal(resultado_sin_punto$codigo, "E110")
+  expect_equal(resultado_sin_punto$codigo, "E11.0")
   
   # Ambos deben dar el mismo resultado
   expect_equal(resultado_punto$codigo, resultado_sin_punto$codigo)
@@ -87,11 +87,11 @@ test_that("cie_lookup puede generar descripcion_completa", {
   skip_on_cran()
   
   # Sin descripcion_completa
-  resultado_normal <- cie_lookup("E110")
+  resultado_normal <- cie_lookup("E11.0")
   expect_false("descripcion_completa" %in% names(resultado_normal))
   
   # Con descripcion_completa
-  resultado_completo <- cie_lookup("E110", descripcion_completa = TRUE)
+  resultado_completo <- cie_lookup("E11.0", descripcion_completa = TRUE)
   expect_true("descripcion_completa" %in% names(resultado_completo))
-  expect_true(stringr::str_detect(resultado_completo$descripcion_completa, "E110 - "))
+  expect_true(stringr::str_detect(resultado_completo$descripcion_completa, "E11\\.0 - "))
 })
