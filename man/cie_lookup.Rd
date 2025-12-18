@@ -4,12 +4,21 @@
 \alias{cie_lookup}
 \title{Busqueda exacta por codigo CIE-10}
 \usage{
-cie_lookup(codigo, expandir = FALSE)
+cie_lookup(
+  codigo,
+  expandir = FALSE,
+  normalizar = TRUE,
+  descripcion_completa = FALSE
+)
 }
 \arguments{
 \item{codigo}{String codigo (ej. "E11", "E11.0", rango "E10-E14")}
 
 \item{expandir}{Logical, expandir jerarquia completa (default FALSE)}
+
+\item{normalizar}{Logical, normalizar formato automaticamente (default TRUE)}
+
+\item{descripcion_completa}{Logical, usar descripcion completa en vez de corta (default FALSE)}
 }
 \value{
 tibble con codigo(s) matcheado(s)
