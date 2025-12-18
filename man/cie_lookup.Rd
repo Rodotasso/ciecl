@@ -12,13 +12,15 @@ cie_lookup(
 )
 }
 \arguments{
-\item{codigo}{String codigo (ej. "E11", "E11.0", rango "E10-E14")}
+\item{codigo}{Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
+o rango (ej. "E10-E14"). Acepta vectores de multiples codigos.
+Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).}
 
 \item{expandir}{Logical, expandir jerarquia completa (default FALSE)}
 
-\item{normalizar}{Logical, normalizar formato automaticamente (default TRUE)}
+\item{normalizar}{Logical, normalizar formato de codigos automaticamente (default TRUE)}
 
-\item{descripcion_completa}{Logical, usar descripcion completa en vez de corta (default FALSE)}
+\item{descripcion_completa}{Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)}
 }
 \value{
 tibble con codigo(s) matcheado(s)
@@ -27,6 +29,12 @@ tibble con codigo(s) matcheado(s)
 Busqueda exacta por codigo CIE-10
 }
 \examples{
-cie_lookup("E11.0")
+cie_lookup("E11.0")       # Con punto
+cie_lookup("E110")        # Sin punto
+cie_lookup("E11")         # Solo categoria
 cie_lookup("E11", expandir = TRUE)  # Todos E11.x
+# Vectorizado - multiples codigos y formatos
+cie_lookup(c("E11.0", "Z00", "I10"))
+# Con descripcion completa
+cie_lookup("E110", descripcion_completa = TRUE)
 }
