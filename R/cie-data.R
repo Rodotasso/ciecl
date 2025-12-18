@@ -15,10 +15,10 @@ NULL
 #' @keywords internal
 #' @noRd
 parsear_cie10_minsal <- function(xls_path) {
-  # Verificar que readxl esté instalado
+  # Verificar que readxl este instalado
   if (!requireNamespace("readxl", quietly = TRUE)) {
     stop("El paquete 'readxl' es necesario para generar el dataset.\n",
-         "Instálalo con: install.packages('readxl')")
+         "Inst\u00e1lalo con: install.packages('readxl')")
   }
   
   if (!file.exists(xls_path)) {
