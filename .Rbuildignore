@@ -14,6 +14,7 @@
 ^RESUMEN_PROYECTO\.md$
 ^SOLUCION_VECTORIZACION\.md$
 ^RESUMEN_ERRORES\.md$
+^ERRORES_SOLUCIONADOS\.md$
 ^cran-comments\.md$
 ^generar_dataset\.R$
 ^prueba_final\.R$
