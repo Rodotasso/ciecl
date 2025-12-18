@@ -12,8 +12,8 @@
 cie_table <- function(codigo, interactive = TRUE) {
   # Verificar que gt esté instalado
   if (!requireNamespace("gt", quietly = TRUE)) {
-    stop("El paquete 'gt' es necesario para esta función.\n",
-         "Instálalo con: install.packages('gt')")
+    stop("El paquete 'gt' es necesario para esta funci\u00f3n.\n",
+         "Inst\u00e1lalo con: install.packages('gt')")
   }
   
   datos <- cie_lookup(codigo, expandir = TRUE)
