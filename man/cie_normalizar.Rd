@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-utils.R
 \name{cie_normalizar}
 \alias{cie_normalizar}
-\title{Normalizar codigos CIE-10 a formato MINSAL}
+\title{Normalizar codigos CIE-10 a formato con punto}
 \usage{
 cie_normalizar(codigos, buscar_db = TRUE)
 }
@@ -12,14 +12,14 @@ cie_normalizar(codigos, buscar_db = TRUE)
 \item{buscar_db}{Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)}
 }
 \value{
-Character vector con codigos normalizados al formato MINSAL
+Character vector con codigos normalizados al formato con punto
 }
 \description{
-Convierte codigos CIE-10 de diferentes formatos al formato MINSAL (sin punto).
+Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
 Acepta codigos con punto (E11.0), sin punto (E110), o solo categoria (E11).
 }
 \examples{
-cie_normalizar("E11.0")  # Retorna "E110"
+cie_normalizar("E110")   # Retorna "E11.0"
 cie_normalizar("E11")    # Retorna "E11" (categoria)
-cie_normalizar(c("E11.0", "I10.0", "Z00"))  # Vectorizado
+cie_normalizar(c("E110", "I100", "Z00"))  # Vectorizado
 }

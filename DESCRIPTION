@@ -4,8 +4,7 @@ Version: 0.1.0
 Authors@R: 
     person("Rodolfo", "Tasso Suazo", 
            email = "rtasso@uchile.cl",
-           role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0000-0000-0000-0000"))
+           role = c("aut", "cre", "cph"))
 Description: Herramientas para trabajar con Clasificacion Internacional de 
     Enfermedades (CIE-10 Chile oficial MINSAL/DEIS v2018). Incluye busqueda 
     SQL optimizada con SQLite, matching difuso de terminos medicos (fuzzy 

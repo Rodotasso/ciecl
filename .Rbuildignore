@@ -16,6 +16,10 @@
 ^RESUMEN_ERRORES\.md$
 ^cran-comments\.md$
 ^DEPENDENCIAS\.md$
+^CRAN_CHECKLIST\.md$
 ^generar_dataset\.R$
 ^prueba_final\.R$
 ^test_paquete\.R$
+^\.Renviron$
+^test_api\.R$
+^README\.html$
