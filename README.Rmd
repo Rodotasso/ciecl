@@ -26,29 +26,41 @@ SQL optimizado + fuzzy search + comorbilidades Charlson/Elixhauser + CIE-11 API 
 ## Instalacion
 
 ```{r eval=FALSE}
-# CRAN (pendiente)
+# Instalacion basica (funcionalidad core - 8 dependencias)
 install.packages("ciecl")
 
-# GitHub (desarrollo)
+# Instalacion completa (incluye paquetes opcionales)
+install.packages("ciecl", dependencies = TRUE)
+
+# Desde GitHub (desarrollo)
 devtools::install_github("RodoTasso/ciecl")
 ```
+
+**Nota**: El paquete tiene **dependencias mínimas** para funcionalidad core. Paquetes adicionales solo se requieren para funciones específicas. Ver [DEPENDENCIAS.md](DEPENDENCIAS.md) para detalles.
 
 ## Uso rapido
 
 ```{r example, eval=FALSE}
 library(ciecl)
 
-# SQL directo
-cie10_sql("SELECT * FROM cie10 WHERE descripcion LIKE '%diabetes%' LIMIT 3")
+# Busqueda exacta (soporta multiples formatos)
+cie_lookup("E11.0")   # Con punto
+cie_lookup("E110")    # Sin punto
+cie_lookup("E11")     # Solo categoria
 
-# Busqueda exacta de codigos (ahora soporta vectores!)
-cie_lookup("E11.0")  # Un solo codigo
-cie_lookup(c("E11.0", "I10", "Z00"))  # Multiples codigos
+# Vectorizado - multiples codigos
+cie_lookup(c("E11.0", "I10", "Z00"))
+
+# Con descripcion completa formateada
+cie_lookup("E110", descripcion_completa = TRUE)
 
 # Fuzzy search con errores tipograficos
-cie_search("neumonia bactereana")  # Encuentra "neumonia bacteriana"
+cie_search("diabetis mellitus")  # Encuentra "diabetes mellitus"
 
-# Comorbilidades
+# SQL directo
+cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 3")
+
+# Comorbilidades (requiere: install.packages("comorbidity"))
 df %>% cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
 ```
 
