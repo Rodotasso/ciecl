@@ -80,6 +80,7 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
 #'   Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoría (E11).
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
 #' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
+#' @param descripcion_completa Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
 #' @examples
@@ -89,7 +90,9 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
 #' cie_lookup("E11", expandir = TRUE)  # Todos E11.x
 #' # Vectorizado - multiples codigos y formatos
 #' cie_lookup(c("E11.0", "Z00", "I10"))
-cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE) {
+#' # Con descripcion completa
+#' cie_lookup("E110", descripcion_completa = TRUE)
+cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE) {
   # Normalizar entrada
   codigo_input <- stringr::str_trim(toupper(codigo))
   
@@ -112,12 +115,20 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE) {
     
     # Eliminar duplicados que pudieran surgir
     resultado <- dplyr::distinct(resultado)
-    
-    return(resultado)
   } else {
     # Codigo unico - usar funcion interna
-    return(cie_lookup_single(codigo_norm, expandir = expandir))
+    resultado <- cie_lookup_single(codigo_norm, expandir = expandir)
   }
+  
+  # Agregar columna descripcion_completa si se solicita
+  if (descripcion_completa && nrow(resultado) > 0) {
+    resultado <- resultado %>%
+      dplyr::mutate(
+        descripcion_completa = paste0(codigo, " - ", descripcion)
+      )
+  }
+  
+  return(resultado)
 }
 
 #' Búsqueda interna de un solo código CIE-10
