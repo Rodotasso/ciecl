@@ -38,11 +38,9 @@ Imports:
     magrittr,
     utils
 Suggests: 
-    icd,
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown,
-    covr
+    rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/RodoTasso/ciecl
 BugReports: https://github.com/RodoTasso/ciecl/issues
