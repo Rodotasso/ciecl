@@ -28,16 +28,16 @@ Imports:
     stringdist,
     stringr,
     dplyr,
+    tibble,
+    tools,
+    utils
+Suggests: 
     comorbidity,
     gt,
     httr2,
     readxl,
-    tibble,
-    tools,
     usethis,
     magrittr,
-    utils
-Suggests: 
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
