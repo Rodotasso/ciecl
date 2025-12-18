@@ -33,7 +33,7 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
     stop("Texto minimo 3 caracteres")
   }
   
-  # Conexión segura con auto-cierre
+  # Conexion segura con auto-cierre
   con <- get_cie10_db()
   on.exit(DBI::dbDisconnect(con), add = TRUE)
   
@@ -71,11 +71,11 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
   return(resultado)
 }
 
-#' Búsqueda exacta por código CIE-10
+#' Busqueda exacta por codigo CIE-10
 #'
-#' @param codigo Character vector de códigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
-#'   o rango (ej. "E10-E14"). Acepta vectores de múltiples códigos.
-#'   Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoría (E11).
+#' @param codigo Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
+#'   o rango (ej. "E10-E14"). Acepta vectores de multiples codigos.
+#'   Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
 #' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
 #' @param descripcion_completa Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)
@@ -129,7 +129,7 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   return(resultado)
 }
 
-#' Búsqueda interna de un solo código CIE-10
+#' Busqueda interna de un solo codigo CIE-10
 #' @keywords internal
 #' @noRd
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
@@ -139,7 +139,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   }
   
   if (expandir) {
-    # Buscar jerarquia completa (E11 → E11.x)
+    # Buscar jerarquia completa (E11 -> E11.x)
     query <- sprintf(
       "SELECT * FROM cie10 WHERE codigo LIKE '%s%%' ORDER BY codigo",
       codigo_norm

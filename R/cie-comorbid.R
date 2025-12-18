@@ -22,10 +22,10 @@ NULL
 #' }
 cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
                          assign0 = TRUE) {
-  # Verificar que comorbidity esté instalado
+  # Verificar que comorbidity este instalado
   if (!requireNamespace("comorbidity", quietly = TRUE)) {
-    stop("El paquete 'comorbidity' es necesario para esta función.\n",
-         "Instálalo con: install.packages('comorbidity')")
+    stop("El paquete 'comorbidity' es necesario para esta funci\u00f3n.\n",
+         "Inst\u00e1lalo con: install.packages('comorbidity')")
   }
   
   map <- match.arg(map)
