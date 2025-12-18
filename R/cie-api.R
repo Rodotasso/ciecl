@@ -7,10 +7,8 @@
 #' @param max_results Integer, maximo resultados (default 10)
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @export
-#' @importFrom httr2 request req_url_query req_perform resp_body_json req_headers
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr slice_head select matches
-#' @importFrom magrittr %>%
 #' @examples
 #' \dontrun{
 #' # Requiere credenciales OMS gratuitas
@@ -36,12 +34,12 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
   base_url <- "https://id.who.int/icd/release/11/2024-01/mms/search"
   
   tryCatch({
-    req <- httr2::request(base_url) %>%
+    req <- httr2::request(base_url) |>
       httr2::req_url_query(
         q = texto,
         flatResults = "true",
         useFlexisearch = "true"
-      ) %>%
+      ) |>
       httr2::req_headers(
         `API-Version` = "v2",
         `Accept-Language` = lang
@@ -52,9 +50,9 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
     
     # Parsear resultados
     if ("destinationEntities" %in% names(json)) {
-      resultados <- json$destinationEntities %>%
-        tibble::as_tibble() %>%
-        dplyr::slice_head(n = max_results) %>%
+      resultados <- json$destinationEntities |>
+        tibble::as_tibble() |>
+        dplyr::slice_head(n = max_results) |>
         dplyr::select(
           codigo = dplyr::matches("theCode|id"),
           titulo = title,

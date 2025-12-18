@@ -1,3 +1,8 @@
+#' @importFrom dplyr filter pull rowwise %>%
+#' @importFrom stringr str_detect
+#' @importFrom tibble tibble as_tibble tribble
+NULL
+
 #' Calcular comorbilidades Charlson/Elixhauser para Chile
 #'
 #' @param data data.frame con columnas id paciente + codigos CIE-10
@@ -7,7 +12,6 @@
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @export
-#' @importFrom comorbidity comorbidity
 #' @examples
 #' \dontrun{
 #' df <- data.frame(

@@ -1,8 +1,6 @@
-#' @importFrom readxl read_excel excel_sheets
 #' @importFrom stringr str_trim str_replace_all str_detect str_extract
-#' @importFrom dplyr select mutate filter all_of any_of
+#' @importFrom dplyr select mutate filter all_of any_of %>%
 #' @importFrom tibble as_tibble
-#' @importFrom usethis use_data
 NULL
 
 #' Parsear datos CIE-10 MINSAL/DEIS desde XLS
