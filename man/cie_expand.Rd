@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-utils.R
 \name{cie_expand}
 \alias{cie_expand}
-\title{Expandir codigo jerarquico (ej. E11 → E11.0-E11.9)}
+\title{Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)}
 \usage{
 cie_expand(codigo)
 }
@@ -13,7 +13,7 @@ cie_expand(codigo)
 Character vector codigos hijos
 }
 \description{
-Expandir codigo jerarquico (ej. E11 → E11.0-E11.9)
+Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 }
 \examples{
 cie_expand("E11")
