@@ -113,6 +113,11 @@ cie_lookup <- function(codigo, expandir = FALSE) {
 #' @keywords internal
 #' @noRd
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
+  # Asegurar que codigo_norm es un escalar (longitud 1)
+  if (length(codigo_norm) != 1) {
+    stop("cie_lookup_single() solo acepta un codigo a la vez")
+  }
+  
   if (expandir) {
     # Buscar jerarquia completa (E11 → E11.x)
     query <- sprintf(
