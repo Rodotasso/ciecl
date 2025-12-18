@@ -77,17 +77,28 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
 #'
 #' @param codigo Character vector de códigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
 #'   o rango (ej. "E10-E14"). Acepta vectores de múltiples códigos.
+#'   Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoría (E11).
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
+#' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
 #' @examples
-#' cie_lookup("E11.0")
+#' cie_lookup("E11.0")       # Con punto
+#' cie_lookup("E110")        # Sin punto
+#' cie_lookup("E11")         # Solo categoria
 #' cie_lookup("E11", expandir = TRUE)  # Todos E11.x
-#' # Vectorizado - multiples codigos
+#' # Vectorizado - multiples codigos y formatos
 #' cie_lookup(c("E11.0", "Z00", "I10"))
-cie_lookup <- function(codigo, expandir = FALSE) {
+cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE) {
   # Normalizar entrada
-  codigo_norm <- stringr::str_trim(toupper(codigo))
+  codigo_input <- stringr::str_trim(toupper(codigo))
+  
+  # Normalizar formato si se solicita
+  if (normalizar) {
+    codigo_norm <- stringr::str_replace_all(codigo_input, "\\.", "")
+  } else {
+    codigo_norm <- codigo_input
+  }
   
   # Si es vector de multiples codigos, procesar cada uno y combinar
   if (length(codigo_norm) > 1) {
