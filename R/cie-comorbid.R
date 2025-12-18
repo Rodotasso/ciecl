@@ -8,6 +8,10 @@
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @export
 #' @importFrom comorbidity comorbidity
+#' @importFrom dplyr filter mutate rowwise ungroup pull first
+#' @importFrom stringr str_detect
+#' @importFrom tibble tribble tibble as_tibble
+#' @importFrom magrittr %>%
 #' @examples
 #' \dontrun{
 #' df <- data.frame(
