@@ -1,3 +1,4 @@
+# R files
 .Rproj.user
 .Rhistory
 .RData
@@ -5,3 +6,38 @@
 *.Rproj
 .Renviron
 .env
+
+# Bases de datos y archivos de datos
+*.xlsx
+*.xls
+*.csv
+*.rds
+*.rda (excepto data/)
+*.RData
+
+# PDFs generados
+*.pdf
+
+# Archivos de prueba
+*_prueba.*
+prueba_*
+test_paquete.*
+
+# Carpeta de análisis (no trackear)
+analisis/
+analisis_*/
+comparaciones/
+
+# Archivos de análisis
+analisis_*.R
+comparar_*.R
+generar_dataset.R
+
+# Documentos Quarto de prueba
+*.qmd
+!vignettes/*.Rmd
+!README.Rmd
+
+# Outputs de Quarto
+*_files/
+*.html
