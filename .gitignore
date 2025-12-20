@@ -41,3 +41,7 @@ generar_dataset.R
 # Outputs de Quarto
 *_files/
 *.html
+
+# Carpeta de desarrollo (documentación interna, scripts de prueba)
+dev/
+dev/*
