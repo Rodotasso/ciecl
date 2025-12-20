@@ -123,11 +123,16 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   }
   
   # Agregar columna descripcion_completa si se solicita
-  if (descripcion_completa && nrow(resultado) > 0) {
-    resultado <- resultado %>%
-      dplyr::mutate(
-        descripcion_completa = paste0(codigo, " - ", descripcion)
-      )
+  if (descripcion_completa) {
+    if (nrow(resultado) > 0) {
+      resultado <- resultado %>%
+        dplyr::mutate(
+          descripcion_completa = paste0(codigo, " - ", descripcion)
+        )
+    } else {
+      # Asegurar que la columna existe incluso cuando el resultado está vacío
+      resultado$descripcion_completa <- character(0)
+    }
   }
   
   return(resultado)
