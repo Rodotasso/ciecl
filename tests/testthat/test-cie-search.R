@@ -95,3 +95,24 @@ test_that("cie_lookup puede generar descripcion_completa", {
   expect_true("descripcion_completa" %in% names(resultado_completo))
   expect_true(stringr::str_detect(resultado_completo$descripcion_completa, "E11\\.0 - "))
 })
+test_that("cie_lookup con descripcion_completa mantiene columna en dataframe vacio", {
+  skip_on_cran()
+  
+  # Bug fix: Cuando todos los codigos son invalidos, debe mantener la columna descripcion_completa
+  suppressMessages({
+    resultado_vacio <- cie_lookup(codigo = c("XXXX", "YYYY", "ZZZZ"), descripcion_completa = TRUE)
+  })
+  
+  # El dataframe debe estar vacio
+  expect_equal(nrow(resultado_vacio), 0)
+  
+  # Pero debe tener 11 columnas incluyendo descripcion_completa
+  expect_equal(ncol(resultado_vacio), 11)
+  expect_true("descripcion_completa" %in% names(resultado_vacio))
+  
+  # Verificar nombres de todas las columnas esperadas
+  columnas_esperadas <- c("codigo", "descripcion", "categoria", "seccion", 
+                          "capitulo_nombre", "inclusion", "exclusion", "capitulo", 
+                          "es_daga", "es_cruz", "descripcion_completa")
+  expect_equal(names(resultado_vacio), columnas_esperadas)
+})

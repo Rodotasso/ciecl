@@ -131,7 +131,9 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
         )
     } else {
       # Asegurar que la columna existe incluso cuando el resultado está vacío
-      resultado$descripcion_completa <- character(0)
+      # Necesitamos usar tibble::add_column() para mantener la estructura de tibble
+      resultado <- resultado %>%
+        tibble::add_column(descripcion_completa = character(0))
     }
   }
   
