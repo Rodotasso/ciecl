@@ -39,6 +39,7 @@ Suggests:
     magrittr,
     testthat (>= 3.0.0),
     knitr,
+    litedown (>= 0.9),
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/RodoTasso/ciecl
