@@ -91,8 +91,50 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
 #' # Con descripcion completa
 #' cie_lookup("E110", descripcion_completa = TRUE)
 cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE) {
+  # Manejar vector vacio
+
+  if (length(codigo) == 0) {
+    resultado_vacio <- tibble::tibble(
+      codigo = character(0),
+      descripcion = character(0),
+      categoria = character(0),
+      seccion = character(0),
+      capitulo_nombre = character(0),
+      inclusion = character(0),
+      exclusion = character(0),
+      capitulo = character(0),
+      es_daga = logical(0),
+      es_cruz = logical(0)
+    )
+    if (descripcion_completa) {
+      resultado_vacio$descripcion_completa <- character(0)
+    }
+    return(resultado_vacio)
+  }
+
+  # Filtrar NAs antes de procesar
+  codigo_sin_na <- codigo[!is.na(codigo)]
+  if (length(codigo_sin_na) == 0) {
+    resultado_vacio <- tibble::tibble(
+      codigo = character(0),
+      descripcion = character(0),
+      categoria = character(0),
+      seccion = character(0),
+      capitulo_nombre = character(0),
+      inclusion = character(0),
+      exclusion = character(0),
+      capitulo = character(0),
+      es_daga = logical(0),
+      es_cruz = logical(0)
+    )
+    if (descripcion_completa) {
+      resultado_vacio$descripcion_completa <- character(0)
+    }
+    return(resultado_vacio)
+  }
+
   # Normalizar entrada
-  codigo_input <- stringr::str_trim(toupper(codigo))
+  codigo_input <- stringr::str_trim(toupper(codigo_sin_na))
   
   # Normalizar formato si se solicita: agregar punto si falta (E110 -> E11.0)
   if (normalizar) {
@@ -148,7 +190,57 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   if (length(codigo_norm) != 1) {
     stop("cie_lookup_single() solo acepta un codigo a la vez")
   }
-  
+
+  # Manejar NA
+  if (is.na(codigo_norm)) {
+    return(tibble::tibble(
+      codigo = character(0),
+      descripcion = character(0),
+      categoria = character(0),
+      seccion = character(0),
+      capitulo_nombre = character(0),
+      inclusion = character(0),
+      exclusion = character(0),
+      capitulo = character(0),
+      es_daga = logical(0),
+      es_cruz = logical(0)
+    ))
+  }
+
+  # Manejar cadena vacia
+  if (nchar(stringr::str_trim(codigo_norm)) == 0) {
+    return(tibble::tibble(
+      codigo = character(0),
+      descripcion = character(0),
+      categoria = character(0),
+      seccion = character(0),
+      capitulo_nombre = character(0),
+      inclusion = character(0),
+      exclusion = character(0),
+      capitulo = character(0),
+      es_daga = logical(0),
+      es_cruz = logical(0)
+    ))
+  }
+
+  # Sanitizar entrada para prevenir SQL injection
+  # Solo permitir caracteres validos para codigos CIE-10: letras, numeros, punto, guion
+  if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
+    message("x Codigo con caracteres invalidos: ", codigo_norm)
+    return(tibble::tibble(
+      codigo = character(0),
+      descripcion = character(0),
+      categoria = character(0),
+      seccion = character(0),
+      capitulo_nombre = character(0),
+      inclusion = character(0),
+      exclusion = character(0),
+      capitulo = character(0),
+      es_daga = logical(0),
+      es_cruz = logical(0)
+    ))
+  }
+
   if (expandir) {
     # Buscar jerarquia completa (E11 -> E11.x)
     query <- sprintf(
@@ -169,12 +261,12 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
       codigo_norm
     )
   }
-  
+
   resultado <- cie10_sql(query)
-  
+
   if (nrow(resultado) == 0) {
     message("x Codigo no encontrado: ", codigo_norm)
   }
-  
+
   return(resultado)
 }
