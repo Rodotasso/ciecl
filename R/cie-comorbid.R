@@ -76,6 +76,14 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' @examples
 #' cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))
 cie_map_comorbid <- function(codigos) {
+  # Manejar vector vacio
+  if (length(codigos) == 0) {
+    return(tibble::tibble(
+      codigo = character(0),
+      categoria = character(0)
+    ))
+  }
+
   # Mapeo manual categorias MINSAL (extender segun necesidad)
   mapeo_chile <- tibble::tribble(
     ~patron,        ~categoria,
@@ -87,19 +95,23 @@ cie_map_comorbid <- function(codigos) {
     "^N18",         "Enfermedad renal cronica",
     "^F[0-9]{2}",   "Trastornos mentales"
   )
-  
-  resultado <- tibble::tibble(codigo = codigos) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      categoria = {
-        match <- mapeo_chile %>%
-          dplyr::filter(stringr::str_detect(codigo, patron)) %>%
-          dplyr::pull(categoria) %>%
-          dplyr::first()
-        ifelse(is.na(match), "Otra", match)
+
+  # Funcion para categorizar un solo codigo
+
+  categorizar <- function(cod) {
+    if (is.na(cod)) return("Otra")
+    for (i in seq_len(nrow(mapeo_chile))) {
+      if (stringr::str_detect(cod, mapeo_chile$patron[i])) {
+        return(mapeo_chile$categoria[i])
       }
-    ) %>%
-    dplyr::ungroup()
-  
+    }
+    return("Otra")
+  }
+
+  resultado <- tibble::tibble(
+    codigo = codigos,
+    categoria = sapply(codigos, categorizar, USE.NAMES = FALSE)
+  )
+
   return(resultado)
 }

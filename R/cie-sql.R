@@ -54,7 +54,10 @@ get_cie10_db <- function() {
 #'            FROM pacientes p JOIN cie10 c ON p.codigo = c.codigo")
 #' }
 cie10_sql <- function(query, close = TRUE) {
-  if (!stringr::str_detect(query, "(?i)^SELECT")) {
+  # Normalizar query: eliminar espacios y saltos de linea al inicio
+  query_norm <- stringr::str_trim(query)
+
+  if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
     stop("Solo queries SELECT permitidas (seguridad)")
   }
   

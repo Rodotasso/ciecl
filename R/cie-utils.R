@@ -66,8 +66,13 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   # MINSAL: [A-Z]\d{2}\d? (3-4 chars: E11, E110)
   # Estandar: [A-Z]\d{2}\.\d{1,2} (con punto: E11.0, E11.00)
   patron <- "^[A-Z]\\d{2}(\\d|\\.\\d{1,2})?$"
-  
-  validos_formato <- stringr::str_detect(toupper(codigos), patron)
+
+  # Manejar NAs: retornar FALSE para NAs
+  validos_formato <- ifelse(
+    is.na(codigos),
+    FALSE,
+    stringr::str_detect(toupper(codigos), patron)
+  )
   
   if (strict) {
     # Validar existencia en DB con conexion segura
@@ -98,6 +103,11 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
 #' @examples
 #' cie_expand("E11")
 cie_expand <- function(codigo) {
+  # Manejar NA o cadena vacia
+  if (length(codigo) == 0 || is.na(codigo) || nchar(stringr::str_trim(codigo)) == 0) {
+    return(character(0))
+  }
+
   hijos <- cie_lookup(codigo, expandir = TRUE)$codigo
   return(hijos)
 }
