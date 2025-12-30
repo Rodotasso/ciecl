@@ -30,9 +30,9 @@ especializadas para:
 - Expansion de categorias a subcategorias (ej: E11 -\> E11.0, E11.1, …,
   E11.9)
 
-## Por que usar ciecl en lugar de un archivo XLSX
+## Por que usar ciecl 
 
-### Ventajas sobre archivos Excel:
+### Ventajas:
 
 1.  **Rendimiento**: Base de datos SQLite indexada con busquedas 10-100x
     mas rapidas que Excel
