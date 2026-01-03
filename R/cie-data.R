@@ -11,7 +11,7 @@ NULL
 #' Detecta columnas automaticamente para mayor robustez.
 #' 
 #' @param xls_path Ruta al archivo XLS descargado DEIS
-#' @return tibble con ~10,000 codigos CIE-10 Chile limpios
+#' @return tibble con 39,873 codigos CIE-10 Chile limpios
 #' @keywords internal
 #' @noRd
 parsear_cie10_minsal <- function(xls_path) {
@@ -122,7 +122,7 @@ generar_cie10_cl <- function(xls_path = NULL) {
 
 #' Dataset CIE-10 Chile oficial MINSAL/DEIS v2018
 #'
-#' @format tibble con ~10,000 filas:
+#' @format tibble con 39,873 filas (categorias y subcategorias):
 #' \describe{
 #'   \item{codigo}{Codigo CIE-10 (ej. "E11.0")}
 #'   \item{descripcion}{Diagnostico en espanol chileno}
@@ -133,7 +133,7 @@ generar_cie10_cl <- function(xls_path = NULL) {
 #'   \item{es_daga}{Logical, codigo daga (+)}
 #'   \item{es_cruz}{Logical, codigo asterisco (*)}
 #' }
-#' @source \url{https://repositoriodeis.minsal.cl}
+#' @source \url{https://deis.minsal.cl/centrofic/}
 #' @examples
 #' data(cie10_cl)
 #' head(cie10_cl)

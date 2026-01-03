@@ -1,6 +1,6 @@
 Package: ciecl
 Title: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     person("Rodolfo", "Tasso Suazo", 
            email = "rtasso@uchile.cl",
@@ -10,10 +10,10 @@ Description: Herramientas para trabajar con Clasificacion Internacional de
     SQL optimizada con SQLite, matching difuso de terminos medicos (fuzzy 
     Jaro-Winkler), calculo de comorbilidades Charlson y Elixhauser adaptadas 
     a codigos chilenos, integracion con API CIE-11 OMS, validacion y expansion 
-    de codigos jerarquicos. Datos parseados del repositorio publico DEIS 
-    <https://repositoriodeis.minsal.cl>. Disenado para vigilancia 
+    de codigos jerarquicos. Datos del Centro FIC Chile DEIS 
+    <https://deis.minsal.cl/centrofic/>. Disenado para vigilancia 
     epidemiologica, analisis de registros medicos y estudios de salud publica 
-    en Chile y Latinoamerica.
+    en Chile y Latinoamerica. BETA: en fase de desarrollo activo.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
