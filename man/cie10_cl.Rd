@@ -5,7 +5,7 @@
 \alias{cie10_cl}
 \title{Dataset CIE-10 Chile oficial MINSAL/DEIS v2018}
 \format{
-tibble con ~10,000 filas:
+tibble con 39,873 filas (categorias y subcategorias):
 \describe{
 \item{codigo}{Codigo CIE-10 (ej. "E11.0")}
 \item{descripcion}{Diagnostico en espanol chileno}
@@ -18,7 +18,7 @@ tibble con ~10,000 filas:
 }
 }
 \source{
-\url{https://repositoriodeis.minsal.cl}
+\url{https://deis.minsal.cl/centrofic/}
 }
 \usage{
 cie10_cl
