@@ -42,7 +42,7 @@ Suggests:
     litedown (>= 0.9),
     rmarkdown
 VignetteBuilder: knitr
-URL: https://github.com/RodoTasso/ciecl
-BugReports: https://github.com/RodoTasso/ciecl/issues
+URL: https://github.com/Rodotasso/ciecl
+BugReports: https://github.com/Rodotasso/ciecl/issues
 Config/testthat/edition: 3
 Language: es
