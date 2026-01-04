@@ -30,13 +30,12 @@ Imports:
     tibble,
     tools,
     utils
-Suggests: 
+Suggests:
     comorbidity,
     gt,
     httr2,
     readxl,
     usethis,
-    magrittr,
     testthat (>= 3.0.0),
     knitr,
     litedown (>= 0.9),
