@@ -38,7 +38,7 @@ Los datos estan incluidos en el paquete (data/cie10_cl.rda).
 
 ### Cache local
 El paquete crea opcionalmente una base de datos SQLite en el directorio de cache del usuario
-usando `tools::R_user_dir("ciecl", "cache")` segun las recomendaciones de CRAN.
+usando `tools::R_user_dir("ciecl", "data")` segun las recomendaciones de CRAN.
 Los tests incluyen `skip_on_cran()` para evitar la creacion de archivos durante el check.
 
 ### API externa (opcional)

@@ -45,3 +45,4 @@ generar_dataset.R
 # Carpeta de desarrollo (documentación interna, scripts de prueba)
 dev/
 dev/*CLAUDE.md
+CLAUDE.md

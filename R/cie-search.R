@@ -22,10 +22,18 @@ NULL
 #' 
 #' # Buscar en inclusiones
 #' cie_search("neumonia bacteriana", campo = "inclusion")
-cie_search <- function(texto, threshold = 0.80, max_results = 20, 
+cie_search <- function(texto, threshold = 0.80, max_results = 20,
                        campo = c("descripcion", "inclusion")) {
   campo <- match.arg(campo)
-  
+
+  # Validacion de parametros
+
+  if (threshold < 0 || threshold > 1) {
+    stop("threshold debe estar entre 0 y 1")
+  }
+  if (max_results < 1) {
+    stop("max_results debe ser >= 1")
+  }
   if (nchar(stringr::str_trim(texto)) < 3) {
     stop("Texto minimo 3 caracteres")
   }
@@ -91,43 +99,13 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   # Manejar vector vacio
 
   if (length(codigo) == 0) {
-    resultado_vacio <- tibble::tibble(
-      codigo = character(0),
-      descripcion = character(0),
-      categoria = character(0),
-      seccion = character(0),
-      capitulo_nombre = character(0),
-      inclusion = character(0),
-      exclusion = character(0),
-      capitulo = character(0),
-      es_daga = logical(0),
-      es_cruz = logical(0)
-    )
-    if (descripcion_completa) {
-      resultado_vacio$descripcion_completa <- character(0)
-    }
-    return(resultado_vacio)
+    return(cie10_empty_tibble(add_descripcion_completa = descripcion_completa))
   }
 
   # Filtrar NAs antes de procesar
   codigo_sin_na <- codigo[!is.na(codigo)]
   if (length(codigo_sin_na) == 0) {
-    resultado_vacio <- tibble::tibble(
-      codigo = character(0),
-      descripcion = character(0),
-      categoria = character(0),
-      seccion = character(0),
-      capitulo_nombre = character(0),
-      inclusion = character(0),
-      exclusion = character(0),
-      capitulo = character(0),
-      es_daga = logical(0),
-      es_cruz = logical(0)
-    )
-    if (descripcion_completa) {
-      resultado_vacio$descripcion_completa <- character(0)
-    }
-    return(resultado_vacio)
+    return(cie10_empty_tibble(add_descripcion_completa = descripcion_completa))
   }
 
   # Normalizar entrada
@@ -190,76 +168,41 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 
   # Manejar NA
   if (is.na(codigo_norm)) {
-    return(tibble::tibble(
-      codigo = character(0),
-      descripcion = character(0),
-      categoria = character(0),
-      seccion = character(0),
-      capitulo_nombre = character(0),
-      inclusion = character(0),
-      exclusion = character(0),
-      capitulo = character(0),
-      es_daga = logical(0),
-      es_cruz = logical(0)
-    ))
+    return(cie10_empty_tibble())
   }
 
   # Manejar cadena vacia
   if (nchar(stringr::str_trim(codigo_norm)) == 0) {
-    return(tibble::tibble(
-      codigo = character(0),
-      descripcion = character(0),
-      categoria = character(0),
-      seccion = character(0),
-      capitulo_nombre = character(0),
-      inclusion = character(0),
-      exclusion = character(0),
-      capitulo = character(0),
-      es_daga = logical(0),
-      es_cruz = logical(0)
-    ))
+    return(cie10_empty_tibble())
   }
 
   # Sanitizar entrada para prevenir SQL injection
   # Solo permitir caracteres validos para codigos CIE-10: letras, numeros, punto, guion
   if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
     message("x Codigo con caracteres invalidos: ", codigo_norm)
-    return(tibble::tibble(
-      codigo = character(0),
-      descripcion = character(0),
-      categoria = character(0),
-      seccion = character(0),
-      capitulo_nombre = character(0),
-      inclusion = character(0),
-      exclusion = character(0),
-      capitulo = character(0),
-      es_daga = logical(0),
-      es_cruz = logical(0)
-    ))
+    return(cie10_empty_tibble())
   }
+
+  # Conexion con queries parametrizadas (previene SQL injection)
+  con <- get_cie10_db()
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   if (expandir) {
     # Buscar jerarquia completa (E11 -> E11.x)
-    query <- sprintf(
-      "SELECT * FROM cie10 WHERE codigo LIKE '%s%%' ORDER BY codigo",
-      codigo_norm
-    )
+    query <- "SELECT * FROM cie10 WHERE codigo LIKE ? ORDER BY codigo"
+    resultado <- DBI::dbGetQuery(con, query, params = list(paste0(codigo_norm, "%")))
   } else if (stringr::str_detect(codigo_norm, "-")) {
     # Rango (ej. "E10-E14")
     partes <- stringr::str_split(codigo_norm, "-")[[1]]
-    query <- sprintf(
-      "SELECT * FROM cie10 WHERE codigo BETWEEN '%s' AND '%s' ORDER BY codigo",
-      partes[1], partes[2]
-    )
+    query <- "SELECT * FROM cie10 WHERE codigo BETWEEN ? AND ? ORDER BY codigo"
+    resultado <- DBI::dbGetQuery(con, query, params = list(partes[1], partes[2]))
   } else {
     # Exacto
-    query <- sprintf(
-      "SELECT * FROM cie10 WHERE codigo = '%s'",
-      codigo_norm
-    )
+    query <- "SELECT * FROM cie10 WHERE codigo = ?"
+    resultado <- DBI::dbGetQuery(con, query, params = list(codigo_norm))
   }
 
-  resultado <- cie10_sql(query)
+  resultado <- tibble::as_tibble(resultado)
 
   if (nrow(resultado) == 0) {
     message("x Codigo no encontrado: ", codigo_norm)
