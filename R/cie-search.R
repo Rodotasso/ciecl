@@ -3,9 +3,6 @@
 #' @importFrom tibble as_tibble
 NULL
 
-# Declarar variables NSE globales
-utils::globalVariables(c("codigo", "descripcion", "score", "."))
-
 #' Busqueda difusa (fuzzy) de terminos medicos CIE-10
 #'
 #' @param texto String termino medico en espanol (ej. "diabetes con coma")

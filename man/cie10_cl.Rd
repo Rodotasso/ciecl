@@ -10,6 +10,8 @@ tibble con 39,873 filas (categorias y subcategorias):
 \item{codigo}{Codigo CIE-10 (ej. "E11.0")}
 \item{descripcion}{Diagnostico en espanol chileno}
 \item{categoria}{Categoria jerarquica}
+\item{seccion}{Seccion dentro del capitulo}
+\item{capitulo_nombre}{Nombre descriptivo del capitulo}
 \item{inclusion}{Terminos incluidos}
 \item{exclusion}{Terminos excluidos}
 \item{capitulo}{Capitulo CIE-10 (A-Z)}

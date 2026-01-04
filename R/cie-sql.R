@@ -60,14 +60,16 @@ cie10_sql <- function(query, close = TRUE) {
   if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
     stop("Solo queries SELECT permitidas (seguridad)")
   }
-  
+
   con <- get_cie10_db()
-  resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
-  
+
+  # Garantizar cierre de conexion incluso si hay error
   if (close) {
-    DBI::dbDisconnect(con)
+    on.exit(DBI::dbDisconnect(con), add = TRUE)
   }
-  
+
+  resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
+
   return(resultado)
 }
 
