@@ -52,6 +52,33 @@ devtools::load_all()      # Cargar paquete en desarrollo
 - Centro FIC: https://deis.minsal.cl/centrofic/
 - API CIE-11: https://icd.who.int/icdapi
 
+## Rutas del Sistema (Windows)
+```bash
+# R ejecutable
+R_PATH="/c/Program Files/R/R-4.4.3/bin/Rscript.exe"
+
+# Proyecto
+PROJECT_DIR="D:/MAGISTER/01_Paquete_R/ciecl"
+
+# Ejecutar comandos R
+"$R_PATH" -e "setwd('$PROJECT_DIR'); <comando>"
+```
+
+### Ejemplos Bash
+```bash
+# Documentar
+"/c/Program Files/R/R-4.4.3/bin/Rscript.exe" -e "setwd('D:/MAGISTER/01_Paquete_R/ciecl'); devtools::document()"
+
+# Check
+"/c/Program Files/R/R-4.4.3/bin/Rscript.exe" -e "setwd('D:/MAGISTER/01_Paquete_R/ciecl'); devtools::check(error_on = 'error')"
+
+# Tests
+"/c/Program Files/R/R-4.4.3/bin/Rscript.exe" -e "setwd('D:/MAGISTER/01_Paquete_R/ciecl'); devtools::test()"
+
+# Load all
+"/c/Program Files/R/R-4.4.3/bin/Rscript.exe" -e "setwd('D:/MAGISTER/01_Paquete_R/ciecl'); devtools::load_all()"
+```
+
 ## Contexto Técnico
 - Dataset: SQLite cache en `tools::R_user_dir("ciecl", "data")`
 - Fuzzy: Jaro-Winkler via `stringdist`
