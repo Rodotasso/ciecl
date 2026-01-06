@@ -130,7 +130,7 @@ sudo dnf install -y \
 
 **Nota**: El paquete tiene **dependencias minimas** para funcionalidad
 core. Paquetes adicionales solo se requieren para funciones especificas.
-Ver [dev/DEPENDENCIAS.md](dev/DEPENDENCIAS.md) para detalles.
+Ver [DEPENDENCIAS.md](DEPENDENCIAS.md) para detalles.
 
 ## Uso rapido
 

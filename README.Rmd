@@ -86,7 +86,7 @@ install.packages("ciecl", dependencies = TRUE)
 devtools::install_github("RodoTasso/ciecl")
 ```
 
-**Nota**: El paquete tiene **dependencias mínimas** para funcionalidad core. Paquetes adicionales solo se requieren para funciones específicas. Ver [dev/DEPENDENCIAS.md](dev/DEPENDENCIAS.md) para detalles.
+**Nota**: El paquete tiene **dependencias mínimas** para funcionalidad core. Paquetes adicionales solo se requieren para funciones específicas. Ver [DEPENDENCIAS.md](DEPENDENCIAS.md) para detalles.
 
 ## Uso rapido
 
