@@ -2,7 +2,21 @@
 #'
 #' @description
 #' Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
-#' Acepta codigos con punto (E11.0), sin punto (E110), o solo categoria (E11).
+#' Acepta codigos con punto (E11.0), sin punto (E110), solo categoria (E11),
+#' o con sufijo X (I10X, J00X).
+#' 
+#' @details
+#' La normalizacion incluye:
+#' \itemize{
+#'   \item Conversion a mayusculas
+#'   \item Eliminacion de espacios
+#'   \item Eliminacion de sufijo X final (I10X -> I10, J00X -> J00)
+#'   \item Agregado de punto en posicion correcta (E110 -> E11.0)
+#' }
+#' 
+#' El sufijo "X" se usa en algunas codificaciones para indicar que no hay
+
+#' subcategoria adicional (ej. I10X = Hipertension esencial sin especificar).
 #' 
 #' @param codigos Character vector de codigos en cualquier formato
 #' @param buscar_db Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)
@@ -11,10 +25,17 @@
 #' @examples
 #' cie_normalizar("E110")   # Retorna "E11.0"
 #' cie_normalizar("E11")    # Retorna "E11" (categoria)
-#' cie_normalizar(c("E110", "I100", "Z00"))  # Vectorizado
+#' cie_normalizar("I10X")   # Retorna "I10" (elimina X)
+#' cie_normalizar("J00X")   # Retorna "J00" (elimina X)
+#' cie_normalizar(c("E110", "I10X", "Z00"))  # Vectorizado
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
   # Normalizar a mayusculas y trim
   codigos_norm <- stringr::str_trim(toupper(codigos))
+  
+
+  # Eliminar sufijo X final (I10X -> I10, J00X -> J00)
+  # El sufijo X indica "sin subcategoria adicional" en algunas codificaciones
+  codigos_norm <- stringr::str_remove(codigos_norm, "X$")
   
   # Agregar punto si no lo tiene (E110 -> E11.0)
   # Solo para códigos de 4+ caracteres sin punto: [A-Z]\d{3,}

@@ -1,3 +1,11 @@
+# ciecl 0.1.0.9000 (desarrollo)
+
+## Mejoras
+
+* `cie_normalizar()`: Ahora elimina automaticamente el sufijo "X" de codigos CIE-10
+  (ej. I10X -> I10, J00X -> J00). Esto permite trabajar con codigos que usan "X"
+  para indicar ausencia de subcategoria adicional (#nueva-funcionalidad).
+
 # ciecl 0.1.0 (BETA)
 
 > **NOTA**: Esta es una version beta en desarrollo activo. La API puede cambiar

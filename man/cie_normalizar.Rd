@@ -16,10 +16,25 @@ Character vector con codigos normalizados al formato con punto
 }
 \description{
 Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
-Acepta codigos con punto (E11.0), sin punto (E110), o solo categoria (E11).
+Acepta codigos con punto (E11.0), sin punto (E110), solo categoria (E11),
+o con sufijo X (I10X, J00X).
+}
+\details{
+La normalizacion incluye:
+\itemize{
+\item Conversion a mayusculas
+\item Eliminacion de espacios
+\item Eliminacion de sufijo X final (I10X -> I10, J00X -> J00)
+\item Agregado de punto en posicion correcta (E110 -> E11.0)
+}
+
+El sufijo "X" se usa en algunas codificaciones para indicar que no hay
+subcategoria adicional (ej. I10X = Hipertension esencial sin especificar).
 }
 \examples{
 cie_normalizar("E110")   # Retorna "E11.0"
 cie_normalizar("E11")    # Retorna "E11" (categoria)
-cie_normalizar(c("E110", "I100", "Z00"))  # Vectorizado
+cie_normalizar("I10X")   # Retorna "I10" (elimina X)
+cie_normalizar("J00X")   # Retorna "J00" (elimina X)
+cie_normalizar(c("E110", "I10X", "Z00"))  # Vectorizado
 }
