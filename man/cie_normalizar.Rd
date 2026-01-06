@@ -16,28 +16,33 @@ Character vector con codigos normalizados al formato con punto
 }
 \description{
 Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
-Acepta codigos con punto (E11.0), sin punto (E110), solo categoria (E11),
-o con sufijo X (I10X, J00X).
+Maneja multiples variaciones de entrada comunes en datos clinicos.
 }
 \details{
 La normalizacion incluye:
 \itemize{
 \item Conversion a mayusculas
-\item Eliminacion de espacios
-\item Eliminacion de sufijo X final en codigos cortos (I10X -> I10, J00X -> J00)
-\item Preservacion de X en codigos largos donde es placeholder obligatorio (S72X01A)
+\item Eliminacion de espacios (inicio, fin e internos)
+\item Eliminacion de simbolos daga y asterisco (codificacion dual)
+\item Conversion de guiones a puntos (I10-0 -> I10.0)
+\item Eliminacion de puntos iniciales (.I10 -> I10)
+\item Correccion de puntos multiples (E..11 -> E.11)
+\item Eliminacion de sufijo X en codigos cortos (I10X -> I10)
+\item Preservacion de X en codigos largos (placeholder 7o caracter)
 \item Agregado de punto en posicion correcta (E110 -> E11.0)
 }
 
-El sufijo "X" se usa en algunas codificaciones para indicar que no hay
-subcategoria adicional (ej. I10X = Hipertension esencial sin especificar).
-En codigos de trauma/lesiones con 7o caracter de extension, la X es un
-placeholder obligatorio y se preserva.
+El sistema de daga/asterisco indica codificacion dual donde la daga
+marca la enfermedad subyacente y el asterisco la manifestacion.
+Ambos simbolos se eliminan para normalizacion.
 }
 \examples{
-cie_normalizar("E110")   # Retorna "E11.0"
-cie_normalizar("E11")    # Retorna "E11" (categoria)
-cie_normalizar("I10X")   # Retorna "I10" (elimina X)
-cie_normalizar("J00X")   # Retorna "J00" (elimina X)
+cie_normalizar("E110")     # Retorna "E11.0"
+cie_normalizar("E11")      # Retorna "E11" (categoria)
+cie_normalizar("I10X")     # Retorna "I10" (elimina X)
+cie_normalizar("E 11 0")   # Retorna "E11.0" (espacios internos)
+cie_normalizar("I10-0")    # Retorna "I10.0" (guion a punto)
+cie_normalizar("A17.0\u2020") # Retorna "A17.0" (elimina daga)
+cie_normalizar("G01*")     # Retorna "G01" (elimina asterisco)
 cie_normalizar(c("E110", "I10X", "Z00"))  # Vectorizado
 }
