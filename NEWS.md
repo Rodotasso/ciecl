@@ -2,6 +2,13 @@
 
 ## Mejoras
 
+* `cie_normalizar()`: Manejo robusto de caracteres especiales comunes en datos clinicos:
+  - Espacios internos (E 11 0 -> E11.0)
+  - Guiones en lugar de puntos (I10-0 -> I10.0)
+  - Puntos multiples consecutivos (E..11 -> E.11)
+  - Puntos iniciales (.I10 -> I10)
+  - Simbolos daga y asterisco de codificacion dual (A17.0† -> A17.0, G01* -> G01)
+
 * `cie_normalizar()`: Ahora elimina automaticamente el sufijo "X" de codigos CIE-10
   (ej. I10X -> I10, J00X -> J00). Esto permite trabajar con codigos que usan "X"
   para indicar ausencia de subcategoria adicional.
