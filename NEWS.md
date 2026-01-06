@@ -1,5 +1,14 @@
 # ciecl 0.1.0.9000 (desarrollo)
 
+## Datos
+
+* Dataset `cie10_cl`: Agregados 4 codigos COVID-19 de actualizaciones OMS 2021:
+  - U08.9: Historia personal de COVID-19
+  - U09.9: Condicion post COVID-19 (COVID prolongado)
+  - U10.9: Sindrome inflamatorio multisistemico (PIMS)
+  - U12.9: Efecto adverso de vacunas COVID-19 (ESAVI)
+  - Total codigos: 39,877 (antes 39,873)
+
 ## Mejoras
 
 * `cie_normalizar()`: Manejo robusto de caracteres especiales comunes en datos clinicos:
