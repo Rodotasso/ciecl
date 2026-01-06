@@ -7,10 +7,20 @@ test_that("cie_normalizar convierte formatos correctamente", {
   # Sin punto (agrega punto)
   expect_equal(cie_normalizar("E110", buscar_db = FALSE), "E11.0")
   
+  # Con sufijo X (elimina X)
+  expect_equal(cie_normalizar("I10X", buscar_db = FALSE), "I10")
+  expect_equal(cie_normalizar("J00X", buscar_db = FALSE), "J00")
+  expect_equal(cie_normalizar("i10x", buscar_db = FALSE), "I10")  # minusculas
+  
   # Vectorizado
   codigos <- c("E11.0", "I10.0", "Z00")
   resultado <- cie_normalizar(codigos, buscar_db = FALSE)
   expect_equal(resultado, c("E11.0", "I10.0", "Z00"))
+  
+  # Vectorizado con X
+  codigos_x <- c("I10X", "J00X", "E110")
+  resultado_x <- cie_normalizar(codigos_x, buscar_db = FALSE)
+  expect_equal(resultado_x, c("I10", "J00", "E11.0"))
 })
 
 test_that("cie_validate_vector detecta formatos invalidos", {
