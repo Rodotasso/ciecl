@@ -10,13 +10,15 @@
 #' \itemize{
 #'   \item Conversion a mayusculas
 #'   \item Eliminacion de espacios
-#'   \item Eliminacion de sufijo X final (I10X -> I10, J00X -> J00)
+#'   \item Eliminacion de sufijo X final en codigos cortos (I10X -> I10, J00X -> J00)
+#'   \item Preservacion de X en codigos largos donde es placeholder obligatorio (S72X01A)
 #'   \item Agregado de punto en posicion correcta (E110 -> E11.0)
 #' }
 #' 
 #' El sufijo "X" se usa en algunas codificaciones para indicar que no hay
-
 #' subcategoria adicional (ej. I10X = Hipertension esencial sin especificar).
+#' En codigos de trauma/lesiones con 7o caracter de extension, la X es un
+#' placeholder obligatorio y se preserva.
 #' 
 #' @param codigos Character vector de codigos en cualquier formato
 #' @param buscar_db Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)
@@ -32,10 +34,14 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
   # Normalizar a mayusculas y trim
   codigos_norm <- stringr::str_trim(toupper(codigos))
   
-
-  # Eliminar sufijo X final (I10X -> I10, J00X -> J00)
-  # El sufijo X indica "sin subcategoria adicional" en algunas codificaciones
-  codigos_norm <- stringr::str_remove(codigos_norm, "X$")
+  # Eliminar sufijo X final solo en codigos cortos (<=5 chars)
+  # Preservar X en codigos largos donde es placeholder obligatorio (ej. S72X01A)
+  # El sufijo X indica "sin subcategoria adicional" en codificaciones DEIS/MINSAL
+  codigos_norm <- ifelse(
+    nchar(codigos_norm) <= 5 & stringr::str_detect(codigos_norm, "X$"),
+    stringr::str_remove(codigos_norm, "X$"),
+    codigos_norm
+  )
   
   # Agregar punto si no lo tiene (E110 -> E11.0)
   # Solo para códigos de 4+ caracteres sin punto: [A-Z]\d{3,}

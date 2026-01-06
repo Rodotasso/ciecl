@@ -4,7 +4,11 @@
 
 * `cie_normalizar()`: Ahora elimina automaticamente el sufijo "X" de codigos CIE-10
   (ej. I10X -> I10, J00X -> J00). Esto permite trabajar con codigos que usan "X"
-  para indicar ausencia de subcategoria adicional (#nueva-funcionalidad).
+  para indicar ausencia de subcategoria adicional.
+
+* `cie_normalizar()`: Preserva X en codigos largos (>5 chars) donde es placeholder
+  obligatorio del 7o caracter de extension en trauma/lesiones (ej. S72X01A).
+  Esto asegura compatibilidad con codificacion ICD-10-CM.
 
 # ciecl 0.1.0 (BETA)
 
