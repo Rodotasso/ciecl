@@ -24,12 +24,15 @@ La normalizacion incluye:
 \itemize{
 \item Conversion a mayusculas
 \item Eliminacion de espacios
-\item Eliminacion de sufijo X final (I10X -> I10, J00X -> J00)
+\item Eliminacion de sufijo X final en codigos cortos (I10X -> I10, J00X -> J00)
+\item Preservacion de X en codigos largos donde es placeholder obligatorio (S72X01A)
 \item Agregado de punto en posicion correcta (E110 -> E11.0)
 }
 
 El sufijo "X" se usa en algunas codificaciones para indicar que no hay
 subcategoria adicional (ej. I10X = Hipertension esencial sin especificar).
+En codigos de trauma/lesiones con 7o caracter de extension, la X es un
+placeholder obligatorio y se preserva.
 }
 \examples{
 cie_normalizar("E110")   # Retorna "E11.0"
