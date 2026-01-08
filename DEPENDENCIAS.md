@@ -1,129 +1,197 @@
 # Dependencias del Paquete ciecl
 
-## ¿Por qué tantas dependencias?
+## Resumen Rapido
 
-El paquete `ciecl` ha sido **reorganizado** para minimizar las dependencias obligatorias.
+```
+                    +------------------+
+                    |      ciecl       |
+                    +------------------+
+                            |
+        +-------------------+-------------------+
+        |                                       |
++-------v-------+                       +-------v-------+
+|   IMPORTS     |                       |   SUGGESTS    |
+|   (8 pkgs)    |                       |   (8 pkgs)    |
+|   Requeridos  |                       |   Opcionales  |
++---------------+                       +---------------+
+```
+
+| Tipo | Cantidad | Instalacion |
+|------|----------|-------------|
+| Imports (obligatorias) | 8 | Automatica |
+| Suggests (opcionales) | 8 | Manual segun uso |
+| **Total** | **16** | - |
+
+---
 
 ## Dependencias OBLIGATORIAS (Imports)
 
-Estas se instalan automáticamente con el paquete:
+Se instalan automaticamente con el paquete:
 
-| Paquete | Uso | ¿Por qué es necesario? |
-|---------|-----|------------------------|
-| **DBI** | Interfaz base de datos | Abstracción para SQLite |
-| **RSQLite** | Motor SQLite | Almacenar y consultar ~9,000 códigos CIE-10 |
-| **stringdist** | Fuzzy matching | Búsqueda con errores tipográficos (Jaro-Winkler) |
-| **stringr** | Manipulación texto | Normalizar códigos, limpiar strings |
-| **dplyr** | Manipulación datos | Transformar y filtrar tibbles |
-| **tibble** | Data frames modernos | Formato de salida consistente |
-| **tools** | Utilidades R | Gestión de directorios de usuario |
-| **utils** | Utilidades base | Funciones básicas de R |
+```
++------------------------------------------------------------------+
+|                        CORE DEPENDENCIES                          |
++------------------------------------------------------------------+
+|                                                                   |
+|  +-------------+     +-------------+     +-------------+          |
+|  |    DBI      |     |  RSQLite    |     | stringdist  |          |
+|  | DB Interface|---->| SQLite Engn |     | Fuzzy Match |          |
+|  +-------------+     +-------------+     +-------------+          |
+|                                                                   |
+|  +-------------+     +-------------+     +-------------+          |
+|  |   stringr   |     |   dplyr     |     |   tibble    |          |
+|  | String Ops  |     | Data Manip  |     | Modern DF   |          |
+|  +-------------+     +-------------+     +-------------+          |
+|                                                                   |
+|  +-------------+     +-------------+                              |
+|  |    tools    |     |    utils    |  <- Base R (incluidos)       |
+|  | User Dirs   |     | Base Utils  |                              |
+|  +-------------+     +-------------+                              |
+|                                                                   |
++------------------------------------------------------------------+
+```
 
-**Total: 8 paquetes** (mínimo necesario para funcionalidad core)
+### Detalle por Paquete
+
+| Paquete | Funcion | Justificacion |
+|---------|---------|---------------|
+| **DBI** | Interfaz DB | Abstraccion para SQLite |
+| **RSQLite** | Motor SQLite | Almacena 39,873 codigos CIE-10 |
+| **stringdist** | Fuzzy matching | Jaro-Winkler para typos |
+| **stringr** | Strings | Normalizar codigos |
+| **dplyr** | Data wrangling | Transformar tibbles |
+| **tibble** | Data frames | Formato salida consistente |
+| **tools** | Utilidades R | Directorios de usuario |
+| **utils** | Base R | Funciones basicas |
+
+---
 
 ## Dependencias OPCIONALES (Suggests)
 
-Solo se necesitan si usas funciones específicas:
+Solo se requieren para funcionalidades especificas:
 
-| Paquete | Funciones que lo requieren | ¿Cómo instalar? |
-|---------|----------------------------|-----------------|
-| **comorbidity** | `cie_comorbid()`, `cie_map_comorbid()` | `install.packages("comorbidity")` |
-| **gt** | `cie_table()` | `install.packages("gt")` |
-| **httr2** | `cie11_search()` | `install.packages("httr2")` |
-| **readxl** | `generar_cie10_cl()` | `install.packages("readxl")` |
-| **usethis** | `generar_cie10_cl()` | `install.packages("usethis")` |
-| **magrittr** | Operador pipe `%>%` | `install.packages("magrittr")` |
-| **testthat** | Pruebas unitarias | Solo para desarrollo |
-| **knitr, rmarkdown** | Vignettes | Solo para documentación |
+```
++------------------------------------------------------------------+
+|                     OPTIONAL DEPENDENCIES                         |
++------------------------------------------------------------------+
+|                                                                   |
+|  ANALISIS AVANZADO          API EXTERNA           DESARROLLO      |
+|  +---------------+          +---------------+     +-------------+ |
+|  | comorbidity   |          |    httr2      |     |  testthat   | |
+|  | Charlson/Elix |          |   CIE-11 API  |     |    Tests    | |
+|  +---------------+          +---------------+     +-------------+ |
+|                                                                   |
+|  VISUALIZACION              GENERACION DATOS                      |
+|  +---------------+          +---------------+     +-------------+ |
+|  |      gt       |          |    readxl     |     |   knitr     | |
+|  | Tablas HTML   |          |  Excel Import |     |  Vignettes  | |
+|  +---------------+          +---------------+     +-------------+ |
+|                                                                   |
+|  UTILIDADES                                                       |
+|  +---------------+          +---------------+                     |
+|  |   usethis     |          |  rmarkdown    |                     |
+|  |  Dev Tools    |          |    Docs       |                     |
+|  +---------------+          +---------------+                     |
+|                                                                   |
++------------------------------------------------------------------+
+```
 
-## ¿Qué funciones NO necesitan paquetes opcionales?
+### Matriz de Funciones vs Dependencias
 
-### ✅ Funcionalidad CORE (sin dependencias extra):
+| Funcion | Paquete Requerido | Instalacion |
+|---------|-------------------|-------------|
+| `cie_comorbid()` | comorbidity | `install.packages("comorbidity")` |
+| `cie_map_comorbid()` | comorbidity | `install.packages("comorbidity")` |
+| `cie_table()` | gt | `install.packages("gt")` |
+| `cie11_search()` | httr2 | `install.packages("httr2")` |
+| `generar_cie10_cl()` | readxl, usethis | `install.packages(c("readxl", "usethis"))` |
+
+---
+
+## Funciones CORE (Sin dependencias extra)
+
+Estas funciones solo requieren los 8 paquetes base:
 
 ```r
 library(ciecl)
 
-# Búsqueda exacta por código
-cie_lookup("E11.0")
-cie_lookup(c("E11.0", "I10", "Z00"))
+# Busqueda exacta
+cie_lookup("E11.0")                    # Un codigo
+cie_lookup(c("E11.0", "I10", "Z00"))   # Multiples
 
-# Búsqueda fuzzy (con typos)
-cie_search("diabetis mellitus")
+# Busqueda fuzzy (tolera typos)
+cie_search("diabetis mellitus")        # Encuentra "diabetes mellitus"
 
-# Normalización de códigos
+# Normalizacion
 cie_normalizar(c("E11.0", "I10.0"))
 
-# Validación de formato
-cie_validate_vector(c("E11.0", "INVALIDO"))
+# Validacion
+cie_validate_vector(c("E11.0", "XXX"))
 
-# Expansión jerárquica
-cie_expand("E11")
+# Expansion jerarquica
+cie_expand("E11")                      # E11 -> E11.0, E11.1, ..., E11.9
 
 # Consultas SQL directas
 cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%'")
 ```
 
-**Estas funciones cubren el 80% de los casos de uso y solo requieren 8 paquetes.**
+> **Cobertura**: Estas funciones cubren el **80%** de los casos de uso tipicos.
 
-## ¿Por qué se sugería 'icd' y 'covr'?
+---
 
-- **`icd`**: No existe en CRAN. Era un remanente de código antiguo. **YA ELIMINADO**.
-- **`covr`**: Para medir cobertura de tests en CI/CD. No es necesario para usuarios. **YA ELIMINADO**.
+## Instalacion
 
-## Comparación con otros paquetes similares
-
-| Paquete | Dependencias Imports | Dependencias Total |
-|---------|---------------------|-------------------|
-| **ciecl (optimizado)** | 8 | 16 |
-| Paquetes típicos de R | 10-15 | 20-30 |
-| Tidyverse completo | 30+ | 80+ |
-
-## ¿Puede el paquete funcionar por sí mismo?
-
-**SÍ**, con limitaciones:
-
-1. **Instalación básica** (solo Imports):
-   ```r
-   install.packages("ciecl")
-   ```
-   - ✅ Búsqueda de códigos
-   - ✅ Fuzzy search
-   - ✅ Consultas SQL
-   - ✅ Validación
-   - ❌ Comorbilidades
-   - ❌ Tablas GT
-   - ❌ API CIE-11
-
-2. **Instalación completa** (con Suggests):
-   ```r
-   install.packages("ciecl", dependencies = TRUE)
-   ```
-   - ✅ Todas las funcionalidades
-
-## Recomendación
-
-Si solo necesitas búsqueda de códigos CIE-10, instala solo el paquete base:
-
+### Minima (solo core)
 ```r
+# 8 dependencias, funcionalidad basica
 install.packages("ciecl")
 ```
 
-Si necesitas análisis avanzado (comorbilidades, tablas bonitas), instala con dependencias:
-
+### Completa (todas las funciones)
 ```r
+# 16 dependencias, todas las funcionalidades
 install.packages("ciecl", dependencies = TRUE)
 ```
 
-O instala solo lo que necesites:
+### Selectiva (segun necesidad)
 ```r
-install.packages(c("ciecl", "comorbidity"))  # Solo para comorbilidades
+# Solo comorbilidades
+install.packages(c("ciecl", "comorbidity"))
+
+# Solo API CIE-11
+install.packages(c("ciecl", "httr2"))
+
+# Solo tablas bonitas
+install.packages(c("ciecl", "gt"))
 ```
 
-## Conclusión
+---
 
-El paquete ahora es **mucho más ligero**:
-- **Antes**: 14 imports (obligatorias)
-- **Ahora**: 8 imports (obligatorias)
-- **Reducción**: 43% menos dependencias obligatorias
+## Comparacion con Otros Paquetes
 
-Las funciones core funcionan sin paquetes adicionales, y solo pides lo opcional cuando realmente lo necesitas.
+```
+Dependencias Imports (obligatorias):
+
+ciecl           ████████ 8
+Tipico R pkg    ████████████ 12
+Tidyverse       ██████████████████████████████ 30+
+```
+
+| Paquete | Imports | Total Deps |
+|---------|---------|------------|
+| **ciecl** | 8 | 16 |
+| Paquete tipico | 10-15 | 20-30 |
+| Tidyverse | 30+ | 80+ |
+
+---
+
+## Historial de Optimizacion
+
+```
+Antes:  14 imports  ████████████████████████████
+Ahora:   8 imports  ████████████████
+
+Reduccion: 43% menos dependencias obligatorias
+```
+
+Las funciones core ahora funcionan sin paquetes adicionales. Solo instalas lo opcional cuando realmente lo necesitas.

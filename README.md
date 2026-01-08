@@ -1,8 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ciecl
-#Grupo Ciencia de Datos para la Salud Pública.
+# ciecl <img src="https://uchile.cl/themes/uchile/assets/images/logo_color.svg" align="right" height="50" alt="UChile">
+
+**Grupo de Ciencia de Datos para la Salud Publica** | Universidad de Chile
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -230,9 +231,30 @@ MIT (codigo del paquete) + datos CIE-10 MINSAL de uso publico
 
 ## Autor
 
-Rodolfo Tasso Suazo (<rtasso@uchile.cl>)
-Grupo de Ciencia de Datos para la Salud Pública
+**Rodolfo Tasso Suazo** | <rtasso@uchile.cl>
+
+### Afiliacion Institucional
+
+<table>
+<tr>
+<td align="center" width="200">
+<img src="https://uchile.cl/themes/uchile/assets/images/logo_color.svg" width="120" alt="Universidad de Chile"><br>
+<strong>Universidad de Chile</strong>
+</td>
+<td align="center" width="200">
+<img src="https://medicina.uchile.cl/themes/medicina/assets/images/logo_color.svg" width="120" alt="Facultad de Medicina"><br>
+<strong>Facultad de Medicina</strong>
+</td>
+</tr>
+</table>
+
+**Grupo de Ciencia de Datos para la Salud Publica**<br>
+Escuela de Salud Publica, Facultad de Medicina<br>
 Universidad de Chile
+
+Este paquete fue desarrollado como parte del trabajo del Grupo de Ciencia de Datos
+para la Salud Publica, dedicado a la aplicacion de metodos computacionales y
+estadisticos para mejorar la investigacion en salud publica en Chile.
 
 ## Enlaces
 
