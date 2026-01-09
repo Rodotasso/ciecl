@@ -3,31 +3,76 @@
 #' @importFrom tibble as_tibble
 NULL
 
+#' Normalizar texto removiendo tildes y caracteres especiales
+#'
+#' @param texto Character vector a normalizar
+#' @return Character vector sin tildes ni caracteres especiales
+#' @keywords internal
+#' @noRd
+normalizar_tildes <- function(texto) {
+
+  # Manejar NA
+  if (length(texto) == 0) return(character(0))
+
+
+  texto <- stringr::str_replace_all(texto, "\u00e1", "a")  # a
+
+  texto <- stringr::str_replace_all(texto, "\u00e9", "e")  # e
+
+  texto <- stringr::str_replace_all(texto, "\u00ed", "i")  # i
+  texto <- stringr::str_replace_all(texto, "\u00f3", "o")  # o
+  texto <- stringr::str_replace_all(texto, "\u00fa", "u")  # u
+  texto <- stringr::str_replace_all(texto, "\u00fc", "u")  # u dieresis
+  texto <- stringr::str_replace_all(texto, "\u00f1", "n")  # n tilde
+  texto <- stringr::str_replace_all(texto, "\u00c1", "A")  # A
+  texto <- stringr::str_replace_all(texto, "\u00c9", "E")  # E
+  texto <- stringr::str_replace_all(texto, "\u00cd", "I")  # I
+  texto <- stringr::str_replace_all(texto, "\u00d3", "O")  # O
+  texto <- stringr::str_replace_all(texto, "\u00da", "U")  # U
+  texto <- stringr::str_replace_all(texto, "\u00dc", "U")  # U dieresis
+  texto <- stringr::str_replace_all(texto, "\u00d1", "N")  # N tilde
+
+  return(texto)
+}
+
 #' Busqueda difusa (fuzzy) de terminos medicos CIE-10
 #'
-#' @param texto String termino medico en espanol (ej. "diabetes con coma")
-#' @param threshold Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.80)
-#' @param max_results Integer, maximo resultados a retornar (default 20)
+#' Busca en descripciones CIE-10 usando multiples estrategias:
+#' 1. Busqueda exacta por subcadena (mas rapida)
+#' 2. Busqueda fuzzy con Jaro-Winkler (tolera typos)
+#'
+#' La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
+#'
+#' @param texto String termino medico en espanol (ej. "diabetes", "neumonia")
+#' @param threshold Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)
+#' @param max_results Integer, maximo resultados a retornar (default 50)
 #' @param campo Character, campo busqueda ("descripcion" o "inclusion")
-#' @return tibble ordenado por score descendente
+#' @param solo_fuzzy Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)
+#' @return tibble ordenado por score descendente (1.0 = coincidencia exacta)
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
 #' @examples
+#' # Busqueda basica
+#' cie_search("diabetes")
+#' cie_search("neumonia")
+#'
+#' # Tolerante a tildes
+
+#' cie_search("neumonia")
+#' cie_search("rinon")
+#'
 #' # Buscar con typos
-#' cie_search("diabetis mellitus")
-#' 
-#' # Mas estricto
-#' cie_search("infarto miocardio", threshold = 0.90)
-#' 
+#' cie_search("diabetis")
+#'
 #' # Buscar en inclusiones
-#' cie_search("neumonia bacteriana", campo = "inclusion")
-cie_search <- function(texto, threshold = 0.80, max_results = 20,
-                       campo = c("descripcion", "inclusion")) {
+#' cie_search("bacteriana", campo = "inclusion")
+cie_search <- function(texto, threshold = 0.70, max_results = 50,
+                       campo = c("descripcion", "inclusion"),
+                       solo_fuzzy = FALSE) {
   campo <- match.arg(campo)
 
   # Validacion de parametros
-
   if (threshold < 0 || threshold > 1) {
     stop("threshold debe estar entre 0 y 1")
   }
@@ -37,42 +82,106 @@ cie_search <- function(texto, threshold = 0.80, max_results = 20,
   if (nchar(stringr::str_trim(texto)) < 3) {
     stop("Texto minimo 3 caracteres")
   }
-  
+
   # Conexion segura con auto-cierre
   con <- get_cie10_db()
   on.exit(DBI::dbDisconnect(con), add = TRUE)
-  
-  # Construir query SQL evitando duplicados
+
+  # Normalizar texto de busqueda (minusculas + sin tildes)
+  texto_norm <- tolower(stringr::str_trim(texto))
+  texto_sin_tildes <- normalizar_tildes(texto_norm)
+
+  # Construir query SQL
   if (campo == "descripcion") {
     query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
   } else {
     query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
   }
-  
+
   base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
-  
-  # Normalizar texto busqueda
-  texto_norm <- tolower(stringr::str_trim(texto))
+
+  # Normalizar texto de la base (minusculas + sin tildes)
   base_texto <- tolower(stringr::str_trim(base[[campo]]))
-  
-  # Manejar NAs en columna buscada
   base_texto[is.na(base_texto)] <- ""
-  
-  # Calcular similitud Jaro-Winkler (0-1, 1=identico)
-  scores <- stringdist::stringsim(texto_norm, base_texto, method = "jw")
-  
-  # Filtrar + ordenar
+  base_texto_sin_tildes <- normalizar_tildes(base_texto)
+
+  # ESTRATEGIA 1: Busqueda exacta por subcadena (mas rapida y precisa)
+  if (!solo_fuzzy) {
+    # Buscar coincidencias exactas (subcadena)
+    matches_exactos <- stringr::str_detect(base_texto_sin_tildes,
+                                           stringr::fixed(texto_sin_tildes))
+
+    if (any(matches_exactos)) {
+      resultado_exacto <- base[matches_exactos, ] %>%
+        dplyr::mutate(score = 1.0) %>%
+        dplyr::slice_head(n = max_results) %>%
+        dplyr::select(codigo, descripcion, score, dplyr::everything())
+
+      return(resultado_exacto)
+    }
+  }
+
+  # ESTRATEGIA 2: Busqueda fuzzy palabra por palabra
+  # Dividir texto en palabras y buscar cada palabra
+  palabras <- unlist(stringr::str_split(texto_sin_tildes, "\\s+"))
+  palabras <- palabras[nchar(palabras) >= 3]
+
+  if (length(palabras) > 0) {
+    # Calcular score basado en cuantas palabras coinciden
+    scores_palabras <- sapply(seq_along(base_texto_sin_tildes), function(i) {
+      texto_base <- base_texto_sin_tildes[i]
+      # Contar palabras que aparecen en la descripcion
+      matches <- sapply(palabras, function(p) {
+        stringr::str_detect(texto_base, stringr::fixed(p))
+      })
+      sum(matches) / length(palabras)
+    })
+
+    # Si hay coincidencias parciales de palabras
+    if (any(scores_palabras > 0)) {
+      resultado <- base %>%
+        dplyr::mutate(score = scores_palabras) %>%
+        dplyr::filter(score > 0) %>%
+        dplyr::arrange(dplyr::desc(score)) %>%
+        dplyr::slice_head(n = max_results) %>%
+        dplyr::select(codigo, descripcion, score, dplyr::everything())
+
+      if (nrow(resultado) > 0) {
+        return(resultado)
+      }
+    }
+  }
+
+  # ESTRATEGIA 3: Fuzzy matching con Jaro-Winkler (para typos)
+  # Calcular similitud de cada palabra del texto con palabras de la descripcion
+  scores_fuzzy <- sapply(seq_along(base_texto_sin_tildes), function(i) {
+    texto_base <- base_texto_sin_tildes[i]
+    palabras_base <- unlist(stringr::str_split(texto_base, "\\s+"))
+    palabras_base <- palabras_base[nchar(palabras_base) >= 3]
+
+    if (length(palabras_base) == 0) return(0)
+
+    # Para cada palabra del texto buscar la mejor coincidencia en la descripcion
+    best_scores <- sapply(palabras, function(p) {
+      if (length(palabras_base) == 0) return(0)
+      max(stringdist::stringsim(p, palabras_base, method = "jw"))
+    })
+
+    mean(best_scores)
+  })
+
+  # Filtrar + ordenar resultados fuzzy
   resultado <- base %>%
-    dplyr::mutate(score = scores) %>%
+    dplyr::mutate(score = scores_fuzzy) %>%
     dplyr::filter(score >= threshold) %>%
     dplyr::arrange(dplyr::desc(score)) %>%
     dplyr::slice_head(n = max_results) %>%
     dplyr::select(codigo, descripcion, score, dplyr::everything())
-  
+
   if (nrow(resultado) == 0) {
     message("x Sin coincidencias >= threshold ", threshold)
   }
-  
+
   return(resultado)
 }
 

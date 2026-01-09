@@ -6,33 +6,48 @@
 \usage{
 cie_search(
   texto,
-  threshold = 0.8,
-  max_results = 20,
-  campo = c("descripcion", "inclusion")
+  threshold = 0.7,
+  max_results = 50,
+  campo = c("descripcion", "inclusion"),
+  solo_fuzzy = FALSE
 )
 }
 \arguments{
-\item{texto}{String termino medico en espanol (ej. "diabetes con coma")}
+\item{texto}{String termino medico en espanol (ej. "diabetes", "neumonia")}
 
-\item{threshold}{Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.80)}
+\item{threshold}{Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)}
 
-\item{max_results}{Integer, maximo resultados a retornar (default 20)}
+\item{max_results}{Integer, maximo resultados a retornar (default 50)}
 
 \item{campo}{Character, campo busqueda ("descripcion" o "inclusion")}
+
+\item{solo_fuzzy}{Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)}
 }
 \value{
-tibble ordenado por score descendente
+tibble ordenado por score descendente (1.0 = coincidencia exacta)
 }
 \description{
-Busqueda difusa (fuzzy) de terminos medicos CIE-10
+Busca en descripciones CIE-10 usando multiples estrategias:
+\enumerate{
+\item Busqueda exacta por subcadena (mas rapida)
+\item Busqueda fuzzy con Jaro-Winkler (tolera typos)
+}
+}
+\details{
+La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
 }
 \examples{
-# Buscar con typos
-cie_search("diabetis mellitus")
+# Busqueda basica
+cie_search("diabetes")
+cie_search("neumonia")
 
-# Mas estricto
-cie_search("infarto miocardio", threshold = 0.90)
+# Tolerante a tildes
+cie_search("neumonia")
+cie_search("rinon")
+
+# Buscar con typos
+cie_search("diabetis")
 
 # Buscar en inclusiones
-cie_search("neumonia bacteriana", campo = "inclusion")
+cie_search("bacteriana", campo = "inclusion")
 }
