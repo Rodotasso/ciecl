@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ciecl <img src="https://uchile.cl/themes/uchile/assets/images/logo_color.svg" align="right" height="50" alt="UChile">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
 
 **Grupo de Ciencia de Datos para la Salud Publica** | Universidad de Chile
 
@@ -235,18 +235,9 @@ MIT (codigo del paquete) + datos CIE-10 MINSAL de uso publico
 
 ### Afiliacion Institucional
 
-<table>
-<tr>
-<td align="center" width="200">
-<img src="https://uchile.cl/themes/uchile/assets/images/logo_color.svg" width="120" alt="Universidad de Chile"><br>
-<strong>Universidad de Chile</strong>
-</td>
-<td align="center" width="200">
-<img src="https://medicina.uchile.cl/themes/medicina/assets/images/logo_color.svg" width="120" alt="Facultad de Medicina"><br>
-<strong>Facultad de Medicina</strong>
-</td>
-</tr>
-</table>
+<p align="center">
+<img src="man/figures/logo-CDSP_color.png" height="100" alt="Grupo Ciencia de Datos para la Salud Publica">
+</p>
 
 **Grupo de Ciencia de Datos para la Salud Publica**<br>
 Escuela de Salud Publica, Facultad de Medicina<br>
