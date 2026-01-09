@@ -97,22 +97,50 @@ test_that("cie_lookup puede generar descripcion_completa", {
 })
 test_that("cie_lookup con descripcion_completa mantiene columna en dataframe vacio", {
   skip_on_cran()
-  
+
   # Bug fix: Cuando todos los codigos son invalidos, debe mantener la columna descripcion_completa
   suppressMessages({
     resultado_vacio <- cie_lookup(codigo = c("XXXX", "YYYY", "ZZZZ"), descripcion_completa = TRUE)
   })
-  
+
   # El dataframe debe estar vacio
   expect_equal(nrow(resultado_vacio), 0)
-  
+
   # Pero debe tener 11 columnas incluyendo descripcion_completa
   expect_equal(ncol(resultado_vacio), 11)
   expect_true("descripcion_completa" %in% names(resultado_vacio))
-  
+
   # Verificar nombres de todas las columnas esperadas
-  columnas_esperadas <- c("codigo", "descripcion", "categoria", "seccion", 
-                          "capitulo_nombre", "inclusion", "exclusion", "capitulo", 
+  columnas_esperadas <- c("codigo", "descripcion", "categoria", "seccion",
+                          "capitulo_nombre", "inclusion", "exclusion", "capitulo",
                           "es_daga", "es_cruz", "descripcion_completa")
   expect_equal(names(resultado_vacio), columnas_esperadas)
+})
+
+# ==============================================================================
+# PRUEBAS PARA cie_siglas()
+# ==============================================================================
+
+test_that("cie_siglas retorna todas las siglas", {
+  resultado <- cie_siglas()
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_true("sigla" %in% names(resultado))
+  expect_true("termino_busqueda" %in% names(resultado))
+  expect_gt(nrow(resultado), 50)  # Al menos 50 siglas
+})
+
+test_that("cie_siglas contiene siglas comunes", {
+  resultado <- cie_siglas()
+
+  # Verificar siglas comunes
+  siglas_esperadas <- c("iam", "dm", "hta", "epoc", "tbc")
+  expect_true(all(siglas_esperadas %in% resultado$sigla))
+})
+
+test_that("cie_siglas no tiene duplicados", {
+  resultado <- cie_siglas()
+
+  # No debe haber siglas duplicadas
+  expect_equal(nrow(resultado), length(unique(resultado$sigla)))
 })

@@ -10,29 +10,16 @@ NULL
 #' @keywords internal
 #' @noRd
 normalizar_tildes <- function(texto) {
-
-  # Manejar NA
+  # Manejar vector vacio o NA
   if (length(texto) == 0) return(character(0))
 
-
-  texto <- stringr::str_replace_all(texto, "\u00e1", "a")  # a
-
-  texto <- stringr::str_replace_all(texto, "\u00e9", "e")  # e
-
-  texto <- stringr::str_replace_all(texto, "\u00ed", "i")  # i
-  texto <- stringr::str_replace_all(texto, "\u00f3", "o")  # o
-  texto <- stringr::str_replace_all(texto, "\u00fa", "u")  # u
-  texto <- stringr::str_replace_all(texto, "\u00fc", "u")  # u dieresis
-  texto <- stringr::str_replace_all(texto, "\u00f1", "n")  # n tilde
-  texto <- stringr::str_replace_all(texto, "\u00c1", "A")  # A
-  texto <- stringr::str_replace_all(texto, "\u00c9", "E")  # E
-  texto <- stringr::str_replace_all(texto, "\u00cd", "I")  # I
-  texto <- stringr::str_replace_all(texto, "\u00d3", "O")  # O
-  texto <- stringr::str_replace_all(texto, "\u00da", "U")  # U
-  texto <- stringr::str_replace_all(texto, "\u00dc", "U")  # U dieresis
-  texto <- stringr::str_replace_all(texto, "\u00d1", "N")  # N tilde
-
-  return(texto)
+  # Usar chartr() que es mas rapido para sustituciones multiples
+  # Caracteres con tilde -> sin tilde
+  chartr(
+    "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1\u00c1\u00c9\u00cd\u00d3\u00da\u00dc\u00d1",
+    "aeiouunAEIOUUN",
+    texto
+  )
 }
 
 #' Diccionario de siglas medicas comunes en Chile
@@ -79,7 +66,8 @@ get_siglas_medicas <- function() {
     "hiper" = "hipertiroidismo",
     "erc" = "enfermedad renal cronica",
     "irc" = "insuficiencia renal cronica",
-    "ira" = "insuficiencia renal aguda",
+    "ira_renal" = "insuficiencia renal aguda",
+    "lra" = "lesion renal aguda",
 
     # Gastrointestinales
     "hda" = "hemorragia digestiva alta",
@@ -148,7 +136,7 @@ get_siglas_medicas <- function() {
 
     # Gineco-obstetricias
     "sop" = "sindrome ovario poliquistico",
-    "epi" = "enfermedad pelvica inflamatoria",
+    "epi_gineco" = "enfermedad pelvica inflamatoria",
     "hie" = "hipertension embarazo",
     "pe" = "preeclampsia",
     "dpp" = "desprendimiento prematuro placenta",
@@ -246,6 +234,9 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   campo <- match.arg(campo)
 
   # Validacion de parametros
+  if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
+    stop("texto debe ser un string character no-NA de longitud 1")
+  }
   if (threshold < 0 || threshold > 1) {
     stop("threshold debe estar entre 0 y 1")
   }

@@ -57,8 +57,29 @@ cie10_sql <- function(query, close = TRUE) {
   # Normalizar query: eliminar espacios y saltos de linea al inicio
   query_norm <- stringr::str_trim(query)
 
+  # Validacion de seguridad: solo SELECT permitido
   if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
     stop("Solo queries SELECT permitidas (seguridad)")
+  }
+
+ # Bloquear keywords peligrosos (case-insensitive)
+  keywords_peligrosos <- c(
+    "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
+    "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
+    "\\bATTACH\\b", "\\bDETACH\\b", "\\bPRAGMA\\b"
+  )
+
+  for (keyword in keywords_peligrosos) {
+    if (stringr::str_detect(query_norm, stringr::regex(keyword, ignore_case = TRUE))) {
+      stop("Query contiene keyword no permitido (seguridad)")
+    }
+  }
+
+  # Bloquear multiples statements (;)
+  # Permitir ; solo dentro de strings
+  query_sin_strings <- stringr::str_remove_all(query_norm, "'[^']*'")
+  if (stringr::str_detect(query_sin_strings, ";")) {
+    stop("Multiples statements SQL no permitidos (seguridad)")
   }
 
   con <- get_cie10_db()
