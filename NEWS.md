@@ -1,5 +1,27 @@
 # ciecl 0.1.0.9000 (desarrollo)
 
+## Nuevas funcionalidades
+
+* `cie_search()`: Soporte para **88 siglas medicas** comunes en Chile:
+  - Cardiovasculares: IAM, HTA, ACV, FA, ICC, TEP, TVP
+  - Respiratorias: TBC, EPOC, NAC, SDRA
+  - Metabolicas: DM, DM1, DM2, ERC, IRC
+  - Infecciosas: VIH, ITU, ITS
+  - Oncologicas: CA, LMA, LMC, LLA, LLC
+  - Neurologicas: TEC, EPI, EM, ELA
+  - Y muchas mas (ver `cie_siglas()`)
+
+* `cie_search()`: Tolerancia a tildes mejorada:
+  - "neumonia" ahora encuentra "neumonía"
+  - "rinon" encuentra "riñón"
+  - "corazon" encuentra "corazón"
+
+* `cie_search()`: Busqueda por subcadena como estrategia principal:
+  - Mas rapido y preciso para terminos exactos
+  - Fuzzy search como fallback para typos
+
+* `cie_siglas()`: Nueva funcion para listar todas las siglas medicas soportadas
+
 ## Datos
 
 * Dataset `cie10_cl`: Agregados 4 codigos COVID-19 de actualizaciones OMS 2021:

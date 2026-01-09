@@ -35,20 +35,187 @@ normalizar_tildes <- function(texto) {
   return(texto)
 }
 
+#' Diccionario de siglas medicas comunes en Chile
+#'
+#' @return Named list con siglas como keys y terminos de busqueda como values
+#' @keywords internal
+#' @noRd
+get_siglas_medicas <- function() {
+  list(
+    # Cardiovasculares
+    "iam" = "infarto agudo miocardio",
+    "iamcest" = "infarto agudo miocardio",
+    "iamsest" = "infarto agudo miocardio",
+    "sca" = "sindrome coronario agudo",
+    "hta" = "hipertension arterial",
+    "aha" = "hipertension arterial",
+    "icc" = "insuficiencia cardiaca",
+    "ic" = "insuficiencia cardiaca",
+    "fa" = "fibrilacion auricular",
+    "tep" = "embolia pulmonar",
+    "tvp" = "trombosis venosa profunda",
+    "eap" = "edema agudo pulmon",
+    "acv" = "accidente cerebrovascular",
+    "ave" = "accidente vascular encefalico",
+    "ait" = "isquemico transitorio",
+
+    # Respiratorias
+    "tbc" = "tuberculosis",
+    "tb" = "tuberculosis",
+    "epoc" = "enfermedad pulmonar obstructiva cronica",
+    "asma" = "asma",
+    "nac" = "neumonia",
+    "ira" = "infeccion respiratoria aguda",
+    "sdra" = "sindrome distres respiratorio",
+    "covid" = "covid",
+    "sars" = "coronavirus",
+
+    # Metabolicas/Endocrinas
+    "dm" = "diabetes mellitus",
+    "dm1" = "diabetes mellitus tipo 1",
+    "dm2" = "diabetes mellitus tipo 2",
+    "dbt" = "diabetes",
+    "hipo" = "hipotiroidismo",
+    "hiper" = "hipertiroidismo",
+    "erc" = "enfermedad renal cronica",
+    "irc" = "insuficiencia renal cronica",
+    "ira" = "insuficiencia renal aguda",
+
+    # Gastrointestinales
+    "hda" = "hemorragia digestiva alta",
+    "hdb" = "hemorragia digestiva baja",
+    "rge" = "reflujo gastroesofagico",
+    "erge" = "reflujo gastroesofagico",
+    "eii" = "enfermedad inflamatoria intestinal",
+    "cu" = "colitis ulcerosa",
+    "ec" = "enfermedad crohn",
+    "dhc" = "dano hepatico cronico",
+    "cirrosis" = "cirrosis",
+
+    # Infecciosas
+    "vih" = "vih",
+    "sida" = "sida",
+    "its" = "infeccion transmision sexual",
+    "ets" = "enfermedad transmision sexual",
+    "itu" = "infeccion tracto urinario",
+    "ivu" = "infeccion vias urinarias",
+    "meningitis" = "meningitis",
+    "sepsis" = "sepsis",
+
+    # Oncologicas
+    "ca" = "carcinoma",
+    "neo" = "neoplasia",
+    "lma" = "leucemia mieloide aguda",
+    "lmc" = "leucemia mieloide cronica",
+    "lla" = "leucemia linfoblastica aguda",
+    "llc" = "leucemia linfocitica cronica",
+    "lnh" = "linfoma no hodgkin",
+    "lh" = "linfoma hodgkin",
+    "mm" = "mieloma multiple",
+
+    # Reumatologicas
+    "ar" = "artritis reumatoide",
+    "les" = "lupus eritematoso",
+    "fm" = "fibromialgia",
+    "ea" = "espondilitis anquilosante",
+
+    # Neurologicas
+    "epi" = "epilepsia",
+    "parkinson" = "parkinson",
+    "alzheimer" = "alzheimer",
+    "em" = "esclerosis multiple",
+    "ela" = "esclerosis lateral amiotrofica",
+    "cefalea" = "cefalea",
+    "migrana" = "migrana",
+
+    # Psiquiatricas
+    "tdah" = "deficit atencion hiperactividad",
+    "toc" = "obsesivo compulsivo",
+    "tag" = "ansiedad generalizada",
+    "tept" = "estres postraumatico",
+    "edm" = "depresion mayor",
+    "tab" = "trastorno bipolar",
+
+    # Traumatologicas
+    "tec" = "traumatismo craneoencefalico",
+    "fx" = "fractura",
+    "lca" = "ligamento cruzado anterior",
+
+    # Pediatricas
+    "sbo" = "sindrome bronquial obstructivo",
+    "eda" = "enfermedad diarreica aguda",
+    "gea" = "gastroenteritis aguda",
+
+    # Gineco-obstetricias
+    "sop" = "sindrome ovario poliquistico",
+    "epi" = "enfermedad pelvica inflamatoria",
+    "hie" = "hipertension embarazo",
+    "pe" = "preeclampsia",
+    "dpp" = "desprendimiento prematuro placenta",
+    "rciu" = "restriccion crecimiento intrauterino"
+  )
+}
+
+#' Expandir siglas medicas a terminos de busqueda
+#'
+#' @param texto Texto que puede contener siglas
+#' @return Texto con siglas expandidas o NULL si no es sigla
+#' @keywords internal
+#' @noRd
+expandir_sigla <- function(texto) {
+  siglas <- get_siglas_medicas()
+  texto_lower <- tolower(stringr::str_trim(texto))
+
+  if (texto_lower %in% names(siglas)) {
+    return(siglas[[texto_lower]])
+  }
+
+  return(NULL)
+}
+
+#' Listar siglas medicas soportadas
+#'
+#' Muestra todas las siglas medicas que pueden usarse en cie_search().
+#'
+#' @param categoria Character opcional, filtrar por categoria
+#'   ("cardiovascular", "respiratoria", "metabolica", "infecciosa",
+#'   "oncologica", "neurologica", "psiquiatrica", "otra")
+#' @return tibble con columnas: sigla, termino_busqueda
+#' @export
+#' @examples
+#' # Ver todas las siglas
+#' cie_siglas()
+#'
+#' # Buscar una sigla especifica
+#' cie_siglas() |> dplyr::filter(sigla == "iam")
+cie_siglas <- function(categoria = NULL) {
+  siglas <- get_siglas_medicas()
+
+  resultado <- tibble::tibble(
+    sigla = names(siglas),
+    termino_busqueda = unlist(siglas)
+  )
+
+  return(resultado)
+}
+
 #' Busqueda difusa (fuzzy) de terminos medicos CIE-10
 #'
 #' Busca en descripciones CIE-10 usando multiples estrategias:
-#' 1. Busqueda exacta por subcadena (mas rapida)
-#' 2. Busqueda fuzzy con Jaro-Winkler (tolera typos)
+#' 1. Expansion de siglas medicas (IAM, TBC, DM, etc.)
+#' 2. Busqueda exacta por subcadena (mas rapida)
+#' 3. Busqueda fuzzy con Jaro-Winkler (tolera typos)
 #'
 #' La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
+#' Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 #'
-#' @param texto String termino medico en espanol (ej. "diabetes", "neumonia")
+#' @param texto String termino medico en espanol o sigla (ej. "diabetes", "IAM", "TBC")
 #' @param threshold Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)
 #' @param max_results Integer, maximo resultados a retornar (default 50)
 #' @param campo Character, campo busqueda ("descripcion" o "inclusion")
 #' @param solo_fuzzy Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)
-#' @return tibble ordenado por score descendente (1.0 = coincidencia exacta)
+#' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
+#'   Incluye atributo "sigla_expandida" si se uso una sigla.
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
@@ -57,8 +224,14 @@ normalizar_tildes <- function(texto) {
 #' cie_search("diabetes")
 #' cie_search("neumonia")
 #'
+#' # Busqueda por siglas medicas
+#' cie_search("IAM")
+#' cie_search("tbc")
+#' cie_search("DM2")
+#' cie_search("EPOC")
+#' cie_search("HTA")
+#'
 #' # Tolerante a tildes
-
 #' cie_search("neumonia")
 #' cie_search("rinon")
 #'
@@ -79,8 +252,22 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   if (max_results < 1) {
     stop("max_results debe ser >= 1")
   }
-  if (nchar(stringr::str_trim(texto)) < 3) {
-    stop("Texto minimo 3 caracteres")
+
+  texto_limpio <- stringr::str_trim(texto)
+
+  # Permitir siglas de 2 caracteres (DM, TB, FA, etc.)
+  if (nchar(texto_limpio) < 2) {
+    stop("Texto minimo 2 caracteres")
+  }
+
+  # Verificar si es una sigla medica y expandirla
+
+  sigla_expandida <- expandir_sigla(texto_limpio)
+  texto_busqueda <- if (!is.null(sigla_expandida)) {
+    message("i Sigla detectada: ", toupper(texto_limpio), " -> ", sigla_expandida)
+    sigla_expandida
+  } else {
+    texto_limpio
   }
 
   # Conexion segura con auto-cierre
@@ -88,7 +275,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   # Normalizar texto de busqueda (minusculas + sin tildes)
-  texto_norm <- tolower(stringr::str_trim(texto))
+  texto_norm <- tolower(texto_busqueda)
   texto_sin_tildes <- normalizar_tildes(texto_norm)
 
   # Construir query SQL

@@ -13,7 +13,7 @@ cie_search(
 )
 }
 \arguments{
-\item{texto}{String termino medico en espanol (ej. "diabetes", "neumonia")}
+\item{texto}{String termino medico en espanol o sigla (ej. "diabetes", "IAM", "TBC")}
 
 \item{threshold}{Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)}
 
@@ -24,22 +24,32 @@ cie_search(
 \item{solo_fuzzy}{Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)}
 }
 \value{
-tibble ordenado por score descendente (1.0 = coincidencia exacta)
+tibble ordenado por score descendente (1.0 = coincidencia exacta).
+Incluye atributo "sigla_expandida" si se uso una sigla.
 }
 \description{
 Busca en descripciones CIE-10 usando multiples estrategias:
 \enumerate{
+\item Expansion de siglas medicas (IAM, TBC, DM, etc.)
 \item Busqueda exacta por subcadena (mas rapida)
 \item Busqueda fuzzy con Jaro-Winkler (tolera typos)
 }
 }
 \details{
 La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
+Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 }
 \examples{
 # Busqueda basica
 cie_search("diabetes")
 cie_search("neumonia")
+
+# Busqueda por siglas medicas
+cie_search("IAM")
+cie_search("tbc")
+cie_search("DM2")
+cie_search("EPOC")
+cie_search("HTA")
 
 # Tolerante a tildes
 cie_search("neumonia")

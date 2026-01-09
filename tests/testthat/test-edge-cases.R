@@ -8,11 +8,15 @@
 test_that("cie_search maneja cadenas muy cortas", {
   skip_on_cran()
 
-  # Texto muy corto debe dar error
 
-  expect_error(cie_search("ab"), "Texto minimo 3 caracteres")
-  expect_error(cie_search(""), "Texto minimo 3 caracteres")
-  expect_error(cie_search("  "), "Texto minimo 3 caracteres")
+  # Texto de 2 caracteres ahora es valido (para siglas como DM, FA, TB)
+  # Sigla DM debe expandirse a "diabetes mellitus"
+  expect_no_error(suppressMessages(cie_search("DM")))
+
+  # Texto de 1 caracter o vacio debe dar error
+  expect_error(cie_search("a"), "Texto minimo 2 caracteres")
+  expect_error(cie_search(""), "Texto minimo 2 caracteres")
+  expect_error(cie_search(" "), "Texto minimo 2 caracteres")
 })
 
 test_that("cie_search maneja threshold invalido", {
