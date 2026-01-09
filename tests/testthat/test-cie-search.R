@@ -127,6 +127,7 @@ test_that("cie_siglas retorna todas las siglas", {
   expect_s3_class(resultado, "tbl_df")
   expect_true("sigla" %in% names(resultado))
   expect_true("termino_busqueda" %in% names(resultado))
+  expect_true("categoria" %in% names(resultado))
   expect_gt(nrow(resultado), 50)  # Al menos 50 siglas
 })
 
@@ -143,4 +144,60 @@ test_that("cie_siglas no tiene duplicados", {
 
   # No debe haber siglas duplicadas
   expect_equal(nrow(resultado), length(unique(resultado$sigla)))
+})
+
+test_that("cie_siglas filtra por categoria", {
+  # Filtrar cardiovasculares
+  cardio <- cie_siglas("cardiovascular")
+  expect_gt(nrow(cardio), 5)
+  expect_true(all(cardio$categoria == "cardiovascular"))
+
+  # Filtrar oncologicas
+  onco <- cie_siglas("oncologica")
+  expect_gt(nrow(onco), 3)
+  expect_true(all(onco$categoria == "oncologica"))
+
+  # Categoria invalida debe dar warning y retornar vacio
+  expect_warning(invalida <- cie_siglas("inexistente"), "no encontrada")
+  expect_equal(nrow(invalida), 0)
+})
+
+# ==============================================================================
+# PRUEBAS PARA rangos en cie_lookup()
+# ==============================================================================
+
+test_that("cie_lookup advierte sobre rangos invertidos", {
+  skip_on_cran()
+
+  # Rango invertido debe emitir warning y corregir automaticamente
+  expect_warning(
+    resultado <- cie_lookup("E14-E10"),
+    "Rango invertido"
+  )
+
+  # Debe retornar resultados (el rango corregido funciona)
+  expect_gt(nrow(resultado), 0)
+
+  # Los codigos deben estar en el rango correcto
+  expect_true(all(stringr::str_detect(resultado$codigo, "^E1[0-4]")))
+})
+
+test_that("cie_lookup rango normal funciona sin warning", {
+  skip_on_cran()
+
+  # Rango normal no debe emitir warning
+  expect_no_warning(
+    resultado <- cie_lookup("E10-E14")
+  )
+
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie_search verbose=FALSE suprime mensajes", {
+  skip_on_cran()
+
+  # Con verbose=FALSE no debe emitir mensajes
+  expect_silent(
+    suppressWarnings(cie_search("xyzabc123", verbose = FALSE))
+  )
 })

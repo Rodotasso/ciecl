@@ -9,7 +9,8 @@ cie_search(
   threshold = 0.7,
   max_results = 50,
   campo = c("descripcion", "inclusion"),
-  solo_fuzzy = FALSE
+  solo_fuzzy = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ cie_search(
 \item{campo}{Character, campo busqueda ("descripcion" o "inclusion")}
 
 \item{solo_fuzzy}{Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)}
+
+\item{verbose}{Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en scripts.}
 }
 \value{
 tibble ordenado por score descendente (1.0 = coincidencia exacta).

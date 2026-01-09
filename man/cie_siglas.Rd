@@ -7,12 +7,14 @@
 cie_siglas(categoria = NULL)
 }
 \arguments{
-\item{categoria}{Character opcional, filtrar por categoria
-("cardiovascular", "respiratoria", "metabolica", "infecciosa",
-"oncologica", "neurologica", "psiquiatrica", "otra")}
+\item{categoria}{Character opcional, filtrar por categoria. Valores validos:
+"cardiovascular", "respiratoria", "metabolica", "gastrointestinal",
+"infecciosa", "oncologica", "reumatologica", "neurologica",
+"psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
+Si es NULL (default), retorna todas las siglas.}
 }
 \value{
-tibble con columnas: sigla, termino_busqueda
+tibble con columnas: sigla, termino_busqueda, categoria
 }
 \description{
 Muestra todas las siglas medicas que pueden usarse en cie_search().
@@ -20,6 +22,10 @@ Muestra todas las siglas medicas que pueden usarse en cie_search().
 \examples{
 # Ver todas las siglas
 cie_siglas()
+
+# Filtrar por categoria
+cie_siglas("cardiovascular")
+cie_siglas("oncologica")
 
 # Buscar una sigla especifica
 cie_siglas() |> dplyr::filter(sigla == "iam")
