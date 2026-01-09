@@ -5,6 +5,22 @@
 # PRUEBAS PARA cie_search()
 # ==============================================================================
 
+test_that("cie_search rechaza NA, vectores y tipos invalidos", {
+  skip_on_cran()
+
+  # NA debe dar error
+  expect_error(cie_search(NA), "texto debe ser un string character no-NA")
+  expect_error(cie_search(NA_character_), "texto debe ser un string character no-NA")
+
+  # Vectores de longitud != 1 deben dar error
+  expect_error(cie_search(c("diabetes", "cancer")), "texto debe ser un string character no-NA")
+  expect_error(cie_search(character(0)), "texto debe ser un string character no-NA")
+
+  # Tipos invalidos deben dar error
+  expect_error(cie_search(123), "texto debe ser un string character no-NA")
+  expect_error(cie_search(list("diabetes")), "texto debe ser un string character no-NA")
+})
+
 test_that("cie_search maneja cadenas muy cortas", {
   skip_on_cran()
 
@@ -540,4 +556,38 @@ test_that("cie10_sql maneja queries con LIKE", {
   resultado <- cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
   expect_s3_class(resultado, "tbl_df")
   expect_true(all(stringr::str_starts(resultado$codigo, "E11")))
+})
+
+test_that("cie10_sql bloquea keywords peligrosos", {
+  # DROP (detectado como keyword peligroso)
+  expect_error(
+    cie10_sql("SELECT * FROM cie10; DROP TABLE cie10;--"),
+    "keyword no permitido"
+  )
+
+  # Multiples statements sin keyword peligroso
+  expect_error(
+    cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
+    "Multiples statements"
+  )
+
+  # ATTACH (SQLite specific attack)
+  expect_error(
+    cie10_sql("SELECT * FROM cie10 WHERE 1=1 ATTACH DATABASE"),
+    "keyword no permitido"
+  )
+
+  # PRAGMA (SQLite metadata)
+  expect_error(
+    cie10_sql("SELECT * FROM cie10 WHERE 1=1 PRAGMA table_info"),
+    "keyword no permitido"
+  )
+})
+
+test_that("cie10_sql permite queries legitimas con strings especiales", {
+  skip_on_cran()
+
+  # Query con string que contiene ;
+  resultado <- cie10_sql("SELECT * FROM cie10 WHERE descripcion LIKE '%a;b%' LIMIT 1")
+  expect_s3_class(resultado, "tbl_df")
 })
