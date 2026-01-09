@@ -153,6 +153,16 @@ cie_lookup("E110", descripcion_completa = TRUE)
 # Fuzzy search con errores tipograficos
 cie_search("diabetis mellitus")  # Encuentra "diabetes mellitus"
 
+# Busqueda por siglas medicas (88 siglas soportadas)
+cie_search("IAM")   # Infarto Agudo del Miocardio
+cie_search("TBC")   # Tuberculosis
+cie_search("DM2")   # Diabetes Mellitus tipo 2
+cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Cronica
+cie_search("HTA")   # Hipertension Arterial
+
+# Ver todas las siglas disponibles
+cie_siglas()
+
 # SQL directo
 cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 3")
 
