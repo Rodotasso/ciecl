@@ -8,7 +8,9 @@ cie_lookup(
   codigo,
   expandir = FALSE,
   normalizar = TRUE,
-  descripcion_completa = FALSE
+  descripcion_completa = FALSE,
+  extract = FALSE,
+  check_siglas = FALSE
 )
 }
 \arguments{
@@ -21,6 +23,12 @@ Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).}
 \item{normalizar}{Logical, normalizar formato de codigos automaticamente (default TRUE)}
 
 \item{descripcion_completa}{Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)}
+
+\item{extract}{Logical, extraer codigo CIE-10 de texto con prefijos/sufijos (default FALSE).
+Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0"}
+
+\item{check_siglas}{Logical, buscar siglas medicas comunes (default FALSE).
+Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)}
 }
 \value{
 tibble con codigo(s) matcheado(s)
@@ -37,4 +45,11 @@ cie_lookup("E11", expandir = TRUE)  # Todos E11.x
 cie_lookup(c("E11.0", "Z00", "I10"))
 # Con descripcion completa
 cie_lookup("E110", descripcion_completa = TRUE)
+# Extraer codigo de texto con ruido
+cie_lookup("CIE:E11.0", extract = TRUE)
+cie_lookup("E11.0-confirmado", extract = TRUE)
+# Buscar por siglas medicas
+cie_lookup("IAM", check_siglas = TRUE)
+cie_lookup("DM2", check_siglas = TRUE)
+cie_lookup("EPOC", check_siglas = TRUE)
 }

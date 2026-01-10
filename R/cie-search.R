@@ -162,6 +162,52 @@ expandir_sigla <- function(texto) {
   return(NULL)
 }
 
+#' Obtener codigo CIE-10 desde sigla medica
+#'
+#' @param sigla Character sigla medica (ej. "IAM", "DM2")
+#' @return Character vector con codigos CIE-10 o NULL
+#' @keywords internal
+#' @noRd
+sigla_to_codigo <- function(sigla) {
+  siglas <- get_siglas_medicas()
+  sigla_lower <- tolower(stringr::str_trim(sigla))
+
+  if (!(sigla_lower %in% names(siglas))) {
+    return(NULL)
+  }
+
+  termino <- siglas[[sigla_lower]]$termino
+  resultado <- cie_search(termino, solo_fuzzy = TRUE, verbose = FALSE)
+
+  if (nrow(resultado) > 0) {
+    return(resultado$codigo[1])
+  }
+
+  return(NULL)
+}
+
+#' Extraer codigo CIE-10 de texto con ruido
+#'
+#' @param texto Character vector que puede contener prefijos/sufijos
+#' @return Character vector con codigo CIE-10 extraido o original
+#' @keywords internal
+#' @noRd
+extract_cie_from_text <- function(texto) {
+  # Patrón para extraer código CIE-10: letra + 2-3 digitos + punto opcional + 0-2 digitos
+  patron <- "[A-Z][0-9]{2}[0-9]?\\.?[0-9X]{0,2}"
+  
+  extraido <- stringr::str_extract(toupper(texto), patron)
+  
+  # Si se extrajo algo, usarlo; si no, devolver original
+  resultado <- ifelse(
+    !is.na(extraido) & extraido != "",
+    extraido,
+    texto
+  )
+  
+  return(resultado)
+}
+
 #' Listar siglas medicas soportadas
 #'
 #' Muestra todas las siglas medicas que pueden usarse en cie_search().
@@ -393,6 +439,10 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
 #' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
 #' @param descripcion_completa Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)
+#' @param extract Logical, extraer codigo CIE-10 de texto con prefijos/sufijos (default FALSE).
+#'   Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0"
+#' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
+#'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
 #' @examples
@@ -404,7 +454,14 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' cie_lookup(c("E11.0", "Z00", "I10"))
 #' # Con descripcion completa
 #' cie_lookup("E110", descripcion_completa = TRUE)
-cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE) {
+#' # Extraer codigo de texto con ruido
+#' cie_lookup("CIE:E11.0", extract = TRUE)
+#' cie_lookup("E11.0-confirmado", extract = TRUE)
+#' # Buscar por siglas medicas
+#' cie_lookup("IAM", check_siglas = TRUE)
+#' cie_lookup("DM2", check_siglas = TRUE)
+#' cie_lookup("EPOC", check_siglas = TRUE)
+cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE, extract = FALSE, check_siglas = FALSE) {
   # Manejar vector vacio
 
   if (length(codigo) == 0) {
@@ -419,6 +476,22 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
 
   # Normalizar entrada
   codigo_input <- stringr::str_trim(toupper(codigo_sin_na))
+  
+  # Extraer codigo de texto con ruido (prefijos/sufijos)
+  if (extract) {
+    codigo_input <- extract_cie_from_text(codigo_input)
+  }
+  
+  # Buscar siglas medicas
+  if (check_siglas) {
+    codigo_input <- sapply(codigo_input, function(x) {
+      codigo_sigla <- sigla_to_codigo(x)
+      if (!is.null(codigo_sigla)) {
+        return(codigo_sigla)
+      }
+      return(x)
+    }, USE.NAMES = FALSE)
+  }
   
   # Normalizar formato si se solicita: agregar punto si falta (E110 -> E11.0)
   if (normalizar) {
@@ -533,4 +606,51 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   }
 
   return(resultado)
+}
+
+#' Guia de funciones de busqueda CIE-10
+#'
+#' Muestra tabla comparativa de cuando usar cada funcion de busqueda.
+#'
+#' @return data.frame con guia de uso
+#' @export
+#' @examples
+#' cie_guia_busqueda()
+cie_guia_busqueda <- function() {
+  guia <- data.frame(
+    `Tengo...` = c(
+      "Codigo exacto (E11.0)",
+      "Codigo sin punto (e110)",
+      "Codigo con espacios (E 11.0)",
+      "Codigo con prefijos/sufijos",
+      "Codigo categoria (E11)",
+      "Descripcion (diabetes)",
+      "Sigla medica (IAM, DM2)",
+      "No se que tengo"
+    ),
+    `Usar funcion` = c(
+      "cie_lookup()",
+      "cie_lookup()",
+      "cie_lookup()",
+      "cie_lookup(extract = TRUE)",
+      "cie_lookup() o cie_lookup(expandir = TRUE)",
+      "cie_search()",
+      "cie_lookup(check_siglas = TRUE)",
+      "cie_buscar() (experimental)"
+    ),
+    `Ejemplo` = c(
+      'cie_lookup("E11.0")',
+      'cie_lookup("e110")',
+      'cie_lookup("E 11.0")',
+      'cie_lookup("CIE:E11.0", extract = TRUE)',
+      'cie_lookup("E11")',
+      'cie_search("diabetes")',
+      'cie_lookup("IAM", check_siglas = TRUE)',
+      'pronto disponible'
+    ),
+    check.names = FALSE,
+    stringsAsFactors = FALSE
+  )
+  
+  return(guia)
 }
