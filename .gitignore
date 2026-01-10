@@ -46,3 +46,6 @@ generar_dataset.R
 dev/
 dev/*CLAUDE.md
 CLAUDE.md
+
+agents.md
+skills.md
