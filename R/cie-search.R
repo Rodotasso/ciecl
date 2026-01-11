@@ -594,8 +594,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 
     # Advertir y corregir rangos invertidos (ej. "E14-E10" -> "E10-E14")
     if (inicio > fin) {
-      warning("Rango invertido detectado: '", codigo_norm, "'. ",
-              "Corrigiendo a '", fin, "-", inicio, "'")
+      warning(paste0("Rango invertido detectado: '", codigo_norm, "'. ",
+                   "Corrigiendo a '", fin, "-", inicio, "'"))
       temp <- inicio
       inicio <- fin
       fin <- temp
