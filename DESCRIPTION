@@ -1,6 +1,6 @@
 Package: ciecl
 Title: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Rodolfo", "Tasso Suazo", 
            email = "rtasso@uchile.cl",
@@ -13,7 +13,7 @@ Description: Herramientas para trabajar con Clasificacion Internacional de
     de codigos jerarquicos. Datos del Centro FIC Chile DEIS 
     <https://deis.minsal.cl/centrofic/>. Disenado para vigilancia 
     epidemiologica, analisis de registros medicos y estudios de salud publica 
-    en Chile y Latinoamerica. BETA: en fase de desarrollo activo.
+    en Chile y Latinoamerica.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +21,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.1.0)
-Imports: 
+Imports:
     DBI,
     RSQLite,
     stringdist,
@@ -29,10 +29,10 @@ Imports:
     dplyr,
     tibble,
     tools,
-    utils
-Suggests:
+    utils,
     comorbidity,
-    gt,
+    gt
+Suggests:
     httr2,
     readxl,
     usethis,
