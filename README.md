@@ -150,6 +150,12 @@ cie_lookup(c("E11.0", "I10", "Z00"))
 # Con descripcion completa formateada
 cie_lookup("E110", descripcion_completa = TRUE)
 
+# Extraer codigo de texto con prefijos/sufijos (solo codigo escalar)
+cie_lookup("CIE:E11.0", extract = TRUE)       # Retorna E11.0
+cie_lookup("E11.0-confirmado", extract = TRUE) # Retorna E11.0
+cie_lookup("dx-G20", extract = TRUE)          # Retorna G20
+# Nota: extract=TRUE solo funciona con códigos escalares, use FALSE para vectores
+
 # Fuzzy search con errores tipograficos
 cie_search("diabetis mellitus")  # Encuentra "diabetes mellitus"
 
