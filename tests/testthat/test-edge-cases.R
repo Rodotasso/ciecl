@@ -156,9 +156,9 @@ test_that("cie_lookup maneja rangos invalidos", {
   skip_on_cran()
 
   # Rango invertido
-  suppressMessages({
+  suppressWarnings(
     resultado <- cie_lookup("E14-E10")
-  })
+  )
   # Puede no encontrar resultados pero no debe crashear
   expect_s3_class(resultado, "tbl_df")
 })
