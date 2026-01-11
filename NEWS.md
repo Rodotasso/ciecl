@@ -1,4 +1,35 @@
-# ciecl 0.1.0.9001 (desarrollo)
+# ciecl 0.1.0 (2026-01-11)
+## Tests de Comorbilidad
+
+Validacion exhaustiva de funciones `cie_comorbid()` y `cie_map_comorbid()` con bases sinteticas:
+
+### Bases de Prueba Generadas
+* `15_comorbid_charlson.csv`: 500 pacientes, 2007 diagnosticos
+  - Codigos de 17 categorias Charlson (MI, CHF, PVD, CEVD, demencia, EPOC, etc.)
+  - Scores validados: rango 1-15 puntos
+* `16_comorbid_elixhauser.csv`: 500 pacientes, 3219 diagnosticos
+  - Codigos de 31 categorias Elixhauser
+  - Categorias por paciente: 1-8
+* `17_comorbid_mixto.csv`: 200 pacientes, edge cases
+  - 50 pacientes con NA en diagnosticos (ignorados correctamente)
+  - 50 pacientes con codigos invalidos mezclados
+  - 50 pacientes con un solo codigo
+  - Validacion de robustez ante datos sucios
+
+### Resultados de Validacion
+* `cie_comorbid(map="charlson")`: Calculo correcto de score_charlson
+* `cie_comorbid(map="elixhauser")`: Calculo correcto de categorias booleanas
+* Manejo robusto de NA y codigos vacios (warnings informativos)
+* Codigos invalidos no afectan calculo de pacientes validos
+
+### Codigos CIE-10 Testeados por Categoria
+* **Infarto miocardio**: I21.0-I22.9, I25.2
+* **Insuficiencia cardiaca**: I50.0-I50.9, I11.0, I13.0
+* **Diabetes**: E10.0-E14.9 (sin/con complicaciones)
+* **Enfermedad renal**: N18.1-N18.9, N19
+* **EPOC**: J40-J44.9
+* **Cancer**: C18.x, C34.x, C50.x, C61, C67.x, C71.x, C73
+* **VIH/SIDA**: B20-B24
 
 ## Bug Fixes
 
@@ -23,7 +54,7 @@
 * `test-cie-search.R`: Modificar test de rangos invertidos para usar `suppressWarnings()`
 * `test-edge-cases.R`: Modificar test de rangos para usar `suppressWarnings()`
 
-# ciecl 0.1.0.9000 (desarrollo)
+# ciecl 0.1.0.9000 (desarrollo - historico)
 
 ## Nuevas funcionalidades
 
