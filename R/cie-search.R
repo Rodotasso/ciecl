@@ -446,7 +446,8 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
 #' @param descripcion_completa Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)
 #' @param extract Logical, extraer codigo CIE-10 de texto con prefijos/sufijos (default FALSE).
-#'   Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0"
+#'   IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1). Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0".
+#'   Para vectores multiples usar extract=FALSE (default).
 #' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
 #' @return tibble con codigo(s) matcheado(s)
@@ -460,9 +461,10 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' cie_lookup(c("E11.0", "Z00", "I10"))
 #' # Con descripcion completa
 #' cie_lookup("E110", descripcion_completa = TRUE)
-#' # Extraer codigo de texto con ruido
+#' # Extraer codigo de texto con ruido (solo codigo escalar)
 #' cie_lookup("CIE:E11.0", extract = TRUE)
 #' cie_lookup("E11.0-confirmado", extract = TRUE)
+#' # Nota: Para vectores multiples usar extract=FALSE (default)
 #' # Buscar por siglas medicas
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)

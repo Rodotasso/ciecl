@@ -1,3 +1,17 @@
+# ciecl 0.1.0.9001 (desarrollo)
+
+## Mejoras
+
+* `cie_lookup()`: Documentación mejorada del parámetro `extract`:
+  - Advertencia clara de usar `extract=TRUE` solo con códigos escalares
+  - Ejemplos de uso correcto con prefijos/sufijos
+  - Evita confusiones con vectores múltiples
+
+* `extract_cie_from_text()`: Función interna para extraer código CIE-10 de texto con ruido
+  - Soporta prefijos: "CIE:E11.0" -> "E11.0"
+  - Soporta sufijos: "E11.0-confirmado" -> "E11.0"
+  - Soporta ambos: "CIE:E11.0-prov" -> "E11.0"
+
 # ciecl 0.1.0.9000 (desarrollo)
 
 ## Nuevas funcionalidades
