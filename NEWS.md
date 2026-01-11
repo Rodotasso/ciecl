@@ -1,5 +1,11 @@
 # ciecl 0.1.0.9001 (desarrollo)
 
+## Bug Fixes
+
+* `cie_lookup_single()`: Corregir emisión de warning para rangos invertidos
+  - Usar `paste0()` en lugar de concatenación con comas en `warning()`
+  - Tests ahora suprimen warnings esperados con `suppressWarnings()`
+
 ## Mejoras
 
 * `cie_lookup()`: Documentación mejorada del parámetro `extract`:
@@ -11,6 +17,11 @@
   - Soporta prefijos: "CIE:E11.0" -> "E11.0"
   - Soporta sufijos: "E11.0-confirmado" -> "E11.0"
   - Soporta ambos: "CIE:E11.0-prov" -> "E11.0"
+
+## Tests
+
+* `test-cie-search.R`: Modificar test de rangos invertidos para usar `suppressWarnings()`
+* `test-edge-cases.R`: Modificar test de rangos para usar `suppressWarnings()`
 
 # ciecl 0.1.0.9000 (desarrollo)
 
