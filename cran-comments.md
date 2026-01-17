@@ -1,71 +1,69 @@
-# Comentarios para desarrollo y futura submission CRAN
-
-> **NOTA**: Este paquete esta actualmente en version BETA (v0.1.0).
-> No esta listo para submission a CRAN todavia.
-
-## Test environments
-* local R installation, R 4.4.3
-* Windows 11 x64 (build 26100)
-* GitHub Actions (windows-latest, macOS-latest, ubuntu-latest): R-release, R-devel, R-oldrel
-
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes (objetivo)
+0 errors | 0 warnings | 2 notes
 
-### Verificaciones realizadas:
+### NOTEs explained
 
-1. **R CMD check --as-cran**: Sin errores ni warnings
-2. **GitHub Actions**: Todas las plataformas configuradas
-3. **Ejemplos**: Todos ejecutables o correctamente documentados con \dontrun{}
-4. **Tests**: Tests unitarios con testthat (skip_on_cran donde corresponde)
-5. **Dependencias**: Minimas (8 imports), documentadas correctamente
-6. **Vignette**: Incluida y funcional
+1. **New submission**: This is the first submission of ciecl to CRAN.
 
-## Notas especiales para futura revision CRAN
+2. **URLs returning 403**: The MINSAL/DEIS URLs in documentation return HTTP 403 (Forbidden)
+   when accessed by automated tools due to anti-bot protection on Chilean government servers.
+   These URLs are valid and accessible via browser:
+   - https://deis.minsal.cl
+   - https://deis.minsal.cl/centrofic/
+   - https://repositoriodeis.minsal.cl
 
-### Datos publicos
-Este paquete utiliza datos publicos del Ministerio de Salud de Chile (MINSAL/DEIS)
-disponibles en:
-- Centro FIC: https://deis.minsal.cl/centrofic/
-- Repositorio: https://repositoriodeis.minsal.cl
+3. **Example timing**: Some examples take >5s because they initialize an SQLite
+   database cache on first run. Subsequent calls are fast (<1s).
 
-Los datos CIE-10 son de uso publico segun el Decreto 356 Exento (2017) del
-Ministerio de Salud que establece el uso oficial de la CIE-10 en Chile.
-Referencia legal: https://www.bcn.cl/leychile/navegar?i=1112064
+## Test environments
 
-El dataset incluye **39,873 codigos** CIE-10 (categorias y subcategorias).
-Los datos estan incluidos en el paquete (data/cie10_cl.rda).
+* Local: Windows 11 x64, R 4.4.3
+* GitHub Actions:
+  - macOS-latest (release)
+  - windows-latest (release)
+  - ubuntu-latest (devel, release, oldrel-1)
 
-### Cache local
-El paquete crea opcionalmente una base de datos SQLite en el directorio de cache del usuario
-usando `tools::R_user_dir("ciecl", "data")` segun las recomendaciones de CRAN.
-Los tests incluyen `skip_on_cran()` para evitar la creacion de archivos durante el check.
+## Package purpose
 
-### API externa (opcional)
-La funcion `cie11_search()` accede a la API de la OMS (https://icd.who.int/icdapi).
-Esto es completamente opcional y requiere credenciales del usuario.
-La funcion falla gracefully si no hay credenciales.
-Los ejemplos estan en `\dontrun{}` para no requerir conexion a internet.
+`ciecl` provides tools for working with the official Chilean ICD-10 classification
+(CIE-10 MINSAL/DEIS v2018) in R. It includes:
 
-### Idioma
-El paquete esta en espanol (`Language: es` en DESCRIPTION) porque:
-- Los datos CIE-10 oficiales de Chile estan en espanol
-- El publico objetivo son profesionales de salud en Chile y Latinoamerica
-- Toda la documentacion medica esta en espanol
-
-## Estado beta
-
-Este paquete esta en fase beta de desarrollo. Se recomienda:
-- Probar exhaustivamente antes de usar en produccion
-- Reportar errores en: https://github.com/RodoTasso/ciecl/issues
-- La API puede cambiar antes de la version 1.0.0
+- 39,873 ICD-10 codes from Chile's Ministry of Health
+- Optimized SQL search with SQLite caching
+- Fuzzy matching for medical terms (Jaro-Winkler algorithm)
+- Charlson and Elixhauser comorbidity calculations
+- WHO ICD-11 API integration (optional)
 
 ## Downstream dependencies
 
-No existen dependencias downstream conocidas (paquete nuevo).
+This is a new package with no reverse dependencies.
 
-## Repositorio y colaboracion
+## Data source
 
-- GitHub repository: https://github.com/RodoTasso/ciecl
-- CI/CD: GitHub Actions configurado
-- Documentacion completa en README y vignette
+ICD-10 data is from the official Chilean Ministry of Health (MINSAL) Department of
+Health Statistics and Information (DEIS), specifically the FIC Chile Center. The data
+is for public use according to Chilean Decree 356 Exempt (2017) establishing official
+ICD-10 use in Chile.
+
+- Data source: https://deis.minsal.cl/centrofic/
+- Legal basis: https://www.bcn.cl/leychile/navegar?i=1112064
+
+## Special notes
+
+### Language
+The package is in Spanish (`Language: es` in DESCRIPTION) because:
+- Official Chilean ICD-10 data is in Spanish
+- Target audience is healthcare professionals in Chile and Latin America
+- All medical documentation follows Spanish conventions
+
+### Local cache
+The package optionally creates an SQLite database in the user's cache directory
+using `tools::R_user_dir("ciecl", "data")` per CRAN recommendations.
+Tests include `skip_on_cran()` to avoid file creation during checks.
+
+### External API (optional)
+The `cie11_search()` function accesses the WHO API (https://icd.who.int/icdapi).
+This is completely optional and requires user credentials.
+The function fails gracefully without credentials.
+Examples use `\dontrun{}` to avoid requiring internet connection.

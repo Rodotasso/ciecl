@@ -1,4 +1,8 @@
-# ciecl 0.1.0 (2026-01-11)
+# ciecl 0.1.0 (2026-01-17)
+
+*English summary below*
+
+---
 ## Tests de Comorbilidad
 
 Validacion exhaustiva de funciones `cie_comorbid()` y `cie_map_comorbid()` con bases sinteticas:
@@ -53,6 +57,25 @@ Validacion exhaustiva de funciones `cie_comorbid()` y `cie_map_comorbid()` con b
 
 * `test-cie-search.R`: Modificar test de rangos invertidos para usar `suppressWarnings()`
 * `test-edge-cases.R`: Modificar test de rangos para usar `suppressWarnings()`
+
+---
+
+## English Summary
+
+### Comorbidity Tests
+Exhaustive validation of `cie_comorbid()` and `cie_map_comorbid()` with synthetic datasets:
+* 500-patient Charlson test base with 2007 diagnoses
+* 500-patient Elixhauser test base with 3219 diagnoses
+* 200-patient mixed test base with edge cases (NA values, invalid codes)
+
+### Bug Fixes
+* `cie_lookup_single()`: Fix warning emission for inverted ranges
+
+### Improvements
+* `cie_lookup()`: Improved documentation for `extract` parameter
+* `extract_cie_from_text()`: Internal function to extract ICD-10 codes from noisy text
+
+---
 
 # ciecl 0.1.0.9000 (desarrollo - historico)
 
