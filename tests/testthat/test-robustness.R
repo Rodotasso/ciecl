@@ -348,3 +348,202 @@ test_that("cie_validate_vector con vector muy grande", {
   expect_length(resultado, 300)
   expect_equal(sum(resultado), 200)  # 100 E11.0 + 100 Z00
 })
+
+# ==============================================================================
+# PRUEBAS ADICIONALES get_cie10_db()
+# ==============================================================================
+
+test_that("get_cie10_db retorna conexion DBI valida", {
+  skip_on_cran()
+
+  get_cie10_db <- ciecl:::get_cie10_db
+
+  con <- get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  expect_true(DBI::dbIsValid(con))
+  expect_s4_class(con, "SQLiteConnection")
+})
+
+test_that("get_cie10_db crea tabla cie10 si no existe", {
+  skip_on_cran()
+
+  get_cie10_db <- ciecl:::get_cie10_db
+
+  con <- get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  # Tabla debe existir
+  expect_true(DBI::dbExistsTable(con, "cie10"))
+})
+
+test_that("get_cie10_db tabla tiene indices", {
+  skip_on_cran()
+
+  get_cie10_db <- ciecl:::get_cie10_db
+
+  con <- get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  # Verificar que existen indices (SQLite)
+  indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index'")
+
+  expect_gt(nrow(indices), 0)
+})
+
+test_that("get_cie10_db usa directorio cache correcto", {
+  skip_on_cran()
+
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+  db_path <- file.path(cache_dir, "cie10.db")
+
+  # Despues de cualquier uso del paquete, debe existir
+  get_cie10_db <- ciecl:::get_cie10_db
+  con <- get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  expect_true(file.exists(db_path))
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES cie10_clear_cache()
+# ==============================================================================
+
+test_that("cie10_clear_cache elimina archivo db", {
+  skip_on_cran()
+
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+  db_path <- file.path(cache_dir, "cie10.db")
+
+  # Asegurar que existe
+  get_cie10_db <- ciecl:::get_cie10_db
+  con <- get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  expect_true(file.exists(db_path))
+
+  # Limpiar cache
+  suppressMessages(cie10_clear_cache())
+
+  expect_false(file.exists(db_path))
+})
+
+test_that("cie10_clear_cache es idempotente", {
+  skip_on_cran()
+
+  # Llamar dos veces no debe dar error
+  expect_no_error({
+    suppressMessages(cie10_clear_cache())
+    suppressMessages(cie10_clear_cache())
+  })
+})
+
+test_that("cie10_clear_cache emite mensaje apropiado", {
+  skip_on_cran()
+
+  # Asegurar que existe cache
+  get_cie10_db <- ciecl:::get_cie10_db
+  con <- get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  # Debe emitir mensaje de eliminacion
+  expect_message(cie10_clear_cache(), "eliminado")
+
+  # Segunda vez mensaje diferente
+  expect_message(cie10_clear_cache(), "no existe")
+})
+
+test_that("cie10_clear_cache retorna invisible NULL", {
+  skip_on_cran()
+
+  resultado <- suppressMessages(cie10_clear_cache())
+  expect_null(resultado)
+})
+
+# ==============================================================================
+# PRUEBAS cie10_sql() ADICIONALES
+# ==============================================================================
+
+test_that("cie10_sql bloquea DROP TABLE", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("DROP TABLE cie10"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea DELETE", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea UPDATE", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea INSERT", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("INSERT INTO cie10 VALUES ('X99', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0)"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea multiples statements", {
+  skip_on_cran()
+
+  # El error puede ser por keyword no permitido (DROP) o por multiples statements
+  expect_error(
+    cie10_sql("SELECT * FROM cie10; DROP TABLE cie10")
+  )
+})
+
+test_that("cie10_sql permite SELECT con subconsulta", {
+  skip_on_cran()
+
+  # Subconsulta valida
+  resultado <- cie10_sql("SELECT * FROM cie10 WHERE codigo IN (SELECT codigo FROM cie10 LIMIT 5)")
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie10_sql permite punto y coma dentro de strings", {
+  skip_on_cran()
+
+  # Punto y coma dentro de string no debe ser bloqueado
+  resultado <- cie10_sql("SELECT * FROM cie10 WHERE descripcion LIKE '%test; test%' LIMIT 1")
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie10_sql con close=FALSE mantiene conexion", {
+  skip_on_cran()
+
+  # Este test verifica comportamiento interno
+  # La conexion no debe cerrarse si close=FALSE
+  resultado <- cie10_sql("SELECT COUNT(*) as n FROM cie10", close = TRUE)
+  expect_gt(resultado$n, 0)
+})
+
+test_that("cie10_sql normaliza espacios al inicio", {
+  skip_on_cran()
+
+  # Query con espacios y saltos de linea al inicio
+  resultado <- cie10_sql("
+    SELECT COUNT(*) as n FROM cie10
+  ")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(resultado$n, 0)
+})

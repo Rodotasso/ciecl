@@ -27,3 +27,156 @@ test_that("cie11_search requiere httr2", {
     "httr2"
   )
 })
+
+# ==============================================================================
+# PRUEBAS CON API REAL (skip_on_cran, requiere ICD_API_KEY)
+# ==============================================================================
+
+test_that("cie11_search con API real retorna resultados", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  # Verificar que existe API key en environment
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  # Buscar termino comun que debe existir
+  resultado <- cie11_search("diabetes")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 0)
+  expect_true("codigo" %in% names(resultado))
+  expect_true("titulo" %in% names(resultado))
+})
+
+test_that("cie11_search con API real respeta max_results", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado_5 <- cie11_search("cancer", max_results = 5)
+  resultado_10 <- cie11_search("cancer", max_results = 10)
+
+  expect_lte(nrow(resultado_5), 5)
+  expect_lte(nrow(resultado_10), 10)
+})
+
+test_that("cie11_search con API real soporta idioma espanol", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("hipertension", lang = "es")
+
+  expect_s3_class(resultado, "tbl_df")
+  # Si hay resultados, deberian tener titulos en espanol
+  if (nrow(resultado) > 0) {
+    # Al menos algunos titulos deberian tener caracteres espanol o palabras comunes
+    expect_type(resultado$titulo, "character")
+  }
+})
+
+test_that("cie11_search con API real soporta idioma ingles", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("hypertension", lang = "en")
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie11_search con API real maneja busqueda sin resultados", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  # Buscar termino que probablemente no existe
+  expect_message(
+    resultado <- cie11_search("xyznonexistent12345"),
+    "Sin resultados"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie11_search con API real limpia tags HTML", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("diabetes")
+
+  if (nrow(resultado) > 0) {
+    # No deberia haber tags <em> en los titulos
+    expect_false(any(grepl("<em", resultado$titulo, fixed = TRUE)))
+    expect_false(any(grepl("</em>", resultado$titulo, fixed = TRUE)))
+  }
+})
+
+# ==============================================================================
+# PRUEBAS DE ESTRUCTURA DE RESPUESTA DETALLADA
+# ==============================================================================
+
+test_that("cie11_search retorna tibble con tipos correctos incluso en error", {
+  skip_if_not_installed("httr2")
+
+  suppressWarnings({
+    resultado <- cie11_search("test", api_key = "fake:key")
+  })
+
+  # Columnas
+  expect_true("codigo" %in% names(resultado))
+  expect_true("titulo" %in% names(resultado))
+  expect_true("capitulo" %in% names(resultado))
+
+  # Tipos (aunque vacio)
+  expect_type(resultado$codigo, "character")
+  expect_type(resultado$titulo, "character")
+  expect_type(resultado$capitulo, "character")
+})
+
+test_that("cie11_search maneja texto de busqueda con caracteres especiales", {
+  skip_if_not_installed("httr2")
+
+  # No debe crashear con caracteres especiales
+  expect_warning(
+    resultado <- cie11_search("diabetes & mellitus", api_key = "test:test"),
+    "Error API"
+  )
+  expect_s3_class(resultado, "tbl_df")
+
+  expect_warning(
+    resultado2 <- cie11_search("c\u00e1ncer", api_key = "test:test"),
+    "Error API"
+  )
+  expect_s3_class(resultado2, "tbl_df")
+})
+
+test_that("cie11_search maneja texto vacio", {
+  skip_if_not_installed("httr2")
+
+  # Texto vacio debe dar error o warning, no crash
+  expect_warning(
+    resultado <- cie11_search("", api_key = "test:test"),
+    "Error API"
+  )
+  expect_s3_class(resultado, "tbl_df")
+})

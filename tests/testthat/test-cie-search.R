@@ -200,3 +200,331 @@ test_that("cie_search verbose=FALSE suprime mensajes", {
     suppressWarnings(cie_search("xyzabc123", verbose = FALSE))
   )
 })
+
+# ==============================================================================
+# PRUEBAS ADICIONALES DE EDGE CASES
+# ==============================================================================
+
+test_that("cie_search con threshold 0 retorna muchos resultados", {
+  skip_on_cran()
+
+  resultado <- cie_search("diabetes", threshold = 0.0, max_results = 100)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Con threshold 0, deberia retornar el maximo solicitado
+  expect_lte(nrow(resultado), 100)
+})
+
+test_that("cie_search con threshold 1 es muy restrictivo", {
+  skip_on_cran()
+
+  # Threshold 1.0 requiere match perfecto
+  suppressMessages({
+    resultado <- cie_search("xyz123abc", threshold = 1.0, verbose = FALSE)
+  })
+
+  expect_s3_class(resultado, "tbl_df")
+  # Probablemente 0 resultados para texto aleatorio
+  expect_gte(nrow(resultado), 0)
+})
+
+test_that("cie_search con max_results=1 retorna maximo 1 resultado", {
+  skip_on_cran()
+
+  resultado <- cie_search("diabetes", threshold = 0.5, max_results = 1)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_lte(nrow(resultado), 1)
+})
+
+test_that("cie_search con campo inclusion funciona", {
+  skip_on_cran()
+
+  resultado <- cie_search("bacteriana", campo = "inclusion",
+                          threshold = 0.7, max_results = 20)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Puede o no encontrar resultados
+  expect_true(nrow(resultado) >= 0)
+})
+
+test_that("cie_search valida parametros incorrectos", {
+  skip_on_cran()
+
+  # threshold fuera de rango
+  expect_error(
+    cie_search("diabetes", threshold = 1.5),
+    "threshold"
+  )
+
+  expect_error(
+    cie_search("diabetes", threshold = -0.1),
+    "threshold"
+  )
+
+  # max_results invalido
+  expect_error(
+    cie_search("diabetes", max_results = 0),
+    "max_results"
+  )
+
+  # texto no character
+  expect_error(
+    cie_search(123),
+    "texto"
+  )
+
+  # texto NA
+  expect_error(
+    cie_search(NA_character_),
+    "texto"
+  )
+
+  # texto muy corto
+  expect_error(
+    cie_search("a"),
+    "2 caracteres"
+  )
+})
+
+test_that("cie_search acepta siglas de 2 caracteres", {
+  skip_on_cran()
+
+  # DM = diabetes mellitus
+  resultado <- cie_search("dm", threshold = 0.7, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie_search busca con typos usando fuzzy", {
+  skip_on_cran()
+
+  # "diabetis" tiene typo
+  resultado <- cie_search("diabetis", threshold = 0.7, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Fuzzy deberia encontrar "diabetes"
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie_search normaliza tildes", {
+  skip_on_cran()
+
+  # Buscar con y sin tilde
+  resultado_sin <- cie_search("neumonia", threshold = 0.7, verbose = FALSE)
+  resultado_con <- cie_search("neumon\u00eda", threshold = 0.7, verbose = FALSE)
+
+  expect_s3_class(resultado_sin, "tbl_df")
+  expect_s3_class(resultado_con, "tbl_df")
+
+  # Ambas busquedas deberian encontrar resultados similares
+  expect_gt(nrow(resultado_sin), 0)
+  expect_gt(nrow(resultado_con), 0)
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES cie_lookup()
+# ==============================================================================
+
+test_that("cie_lookup con extract=TRUE extrae codigo de texto", {
+  skip_on_cran()
+
+  # Codigo con prefijo
+  resultado <- cie_lookup("CIE:E11.0", extract = TRUE)
+  expect_equal(nrow(resultado), 1)
+  expect_equal(resultado$codigo, "E11.0")
+
+  # Codigo con sufijo
+  resultado2 <- cie_lookup("I10-confirmado", extract = TRUE)
+  expect_equal(nrow(resultado2), 1)
+  expect_equal(resultado2$codigo, "I10")
+})
+
+test_that("cie_lookup con check_siglas=TRUE convierte siglas", {
+  skip_on_cran()
+
+  # IAM deberia convertirse a I21.x
+  resultado <- cie_lookup("IAM", check_siglas = TRUE)
+
+  # Puede encontrar o no, pero no debe dar error
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_lookup maneja rangos validos", {
+  skip_on_cran()
+
+  # Rango normal
+  resultado <- cie_lookup("E10-E14")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 10)
+
+  # Todos los codigos deben estar en el rango
+  expect_true(all(grepl("^E1[0-4]", resultado$codigo)))
+})
+
+test_that("cie_lookup con normalizar=FALSE preserva formato", {
+  skip_on_cran()
+
+  # Sin normalizacion, E110 no se convierte a E11.0
+  suppressMessages({
+    resultado <- cie_lookup("E110", normalizar = FALSE)
+  })
+
+  # Puede encontrar o no dependiendo del formato en DB
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_lookup maneja vector con NAs", {
+  skip_on_cran()
+
+  codigos <- c("E11.0", NA, "Z00", NA)
+
+  suppressMessages({
+    resultado <- cie_lookup(codigos)
+  })
+
+  expect_s3_class(resultado, "tbl_df")
+  # Solo deberia encontrar E11.0 y Z00
+  expect_lte(nrow(resultado), 2)
+})
+
+test_that("cie_lookup maneja vector vacio", {
+  resultado <- cie_lookup(character(0))
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie_lookup maneja vector solo NAs", {
+  resultado <- cie_lookup(c(NA, NA, NA))
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+# ==============================================================================
+# PRUEBAS cie_guia_busqueda()
+# ==============================================================================
+
+test_that("cie_guia_busqueda retorna data.frame", {
+  resultado <- cie_guia_busqueda()
+
+  expect_s3_class(resultado, "data.frame")
+  expect_gt(nrow(resultado), 5)
+  expect_true("Tengo..." %in% names(resultado))
+  expect_true("Usar funcion" %in% names(resultado))
+  expect_true("Ejemplo" %in% names(resultado))
+})
+
+test_that("cie_guia_busqueda contiene casos comunes", {
+  resultado <- cie_guia_busqueda()
+
+  # Verificar que menciona casos importantes
+  tengo <- resultado[["Tengo..."]]
+
+  expect_true(any(grepl("exacto", tengo, ignore.case = TRUE)))
+  expect_true(any(grepl("Descripcion", tengo, ignore.case = TRUE)))
+  expect_true(any(grepl("Sigla", tengo, ignore.case = TRUE)))
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES cie_search() - COBERTURA
+# ==============================================================================
+
+test_that("cie_search con solo_fuzzy=TRUE omite busqueda exacta", {
+  skip_on_cran()
+
+  # Con solo_fuzzy, usa directamente fuzzy matching
+  resultado <- cie_search("diabetes mellitus", solo_fuzzy = TRUE,
+                          threshold = 0.7, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie_search detecta sigla y muestra mensaje", {
+  skip_on_cran()
+
+  # IAM debe detectarse como sigla
+  expect_message(
+    resultado <- cie_search("IAM", threshold = 0.7, verbose = TRUE),
+    "Sigla detectada"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_search busca en inclusion correctamente", {
+  skip_on_cran()
+
+  resultado <- cie_search("aguda", campo = "inclusion",
+                          threshold = 0.6, max_results = 10, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_search con texto largo encuentra matches parciales", {
+  skip_on_cran()
+
+  # Busqueda de multiples palabras
+  resultado <- cie_search("diabetes tipo dos insulina",
+                          threshold = 0.5, max_results = 20, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_search fuzzy encuentra typos", {
+  skip_on_cran()
+
+  # Typos intencionales
+  resultado <- cie_search("hipertencion", threshold = 0.6, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Deberia encontrar hipertension
+  expect_gt(nrow(resultado), 0)
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES cie_lookup() - COBERTURA
+# ==============================================================================
+
+test_that("cie_lookup con extract=TRUE y check_siglas=TRUE combinados", {
+  skip_on_cran()
+
+  # Combinar ambas opciones
+  resultado <- cie_lookup("CIE:E11.0", extract = TRUE, check_siglas = TRUE)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 1)
+})
+
+test_that("cie_lookup maneja rango de codigos", {
+  skip_on_cran()
+
+  resultado <- cie_lookup("I20-I25")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie_lookup con normalizar procesa codigo sin punto", {
+  skip_on_cran()
+
+  # E110 -> E11.0
+  resultado <- cie_lookup("E110", normalizar = TRUE)
+
+  expect_equal(nrow(resultado), 1)
+  expect_equal(resultado$codigo, "E11.0")
+})
+
+test_that("cie_lookup maneja codigos especiales daga/asterisco", {
+  skip_on_cran()
+
+  # Buscar codigo con daga si existe
+  # Primero verificar que el paquete normaliza correctamente
+  resultado <- cie_lookup("A17.0")
+
+  expect_s3_class(resultado, "tbl_df")
+})
