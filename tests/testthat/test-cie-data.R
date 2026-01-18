@@ -29,11 +29,11 @@ test_that("parsear_cie10_minsal con XLS real", {
   skip_on_cran()
   skip_if_not_installed("readxl")
 
-  # Buscar XLS MINSAL en rutas conocidas (formato Lista-Tabular original)
+  # Buscar XLSX MINSAL en rutas conocidas (formato CIE-10 correcto)
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -44,7 +44,7 @@ test_that("parsear_cie10_minsal con XLS real", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   # Intentar parsear, skip si formato incompatible
   resultado <- tryCatch(
@@ -79,11 +79,11 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
   skip_on_cran()
   skip_if_not_installed("readxl")
 
-  # Buscar XLS MINSAL (formato Lista-Tabular original)
+  # Buscar XLSX MINSAL (formato CIE-10 correcto)
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -94,7 +94,7 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   # Intentar parsear, skip si formato incompatible
   resultado <- tryCatch(
@@ -268,9 +268,9 @@ test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -281,7 +281,7 @@ test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   resultado <- tryCatch(
     ciecl:::parsear_cie10_minsal(xls_path),
@@ -303,9 +303,9 @@ test_that("parsear_cie10_minsal extrae capitulo de codigo", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -316,7 +316,7 @@ test_that("parsear_cie10_minsal extrae capitulo de codigo", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   resultado <- tryCatch(
     ciecl:::parsear_cie10_minsal(xls_path),
@@ -338,9 +338,9 @@ test_that("parsear_cie10_minsal limpia descripciones", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -351,7 +351,7 @@ test_that("parsear_cie10_minsal limpia descripciones", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   resultado <- tryCatch(
     ciecl:::parsear_cie10_minsal(xls_path),
@@ -373,9 +373,9 @@ test_that("generar_cie10_cl con XLS disponible", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls",
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
+    "../CIE-10 (1).xlsx",
+    "CIE-10 (1).xlsx"
   )
 
   xls_path <- NULL
@@ -386,7 +386,7 @@ test_that("generar_cie10_cl con XLS disponible", {
     }
   }
 
-  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+  skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
   # Solo verificar que no crashea al parsear (no guardar archivo)
   resultado <- tryCatch(
@@ -401,4 +401,245 @@ test_that("generar_cie10_cl con XLS disponible", {
 
   expect_s3_class(resultado, "tbl_df")
   expect_gt(nrow(resultado), 30000)
+})
+
+# ==============================================================================
+# PRUEBAS parsear_cie10_minsal() CON MOCK DATA
+# ==============================================================================
+
+test_that("parsear_cie10_minsal con mock XLSX detecta columnas codigo/descripcion", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    # Crear mock XLSX con estructura minima
+    mock_data <- data.frame(
+      codigo = c("E11.0", "E11.1", "I50.9", "C50.9"),
+      descripcion = c(
+        "Diabetes mellitus tipo 2 con coma",
+        "Diabetes mellitus tipo 2 con cetoacidosis",
+        "Insuficiencia cardiaca, no especificada",
+        "Tumor maligno de la mama, sin especificar"
+      ),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_s3_class(resultado, "tbl_df")
+    expect_true("codigo" %in% names(resultado))
+    expect_true("descripcion" %in% names(resultado))
+    expect_equal(nrow(resultado), 4)
+  })
+})
+
+test_that("parsear_cie10_minsal con mock extrae capitulo correctamente", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0", "I50.9", "A00.0", "Z99.9"),
+      descripcion = c("Desc E11", "Desc I50", "Desc A00", "Desc Z99"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_true("capitulo" %in% names(resultado))
+    expect_equal(resultado$capitulo[1], "E11")
+    expect_equal(resultado$capitulo[2], "I50")
+    expect_equal(resultado$capitulo[3], "A00")
+    expect_equal(resultado$capitulo[4], "Z99")
+  })
+})
+
+test_that("parsear_cie10_minsal detecta codigo con tilde en nombre columna", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    # Columna con tilde: codigo -> código
+    mock_data <- data.frame(
+      `código` = c("E11.0", "I50.9"),
+      `descripción` = c("Diabetes", "Insuficiencia cardiaca"),
+      stringsAsFactors = FALSE,
+      check.names = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_s3_class(resultado, "tbl_df")
+    expect_true("codigo" %in% names(resultado))
+    expect_equal(nrow(resultado), 2)
+  })
+})
+
+test_that("parsear_cie10_minsal detecta columna 'clave' como codigo", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      clave = c("E11.0", "I50.9"),
+      titulo = c("Diabetes", "Insuficiencia cardiaca"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_s3_class(resultado, "tbl_df")
+    expect_equal(nrow(resultado), 2)
+  })
+})
+
+test_that("parsear_cie10_minsal filtra codigos con menos de 3 caracteres", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0", "AB", "I", "C50.9"),  # AB e I deben ser filtrados
+      descripcion = c("Desc1", "Desc2", "Desc3", "Desc4"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_equal(nrow(resultado), 2)  # Solo E11.0 y C50.9
+    expect_true(all(nchar(resultado$codigo) >= 3))
+  })
+})
+
+test_that("parsear_cie10_minsal filtra filas con codigo NA", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0", NA, "I50.9", NA),
+      descripcion = c("Desc1", "Desc2", "Desc3", "Desc4"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_equal(nrow(resultado), 2)  # Solo E11.0 e I50.9
+  })
+})
+
+test_that("parsear_cie10_minsal limpia espacios en codigo y descripcion", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("  E11.0  ", "I50.9 "),
+      descripcion = c("  Diabetes  ", " Insuficiencia "),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_equal(resultado$codigo[1], "E11.0")
+    expect_equal(resultado$codigo[2], "I50.9")
+    expect_equal(resultado$descripcion[1], "Diabetes")
+    expect_equal(resultado$descripcion[2], "Insuficiencia")
+  })
+})
+
+test_that("parsear_cie10_minsal detecta simbolo daga", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0\u2020", "I50.9"),  # \u2020 es simbolo daga
+      descripcion = c("Diabetes daga", "Insuficiencia"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_true("es_daga" %in% names(resultado))
+    expect_true(resultado$es_daga[1])
+    expect_false(resultado$es_daga[2])
+  })
+})
+
+test_that("parsear_cie10_minsal detecta simbolo asterisco", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0*", "I50.9"),  # * es simbolo cruz
+      descripcion = c("Diabetes cruz", "Insuficiencia"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_true("es_cruz" %in% names(resultado))
+    expect_true(resultado$es_cruz[1])
+    expect_false(resultado$es_cruz[2])
+  })
+})
+
+test_that("parsear_cie10_minsal incluye columna categoria si existe", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    mock_data <- data.frame(
+      codigo = c("E11.0", "I50.9"),
+      descripcion = c("Diabetes", "Insuficiencia"),
+      categoria = c("Endocrinas", "Circulatorias"),
+      stringsAsFactors = FALSE
+    )
+
+    mock_path <- "mock_cie10.xlsx"
+    writexl::write_xlsx(mock_data, mock_path)
+
+    resultado <- ciecl:::parsear_cie10_minsal(mock_path)
+
+    expect_true("categoria" %in% names(resultado))
+  })
 })

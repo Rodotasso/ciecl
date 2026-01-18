@@ -38,9 +38,9 @@ parsear_cie10_minsal <- function(xls_path) {
   names(raw) <- tolower(stringr::str_trim(names(raw)))
   names(raw) <- stringr::str_replace_all(names(raw), "\\s+", "_")
   
-  # Detectar columnas dinamicamente
-  col_codigo <- names(raw)[stringr::str_detect(names(raw), "cod|clave")]
-  col_desc <- names(raw)[stringr::str_detect(names(raw), "desc|titulo")]
+  # Detectar columnas dinamicamente (soporta tildes: codigo/descripcion)
+  col_codigo <- names(raw)[stringr::str_detect(names(raw), "c[o\u00f3]d|clave")]
+  col_desc <- names(raw)[stringr::str_detect(names(raw), "desc|t[i\u00ed]tulo")]
   
   if (length(col_codigo) == 0 || length(col_desc) == 0) {
     stop("No se detectaron columnas codigo/descripcion. Columnas: ", 
@@ -53,7 +53,7 @@ parsear_cie10_minsal <- function(xls_path) {
       codigo = dplyr::all_of(col_codigo[1]),
       descripcion = dplyr::all_of(col_desc[1]),
       categoria = dplyr::any_of(
-        names(raw)[stringr::str_detect(names(raw), "cat|tipo")]
+        names(raw)[stringr::str_detect(names(raw), "cat|tipo|categor[i\u00ed]a")]
       ),
       inclusion = dplyr::any_of(
         names(raw)[stringr::str_detect(names(raw), "incl")]

@@ -129,3 +129,106 @@ test_that("cie10_sql maneja query con saltos de linea", {
   expect_s3_class(resultado, "tbl_df")
   expect_equal(nrow(resultado), 1)
 })
+
+# ==============================================================================
+# PRUEBAS get_cie10_db()
+# ==============================================================================
+
+test_that("get_cie10_db retorna conexion DBI valida", {
+  skip_on_cran()
+
+  con <- ciecl:::get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  expect_true(DBI::dbIsValid(con))
+  expect_s4_class(con, "SQLiteConnection")
+})
+
+test_that("get_cie10_db crea tabla cie10 si no existe", {
+  skip_on_cran()
+
+  con <- ciecl:::get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  expect_true(DBI::dbExistsTable(con, "cie10"))
+})
+
+test_that("get_cie10_db tabla tiene indices", {
+  skip_on_cran()
+
+  con <- ciecl:::get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index'")
+  expect_gt(nrow(indices), 0)
+})
+
+test_that("get_cie10_db usa directorio cache correcto", {
+  skip_on_cran()
+
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+  db_path <- file.path(cache_dir, "cie10.db")
+
+  con <- ciecl:::get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  expect_true(file.exists(db_path))
+})
+
+test_that("get_cie10_db tabla tiene columnas esperadas", {
+  skip_on_cran()
+
+  con <- ciecl:::get_cie10_db()
+  on.exit(DBI::dbDisconnect(con))
+
+  columnas <- DBI::dbListFields(con, "cie10")
+  expect_true("codigo" %in% columnas)
+  expect_true("descripcion" %in% columnas)
+})
+
+# ==============================================================================
+# PRUEBAS cie10_clear_cache()
+# ==============================================================================
+
+test_that("cie10_clear_cache elimina archivo db", {
+  skip_on_cran()
+
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+  db_path <- file.path(cache_dir, "cie10.db")
+
+  # Asegurar que existe
+  con <- ciecl:::get_cie10_db()
+  DBI::dbDisconnect(con)
+  expect_true(file.exists(db_path))
+
+  # Limpiar cache
+  suppressMessages(cie10_clear_cache())
+  expect_false(file.exists(db_path))
+})
+
+test_that("cie10_clear_cache es idempotente", {
+  skip_on_cran()
+
+  expect_no_error({
+    suppressMessages(cie10_clear_cache())
+    suppressMessages(cie10_clear_cache())
+  })
+})
+
+test_that("cie10_clear_cache emite mensaje apropiado", {
+  skip_on_cran()
+
+  # Asegurar que existe cache
+  con <- ciecl:::get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  expect_message(cie10_clear_cache(), "eliminado")
+  expect_message(cie10_clear_cache(), "no existe")
+})
+
+test_that("cie10_clear_cache retorna invisible NULL", {
+  skip_on_cran()
+
+  resultado <- suppressMessages(cie10_clear_cache())
+  expect_null(resultado)
+})
