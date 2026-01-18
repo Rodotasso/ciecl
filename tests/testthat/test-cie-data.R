@@ -29,12 +29,13 @@ test_that("parsear_cie10_minsal con XLS real", {
   skip_on_cran()
   skip_if_not_installed("readxl")
 
-  # Buscar XLSX MINSAL en rutas conocidas (formato CIE-10 correcto)
+  # Buscar XLSX/XLS MINSAL en rutas conocidas (formato CIE-10 correcto)
   xls_paths <- c(
     "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
+
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -66,7 +67,8 @@ test_that("parsear_cie10_minsal con XLS real", {
   expect_true("es_cruz" %in% names(resultado))
 
   # Verificar contenido minimo
-  expect_gt(nrow(resultado), 1000)
+  expect_gt(nrow(resultado), 30000)
+
 
   # Verificar tipos de datos
   expect_type(resultado$codigo, "character")
@@ -79,12 +81,13 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
   skip_on_cran()
   skip_if_not_installed("readxl")
 
-  # Buscar XLSX MINSAL (formato CIE-10 correcto)
+  # Buscar XLSX/XLS MINSAL (formato CIE-10 correcto)
   xls_paths <- c(
     "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
+
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -273,6 +276,7 @@ test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
     "CIE-10 (1).xlsx"
   )
 
+
   xls_path <- NULL
   for (path in xls_paths) {
     if (file.exists(path)) {
@@ -307,6 +311,7 @@ test_that("parsear_cie10_minsal extrae capitulo de codigo", {
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
+
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -343,6 +348,7 @@ test_that("parsear_cie10_minsal limpia descripciones", {
     "CIE-10 (1).xlsx"
   )
 
+
   xls_path <- NULL
   for (path in xls_paths) {
     if (file.exists(path)) {
@@ -367,11 +373,25 @@ test_that("parsear_cie10_minsal limpia descripciones", {
   expect_false(any(grepl("^\\s|\\s$", resultado$descripcion)))
 })
 
-test_that("generar_cie10_cl con XLS disponible", {
+test_that("generar_cie10_cl valida parametros y parsea XLS", {
   skip_on_cran()
   skip_if_not_installed("usethis")
   skip_if_not_installed("readxl")
 
+  # Test 1: Error cuando no encuentra XLS
+  expect_error(
+    generar_cie10_cl(xls_path = NULL),
+    "XLS no encontrado"
+  )
+
+ # Test 2: Error con ruta invalida
+  expect_error(
+    generar_cie10_cl(xls_path = "archivo_inexistente.xlsx"),
+    class = "error"
+  )
+
+  # Test 3: Verificar que parsear_cie10_minsal funciona con XLS real
+  # (generar_cie10_cl usa internamente parsear_cie10_minsal)
   xls_paths <- c(
     "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
@@ -388,20 +408,15 @@ test_that("generar_cie10_cl con XLS disponible", {
 
   skip_if(is.null(xls_path), "Archivo XLSX CIE-10 MINSAL no disponible")
 
-  # Solo verificar que no crashea al parsear (no guardar archivo)
-  resultado <- tryCatch(
-    ciecl:::parsear_cie10_minsal(xls_path),
-    error = function(e) {
-      if (grepl("columnas codigo/descripcion", e$message)) {
-        skip("XLS tiene formato de columnas incompatible")
-      }
-      stop(e)
-    }
-  )
+  # Testear parsear_cie10_minsal directamente (lo que generar_cie10_cl usa)
+  resultado <- parsear_cie10_minsal(xls_path)
 
   expect_s3_class(resultado, "tbl_df")
   expect_gt(nrow(resultado), 30000)
+  expect_true("codigo" %in% names(resultado))
+  expect_true("descripcion" %in% names(resultado))
 })
+
 
 # ==============================================================================
 # PRUEBAS parsear_cie10_minsal() CON MOCK DATA

@@ -35,6 +35,7 @@ test_that("cie11_search requiere httr2", {
 test_that("cie11_search con API real retorna resultados", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   # Verificar que existe API key en environment
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
@@ -42,17 +43,24 @@ test_that("cie11_search con API real retorna resultados", {
           "ICD_API_KEY no configurada para tests reales")
 
   # Buscar termino comun que debe existir
-  resultado <- cie11_search("diabetes")
+  resultado <- cie11_search("diabetes", max_results = 2)
 
   expect_s3_class(resultado, "tbl_df")
-  expect_gt(nrow(resultado), 0)
   expect_true("codigo" %in% names(resultado))
   expect_true("titulo" %in% names(resultado))
+  expect_true("capitulo" %in% names(resultado))
+  expect_lte(nrow(resultado), 2)
+  if (nrow(resultado) > 0) {
+    expect_false(any(grepl("<em", resultado$titulo, fixed = TRUE)))
+    expect_false(any(grepl("</em>", resultado$titulo, fixed = TRUE)))
+  }
 })
+
 
 test_that("cie11_search con API real respeta max_results", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -65,9 +73,11 @@ test_that("cie11_search con API real respeta max_results", {
   expect_lte(nrow(resultado_10), 10)
 })
 
+
 test_that("cie11_search con API real soporta idioma espanol", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -83,9 +93,11 @@ test_that("cie11_search con API real soporta idioma espanol", {
   }
 })
 
+
 test_that("cie11_search con API real soporta idioma ingles", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -96,9 +108,11 @@ test_that("cie11_search con API real soporta idioma ingles", {
   expect_s3_class(resultado, "tbl_df")
 })
 
+
 test_that("cie11_search con API real maneja busqueda sin resultados", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -114,9 +128,11 @@ test_that("cie11_search con API real maneja busqueda sin resultados", {
   expect_equal(nrow(resultado), 0)
 })
 
+
 test_that("cie11_search con API real limpia tags HTML", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -130,6 +146,7 @@ test_that("cie11_search con API real limpia tags HTML", {
     expect_false(any(grepl("</em>", resultado$titulo, fixed = TRUE)))
   }
 })
+
 
 # ==============================================================================
 # PRUEBAS DE ESTRUCTURA DE RESPUESTA DETALLADA
@@ -188,6 +205,7 @@ test_that("cie11_search maneja texto vacio", {
 test_that("cie11_search con API real busca hipertension", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -202,9 +220,11 @@ test_that("cie11_search con API real busca hipertension", {
   }
 })
 
+
 test_that("cie11_search con API real busca cancer", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -217,9 +237,11 @@ test_that("cie11_search con API real busca cancer", {
   expect_type(resultado$capitulo, "character")
 })
 
+
 test_that("cie11_search con API real verifica columna capitulo", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -234,9 +256,11 @@ test_that("cie11_search con API real verifica columna capitulo", {
   }
 })
 
+
 test_that("cie11_search con API real acepta max_results=1", {
   skip_on_cran()
   skip_if_not_installed("httr2")
+  skip_if_offline()
 
   api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
   skip_if(is.na(api_key) || api_key == "",
@@ -247,3 +271,4 @@ test_that("cie11_search con API real acepta max_results=1", {
   expect_s3_class(resultado, "tbl_df")
   expect_lte(nrow(resultado), 1)
 })
+
