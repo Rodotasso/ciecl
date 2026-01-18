@@ -485,9 +485,11 @@ test_that("cie_comorbid maneja codigos con NA", {
     diag = c("E11.0", NA, "I50.9", "C50.9")
   )
 
-  # No debe crashear con NAs
+  # No debe crashear con NAs (warning esperado por NA values)
   expect_no_error({
-    resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
+    suppressWarnings({
+      resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
+    })
   })
 })
 
