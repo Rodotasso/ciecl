@@ -1,6 +1,6 @@
 Package: ciecl
 Title: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     person("Rodolfo", "Tasso Suazo", 
            email = "rtasso@uchile.cl",
@@ -36,6 +36,7 @@ Suggests:
     httr2,
     readxl,
     usethis,
+    withr,
     testthat (>= 3.0.0),
     knitr,
     litedown (>= 0.9),
