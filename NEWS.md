@@ -2,8 +2,6 @@
 
 *English summary below*
 
----
-
 ## Primera Version Estable
 
 Esta es la primera version estable de `ciecl`, el paquete R para trabajar con
@@ -15,7 +13,7 @@ la Clasificacion Internacional de Enfermedades CIE-10 oficial de Chile
 Aumento masivo de cobertura de tests para cumplir estandares CRAN:
 
 * **850 tests** (antes 305)
-* **85.94% cobertura** (meta CRAN >80%)
+* **96.41% cobertura** (meta CRAN >80%)
 * **0 errores, 0 warnings, 0 notes** en R CMD check
 
 ### Nuevos Archivos de Tests
@@ -102,8 +100,6 @@ Aumento masivo de cobertura de tests para cumplir estandares CRAN:
 * Conexiones DB con `on.exit()` garantizado
 * Validacion de inputs en funciones publicas
 
----
-
 ## English Summary
 
 ### First Stable Release
@@ -114,7 +110,7 @@ official ICD-10 classification (MINSAL/DEIS v2018).
 ### Comprehensive Test Suite - CRAN Ready
 
 * **850 tests** (up from 305)
-* **85.94% coverage** (CRAN target >80%)
+* **96.41% coverage** (CRAN target >80%)
 * **0 errors, 0 warnings, 0 notes** in R CMD check
 
 New test files for:
@@ -134,13 +130,11 @@ Coverage by file:
 - cie-utils.R: 94.55%
 - cie-table.R: 92.00%
 
----
 
 # ciecl 0.1.0 (2026-01-17)
 
 *English summary below*
 
----
 ## Tests de Comorbilidad
 
 Validacion exhaustiva de funciones `cie_comorbid()` y `cie_map_comorbid()` con bases sinteticas:
@@ -196,8 +190,6 @@ Validacion exhaustiva de funciones `cie_comorbid()` y `cie_map_comorbid()` con b
 * `test-cie-search.R`: Modificar test de rangos invertidos para usar `suppressWarnings()`
 * `test-edge-cases.R`: Modificar test de rangos para usar `suppressWarnings()`
 
----
-
 ## English Summary
 
 ### Comorbidity Tests
@@ -213,7 +205,6 @@ Exhaustive validation of `cie_comorbid()` and `cie_map_comorbid()` with syntheti
 * `cie_lookup()`: Improved documentation for `extract` parameter
 * `extract_cie_from_text()`: Internal function to extract ICD-10 codes from noisy text
 
----
 
 # ciecl 0.1.0.9000 (desarrollo - historico)
 

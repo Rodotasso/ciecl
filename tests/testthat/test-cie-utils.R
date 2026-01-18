@@ -375,3 +375,67 @@ test_that("cie_normalizar con codigos de trauma largos", {
   resultado <- cie_normalizar(codigos_trauma, buscar_db = FALSE)
   expect_length(resultado, 2)
 })
+
+# ==============================================================================
+# PRUEBAS COBERTURA LINEAS 90-94: Extension cod_con_0 para codigos 3 digitos
+# ==============================================================================
+
+test_that("cie_normalizar buscar_db=TRUE extiende codigo 3 digitos con 0", {
+  skip_on_cran()
+
+  # E10 es categoria diabetes tipo 1
+  # Si E10 no existe pero E100 si, debe retornar E100
+  # O si E10 existe, retorna E10
+  resultado <- cie_normalizar("E10", buscar_db = TRUE)
+
+  # El resultado debe ser E10 o E100 (si se extendio)
+  expect_true(resultado %in% c("E10", "E100"))
+  expect_true(nchar(resultado) >= 3)
+})
+
+test_that("cie_normalizar buscar_db=TRUE con codigo 3 digitos que no tiene extension", {
+  skip_on_cran()
+
+  # Codigo de 3 digitos que existe en la DB
+  # I10 es Hipertension esencial (codigo sin subcategorias directas numericas)
+  resultado <- cie_normalizar("I10", buscar_db = TRUE)
+
+  # Debe mantenerse I10 ya que existe en la DB
+  expect_equal(resultado, "I10")
+})
+
+test_that("cie_normalizar buscar_db=TRUE con varios codigos 3 digitos", {
+  skip_on_cran()
+
+  # Mezcla de codigos de 3 digitos
+  codigos <- c("E10", "E11", "I10", "J00")
+  resultado <- cie_normalizar(codigos, buscar_db = TRUE)
+
+  expect_length(resultado, 4)
+  # Todos deben empezar con la letra original
+  expect_true(all(substr(resultado, 1, 1) == c("E", "E", "I", "J")))
+})
+
+test_that("cie_normalizar buscar_db=TRUE codigo 3 digitos inexistente no se extiende", {
+  skip_on_cran()
+
+  # Codigo que no existe en la base y tampoco existe con 0
+  resultado <- cie_normalizar("X99", buscar_db = TRUE)
+
+  # Debe retornar X99 ya que ni X99 ni X990 existen
+  expect_equal(resultado, "X99")
+})
+
+test_that("cie_normalizar buscar_db=TRUE ejercita rama cod_con_0", {
+  skip_on_cran()
+
+  # Buscar un codigo de 3 digitos donde el codigo base no existe
+
+  # pero la extension con 0 podria existir
+  # A09 (Diarrea y gastroenteritis) puede tener A090
+  resultado <- cie_normalizar("A09", buscar_db = TRUE)
+
+  # El resultado debe ser valido (A09 o A090)
+  expect_true(nchar(resultado) >= 3)
+  expect_true(grepl("^A09", resultado))
+})
