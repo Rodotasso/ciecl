@@ -100,6 +100,17 @@ test_that("cie_normalizar con buscar_db=TRUE es vectorizado", {
   expect_true("E11.0" %in% resultado)
 })
 
+test_that("cie_normalizar con buscar_db=TRUE falla con NA", {
+  skip_on_cran()
+
+  codigos <- c(NA, "E11.0")
+
+  expect_error(
+    cie_normalizar(codigos, buscar_db = TRUE)
+  )
+})
+
+
 test_that("cie_normalizar maneja codigo inexistente con buscar_db=TRUE", {
   skip_on_cran()
 
