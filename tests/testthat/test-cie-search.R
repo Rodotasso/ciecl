@@ -429,6 +429,35 @@ test_that("cie_guia_busqueda contiene casos comunes", {
   expect_true(any(grepl("Sigla", tengo, ignore.case = TRUE)))
 })
 
+test_that("cie_guia_busqueda tiene 8 filas", {
+  resultado <- cie_guia_busqueda()
+  expect_equal(nrow(resultado), 8)
+})
+
+test_that("cie_guia_busqueda tiene 3 columnas exactas", {
+  resultado <- cie_guia_busqueda()
+  expect_equal(ncol(resultado), 3)
+  expect_equal(names(resultado), c("Tengo...", "Usar funcion", "Ejemplo"))
+})
+
+test_that("cie_guia_busqueda ejemplos mencionan funciones ciecl", {
+  resultado <- cie_guia_busqueda()
+
+  ejemplos <- resultado[["Ejemplo"]]
+
+  # Verificar que menciona las funciones principales
+  expect_true(any(grepl("cie_lookup", ejemplos)))
+  expect_true(any(grepl("cie_search", ejemplos)))
+})
+
+test_that("cie_guia_busqueda todas las columnas son character", {
+  resultado <- cie_guia_busqueda()
+
+  expect_type(resultado[["Tengo..."]], "character")
+  expect_type(resultado[["Usar funcion"]], "character")
+  expect_type(resultado[["Ejemplo"]], "character")
+})
+
 # ==============================================================================
 # PRUEBAS ADICIONALES cie_search() - COBERTURA
 # ==============================================================================
