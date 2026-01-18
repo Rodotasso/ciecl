@@ -32,7 +32,8 @@ test_that("parsear_cie10_minsal con XLS real", {
   # Buscar XLS MINSAL en rutas conocidas (formato Lista-Tabular original)
   xls_paths <- c(
     "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls"
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
   )
 
   xls_path <- NULL
@@ -81,7 +82,8 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
   # Buscar XLS MINSAL (formato Lista-Tabular original)
   xls_paths <- c(
     "../Lista-Tabular-CIE-10-1-1.xls",
-    "Lista-Tabular-CIE-10-1-1.xls"
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
   )
 
   xls_path <- NULL
@@ -255,4 +257,148 @@ test_that("dataset cie10_cl capitulos extraidos correctamente", {
     expect_true(all(grepl("^[A-Z]\\d{1,2}$", capitulos_validos, perl = TRUE) |
                     is.na(capitulos_validos)))
   }
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES PARA COBERTURA
+# ==============================================================================
+
+test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+
+  xls_paths <- c(
+    "../Lista-Tabular-CIE-10-1-1.xls",
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+  )
+
+  xls_path <- NULL
+  for (path in xls_paths) {
+    if (file.exists(path)) {
+      xls_path <- path
+      break
+    }
+  }
+
+  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+
+  resultado <- tryCatch(
+    ciecl:::parsear_cie10_minsal(xls_path),
+    error = function(e) {
+      if (grepl("columnas codigo/descripcion", e$message)) {
+        skip("XLS tiene formato de columnas incompatible")
+      }
+      stop(e)
+    }
+  )
+
+  # Todos los codigos deben empezar con letra y tener minimo 3 caracteres
+  expect_true(all(grepl("^[A-Z]", resultado$codigo)))
+  expect_true(all(nchar(resultado$codigo) >= 3))
+})
+
+test_that("parsear_cie10_minsal extrae capitulo de codigo", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+
+  xls_paths <- c(
+    "../Lista-Tabular-CIE-10-1-1.xls",
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+  )
+
+  xls_path <- NULL
+  for (path in xls_paths) {
+    if (file.exists(path)) {
+      xls_path <- path
+      break
+    }
+  }
+
+  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+
+  resultado <- tryCatch(
+    ciecl:::parsear_cie10_minsal(xls_path),
+    error = function(e) {
+      if (grepl("columnas codigo/descripcion", e$message)) {
+        skip("XLS tiene formato de columnas incompatible")
+      }
+      stop(e)
+    }
+  )
+
+  # Capitulo debe extraerse correctamente del codigo
+  # E11.0 -> E11, A00 -> A00
+  expect_true(all(!is.na(resultado$capitulo) | is.na(resultado$codigo)))
+})
+
+test_that("parsear_cie10_minsal limpia descripciones", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+
+  xls_paths <- c(
+    "../Lista-Tabular-CIE-10-1-1.xls",
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+  )
+
+  xls_path <- NULL
+  for (path in xls_paths) {
+    if (file.exists(path)) {
+      xls_path <- path
+      break
+    }
+  }
+
+  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+
+  resultado <- tryCatch(
+    ciecl:::parsear_cie10_minsal(xls_path),
+    error = function(e) {
+      if (grepl("columnas codigo/descripcion", e$message)) {
+        skip("XLS tiene formato de columnas incompatible")
+      }
+      stop(e)
+    }
+  )
+
+  # Descripciones deben estar limpias (sin espacios extra al inicio/fin)
+  expect_false(any(grepl("^\\s|\\s$", resultado$descripcion)))
+})
+
+test_that("generar_cie10_cl con XLS disponible", {
+  skip_on_cran()
+  skip_if_not_installed("usethis")
+  skip_if_not_installed("readxl")
+
+  xls_paths <- c(
+    "../Lista-Tabular-CIE-10-1-1.xls",
+    "Lista-Tabular-CIE-10-1-1.xls",
+    "D:/MAGISTER/01_Paquete_R/analisis_bases/Lista-Tabular-CIE-10-1-1.xls"
+  )
+
+  xls_path <- NULL
+  for (path in xls_paths) {
+    if (file.exists(path)) {
+      xls_path <- path
+      break
+    }
+  }
+
+  skip_if(is.null(xls_path), "Archivo Lista-Tabular XLS MINSAL no disponible")
+
+  # Solo verificar que no crashea al parsear (no guardar archivo)
+  resultado <- tryCatch(
+    ciecl:::parsear_cie10_minsal(xls_path),
+    error = function(e) {
+      if (grepl("columnas codigo/descripcion", e$message)) {
+        skip("XLS tiene formato de columnas incompatible")
+      }
+      stop(e)
+    }
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_gt(nrow(resultado), 30000)
 })

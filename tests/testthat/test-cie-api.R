@@ -180,3 +180,70 @@ test_that("cie11_search maneja texto vacio", {
   )
   expect_s3_class(resultado, "tbl_df")
 })
+
+# ==============================================================================
+# PRUEBAS ADICIONALES PARA COBERTURA
+# ==============================================================================
+
+test_that("cie11_search con API real busca hipertension", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("hipertension arterial", max_results = 3)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_lte(nrow(resultado), 3)
+  if (nrow(resultado) > 0) {
+    expect_true(all(c("codigo", "titulo", "capitulo") %in% names(resultado)))
+  }
+})
+
+test_that("cie11_search con API real busca cancer", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("neoplasia maligna", lang = "es", max_results = 5)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_type(resultado$codigo, "character")
+  expect_type(resultado$capitulo, "character")
+})
+
+test_that("cie11_search con API real verifica columna capitulo", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("neumonia", max_results = 5)
+
+  expect_true("capitulo" %in% names(resultado))
+  if (nrow(resultado) > 0) {
+    # Capitulos deben ser strings no vacios o NA
+    expect_type(resultado$capitulo, "character")
+  }
+})
+
+test_that("cie11_search con API real acepta max_results=1", {
+  skip_on_cran()
+  skip_if_not_installed("httr2")
+
+  api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
+  skip_if(is.na(api_key) || api_key == "",
+          "ICD_API_KEY no configurada para tests reales")
+
+  resultado <- cie11_search("asma", max_results = 1)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_lte(nrow(resultado), 1)
+})

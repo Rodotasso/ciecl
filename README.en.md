@@ -6,16 +6,10 @@
 **Data Science for Public Health Group** | University of Chile
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
-> **STATUS: BETA (v0.1.0)**
->
-> This package is under active development and testing. The API may
-> change before stable version 1.0.0. Feedback and bug reports are welcome
-> at [GitHub Issues](https://github.com/RodoTasso/ciecl/issues).
 
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
 
@@ -81,7 +75,7 @@ diabetes_codes <- cie_search("diabetes")
 ### All platforms (Windows, macOS, Linux)
 
 ``` r
-# From GitHub (development/beta version)
+# From GitHub
 # install.packages("pak")
 pak::pak("RodoTasso/ciecl")
 
@@ -230,9 +224,14 @@ Based on official **ICD-10 MINSAL/DEIS v2018** catalog:
 ICD-10 data is for public use according to [Decree 356 Exempt (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
 from the Ministry of Health establishing official ICD-10 use in Chile.
 
+## Development
+
+This package was developed with assistance from Claude (Anthropic),
+with human verification and validation of all code and documentation.
+
 ## Contributing
 
-This package is in beta phase. Contributions are welcome:
+Contributions are welcome:
 
 - Report bugs at [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
 - Suggest improvements or new features
