@@ -6,16 +6,10 @@
 **Grupo de Ciencia de Datos para la Salud Publica** | Universidad de Chile
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
-> **ESTADO: BETA (v0.1.0)**
->
-> Este paquete esta en fase de desarrollo activo y pruebas. La API puede
-> cambiar antes de la version estable 1.0.0. Se agradece el feedback y
-> reporte de errores en [GitHub Issues](https://github.com/RodoTasso/ciecl/issues).
 
 **Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile
 para R**.
@@ -83,7 +77,7 @@ diabete_codes <- cie_search("diabetes")
 ### Todas las plataformas (Windows, macOS, Linux)
 
 ``` r
-# Desde GitHub (version de desarrollo/beta)
+# Desde GitHub
 # install.packages("pak")
 pak::pak("RodoTasso/ciecl")
 
@@ -233,9 +227,14 @@ Basado en el catalogo oficial **CIE-10 MINSAL/DEIS v2018**:
 Los datos CIE-10 son de uso publico segun el [Decreto 356 Exento (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
 del Ministerio de Salud que establece el uso oficial de la CIE-10 en Chile.
 
+## Desarrollo
+
+Este paquete fue desarrollado con asistencia de Claude (Anthropic),
+con verificacion y validacion humana de todo el codigo y documentacion.
+
 ## Contribuir
 
-Este paquete esta en fase beta. Las contribuciones son bienvenidas:
+Las contribuciones son bienvenidas:
 
 - Reporta errores en [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
 - Sugiere mejoras o nuevas funcionalidades
