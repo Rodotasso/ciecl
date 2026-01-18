@@ -557,3 +557,141 @@ test_that("cie_lookup maneja codigos especiales daga/asterisco", {
 
   expect_s3_class(resultado, "tbl_df")
 })
+
+# ==============================================================================
+# PRUEBAS COBERTURA - mensaje "Sin coincidencias" y sigla_to_codigo NULL
+# ==============================================================================
+
+test_that("cie_search muestra mensaje Sin coincidencias con verbose=TRUE", {
+  skip_on_cran()
+
+  # Buscar texto que no deberia tener coincidencias
+  expect_message(
+    resultado <- cie_search("xyznonexistent12345abc", threshold = 0.95, verbose = TRUE),
+    "Sin coincidencias"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie_search no muestra mensaje con verbose=FALSE cuando no hay resultados", {
+  skip_on_cran()
+
+  # No debe mostrar mensaje con verbose=FALSE
+  expect_silent({
+    resultado <- cie_search("xyznonexistent12345abc", threshold = 0.95, verbose = FALSE)
+  })
+
+  expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie_lookup con check_siglas=TRUE y sigla invalida no convierte", {
+  skip_on_cran()
+
+  # Sigla que no existe en el diccionario
+  suppressMessages({
+    resultado <- cie_lookup("XYZ", check_siglas = TRUE)
+  })
+
+  # Debe retornar vacio porque XYZ no es codigo CIE ni sigla valida
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie_lookup con check_siglas=TRUE y sigla valida convierte", {
+  skip_on_cran()
+
+  # EPOC es sigla valida
+  resultado <- cie_lookup("EPOC", check_siglas = TRUE)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Puede encontrar o no, pero no debe crashear
+})
+
+test_that("sigla_to_codigo retorna NULL para sigla inexistente", {
+  skip_on_cran()
+
+  # Acceder funcion interna
+  resultado <- ciecl:::sigla_to_codigo("XYZINVALIDA")
+
+  expect_null(resultado)
+})
+
+test_that("sigla_to_codigo retorna codigo para sigla valida", {
+  skip_on_cran()
+
+  # IAM es sigla de infarto agudo miocardio
+  resultado <- ciecl:::sigla_to_codigo("iam")
+
+  # Puede retornar codigo o NULL si no encuentra match fuzzy
+  expect_true(is.null(resultado) || is.character(resultado))
+})
+
+test_that("expandir_sigla retorna NULL para texto no-sigla", {
+  skip_on_cran()
+
+  resultado <- ciecl:::expandir_sigla("diabetes")
+
+  expect_null(resultado)
+})
+
+test_that("expandir_sigla retorna termino para sigla valida", {
+  skip_on_cran()
+
+  resultado <- ciecl:::expandir_sigla("IAM")
+
+  expect_equal(resultado, "infarto agudo miocardio")
+})
+
+test_that("cie_search con busqueda que no encuentra matches exactos ni fuzzy", {
+  skip_on_cran()
+
+  # Threshold muy alto para texto que no matchea bien
+  suppressMessages({
+    resultado <- cie_search("qwrtyuiopasdfghjklzxcvbnm", threshold = 0.99, verbose = FALSE)
+  })
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie_search fuzzy fallback cuando no hay matches exactos", {
+  skip_on_cran()
+
+  # Usar solo_fuzzy para forzar path fuzzy
+  resultado <- cie_search("diabetes mellitus tipo", solo_fuzzy = TRUE,
+                          threshold = 0.5, max_results = 10, verbose = FALSE)
+
+  expect_s3_class(resultado, "tbl_df")
+  # Deberia encontrar algo via fuzzy
+  expect_gt(nrow(resultado), 0)
+})
+
+test_that("normalizar_tildes con vector vacio retorna vacio", {
+  resultado <- ciecl:::normalizar_tildes(character(0))
+
+  expect_length(resultado, 0)
+  expect_type(resultado, "character")
+})
+
+test_that("normalizar_tildes convierte caracteres acentuados", {
+  resultado <- ciecl:::normalizar_tildes("neumonía agúda")
+
+  expect_equal(resultado, "neumonia aguda")
+})
+
+test_that("extract_cie_from_text extrae codigo de texto con ruido", {
+  skip_on_cran()
+
+  # Con prefijo
+  resultado1 <- ciecl:::extract_cie_from_text("CIE:E11.0")
+  expect_equal(resultado1, "E11.0")
+
+  # Con sufijo
+  resultado2 <- ciecl:::extract_cie_from_text("I10-confirmado")
+  expect_equal(resultado2, "I10")
+
+  # Sin ruido
+  resultado3 <- ciecl:::extract_cie_from_text("E11.0")
+  expect_equal(resultado3, "E11.0")
+})

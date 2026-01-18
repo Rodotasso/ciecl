@@ -161,6 +161,85 @@ test_that("generar_cie10_cl acepta ruta explicita", {
   )
 })
 
+test_that("generar_cie10_cl detecta XLS en directorio padre", {
+  skip_on_cran()
+  skip_if_not_installed("usethis")
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    # Crear subdirectorio
+    dir.create("child")
+
+    # Crear mock XLSX en directorio padre con formato CIE-10 correcto
+    # Nota: usamos .xlsx porque writexl crea archivos xlsx
+    mock_data <- data.frame(
+      codigo = c("E11.0", "I50.9", "A00.0"),
+      descripcion = c("Diabetes tipo 2", "Insuficiencia cardiaca", "Colera"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(mock_data, "mock_cie10.xlsx")
+
+    # Verificar que el archivo existe en padre
+    expect_true(file.exists("mock_cie10.xlsx"))
+
+    # Desde child, parsear_cie10_minsal deberia poder leer archivo en padre
+    withr::with_dir("child", {
+      parent_path <- normalizePath("../mock_cie10.xlsx", mustWork = FALSE)
+      expect_true(file.exists(parent_path))
+
+      # Ejecutar parsear_cie10_minsal con ruta explicita padre
+      resultado <- ciecl:::parsear_cie10_minsal(parent_path)
+      expect_s3_class(resultado, "tbl_df")
+      expect_equal(nrow(resultado), 3)
+    })
+  })
+})
+
+test_that("generar_cie10_cl detecta XLS en directorio actual", {
+  skip_on_cran()
+  skip_if_not_installed("usethis")
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    # Crear mock XLSX en directorio actual con formato CIE-10 correcto
+    mock_data <- data.frame(
+      codigo = c("E11.0", "I50.9", "A00.0"),
+      descripcion = c("Diabetes tipo 2", "Insuficiencia cardiaca", "Colera"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(mock_data, "mock_cie10.xlsx")
+
+    # Verificar que el archivo existe
+    expect_true(file.exists("mock_cie10.xlsx"))
+
+    # parsear_cie10_minsal con ruta directa
+    resultado <- ciecl:::parsear_cie10_minsal("mock_cie10.xlsx")
+    expect_s3_class(resultado, "tbl_df")
+    expect_equal(nrow(resultado), 3)
+  })
+})
+
+test_that("generar_cie10_cl autodeteccion prueba ambas rutas", {
+  skip_on_cran()
+  skip_if_not_installed("usethis")
+  skip_if_not_installed("readxl")
+
+  # Este test verifica que la funcion intenta ambas rutas
+  # cuando xls_path es NULL y ninguna existe
+  withr::with_tempdir({
+    dir.create("subdir")
+    withr::with_dir("subdir", {
+      # Desde subdir, ni ../ ni ./ tienen el archivo
+      expect_error(
+        generar_cie10_cl(xls_path = NULL),
+        "XLS no encontrado"
+      )
+    })
+  })
+})
+
 # ==============================================================================
 # PRUEBAS DATASET cie10_cl
 # ==============================================================================

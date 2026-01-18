@@ -16,6 +16,8 @@ test_that("cie10_sql ejecuta queries SELECT", {
 })
 
 test_that("cie10_sql bloquea queries peligrosas", {
+  skip_on_cran()
+  
   expect_error(
     cie10_sql("DROP TABLE cie10"),
     "Solo queries SELECT"
@@ -231,4 +233,111 @@ test_that("cie10_clear_cache retorna invisible NULL", {
 
   resultado <- suppressMessages(cie10_clear_cache())
   expect_null(resultado)
+})
+
+# ==============================================================================
+# PRUEBAS ADICIONALES COBERTURA - Semicolon dentro de strings
+# ==============================================================================
+
+test_that("cie10_sql permite semicolon dentro de strings", {
+  skip_on_cran()
+
+  # Semicolon dentro de comillas simples no debe bloquearse
+  resultado <- cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE descripcion LIKE '%tipo;%' LIMIT 1")
+  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie10_sql bloquea semicolon fuera de strings", {
+
+  skip_on_cran()
+
+  # Multiples statements separados por semicolon (sin keywords peligrosos)
+  expect_error(
+    cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
+    "Multiples statements"
+  )
+})
+
+test_that("cie10_sql bloquea INSERT", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("INSERT INTO cie10 VALUES ('X99', 'Test')"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea UPDATE", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea DELETE", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea DETACH", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("DETACH DATABASE main"),
+    "Solo queries SELECT"
+  )
+})
+
+test_that("cie10_sql bloquea EXEC", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("EXEC sp_help"),
+    "Solo queries SELECT"
+  )
+})
+
+# ==============================================================================
+# PRUEBAS get_cie10_db() creacion directorio cache
+# ==============================================================================
+
+test_that("get_cie10_db crea directorio cache si no existe", {
+  skip_on_cran()
+
+  # Limpiar cache para forzar recreacion
+  suppressMessages(cie10_clear_cache())
+
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+
+  # Conectar - debe crear directorio si no existe
+  con <- ciecl:::get_cie10_db()
+  DBI::dbDisconnect(con)
+
+  # Verificar que directorio existe
+expect_true(dir.exists(cache_dir))
+})
+
+test_that("get_cie10_db inicializa indices en DB nueva", {
+  skip_on_cran()
+
+  # Limpiar cache
+  suppressMessages(cie10_clear_cache())
+
+  # Conectar - debe crear DB e indices
+  expect_message(
+    con <- ciecl:::get_cie10_db(),
+    "Inicializada SQLite"
+  )
+  on.exit(DBI::dbDisconnect(con))
+
+  # Verificar indices
+  indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'")
+  expect_true("idx_codigo" %in% indices$name)
+  expect_true("idx_desc" %in% indices$name)
 })
