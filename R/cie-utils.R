@@ -36,6 +36,22 @@
 #' cie_normalizar("G01*")     # Retorna "G01" (elimina asterisco)
 #' cie_normalizar(c("E110", "I10X", "Z00"))  # Vectorizado
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
+  # Manejar NULL y vectores vacios
+
+  if (is.null(codigos) || length(codigos) == 0) {
+    return(character(0))
+  }
+  
+  # Convertir factores a character
+  if (is.factor(codigos)) {
+    codigos <- as.character(codigos)
+  }
+  
+  # Manejar vector todo NA
+  if (all(is.na(codigos))) {
+    return(rep(NA_character_, length(codigos)))
+  }
+  
   # Normalizar a mayusculas y trim
   codigos_norm <- stringr::str_trim(toupper(codigos))
   
