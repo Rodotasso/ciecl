@@ -40,7 +40,19 @@ get_cie10_db <- function() {
 
     message("Inicializada SQLite DB: ", db_path)
   }
-  
+
+  # Verificar tabla FTS independientemente (fix cache parcial/corrupto)
+  if (!DBI::dbExistsTable(con, "cie10_fts")) {
+    DBI::dbExecute(con, "
+      CREATE VIRTUAL TABLE IF NOT EXISTS cie10_fts USING fts5(
+        codigo, descripcion, inclusion, exclusion,
+        content='cie10', content_rowid='rowid'
+      )
+    ")
+    DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
+    message("Recreada tabla FTS5: cie10_fts")
+  }
+
   return(con)
 }
 

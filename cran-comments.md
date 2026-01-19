@@ -1,10 +1,24 @@
+## Resubmission
+
+This is a resubmission of ciecl v0.9.0. The following issues from CRAN review have been fixed:
+
+1. **"no such table: cie10_fts" error (Windows)**: Added independent verification of the FTS5
+   table in `get_cie10_db()`. If the SQLite cache has `cie10` but not `cie10_fts` (partial/corrupt
+   cache), the table is now recreated automatically.
+
+2. **Invalid file URI in README.md**: Changed relative link `[DEPENDENCIAS.md](DEPENDENCIAS.md)`
+   to absolute GitHub URL `https://github.com/Rodotasso/ciecl/blob/main/DEPENDENCIAS.md`.
+
+3. **audit_elite_cran.R failure**: Moved this development script from `tests/` to `tools/`.
+   It contained hardcoded local paths and is not needed for package functionality.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 2 notes
 
 ### NOTEs explained
 
-1. **New submission**: This is the first submission of ciecl to CRAN.
+1. **New submission**: This is a resubmission (v0.9.1) of ciecl to CRAN.
 
 2. **URLs returning 403**: The MINSAL/DEIS URLs in documentation return HTTP 403 (Forbidden)
    when accessed by automated tools due to anti-bot protection on Chilean government servers.
