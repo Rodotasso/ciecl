@@ -1,3 +1,40 @@
+# ciecl 0.9.1 (2026-01-19)
+*English summary below*
+
+## CRAN Resubmission Fixes
+
+Correccion de errores reportados por CRAN en revision de v0.9.0.
+
+### Bug Fixes
+
+* **FTS5 tabla faltante**: Agregar verificacion independiente de `cie10_fts`
+  - Si la BD tiene `cie10` pero no `cie10_fts` (cache corrupto), ahora se recrea
+  - Soluciona error "no such table: cie10_fts" en examples/tests
+  - Afecta `get_cie10_db()` en `R/cie-sql.R`
+
+* **Link invalido README**: Cambiar link relativo `DEPENDENCIAS.md` a URL absoluta
+  - CRAN no incluye archivos de raiz en paquete instalado
+  - Ahora apunta a GitHub: `https://github.com/Rodotasso/ciecl/blob/main/DEPENDENCIAS.md`
+
+* **Script audit removido de tests/**: Mover `audit_elite_cran.R` a `tools/`
+  - Contenia rutas hardcodeadas locales
+  - CRAN no ejecuta scripts en `tools/`
+
+### Tests y Validacion
+
+* 0 errores, 0 warnings en R CMD check (Windows, macOS, Linux)
+* Examples de `cie_lookup()` y `cie_search()` ejecutan sin error
+
+## English Summary
+
+### CRAN Resubmission Fixes
+
+* **Missing FTS5 table**: Independent verification of `cie10_fts` table
+* **Invalid README link**: Changed relative link to absolute GitHub URL
+* **Audit script moved**: `audit_elite_cran.R` moved from tests/ to tools/
+
+---
+
 # ciecl 0.9.0 (2026-01-18)
 *English summary below*
 
