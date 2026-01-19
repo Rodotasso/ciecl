@@ -27,3 +27,4 @@
 ^CLAUDE\.md$
 ^README\.en\.md$
 ^\.zenodo\.json$
+^CRAN-SUBMISSION$
