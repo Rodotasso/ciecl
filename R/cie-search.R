@@ -343,14 +343,62 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   texto_norm <- tolower(texto_busqueda)
   texto_sin_tildes <- normalizar_tildes(texto_norm)
 
-  # Construir query SQL
-  if (campo == "descripcion") {
-    query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+  # Dividir en palabras para FTS5
+  palabras <- unlist(stringr::str_split(texto_sin_tildes, "\\s+"))
+  palabras <- palabras[nchar(palabras) >= 2]
+
+  # Pre-filtrar usando FTS5 para velocidad
+  if (length(palabras) > 0) {
+    # Sanitizar palabras para FTS5 (prevenir SQL injection)
+    # Solo permitir alfanumericos y acentos normalizados
+    palabras_fts <- gsub("[^a-z0-9]", "", palabras)
+    palabras_fts <- palabras_fts[nchar(palabras_fts) >= 2]
+
+    if (length(palabras_fts) > 0) {
+      # Construir query FTS5: palabra1* OR palabra2*
+      texto_fts <- paste0(palabras_fts, "*", collapse = " OR ")
+
+      if (campo == "descripcion") {
+        query_sql <- sprintf("
+          SELECT c.codigo, c.descripcion, c.categoria
+          FROM cie10 c
+          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH '%s')
+        ", texto_fts)
+      } else {
+        query_sql <- sprintf("
+          SELECT c.codigo, c.descripcion, c.categoria, c.%s
+          FROM cie10 c
+          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH '%s')
+        ", campo, texto_fts)
+      }
+    } else {
+      # Sin palabras validas tras sanitizar, cargar todo
+      if (campo == "descripcion") {
+        query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+      } else {
+        query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+      }
+    }
   } else {
-    query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+    # Sin palabras validas, cargar todo (fallback)
+    if (campo == "descripcion") {
+      query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+    } else {
+      query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+    }
   }
 
   base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
+
+  # Si FTS5 no retorno resultados, intentar carga completa para fuzzy
+  if (nrow(base) == 0 && length(palabras) > 0) {
+    if (campo == "descripcion") {
+      query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+    } else {
+      query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+    }
+    base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
+  }
 
   # Normalizar texto de la base (minusculas + sin tildes)
   base_texto <- tolower(stringr::str_trim(base[[campo]]))
@@ -374,19 +422,18 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   }
 
   # ESTRATEGIA 2: Busqueda fuzzy palabra por palabra
-  # Dividir texto en palabras y buscar cada palabra
-  palabras <- unlist(stringr::str_split(texto_sin_tildes, "\\s+"))
-  palabras <- palabras[nchar(palabras) >= 3]
+  # palabras ya fue definido arriba para FTS5
+  palabras_fuzzy <- palabras[nchar(palabras) >= 3]
 
-  if (length(palabras) > 0) {
+  if (length(palabras_fuzzy) > 0) {
     # Calcular score basado en cuantas palabras coinciden
     scores_palabras <- sapply(seq_along(base_texto_sin_tildes), function(i) {
       texto_base <- base_texto_sin_tildes[i]
       # Contar palabras que aparecen en la descripcion
-      matches <- sapply(palabras, function(p) {
+      matches <- sapply(palabras_fuzzy, function(p) {
         stringr::str_detect(texto_base, stringr::fixed(p))
       })
-      sum(matches) / length(palabras)
+      sum(matches) / length(palabras_fuzzy)
     })
 
     # Si hay coincidencias parciales de palabras
@@ -414,7 +461,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     if (length(palabras_base) == 0) return(0)
 
     # Para cada palabra del texto buscar la mejor coincidencia en la descripcion
-    best_scores <- sapply(palabras, function(p) {
+    best_scores <- sapply(palabras_fuzzy, function(p) {
       if (length(palabras_base) == 0) return(0)
       max(stringdist::stringsim(p, palabras_base, method = "jw"))
     })
@@ -514,20 +561,50 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
     codigo_norm <- codigo_input
   }
   
-  # Si es vector de multiples codigos, procesar cada uno y combinar
+  # Si es vector de multiples codigos, procesar con query vectorizada
   if (length(codigo_norm) > 1) {
-    # Optimizacion: usar unique() para evitar queries duplicadas
+    # Optimizacion: usar unique() y query batch
     codigo_unique <- unique(codigo_norm)
 
-    # Procesar cada codigo unico y combinar resultados
-    resultados_lista <- lapply(codigo_unique, function(cod) {
-      cie_lookup_single(cod, expandir = expandir)
-    })
+    # Separar codigos normales de rangos (contienen "-")
+    es_rango <- stringr::str_detect(codigo_unique, "-")
+    codigos_normales <- codigo_unique[!es_rango]
+    codigos_rango <- codigo_unique[es_rango]
 
-    # Combinar todos los resultados en un solo tibble
-    resultado <- dplyr::bind_rows(resultados_lista)
+    resultado <- cie10_empty_tibble()
 
-    # Eliminar duplicados que pudieran surgir (por expansion)
+    # Query batch para codigos normales (sin rangos)
+    if (length(codigos_normales) > 0) {
+      # Sanitizar codigos (solo alfanumericos y punto)
+      codigos_safe <- codigos_normales[stringr::str_detect(codigos_normales, "^[A-Za-z0-9.]+$")]
+
+      if (length(codigos_safe) > 0) {
+        con <- get_cie10_db()
+        on.exit(DBI::dbDisconnect(con), add = TRUE)
+
+        if (expandir) {
+          # Expandir: usar LIKE para cada codigo
+          likes <- paste0("codigo LIKE '", codigos_safe, "%'", collapse = " OR ")
+          query <- sprintf("SELECT * FROM cie10 WHERE %s ORDER BY codigo", likes)
+        } else {
+          # Exacto: usar IN clause
+          codigos_sql <- paste0("'", codigos_safe, "'", collapse = ",")
+          query <- sprintf("SELECT * FROM cie10 WHERE codigo IN (%s)", codigos_sql)
+        }
+
+        resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
+      }
+    }
+
+    # Procesar rangos individualmente (poco comun)
+    if (length(codigos_rango) > 0) {
+      resultados_rango <- lapply(codigos_rango, function(cod) {
+        cie_lookup_single(cod, expandir = expandir)
+      })
+      resultado <- dplyr::bind_rows(resultado, dplyr::bind_rows(resultados_rango))
+    }
+
+    # Eliminar duplicados
     resultado <- dplyr::distinct(resultado)
   } else {
     # Codigo unico - usar funcion interna

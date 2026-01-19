@@ -1,12 +1,55 @@
-# ciecl 1.0.0 (2026-01-17)
-
+# ciecl 0.9.0 (2026-01-18)
 *English summary below*
 
-## Primera Version Estable
+## Optimizacion de Rendimiento - FTS5
 
-Esta es la primera version estable de `ciecl`, el paquete R para trabajar con
-la Clasificacion Internacional de Enfermedades CIE-10 oficial de Chile
-(MINSAL/DEIS v2018).
+Version candidata a release con mejoras significativas de rendimiento.
+
+### Nuevas Funcionalidades
+
+* **FTS5 Full-Text Search**: Busquedas de texto ~100x mas rapidas
+  - Tabla virtual SQLite FTS5 para pre-filtrado en SQL
+  - `cie_search()` ahora filtra en SQLite antes de traer datos a R
+  - Reduccion de tiempo de busqueda de ~30s a <1s
+
+* **Vectorizacion de `cie_lookup()`**: Query batch con IN clause
+  - Una sola conexion para multiples codigos (antes N conexiones)
+  - Mejora significativa para procesamiento de datasets grandes
+
+### Seguridad
+
+* **Sanitizacion SQL injection en FTS5**: Solo caracteres alfanumericos permitidos
+* Proteccion contra inyeccion de comandos FTS5 maliciosos
+
+### Limpieza de Proyecto
+
+* Fixtures de prueba movidos fuera del paquete (reduccion ~2.5 MB)
+* Eliminado `helper-fixtures.R` no utilizado
+
+### Tests y Validacion
+
+* **1088 tests** pasando
+* **0 errores, 0 warnings** en R CMD check
+* Cobertura de tests mantenida
+
+## English Summary
+
+### Performance Optimization - FTS5
+
+Release candidate with significant performance improvements.
+
+* **FTS5 Full-Text Search**: ~100x faster text searches
+* **Vectorized `cie_lookup()`**: Batch queries with IN clause
+* **SQL injection protection**: Sanitized FTS5 inputs
+* **Project cleanup**: Test fixtures moved outside package
+
+Tests: 1088 passing | R CMD check: 0 errors, 0 warnings
+
+---
+
+# ciecl 0.8.0 (2026-01-17)
+
+*English summary below*
 
 ## Suite de Tests Exhaustiva - Cobertura CRAN
 

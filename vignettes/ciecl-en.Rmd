@@ -19,8 +19,7 @@ knitr::opts_chunk$set(
 library(ciecl)
 ```
 
-> **NOTE**: This package is in BETA version (v0.1.0). The API may change
-> before stable version 1.0.0.
+> **Version 0.9.0**: Release candidate for CRAN with FTS5 optimizations.
 
 ## About the dataset
 

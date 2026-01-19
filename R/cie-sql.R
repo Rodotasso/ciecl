@@ -28,7 +28,16 @@ get_cie10_db <- function() {
     # Indices para velocidad
     DBI::dbExecute(con, "CREATE INDEX idx_codigo ON cie10(codigo)")
     DBI::dbExecute(con, "CREATE INDEX idx_desc ON cie10(descripcion)")
-    
+
+    # FTS5 para busquedas de texto rapidas
+    DBI::dbExecute(con, "
+      CREATE VIRTUAL TABLE IF NOT EXISTS cie10_fts USING fts5(
+        codigo, descripcion, inclusion, exclusion,
+        content='cie10', content_rowid='rowid'
+      )
+    ")
+    DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
+
     message("Inicializada SQLite DB: ", db_path)
   }
   
