@@ -1,12 +1,12 @@
 Package: ciecl
-Title: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile
+Title: Clasificación Internacional de Enfermedades CIE-10/11 para Chile
 Version: 0.9.1
 Authors@R:
     person("Rodolfo", "Tasso Suazo",
            email = "rtasso@uchile.cl",
            role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-1264-4933"))
-Description: Herramientas para trabajar con Clasificacion Internacional de 
+Description: Herramientas para trabajar con Clasificación Internacional de 
     Enfermedades (CIE-10 Chile oficial MINSAL/DEIS v2018). Incluye busqueda 
     SQL optimizada con SQLite, matching difuso de terminos medicos (fuzzy 
     Jaro-Winkler), calculo de comorbilidades Charlson y Elixhauser adaptadas 
