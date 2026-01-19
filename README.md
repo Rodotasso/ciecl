@@ -6,9 +6,10 @@
 **Grupo de Ciencia de Datos para la Salud Publica** | Universidad de Chile
 
 <!-- badges: start -->
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml)
+[![Version](https://img.shields.io/badge/version-0.9.0-orange.svg)](https://github.com/RodoTasso/ciecl)
 <!-- badges: end -->
 
 **Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile
@@ -36,7 +37,7 @@ especializadas para:
 
 ### Ventajas:
 
-1.  **Rendimiento**: Base de datos SQLite indexada con busquedas 10-100x mas rapidas que Excel
+1.  **Rendimiento**: Base de datos SQLite con FTS5 (Full-Text Search) - busquedas 100x mas rapidas que Excel
 2.  **Integracion nativa**: Funciona directamente en R sin dependencias externas pesadas
 3.  **Fuzzy search**: Encuentra "neumonia bactereana" aunque este mal escrito (tolera errores tipograficos)
 4.  **Validacion vectorizada**: Procesa miles de codigos en milisegundos
@@ -246,7 +247,7 @@ MIT (codigo del paquete) + datos CIE-10 MINSAL de uso publico
 
 ## Autor
 
-**Rodolfo Tasso Suazo** | <rtasso@uchile.cl>
+**Rodolfo Tasso Suazo** | <rtasso@uchile.cl> | [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--1264--4933-green.svg)](https://orcid.org/0000-0002-1264-4933)
 
 ### Afiliacion Institucional
 
