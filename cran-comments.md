@@ -1,6 +1,12 @@
-## Resubmission
+## Resubmission (v0.9.2)
 
-This is a resubmission of ciecl v0.9.0. The following issues from CRAN review have been fixed:
+This is a resubmission addressing NOTEs from CRAN pre-tests on v0.9.1:
+
+4. **Examples timing NOTE**: Wrapped additional `cie_search()` examples in `\donttest{}`
+   to reduce example runtime from ~12s to ~2s. The first call initializes an SQLite
+   cache which is a one-time operation.
+
+Previous fixes from v0.9.0 review:
 
 1. **"no such table: cie10_fts" error (Windows)**: Added independent verification of the FTS5
    table in `get_cie10_db()`. If the SQLite cache has `cie10` but not `cie10_fts` (partial/corrupt

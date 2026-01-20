@@ -9,7 +9,7 @@
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml)
-[![Version](https://img.shields.io/badge/version-0.9.1-orange.svg)](https://github.com/RodoTasso/ciecl)
+[![Version](https://img.shields.io/badge/version-0.9.2-orange.svg)](https://github.com/RodoTasso/ciecl)
 <!-- badges: end -->
 
 **Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile
