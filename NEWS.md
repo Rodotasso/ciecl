@@ -1,3 +1,12 @@
+# ciecl 0.9.2 (2026-01-20)
+
+## CRAN Resubmission - Example Timing
+
+* Ejemplos de `cie_search()` envueltos en `\donttest{}` para reducir tiempo de check
+* Tiempo de ejemplos reducido de ~12s a ~2s
+
+---
+
 # ciecl 0.9.1 (2026-01-19)
 *English summary below*
 

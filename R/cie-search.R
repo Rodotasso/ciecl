@@ -285,24 +285,20 @@ cie_siglas <- function(categoria = NULL) {
 #' @examples
 #' # Busqueda basica
 #' cie_search("diabetes")
+#'
+#' \donttest{
 #' cie_search("neumonia")
 #'
 #' # Busqueda por siglas medicas
 #' cie_search("IAM")
-#' cie_search("tbc")
 #' cie_search("DM2")
-#' cie_search("EPOC")
-#' cie_search("HTA")
 #'
-#' # Tolerante a tildes
-#' cie_search("neumonia")
-#' cie_search("rinon")
-#'
-#' # Buscar con typos
+#' # Tolerante a tildes y typos
 #' cie_search("diabetis")
 #'
 #' # Buscar en inclusiones
 #' cie_search("bacteriana", campo = "inclusion")
+#' }
 cie_search <- function(texto, threshold = 0.70, max_results = 50,
                        campo = c("descripcion", "inclusion"),
                        solo_fuzzy = FALSE, verbose = TRUE) {
