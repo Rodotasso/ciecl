@@ -18,15 +18,17 @@ tibble resultado query
 Ejecutar consultas SQL sobre CIE-10 Chile
 }
 \examples{
+\donttest{
 # Buscar diabetes
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11\%'")
 
 # Contar por capitulo
 cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
+}
 
 # Join con datos pacientes (externo)
 \dontrun{
-cie10_sql("SELECT p.id, c.descripcion 
+cie10_sql("SELECT p.id, c.descripcion
            FROM pacientes p JOIN cie10 c ON p.codigo = c.codigo")
 }
 }

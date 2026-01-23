@@ -87,3 +87,12 @@ The `cie11_search()` function accesses the WHO API (https://icd.who.int/icdapi).
 This is completely optional and requires user credentials.
 The function fails gracefully without credentials.
 Examples use `\dontrun{}` to avoid requiring internet connection.
+
+### Acronyms
+- CIE/ICD: Clasificacion Internacional de Enfermedades / International Classification of Diseases
+- MINSAL: Ministerio de Salud de Chile (Chilean Ministry of Health)
+- DEIS: Departamento de Estadisticas e Informacion de Salud (Health Statistics Department)
+- SQL: Structured Query Language
+- API: Application Programming Interface
+- WHO/OMS: World Health Organization / Organizacion Mundial de la Salud
+- FTS: Full Text Search
