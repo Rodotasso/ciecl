@@ -6,6 +6,9 @@
 \usage{
 cie10_clear_cache()
 }
+\value{
+No return value, called for side effects (deletes SQLite cache).
+}
 \description{
 Limpiar cache SQLite (forzar rebuild)
 }

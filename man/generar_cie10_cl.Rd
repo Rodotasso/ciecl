@@ -9,6 +9,9 @@ generar_cie10_cl(xls_path = NULL)
 \arguments{
 \item{xls_path}{Ruta al archivo XLS (opcional, deteccion automatica)}
 }
+\value{
+Invisible tibble with generated 'ICD-10' data.
+}
 \description{
 EJECUTAR UNA VEZ para crear data/cie10_cl.rda desde XLS padre.
 Ruta automatica: busca en ../ o directorio actual

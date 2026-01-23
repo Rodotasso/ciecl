@@ -82,6 +82,7 @@ parsear_cie10_minsal <- function(xls_path) {
 #' Ruta automatica: busca en ../ o directorio actual
 #' 
 #' @param xls_path Ruta al archivo XLS (opcional, deteccion automatica)
+#' @return Invisible tibble with generated 'ICD-10' data.
 #' @examples
 #' \dontrun{
 #' # Desde ciecl/ ejecutar:
