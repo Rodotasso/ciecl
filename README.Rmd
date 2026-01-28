@@ -2,6 +2,8 @@
 output: github_document
 ---
 
+> **Language / Idioma:** [English](https://github.com/RodoTasso/ciecl/blob/main/README.en.md) | **Español**
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
@@ -16,7 +18,7 @@ knitr::opts_chunk$set(
 # ciecl
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 <!-- badges: end -->
 
 **Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile para R**.
