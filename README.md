@@ -7,7 +7,8 @@
 
 # ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
 
-**Grupo de Ciencia de Datos para Salud Pública** | Universidad de Chile
+**Grupo de Ciencia de Datos para Salud Pública**<br>
+Escuela de Salud Pública | Universidad de Chile
 
 <!-- badges: start -->
 
@@ -211,6 +212,11 @@ Basado en **MINSAL/DEIS v2018** (repositorio público):
 ## Licencia
 
 MIT + datos MINSAL dominio público (Decreto 356/2017)
+
+## Desarrollo
+
+Este paquete fue desarrollado con asistencia de Claude (Anthropic),
+con verificación y validación humana de todo el código y documentación.
 
 ## Contribuir
 
