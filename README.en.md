@@ -1,5 +1,6 @@
-
 <!-- README.en.md - English version -->
+
+> **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)
 
 # ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
 
@@ -8,7 +9,7 @@
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
-[![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 <!-- badges: end -->
 
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
