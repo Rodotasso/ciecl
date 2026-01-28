@@ -18,36 +18,39 @@ knitr::opts_chunk$set(
 # ciecl
 
 <!-- badges: start -->
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
+![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitas&color=blue)
 <!-- badges: end -->
 
-**Clasificacion Internacional de Enfermedades (CIE-10) oficial de Chile para R**.
+**Clasificación Internacional de Enfermedades (CIE-10) oficial de Chile para R**.
 
-Paquete especializado para busqueda, validacion y analisis de codigos CIE-10 en el contexto chileno. Incluye 39,873 codigos (categorias y subcategorias) con busqueda optimizada, calculo de comorbilidades y acceso a la API CIE-11 de la OMS.
+Paquete especializado para búsqueda, validación y análisis de códigos CIE-10 en el contexto chileno. Incluye 39,873 códigos (categorías y subcategorías) con búsqueda optimizada, cálculo de comorbilidades y acceso a la API CIE-11 de la OMS.
 
 ## Finalidad
 
-`ciecl` facilita el trabajo con codigos CIE-10 en investigacion y analisis de datos de salud en Chile, eliminando la necesidad de manipular archivos Excel manualmente y proporcionando herramientas especializadas para:
+`ciecl` facilita el trabajo con códigos CIE-10 en investigación y análisis de datos de salud en Chile, eliminando la necesidad de manipular archivos Excel manualmente y proporcionando herramientas especializadas para:
 
-- Validacion rapida de codigos diagnosticos
-- Busqueda tolerante a errores (fuzzy search)
-- Calculo automatico de indices de comorbilidad (Charlson, Elixhauser)
-- Consultas SQL optimizadas sobre mas de 39 mil codigos
-- Expansion de categorias a subcategorias (ej: E11 -> E11.0, E11.1, ..., E11.9)
+- Validación rápida de códigos diagnósticos
+- Búsqueda tolerante a errores (fuzzy search)
+- Cálculo automático de índices de comorbilidad (Charlson, Elixhauser)
+- Consultas SQL optimizadas sobre más de 39 mil códigos
+- Expansión de categorías a subcategorías (ej: E11 -> E11.0, E11.1, ..., E11.9)
 
-## Por que usar ciecl en lugar de un archivo XLSX
+## Por qué usar ciecl en lugar de un archivo XLSX
 
 ### Ventajas sobre archivos Excel:
 
-1. **Rendimiento**: Base de datos SQLite indexada con busquedas 10-100x mas rapidas que Excel
-2. **Integracion nativa**: Funciona directamente en R sin dependencias externas pesadas
-3. **Fuzzy search**: Encuentra "neumonia bactereana" aunque este mal escrito (tolera errores tipograficos)
-4. **Validacion vectorizada**: Procesa miles de codigos en milisegundos
-5. **Normalizacion automatica**: Acepta E110, E11.0, e11.0 indistintamente
+1. **Rendimiento**: Base de datos SQLite indexada con búsquedas 10-100x más rápidas que Excel
+2. **Integración nativa**: Funciona directamente en R sin dependencias externas pesadas
+3. **Fuzzy search**: Encuentra "neumonía bacteriana" aunque esté mal escrito (tolera errores tipográficos)
+4. **Validación vectorizada**: Procesa miles de códigos en milisegundos
+5. **Normalización automática**: Acepta E110, E11.0, e11.0 indistintamente
 6. **Sin errores de encoding**: Los archivos XLSX tienen problemas con tildes y ñ en diferentes sistemas
-7. **Reproducibilidad**: Version controlada del catalogo CIE-10 (no cambia entre computadores)
+7. **Reproducibilidad**: Versión controlada del catálogo CIE-10 (no cambia entre computadores)
 8. **Comorbilidades predefinidas**: Mapeos Charlson/Elixhauser listos para usar
-9. **API CIE-11**: Acceso directo a la clasificacion internacional actualizada
+9. **API CIE-11**: Acceso directo a la clasificación internacional actualizada
 10. **Cache inteligente**: Guarda consultas frecuentes para mayor velocidad
 
 ### Ejemplo comparativo:
@@ -58,30 +61,30 @@ library(readxl)
 cie10 <- read_excel("CIE-10.xlsx")
 diabete_codes <- cie10[grepl("diabetes", tolower(cie10$descripcion)), ]
 
-# Con ciecl (rapido, robusto, con cache)
+# Con ciecl (rápido, robusto, con cache)
 library(ciecl)
 diabete_codes <- cie_search("diabetes")
 ```
 
-## Caracteristicas principales
+## Características principales
 
-- **39,873 codigos CIE-10**: Incluye todas las categorias (3 digitos) y subcategorias (4+ digitos)
-- **Busqueda fuzzy**: Algoritmo de distancia Levenshtein para tolerar errores de escritura
+- **39,873 códigos CIE-10**: Incluye todas las categorías (3 dígitos) y subcategorías (4+ dígitos)
+- **Búsqueda fuzzy**: Algoritmo de distancia Levenshtein para tolerar errores de escritura
 - **SQL directo**: Acceso completo a la base de datos para consultas complejas
-- **Vectorizacion**: Procesa miles de codigos simultaneamente
-- **Cache SQLite**: Almacena resultados frecuentes para consultas instantaneas
+- **Vectorización**: Procesa miles de códigos simultáneamente
+- **Cache SQLite**: Almacena resultados frecuentes para consultas instantáneas
 - **Comorbilidades**: Mapeos validados de Charlson y Elixhauser
-- **Expansion jerarquica**: Obtiene todos los subcodes de una categoria
-- **API CIE-11**: Busqueda en la clasificacion internacional actualizada (OMS)
+- **Expansión jerárquica**: Obtiene todos los subcodes de una categoría
+- **API CIE-11**: Búsqueda en la clasificación internacional actualizada (OMS)
 - **Sin dependencias pesadas**: Solo requiere readxl, dplyr, stringr, DBI y RSQLite
 
-## Instalacion
+## Instalación
 
 ```{r eval=FALSE}
-# Instalacion basica (funcionalidad core - 8 dependencias)
+# Instalación básica (funcionalidad core - 8 dependencias)
 install.packages("ciecl")
 
-# Instalacion completa (incluye paquetes opcionales)
+# Instalación completa (incluye paquetes opcionales)
 install.packages("ciecl", dependencies = TRUE)
 
 # Desde GitHub (desarrollo)
@@ -90,23 +93,23 @@ devtools::install_github("RodoTasso/ciecl")
 
 **Nota**: El paquete tiene **dependencias mínimas** para funcionalidad core. Paquetes adicionales solo se requieren para funciones específicas. Ver [DEPENDENCIAS.md](DEPENDENCIAS.md) para detalles.
 
-## Uso rapido
+## Uso rápido
 
 ```{r example, eval=FALSE}
 library(ciecl)
 
-# Busqueda exacta (soporta multiples formatos)
+# Búsqueda exacta (soporta múltiples formatos)
 cie_lookup("E11.0")   # Con punto
 cie_lookup("E110")    # Sin punto
-cie_lookup("E11")     # Solo categoria
+cie_lookup("E11")     # Solo categoría
 
-# Vectorizado - multiples codigos
+# Vectorizado - múltiples códigos
 cie_lookup(c("E11.0", "I10", "Z00"))
 
-# Con descripcion completa formateada
+# Con descripción completa formateada
 cie_lookup("E110", descripcion_completa = TRUE)
 
-# Fuzzy search con errores tipograficos
+# Fuzzy search con errores tipográficos
 cie_search("diabetis mellitus")  # Encuentra "diabetes mellitus"
 
 # SQL directo
@@ -116,19 +119,19 @@ cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 3")
 df %>% cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
 ```
 
-## Configuracion CIE-11 (opcional)
+## Configuración CIE-11 (opcional)
 
-Para usar `cie11_search()` y acceder a la clasificacion internacional actualizada, necesitas credenciales gratuitas de la OMS:
+Para usar `cie11_search()` y acceder a la clasificación internacional actualizada, necesitas credenciales gratuitas de la OMS:
 
 ### Paso 1: Obtener credenciales
 
 1. Visita https://icd.who.int/icdapi
-2. Registrate con tu email (proceso gratuito)
-3. Obtendras un `Client ID` y `Client Secret`
+2. Regístrate con tu email (proceso gratuito)
+3. Obtendrás un `Client ID` y `Client Secret`
 
 ### Paso 2: Configurar en R
 
-**Opcion A: Variable de entorno (recomendado)**
+**Opción A: Variable de entorno (recomendado)**
 
 Crea un archivo `.Renviron` en tu directorio de trabajo o home:
 
@@ -137,7 +140,7 @@ Crea un archivo `.Renviron` en tu directorio de trabajo o home:
 ICD_API_KEY=tu_client_id:tu_client_secret
 ```
 
-**Opcion B: En cada sesion**
+**Opción B: En cada sesión**
 
 ```{r, eval=FALSE}
 Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
@@ -162,12 +165,12 @@ cie11_search("diabetes mellitus", max_results = 5)
 
 ## Datos
 
-Basado en **MINSAL/DEIS v2018** (repositorio publico):  
+Basado en **MINSAL/DEIS v2018** (repositorio público):  
 <https://repositoriodeis.minsal.cl>
 
 ## Licencia
 
-MIT + datos MINSAL dominio publico (Decreto 356/2017)
+MIT + datos MINSAL dominio público (Decreto 356/2017)
 
 ## Autor
 
