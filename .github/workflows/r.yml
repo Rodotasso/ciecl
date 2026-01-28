@@ -5,9 +5,9 @@ name: R-CMD-check-cran
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main", "dev" ]
 
 permissions:
   contents: read
