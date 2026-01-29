@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# ciecl
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
+
+**Grupo de Ciencia de Datos para Salud Pública** | Universidad de Chile
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -166,8 +168,27 @@ cie11_search("diabetes mellitus", max_results = 5)
 
 ## Datos
 
-Basado en **MINSAL/DEIS v2018** (repositorio público):  
-<https://repositoriodeis.minsal.cl>
+Basado en catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
+
+- **Fuente**: [Departamento de Estadísticas e Información de Salud (DEIS)](https://deis.minsal.cl)
+- **Centro FIC Chile**: <https://deis.minsal.cl/centrofic/>
+- **Repositorio de documentos**: <https://repositoriodeis.minsal.cl>
+
+Los datos CIE-10 son de uso público según [Decreto 356 Exento (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
+del Ministerio de Salud que establece el uso oficial de CIE-10 en Chile.
+
+## Desarrollo
+
+Este paquete fue desarrollado con asistencia de Claude (Anthropic),
+con verificación y validación humana de todo el código y documentación.
+
+## Contribuir
+
+Las contribuciones son bienvenidas:
+
+- Reportar bugs en [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
+- Sugerir mejoras o nuevas funcionalidades
+- Enviar pull requests
 
 ## Licencia
 
@@ -175,4 +196,26 @@ MIT + datos MINSAL dominio público (Decreto 356/2017)
 
 ## Autor
 
-Rodolfo Tasso Suazo (rtasso@uchile.cl)
+**Rodolfo Tasso Suazo** | <rtasso@uchile.cl>
+
+### Afiliación Institucional
+
+<p align="center">
+<img src="man/figures/logo-CDSP_color.png" height="100" alt="Grupo de Ciencia de Datos para Salud Pública">
+</p>
+
+**Grupo de Ciencia de Datos para Salud Pública**<br>
+Escuela de Salud Pública, Facultad de Medicina<br>
+Universidad de Chile
+
+Este paquete fue desarrollado como parte del trabajo del Grupo de Ciencia
+de Datos para Salud Pública, dedicado a aplicar métodos computacionales y
+estadísticos para mejorar la investigación en salud pública en Chile.
+
+## Enlaces
+
+- **Repositorio**: <https://github.com/RodoTasso/ciecl>
+- **Reportar issues**: <https://github.com/RodoTasso/ciecl/issues>
+- **DEIS MINSAL**: <https://deis.minsal.cl>
+- **Centro FIC Chile**: <https://deis.minsal.cl/centrofic/>
+- **API CIE-11 OMS**: <https://icd.who.int/icdapi>
