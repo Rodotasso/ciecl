@@ -7,8 +7,7 @@
 
 # ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
 
-**Grupo de Ciencia de Datos para Salud Pública**<br>
-Escuela de Salud Pública | Universidad de Chile
+**Grupo de Ciencia de Datos para Salud Pública** \| Universidad de Chile
 
 <!-- badges: start -->
 
@@ -132,24 +131,8 @@ cie_lookup(c("E11.0", "I10", "Z00"))
 # Con descripción completa formateada
 cie_lookup("E110", descripcion_completa = TRUE)
 
-# Extraer código de texto con prefijos/sufijos (solo código escalar)
-cie_lookup("CIE:E11.0", extract = TRUE)       # Retorna E11.0
-cie_lookup("E11.0-confirmado", extract = TRUE) # Retorna E11.0
-cie_lookup("dx-G20", extract = TRUE)          # Retorna G20
-# Nota: extract=TRUE solo funciona con códigos escalares
-
 # Fuzzy search con errores tipográficos
 cie_search("diabetis mellitus")  # Encuentra "diabetes mellitus"
-
-# Búsqueda por siglas médicas (88 abreviaturas soportadas)
-cie_search("IAM")   # Infarto Agudo al Miocardio
-cie_search("TBC")   # Tuberculosis
-cie_search("DM2")   # Diabetes Mellitus tipo 2
-cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Crónica
-cie_search("HTA")   # Hipertensión Arterial
-
-# Ver todas las abreviaturas disponibles
-cie_siglas()
 
 # SQL directo
 cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 3")
@@ -206,47 +189,53 @@ funcionan sin API key.
 
 ## Datos
 
-Basado en catálogo oficial CIE-10 **MINSAL/DEIS v2018** (repositorio público):  
+Basado en catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
 
-Fuente: Departamento de Estadísticas e Información de Salud (DEIS)
-Centro Nacional de Referencia de la Familia Internacional de las Clasificaciones Chile: <https://deis.minsal.cl/centrofic/>
-Repositorio: <https://repositoriodeis.minsal.cl>
-Los datos de CIE-10 son de uso público de acuero al Decreto Excento 356 (2017), que complementa la Norma Técnica del 7 de enero de 2008 del Ministerio de Salud, estableciendo el uso oficial de CIE-10 en Chile, cumpliendo con su no modificación ni agregación de codigos que estén fuera de la OMS o de DEIS. <https://bcn.cl/RDVfHD>
+- **Fuente**: [Departamento de Estadísticas e Información de Salud
+  (DEIS)](https://deis.minsal.cl)
+- **Centro FIC Chile**: <https://deis.minsal.cl/centrofic/>
+- **Repositorio de documentos**: <https://repositoriodeis.minsal.cl>
 
-## Licencia
-
-MIT + datos MINSAL dominio público (Decreto 356/2017)
+Los datos CIE-10 son de uso público según [Decreto 356 Exento
+(2017)](https://www.bcn.cl/leychile/navegar?i=1112064) del Ministerio de
+Salud que establece el uso oficial de CIE-10 en Chile.
 
 ## Desarrollo
 
-Este paquete fue desarrollado con asistencia de Claude (Anthropic),
-con verificación y validación humana de todo el código y documentación.
+Este paquete fue desarrollado con asistencia de Claude (Anthropic), con
+verificación y validación humana de todo el código y documentación.
 
 ## Contribuir
 
 Las contribuciones son bienvenidas:
 
-- Reportar bugs en [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
+- Reportar bugs en [GitHub
+  Issues](https://github.com/RodoTasso/ciecl/issues)
 - Sugerir mejoras o nuevas funcionalidades
 - Enviar pull requests
 
+## Licencia
+
+MIT + datos MINSAL dominio público (Decreto 356/2017)
+
 ## Autor
 
-**Rodolfo Tasso Suazo** | <rtasso@uchile.cl>
+**Rodolfo Tasso Suazo** \| <rtasso@uchile.cl>
 
 ### Afiliación Institucional
 
 <p align="center">
+
 <img src="man/figures/logo-CDSP_color.png" height="100" alt="Grupo de Ciencia de Datos para Salud Pública">
 </p>
 
-**Grupo de Ciencia de Datos para Salud Pública**<br>
-Escuela de Salud Pública, Facultad de Medicina<br>
-Universidad de Chile
+**Grupo de Ciencia de Datos para Salud Pública**<br> Escuela de Salud
+Pública, Facultad de Medicina<br> Universidad de Chile
 
-Este paquete fue desarrollado como parte del trabajo del Grupo de Ciencia
-de Datos para Salud Pública, dedicado a aplicar métodos computacionales y
-estadísticos para mejorar la investigación en salud pública en Chile.
+Este paquete fue desarrollado como parte del trabajo del Grupo de
+Ciencia de Datos para Salud Pública, dedicado a aplicar métodos
+computacionales y estadísticos para mejorar la investigación en salud
+pública en Chile.
 
 ## Enlaces
 
