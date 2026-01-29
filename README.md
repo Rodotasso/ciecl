@@ -192,7 +192,7 @@ Basado en catálogo oficial CIE-10 **MINSAL/DEIS v2018** (repositorio público):
 Fuente: Departamento de Estadísticas e Información de Salud (DEIS)
 Centro Nacional de Referencia de la Familia Internacional de las Clasificaciones Chile: <https://deis.minsal.cl/centrofic/>
 Repositorio: <https://repositoriodeis.minsal.cl>
-Los datos de CIE-10 son de uso público de acuero al Decreto Excento 356 (2017), que complementa la Norma Técnica del 7 de enero de 2008, del Ministerio de Salud estableciendo el uso oficial de CIE-10 en Chile, cumpliendo con su no modificación ni agregación de codigos que estén fuera de la OMS o de DEIS. <https://bcn.cl/RDVfHD>
+Los datos de CIE-10 son de uso público de acuero al Decreto Excento 356 (2017), que complementa la Norma Técnica del 7 de enero de 2008 del Ministerio de Salud, estableciendo el uso oficial de CIE-10 en Chile, cumpliendo con su no modificación ni agregación de codigos que estén fuera de la OMS o de DEIS. <https://bcn.cl/RDVfHD>
 
 ## Licencia
 
