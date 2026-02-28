@@ -28,3 +28,4 @@
 ^README\.en\.md$
 ^\.zenodo\.json$
 ^CRAN-SUBMISSION$
+^tools/build_sqlite_cache\.R$

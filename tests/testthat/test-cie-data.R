@@ -135,15 +135,15 @@ test_that("generar_cie10_cl requiere usethis", {
   )
 })
 
-test_that("generar_cie10_cl error si XLS no encontrado", {
+test_that("generar_cie10_cl error si archivo no encontrado", {
   skip_if_not_installed("usethis")
   skip_if_not_installed("readxl")
 
-  # En directorio temporal sin XLS
+  # En directorio temporal sin archivos DEIS
   withr::with_tempdir({
     expect_error(
       generar_cie10_cl(),
-      "XLS no encontrado"
+      "no encontrado"
     )
   })
 })
@@ -153,10 +153,10 @@ test_that("generar_cie10_cl acepta ruta explicita", {
   skip_if_not_installed("usethis")
   skip_if_not_installed("readxl")
 
-  # Verificar que acepta argumento xls_path
+  # Verificar que acepta argumento archivo_path
   # (fallara si archivo no existe, pero no debe dar error de argumento)
   expect_error(
-    generar_cie10_cl(xls_path = "ruta_explicita.xls"),
+    generar_cie10_cl(archivo_path = "ruta_explicita.xls"),
     "no encontrado"
   )
 })
@@ -221,20 +221,20 @@ test_that("generar_cie10_cl detecta XLS en directorio actual", {
   })
 })
 
-test_that("generar_cie10_cl autodeteccion prueba ambas rutas", {
+test_that("generar_cie10_cl autodeteccion prueba todas las rutas", {
   skip_on_cran()
   skip_if_not_installed("usethis")
   skip_if_not_installed("readxl")
 
-  # Este test verifica que la funcion intenta ambas rutas
-  # cuando xls_path es NULL y ninguna existe
+  # Este test verifica que la funcion intenta todas las rutas candidatas
+  # cuando archivo_path es NULL y ninguna existe
   withr::with_tempdir({
     dir.create("subdir")
     withr::with_dir("subdir", {
-      # Desde subdir, ni ../ ni ./ tienen el archivo
+      # Desde subdir, ninguna ruta candidata tiene el archivo
       expect_error(
-        generar_cie10_cl(xls_path = NULL),
-        "XLS no encontrado"
+        generar_cie10_cl(archivo_path = NULL),
+        "no encontrado"
       )
     })
   })
@@ -457,15 +457,15 @@ test_that("generar_cie10_cl valida parametros y parsea XLS", {
   skip_if_not_installed("usethis")
   skip_if_not_installed("readxl")
 
-  # Test 1: Error cuando no encuentra XLS
+  # Test 1: Error cuando no encuentra archivo
   expect_error(
-    generar_cie10_cl(xls_path = NULL),
-    "XLS no encontrado"
+    generar_cie10_cl(archivo_path = NULL),
+    "no encontrado"
   )
 
- # Test 2: Error con ruta invalida
+  # Test 2: Error con ruta invalida
   expect_error(
-    generar_cie10_cl(xls_path = "archivo_inexistente.xlsx"),
+    generar_cie10_cl(archivo_path = "archivo_inexistente.xlsx"),
     class = "error"
   )
 

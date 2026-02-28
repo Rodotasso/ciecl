@@ -114,10 +114,10 @@ test_that("base de datos se reconstruye despues de clear_cache", {
   # Limpiar cache
   suppressMessages(cie10_clear_cache())
 
-  # La siguiente query debe reconstruir la base
+  # La siguiente query debe inicializar la base (desde bundle o desde datos)
   expect_message({
     resultado <- cie_lookup("E11.0")
-  }, "Inicializada SQLite DB")
+  }, "inicializ")
 
   expect_equal(nrow(resultado), 1)
 })

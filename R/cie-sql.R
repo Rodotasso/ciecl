@@ -18,6 +18,16 @@ get_cie10_db <- function() {
   }
   
   db_path <- file.path(cache_dir, "cie10.db")
+
+  # Si cache no existe, copiar BD pre-construida desde inst/extdata/
+  if (!file.exists(db_path)) {
+    bundled_db <- system.file("extdata", "cie10.db", package = "ciecl")
+    if (nzchar(bundled_db) && file.exists(bundled_db)) {
+      file.copy(bundled_db, db_path)
+      message("Cache SQLite inicializado desde paquete")
+    }
+  }
+
   con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
   
   # Inicializar DB si vacia

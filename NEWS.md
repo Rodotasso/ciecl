@@ -1,3 +1,17 @@
+# ciecl 0.9.3
+
+## Mejoras de rendimiento
+
+* `get_cie10_db()`: primera inicializacion reduce de ~16s a ~1s al incluir
+  base SQLite pre-construida en el paquete (`inst/extdata/cie10.db`).
+
+## Fixes
+
+* `generar_cie10_cl()`: auto-deteccion prioriza XLSX completo (39K+ codigos)
+  sobre XLS legado (~8K codigos). Parametro renombrado a `archivo_path`.
+
+---
+
 # ciecl 0.9.2 (2026-01-20)
 
 ## CRAN Resubmission - Example Timing

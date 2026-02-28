@@ -329,10 +329,10 @@ test_that("get_cie10_db inicializa indices en DB nueva", {
   # Limpiar cache
   suppressMessages(cie10_clear_cache())
 
-  # Conectar - debe crear DB e indices
+  # Conectar - debe inicializar DB (desde bundle o desde datos)
   expect_message(
     con <- ciecl:::get_cie10_db(),
-    "Inicializada SQLite"
+    "inicializ"
   )
   on.exit(DBI::dbDisconnect(con))
 

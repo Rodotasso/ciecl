@@ -4,17 +4,17 @@
 \alias{generar_cie10_cl}
 \title{Generar dataset cie10_cl.rda}
 \usage{
-generar_cie10_cl(xls_path = NULL)
+generar_cie10_cl(archivo_path = NULL)
 }
 \arguments{
-\item{xls_path}{Ruta al archivo XLS (opcional, deteccion automatica)}
+\item{archivo_path}{Ruta al archivo XLSX/XLS (opcional, deteccion automatica)}
 }
 \value{
 Invisible tibble with generated 'ICD-10' data.
 }
 \description{
-EJECUTAR UNA VEZ para crear data/cie10_cl.rda desde XLS padre.
-Ruta automatica: busca en ../ o directorio actual
+EJECUTAR UNA VEZ para crear data/cie10_cl.rda desde archivo DEIS.
+Deteccion automatica por prioridad: XLSX completo (39K+ codigos) > XLS legado (~8K).
 }
 \examples{
 \dontrun{
