@@ -344,6 +344,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
   palabras <- palabras[nchar(palabras) >= 2]
 
   # Pre-filtrar usando FTS5 para velocidad
+  query_params <- NULL
   if (length(palabras) > 0) {
     # Sanitizar palabras para FTS5 (prevenir SQL injection)
     # Solo permitir alfanumericos y acentos normalizados
@@ -353,19 +354,20 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     if (length(palabras_fts) > 0) {
       # Construir query FTS5: palabra1* OR palabra2*
       texto_fts <- paste0(palabras_fts, "*", collapse = " OR ")
+      query_params <- list(texto_fts)
 
       if (campo == "descripcion") {
-        query_sql <- sprintf("
+        query_sql <- "
           SELECT c.codigo, c.descripcion, c.categoria
           FROM cie10 c
-          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH '%s')
-        ", texto_fts)
+          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH ?)
+        "
       } else {
         query_sql <- sprintf("
           SELECT c.codigo, c.descripcion, c.categoria, c.%s
           FROM cie10 c
-          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH '%s')
-        ", campo, texto_fts)
+          WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH ?)
+        ", campo)
       }
     } else {
       # Sin palabras validas tras sanitizar, cargar todo
@@ -384,7 +386,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     }
   }
 
-  base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
+  base <- DBI::dbGetQuery(con, query_sql, params = query_params) %>% tibble::as_tibble()
 
   # Si FTS5 no retorno resultados, intentar carga completa para fuzzy
   if (nrow(base) == 0 && length(palabras) > 0) {

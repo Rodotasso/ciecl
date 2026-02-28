@@ -109,8 +109,11 @@ cie10_sql <- function(query, close = TRUE) {
   }
 
   # Bloquear multiples statements (;)
-  # Permitir ; solo dentro de strings
-  query_sin_strings <- stringr::str_remove_all(query_norm, "'[^']*'")
+  # Remover strings, comentarios de linea (--) y comentarios de bloque (/* */)
+  query_sin_strings <- query_norm
+  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "'[^']*'")
+  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "--[^\n]*")
+  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "(?s)/\\*.*?\\*/")
   if (stringr::str_detect(query_sin_strings, ";")) {
     stop("Multiples statements SQL no permitidos (seguridad)")
   }

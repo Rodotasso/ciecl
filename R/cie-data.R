@@ -81,7 +81,8 @@ parsear_cie10_minsal <- function(xls_path) {
 #' EJECUTAR UNA VEZ para crear data/cie10_cl.rda desde archivo DEIS.
 #' Deteccion automatica por prioridad: XLSX completo (39K+ codigos) > XLS legado (~8K).
 #'
-#' @param archivo_path Ruta al archivo XLSX/XLS (opcional, deteccion automatica)
+#' @param archivo_path Ruta al archivo XLSX/XLS DEIS (opcional, deteccion automatica).
+#'   Debe ser una ruta de confianza; no usar con input de usuarios finales.
 #' @return Invisible tibble with generated 'ICD-10' data.
 #' @examples
 #' \dontrun{

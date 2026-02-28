@@ -7,7 +7,8 @@
 generar_cie10_cl(archivo_path = NULL)
 }
 \arguments{
-\item{archivo_path}{Ruta al archivo XLSX/XLS (opcional, deteccion automatica)}
+\item{archivo_path}{Ruta al archivo XLSX/XLS DEIS (opcional, deteccion automatica).
+Debe ser una ruta de confianza; no usar con input de usuarios finales.}
 }
 \value{
 Invisible tibble with generated 'ICD-10' data.
