@@ -193,8 +193,8 @@ sigla_to_codigo <- function(sigla) {
 #' @keywords internal
 #' @noRd
 extract_cie_from_text <- function(texto) {
-  # Fix #2: Patrón estricto para extraer código CIE-10: letra + 2-3 digitos + punto opcional + 0-2 digitos
-  # Solo extrae si está rodeado de no-alfanuméricos o en extremos
+  # Fix #2: Patron estricto para extraer codigo CIE-10: letra + 2-3 digitos + punto opcional + 0-2 digitos
+  # Solo extrae si esta rodeado de no-alfanumericos o en extremos
   patron <- "(?:^|[^A-Z0-9])([A-Z][0-9]{2}[0-9]?\\.?[0-9X]{0,2})(?:$|[^A-Z0-9])"
   
   extraido <- stringr::str_extract(toupper(texto), patron)
@@ -531,7 +531,7 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
 
   # Normalizar entrada
   codigo_input <- stringr::str_trim(toupper(codigo_sin_na))
-  # Fix #1: Normalizar espacios en códigos
+  # Fix #1: Normalizar espacios en codigos
   codigo_input <- gsub("\\s+", "", codigo_input)
   
   # Extraer codigo de texto con ruido (prefijos/sufijos)
@@ -619,7 +619,7 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
           descripcion_completa = paste0(codigo, " - ", descripcion)
         )
     } else {
-      # Asegurar que la columna existe incluso cuando el resultado está vacío
+      # Asegurar que la columna existe incluso cuando el resultado esta vacio
       # Necesitamos usar tibble::add_column() para mantener la estructura de tibble
       resultado <- resultado %>%
         tibble::add_column(descripcion_completa = character(0))
@@ -688,8 +688,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 
   resultado <- tibble::as_tibble(resultado)
 
-  # Fix #3: Validar estrictamente códigos inválidos
-  # Solo códigos CIE-10 válidos existen en la base
+  # Fix #3: Validar estrictamente codigos invalidos
+  # Solo codigos CIE-10 validos existen en la base
   if (nrow(resultado) == 0) {
     message("x Codigo no encontrado: ", codigo_norm)
     return(cie10_empty_tibble())

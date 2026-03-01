@@ -29,3 +29,4 @@
 ^\.zenodo\.json$
 ^CRAN-SUBMISSION$
 ^tools/build_sqlite_cache\.R$
+^tools/audit_elite_cran\.R$

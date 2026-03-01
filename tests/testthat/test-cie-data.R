@@ -31,11 +31,9 @@ test_that("parsear_cie10_minsal con XLS real", {
 
   # Buscar XLSX/XLS MINSAL en rutas conocidas (formato CIE-10 correcto)
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
-
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -83,7 +81,6 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
 
   # Buscar XLSX/XLS MINSAL (formato CIE-10 correcto)
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
@@ -350,11 +347,9 @@ test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
-
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -386,7 +381,6 @@ test_that("parsear_cie10_minsal extrae capitulo de codigo", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
@@ -422,11 +416,9 @@ test_that("parsear_cie10_minsal limpia descripciones", {
   skip_if_not_installed("readxl")
 
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
-
 
   xls_path <- NULL
   for (path in xls_paths) {
@@ -472,7 +464,6 @@ test_that("generar_cie10_cl valida parametros y parsea XLS", {
   # Test 3: Verificar que parsear_cie10_minsal funciona con XLS real
   # (generar_cie10_cl usa internamente parsear_cie10_minsal)
   xls_paths <- c(
-    "D:/MAGISTER/01_Paquete_R/analisis_bases/CIE-10 (1).xlsx",
     "../CIE-10 (1).xlsx",
     "CIE-10 (1).xlsx"
   )
