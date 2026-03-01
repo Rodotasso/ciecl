@@ -121,7 +121,7 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
 })
 
 # ==============================================================================
-# PRUEBAS generar_cie10_cl()
+# PRUEBAS ciecl:::generar_cie10_cl()
 # ==============================================================================
 
 test_that("generar_cie10_cl requiere usethis", {
@@ -130,7 +130,7 @@ test_that("generar_cie10_cl requiere usethis", {
           "usethis esta instalado")
 
   expect_error(
-    generar_cie10_cl("test.xls"),
+    ciecl:::generar_cie10_cl("test.xls"),
     "usethis"
   )
 })
@@ -142,7 +142,7 @@ test_that("generar_cie10_cl error si archivo no encontrado", {
   # En directorio temporal sin archivos DEIS
   withr::with_tempdir({
     expect_error(
-      generar_cie10_cl(),
+      ciecl:::generar_cie10_cl(),
       "no encontrado"
     )
   })
@@ -156,7 +156,7 @@ test_that("generar_cie10_cl acepta ruta explicita", {
   # Verificar que acepta argumento archivo_path
   # (fallara si archivo no existe, pero no debe dar error de argumento)
   expect_error(
-    generar_cie10_cl(archivo_path = "ruta_explicita.xls"),
+    ciecl:::generar_cie10_cl(archivo_path = "ruta_explicita.xls"),
     "no encontrado"
   )
 })
@@ -233,7 +233,7 @@ test_that("generar_cie10_cl autodeteccion prueba todas las rutas", {
     withr::with_dir("subdir", {
       # Desde subdir, ninguna ruta candidata tiene el archivo
       expect_error(
-        generar_cie10_cl(archivo_path = NULL),
+        ciecl:::generar_cie10_cl(archivo_path = NULL),
         "no encontrado"
       )
     })
@@ -459,13 +459,13 @@ test_that("generar_cie10_cl valida parametros y parsea XLS", {
 
   # Test 1: Error cuando no encuentra archivo
   expect_error(
-    generar_cie10_cl(archivo_path = NULL),
+    ciecl:::generar_cie10_cl(archivo_path = NULL),
     "no encontrado"
   )
 
   # Test 2: Error con ruta invalida
   expect_error(
-    generar_cie10_cl(archivo_path = "archivo_inexistente.xlsx"),
+    ciecl:::generar_cie10_cl(archivo_path = "archivo_inexistente.xlsx"),
     class = "error"
   )
 

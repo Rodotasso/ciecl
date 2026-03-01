@@ -1,14 +1,28 @@
-# ciecl 0.9.3
+# ciecl 0.9.3 (2026-03-01)
 
-## Mejoras de rendimiento
+## CRAN compliance
 
-* `get_cie10_db()`: primera inicializacion reduce de ~16s a ~1s al incluir
-  base SQLite pre-construida en el paquete (`inst/extdata/cie10.db`).
+* **Breaking**: `generar_cie10_cl()` ya no exportada (marcada `@noRd`).
+  Funcion de desarrollo que escribe en `data/` del paquete.
+  Si la necesitas, usa `ciecl:::generar_cie10_cl()`.
+
+* `cie_lookup()`: ejemplos envueltos en `\donttest{}` para evitar timeout
+  en CRAN check (inicializacion SQLite ~16s en primer uso).
+
+* `comorbidity` y `gt` movidos de Imports a Suggests. Ambos se usan
+  con `requireNamespace()`, consistente con su uso opcional.
+
+* Mensajes de inicializacion de BD solo se emiten en sesiones interactivas
+  (`if (interactive())`).
 
 ## Fixes
 
 * `generar_cie10_cl()`: auto-deteccion prioriza XLSX completo (39K+ codigos)
   sobre XLS legado (~8K codigos). Parametro renombrado a `archivo_path`.
+
+* `cie_guia_busqueda()`: corregida referencia a funcion inexistente `cie_buscar()`.
+
+* `tests/testthat/setup.R`: eliminada ruta absoluta hardcodeada.
 
 ---
 

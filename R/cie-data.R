@@ -90,7 +90,7 @@ parsear_cie10_minsal <- function(xls_path) {
 #' generar_cie10_cl()
 #' }
 #' @keywords internal
-#' @export
+#' @noRd
 generar_cie10_cl <- function(archivo_path = NULL) {
   # Verificar que usethis este instalado
   if (!requireNamespace("usethis", quietly = TRUE)) {

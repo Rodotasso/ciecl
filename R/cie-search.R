@@ -498,6 +498,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
 #' @examples
+#' \donttest{
 #' cie_lookup("E11.0")       # Con punto
 #' cie_lookup("E110")        # Sin punto
 #' cie_lookup("E11")         # Solo categoria
@@ -514,6 +515,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
 #' cie_lookup("EPOC", check_siglas = TRUE)
+#' }
 cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE, extract = FALSE, check_siglas = FALSE) {
   # Manejar vector vacio
 
@@ -724,7 +726,7 @@ cie_guia_busqueda <- function() {
       "cie_lookup() o cie_lookup(expandir = TRUE)",
       "cie_search()",
       "cie_lookup(check_siglas = TRUE)",
-      "cie_buscar() (experimental)"
+      "cie_search() con threshold bajo"
     ),
     `Ejemplo` = c(
       'cie_lookup("E11.0")',
@@ -734,7 +736,7 @@ cie_guia_busqueda <- function() {
       'cie_lookup("E11")',
       'cie_search("diabetes")',
       'cie_lookup("IAM", check_siglas = TRUE)',
-      'pronto disponible'
+      'cie_search("dolor", threshold = 0.5)'
     ),
     check.names = FALSE,
     stringsAsFactors = FALSE

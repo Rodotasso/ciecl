@@ -27,10 +27,10 @@ Imports:
     dplyr,
     tibble,
     tools,
-    utils,
-    comorbidity,
-    gt
+    utils
 Suggests:
+    comorbidity,
+    gt,
     httr2,
     readxl,
     usethis,

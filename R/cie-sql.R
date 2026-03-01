@@ -19,22 +19,13 @@ get_cie10_db <- function() {
   
   db_path <- file.path(cache_dir, "cie10.db")
 
-  # Si cache no existe, copiar BD pre-construida desde inst/extdata/
-  if (!file.exists(db_path)) {
-    bundled_db <- system.file("extdata", "cie10.db", package = "ciecl")
-    if (nzchar(bundled_db) && file.exists(bundled_db)) {
-      file.copy(bundled_db, db_path)
-      message("Cache SQLite inicializado desde paquete")
-    }
-  }
-
   con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
-  
+
   # Inicializar DB si vacia
   if (!DBI::dbExistsTable(con, "cie10")) {
     data(cie10_cl, envir = environment())
     DBI::dbWriteTable(con, "cie10", cie10_cl, overwrite = TRUE)
-    
+
     # Indices para velocidad
     DBI::dbExecute(con, "CREATE INDEX idx_codigo ON cie10(codigo)")
     DBI::dbExecute(con, "CREATE INDEX idx_desc ON cie10(descripcion)")
@@ -48,7 +39,7 @@ get_cie10_db <- function() {
     ")
     DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
 
-    message("Inicializada SQLite DB: ", db_path)
+    if (interactive()) message("Inicializada SQLite DB: ", db_path)
   }
 
   # Verificar tabla FTS independientemente (fix cache parcial/corrupto)
@@ -60,7 +51,7 @@ get_cie10_db <- function() {
       )
     ")
     DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
-    message("Recreada tabla FTS5: cie10_fts")
+    if (interactive()) message("Recreada tabla FTS5: cie10_fts")
   }
 
   return(con)

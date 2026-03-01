@@ -38,6 +38,7 @@ tibble con codigo(s) matcheado(s)
 Busqueda exacta por codigo CIE-10
 }
 \examples{
+\donttest{
 cie_lookup("E11.0")       # Con punto
 cie_lookup("E110")        # Sin punto
 cie_lookup("E11")         # Solo categoria
@@ -54,4 +55,5 @@ cie_lookup("E11.0-confirmado", extract = TRUE)
 cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
 cie_lookup("EPOC", check_siglas = TRUE)
+}
 }
