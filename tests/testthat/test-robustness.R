@@ -354,10 +354,7 @@ test_that("cie_validate_vector con vector muy grande", {
 test_that("get_cie10_db retorna conexion DBI valida", {
   skip_on_cran()
 
-  get_cie10_db <- ciecl:::get_cie10_db
-
-  con <- get_cie10_db()
-  on.exit(DBI::dbDisconnect(con))
+  con <- ciecl:::get_cie10_db()
 
   expect_true(DBI::dbIsValid(con))
   expect_s4_class(con, "SQLiteConnection")
@@ -366,10 +363,7 @@ test_that("get_cie10_db retorna conexion DBI valida", {
 test_that("get_cie10_db crea tabla cie10 si no existe", {
   skip_on_cran()
 
-  get_cie10_db <- ciecl:::get_cie10_db
-
-  con <- get_cie10_db()
-  on.exit(DBI::dbDisconnect(con))
+  con <- ciecl:::get_cie10_db()
 
   # Tabla debe existir
   expect_true(DBI::dbExistsTable(con, "cie10"))
@@ -378,10 +372,7 @@ test_that("get_cie10_db crea tabla cie10 si no existe", {
 test_that("get_cie10_db tabla tiene indices", {
   skip_on_cran()
 
-  get_cie10_db <- ciecl:::get_cie10_db
-
-  con <- get_cie10_db()
-  on.exit(DBI::dbDisconnect(con))
+  con <- ciecl:::get_cie10_db()
 
   # Verificar que existen indices (SQLite)
   indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index'")
@@ -395,10 +386,7 @@ test_that("get_cie10_db usa directorio cache correcto", {
   cache_dir <- tools::R_user_dir("ciecl", "data")
   db_path <- file.path(cache_dir, "cie10.db")
 
-  # Despues de cualquier uso del paquete, debe existir
-  get_cie10_db <- ciecl:::get_cie10_db
-  con <- get_cie10_db()
-  DBI::dbDisconnect(con)
+  ciecl:::get_cie10_db()
 
   expect_true(file.exists(db_path))
 })
@@ -414,9 +402,7 @@ test_that("cie10_clear_cache elimina archivo db", {
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe
-  get_cie10_db <- ciecl:::get_cie10_db
-  con <- get_cie10_db()
-  DBI::dbDisconnect(con)
+  ciecl:::get_cie10_db()
 
   expect_true(file.exists(db_path))
 
@@ -440,9 +426,7 @@ test_that("cie10_clear_cache emite mensaje apropiado", {
   skip_on_cran()
 
   # Asegurar que existe cache
-  get_cie10_db <- ciecl:::get_cie10_db
-  con <- get_cie10_db()
-  DBI::dbDisconnect(con)
+  ciecl:::get_cie10_db()
 
   # Debe emitir mensaje de eliminacion
   expect_message(cie10_clear_cache(), "eliminado")

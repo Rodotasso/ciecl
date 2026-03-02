@@ -93,7 +93,6 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
   if (buscar_db) {
     # Verificar que existan en la base de datos
     con <- get_cie10_db()
-    on.exit(DBI::dbDisconnect(con), add = TRUE)
     
     codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
     
@@ -141,9 +140,8 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   )
   
   if (strict) {
-    # Validar existencia en DB con conexion segura
+    # Validar existencia en DB (conexion pooled)
     con <- get_cie10_db()
-    on.exit(DBI::dbDisconnect(con), add = TRUE)
     
     codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
     

@@ -331,9 +331,8 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     texto_limpio
   }
 
-  # Conexion segura con auto-cierre
+  # Conexion pooled (no cerrar, gestionada por .ciecl_env)
   con <- get_cie10_db()
-  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   # Normalizar texto de busqueda (minusculas + sin tildes)
   texto_norm <- tolower(texto_busqueda)
@@ -580,7 +579,6 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
 
       if (length(codigos_safe) > 0) {
         con <- get_cie10_db()
-        on.exit(DBI::dbDisconnect(con), add = TRUE)
 
         if (expandir) {
           # Expandir: usar LIKE para cada codigo
@@ -655,9 +653,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
     return(cie10_empty_tibble())
   }
 
-  # Conexion con queries parametrizadas (previene SQL injection)
+  # Conexion pooled (queries parametrizadas, previene SQL injection)
   con <- get_cie10_db()
-  on.exit(DBI::dbDisconnect(con), add = TRUE)
 
   if (expandir) {
     # Buscar jerarquia completa (E11 -> E11.x)

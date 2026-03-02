@@ -9,7 +9,7 @@ cie10_sql(query, close = TRUE)
 \arguments{
 \item{query}{String SQL valido SQLite (SELECT/WHERE/JOIN)}
 
-\item{close}{Logical, cerrar conexion post-query (default TRUE)}
+\item{close}{Logical, ignorado (conexion pooled). Mantenido por compatibilidad.}
 }
 \value{
 tibble resultado query
