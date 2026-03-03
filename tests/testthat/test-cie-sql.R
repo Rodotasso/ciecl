@@ -27,36 +27,25 @@ test_that("cie10_sql bloquea queries peligrosas", {
 # PRUEBAS ADICIONALES cie10_sql()
 # ==============================================================================
 
-test_that("cie10_sql ejecuta queries con WHERE", {
+test_that("cie10_sql ejecuta queries SQL con clausulas WHERE/LIKE/GROUP/ORDER", {
   skip_on_cran()
 
-  resultado <- cie10_sql("SELECT * FROM cie10 WHERE codigo = 'E11.0'")
-  expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 1)
-})
+  # WHERE retorna codigo exacto con contenido correcto
+  r_where <- cie10_sql("SELECT * FROM cie10 WHERE codigo = 'E11.0'")
+  expect_equal(nrow(r_where), 1)
+  expect_true(grepl("iabetes", r_where$descripcion, ignore.case = TRUE))
 
-test_that("cie10_sql ejecuta queries con LIKE", {
-  skip_on_cran()
+  # LIKE filtra por prefijo
+  r_like <- cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 10")
+  expect_true(all(grepl("^E11", r_like$codigo)))
 
-  resultado <- cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 10")
-  expect_s3_class(resultado, "tbl_df")
-  expect_lte(nrow(resultado), 10)
-})
+  # GROUP BY retorna capitulos
+  r_group <- cie10_sql("SELECT capitulo, COUNT(*) as n FROM cie10 GROUP BY capitulo")
+  expect_gt(nrow(r_group), 10)
 
-test_that("cie10_sql ejecuta queries con GROUP BY", {
-  skip_on_cran()
-
-  resultado <- cie10_sql("SELECT capitulo, COUNT(*) as n FROM cie10 GROUP BY capitulo")
-  expect_s3_class(resultado, "tbl_df")
-  expect_gt(nrow(resultado), 10)
-})
-
-test_that("cie10_sql ejecuta queries con ORDER BY", {
-  skip_on_cran()
-
-  resultado <- cie10_sql("SELECT codigo, descripcion FROM cie10 ORDER BY codigo LIMIT 5")
-  expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 5)
+  # ORDER BY ordena correctamente
+  r_order <- cie10_sql("SELECT codigo FROM cie10 ORDER BY codigo LIMIT 5")
+  expect_equal(r_order$codigo, sort(r_order$codigo))
 })
 
 test_that("cie10_sql bloquea ALTER TABLE", {
@@ -100,12 +89,32 @@ test_that("cie10_sql bloquea PRAGMA", {
   )
 })
 
+test_that("cie10_sql bloquea keywords peligrosos case-insensitive", {
+  skip_on_cran()
+
+  expect_error(cie10_sql("SELECT * FROM cie10; dRoP TABLE cie10"))
+  expect_error(cie10_sql("SELECT * FROM cie10; Pragma table_info(cie10)"))
+  expect_error(cie10_sql("SELECT * FROM cie10; aTTaCH DATABASE 'x' AS y"))
+})
+
 test_that("cie10_sql permite DISTINCT", {
   skip_on_cran()
 
   resultado <- cie10_sql("SELECT DISTINCT capitulo FROM cie10")
   expect_s3_class(resultado, "tbl_df")
   expect_gt(nrow(resultado), 0)
+})
+
+test_that("cie10_sql permite subqueries y UNION", {
+  skip_on_cran()
+
+  # Subquery en WHERE con IN (SELECT ...)
+  r_sub <- cie10_sql("SELECT * FROM cie10 WHERE codigo IN (SELECT codigo FROM cie10 WHERE codigo = 'E11.0')")
+  expect_equal(nrow(r_sub), 1)
+
+  # UNION de dos SELECT validos
+  r_union <- cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo = 'E11.0' UNION SELECT codigo, descripcion FROM cie10 WHERE codigo = 'I10'")
+  expect_gte(nrow(r_union), 1)
 })
 
 test_that("cie10_sql permite COUNT con condicion", {
@@ -243,6 +252,22 @@ test_that("cie10_sql bloquea semicolon fuera de strings", {
     cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
     "Multiples statements"
   )
+})
+
+test_that("cie10_sql maneja comentarios SQL sin falsos positivos", {
+  skip_on_cran()
+
+  # Comentario de linea no genera falso positivo
+  resultado <- cie10_sql("SELECT codigo FROM cie10 WHERE codigo = 'E11.0' -- comentario")
+  expect_equal(nrow(resultado), 1)
+
+  # Comentario de bloque no genera falso positivo
+  resultado2 <- cie10_sql("SELECT codigo /* columna */ FROM cie10 WHERE codigo = 'E11.0'")
+  expect_equal(nrow(resultado2), 1)
+
+  # Semicolon dentro de comentario no bloquea
+  resultado3 <- cie10_sql("SELECT codigo FROM cie10 WHERE codigo = 'E11.0' -- ;test")
+  expect_equal(nrow(resultado3), 1)
 })
 
 test_that("cie10_sql bloquea INSERT", {

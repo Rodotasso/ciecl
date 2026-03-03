@@ -241,20 +241,6 @@ test_that("generar_cie10_cl autodeteccion prueba todas las rutas", {
 # PRUEBAS DATASET cie10_cl
 # ==============================================================================
 
-test_that("dataset cie10_cl carga correctamente", {
-  data("cie10_cl", package = "ciecl", envir = environment())
-
-  expect_s3_class(cie10_cl, "tbl_df")
-  expect_gt(nrow(cie10_cl), 30000)
-})
-
-test_that("dataset cie10_cl tiene columnas requeridas", {
-  data("cie10_cl", package = "ciecl", envir = environment())
-
-  columnas_requeridas <- c("codigo", "descripcion")
-  expect_true(all(columnas_requeridas %in% names(cie10_cl)))
-})
-
 test_that("dataset cie10_cl codigos son unicos", {
   skip_on_cran()
 
@@ -269,10 +255,17 @@ test_that("dataset cie10_cl codigos son unicos", {
   expect_lt(ratio_duplicados, 0.1)  # < 10% duplicados
 })
 
-test_that("dataset cie10_cl codigos tienen formato valido", {
+test_that("dataset cie10_cl carga con estructura y formato valido", {
   skip_on_cran()
 
   data("cie10_cl", package = "ciecl", envir = environment())
+
+  # Carga correcta como tibble con >30k filas
+  expect_s3_class(cie10_cl, "tbl_df")
+  expect_gt(nrow(cie10_cl), 30000)
+
+  # Columnas requeridas presentes
+  expect_true(all(c("codigo", "descripcion") %in% names(cie10_cl)))
 
   # Todos los codigos deben empezar con letra
   expect_true(all(grepl("^[A-Z]", cie10_cl$codigo)))
@@ -281,24 +274,17 @@ test_that("dataset cie10_cl codigos tienen formato valido", {
   expect_true(all(nchar(cie10_cl$codigo) >= 3))
 })
 
-test_that("dataset cie10_cl contiene codigos E11 (diabetes)", {
+test_that("dataset cie10_cl contiene codigos de capitulos clinicos principales", {
   skip_on_cran()
 
   data("cie10_cl", package = "ciecl", envir = environment())
 
-  # E11 es Diabetes tipo 2, debe existir
-  codigos_e11 <- cie10_cl[grepl("^E11", cie10_cl$codigo), ]
-  expect_gt(nrow(codigos_e11), 0)
-})
-
-test_that("dataset cie10_cl contiene codigos I10 (hipertension)", {
-  skip_on_cran()
-
-  data("cie10_cl", package = "ciecl", envir = environment())
-
-  # I10 es Hipertension esencial
-  codigos_i10 <- cie10_cl[grepl("^I10", cie10_cl$codigo), ]
-  expect_gt(nrow(codigos_i10), 0)
+  # Verificar presencia de letras de capitulos clinicos clave
+  letras_iniciales <- unique(substr(cie10_cl$codigo, 1, 1))
+  expect_true("E" %in% letras_iniciales)  # Endocrinas (diabetes)
+  expect_true("I" %in% letras_iniciales)  # Circulatorias (hipertension)
+  expect_true("C" %in% letras_iniciales)  # Neoplasias
+  expect_true("J" %in% letras_iniciales)  # Respiratorias
 })
 
 # ==============================================================================

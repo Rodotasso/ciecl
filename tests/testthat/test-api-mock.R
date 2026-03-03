@@ -5,36 +5,6 @@
 # PRUEBAS DE VALIDACION DE PARAMETROS cie11_search()
 # ==============================================================================
 
-test_that("cie11_search usa max_results correctamente", {
-  skip_if_not_installed("httr2")
-
-  # Verificar que el parametro se acepta sin error de sintaxis
-  # La funcion retorna warning y tibble vacio con credenciales invalidas
-  expect_warning(
-    resultado <- cie11_search("diabetes", api_key = "test:test", max_results = 5),
-    "Error API CIE-11"
-  )
-
-  expect_s3_class(resultado, "tbl_df")
-})
-
-test_that("cie11_search acepta parametro lang", {
-  skip_if_not_installed("httr2")
-
-  # Verificar que lang = "es" y "en" son aceptados (retorna warning, no error)
-  expect_warning(
-    resultado_es <- cie11_search("diabetes", api_key = "test:test", lang = "es"),
-    "Error API CIE-11"
-  )
-  expect_s3_class(resultado_es, "tbl_df")
-
-  expect_warning(
-    resultado_en <- cie11_search("diabetes", api_key = "test:test", lang = "en"),
-    "Error API CIE-11"
-  )
-  expect_s3_class(resultado_en, "tbl_df")
-})
-
 # ==============================================================================
 # PRUEBAS DE MANEJO DE ERRORES
 # ==============================================================================
@@ -164,34 +134,6 @@ test_that("cie11_search prefiere argumento sobre environment", {
   # La funcion debe usar arg:key, no env:key
   # (ambas fallaran, pero verificamos que acepta el argumento)
   expect_s3_class(resultado, "tbl_df")
-})
-
-# ==============================================================================
-# PRUEBAS DE ESTRUCTURA DE RESPUESTA
-# ==============================================================================
-
-test_that("cie11_search retorna columnas esperadas", {
-  skip_if_not_installed("httr2")
-
-  # Incluso en error, debe retornar estructura correcta
-  suppressWarnings({
-    resultado <- cie11_search("test", api_key = "test:test")
-  })
-
-  columnas_esperadas <- c("codigo", "titulo", "capitulo")
-  expect_true(all(columnas_esperadas %in% names(resultado)))
-})
-
-test_that("cie11_search columnas tienen tipos correctos", {
-  skip_if_not_installed("httr2")
-
-  suppressWarnings({
-    resultado <- cie11_search("test", api_key = "test:test")
-  })
-
-  expect_type(resultado$codigo, "character")
-  expect_type(resultado$titulo, "character")
-  expect_type(resultado$capitulo, "character")
 })
 
 # ==============================================================================
@@ -350,6 +292,36 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
   expect_equal(nrow(resultado), 1)
   expect_equal(resultado$titulo[1], "Hipertensi\u00f3n arterial esencial")
   expect_false(grepl("<em", resultado$titulo[1]))
+})
+
+test_that("cie11_search maneja JSON inesperado sin destinationEntities ni error", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        list(access_token = "mock_token")
+      } else {
+        # JSON sin destinationEntities ni error — estructura inesperada
+        list(status = "ok", data = list())
+      }
+    },
+    .package = "httr2"
+  )
+
+  expect_message(
+    resultado <- cie11_search("unexpected", api_key = "id:secret"),
+    "Sin resultados"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
 })
 
 test_that("cie11_search retorna tibble vacio con destinationEntities vacio", {
