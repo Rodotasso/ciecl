@@ -110,21 +110,20 @@ cie_map_comorbid <- function(codigos) {
     "^F[0-9]{2}",   "Trastornos mentales"
   )
 
-  # Funcion para categorizar un solo codigo
-
-  categorizar <- function(cod) {
-    if (is.na(cod)) return("Otra")
-    for (i in seq_len(nrow(mapeo_chile))) {
-      if (stringr::str_detect(cod, mapeo_chile$patron[i])) {
-        return(mapeo_chile$categoria[i])
-      }
-    }
-    return("Otra")
-  }
-
+  # Categorizacion vectorizada con case_when
   resultado <- tibble::tibble(
     codigo = codigos,
-    categoria = sapply(codigos, categorizar, USE.NAMES = FALSE)
+    categoria = dplyr::case_when(
+      is.na(codigos) ~ "Otra",
+      stringr::str_detect(codigos, "^E10|^E11") ~ "Diabetes",
+      stringr::str_detect(codigos, "^I50") ~ "Insuficiencia cardiaca",
+      stringr::str_detect(codigos, "^I21|^I22") ~ "Infarto miocardio",
+      stringr::str_detect(codigos, "^C[0-9]{2}") ~ "Neoplasia maligna",
+      stringr::str_detect(codigos, "^J40|^J44") ~ "EPOC",
+      stringr::str_detect(codigos, "^N18") ~ "Enfermedad renal cronica",
+      stringr::str_detect(codigos, "^F[0-9]{2}") ~ "Trastornos mentales",
+      .default = "Otra"
+    )
   )
 
   return(resultado)

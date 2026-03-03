@@ -29,6 +29,7 @@ Imports:
     tools,
     utils
 Suggests:
+    bench,
     comorbidity,
     gt,
     httr2,

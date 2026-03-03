@@ -93,25 +93,20 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
   if (buscar_db) {
     # Verificar que existan en la base de datos
     con <- get_cie10_db()
-    
+
     codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
-    
-    # Para cada codigo, verificar si existe, sino buscar variaciones
-    resultado <- sapply(codigos_norm, function(cod) {
-      if (cod %in% codigos_db) {
-        return(cod)
-      }
-      # Si no existe, intentar agregar 0 al final para subcategorias de 3 digitos
-      if (nchar(cod) == 3 && stringr::str_detect(cod, "^[A-Z]\\d{2}$")) {
-        cod_con_0 <- paste0(cod, "0")
-        if (cod_con_0 %in% codigos_db) {
-          return(cod_con_0)
-        }
-      }
-      # Retornar codigo original si no se encuentra
-      return(cod)
-    }, USE.NAMES = FALSE)
-    
+
+    # Verificacion vectorizada contra DB
+    no_na <- !is.na(codigos_norm)
+    en_db <- codigos_norm %in% codigos_db
+    es_3_dig <- no_na & !en_db & nchar(codigos_norm) == 3 &
+      stringr::str_detect(codigos_norm, "^[A-Z]\\d{2}$")
+    cod_con_0 <- paste0(codigos_norm, "0")
+    fallback_ok <- es_3_dig & (cod_con_0 %in% codigos_db)
+
+    resultado <- codigos_norm
+    resultado[fallback_ok] <- cod_con_0[fallback_ok]
+
     return(resultado)
   } else {
     return(codigos_norm)
