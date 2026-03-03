@@ -728,3 +728,112 @@ test_that("parsear_cie10_minsal incluye columna categoria si existe", {
     expect_true("categoria" %in% names(resultado))
   })
 })
+
+# ==============================================================================
+# PRUEBAS ADICIONALES PARA COVERAGE (branches faltantes)
+# ==============================================================================
+
+test_that("parsear_cie10_minsal funciona sin columnas opcionales", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    # Solo codigo + descripcion, sin categoria/inclusion/exclusion
+    df <- data.frame(
+      codigo = c("A00", "A01.0", "B02.9"),
+      descripcion = c("Colera", "Fiebre tifoidea", "Zoster sin complicaciones"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(df, "minimal.xlsx")
+
+    resultado <- ciecl:::parsear_cie10_minsal("minimal.xlsx")
+
+    expect_s3_class(resultado, "tbl_df")
+    expect_equal(nrow(resultado), 3)
+    expect_true("codigo" %in% names(resultado))
+    expect_true("descripcion" %in% names(resultado))
+    # Columnas opcionales no deben estar
+    expect_false("categoria" %in% names(resultado))
+    expect_false("inclusion" %in% names(resultado))
+    expect_false("exclusion" %in% names(resultado))
+  })
+})
+
+test_that("parsear_cie10_minsal maneja codigos sin match de capitulo", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    df <- data.frame(
+      codigo = c("A00", "ZZZ"),
+      descripcion = c("Colera", "Codigo raro"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(df, "raro.xlsx")
+
+    resultado <- ciecl:::parsear_cie10_minsal("raro.xlsx")
+
+    # "ZZZ" no matchea ^[A-Z]\d{1,2} -> capitulo NA
+    fila_zzz <- resultado[resultado$codigo == "ZZZ", ]
+    if (nrow(fila_zzz) > 0) {
+      expect_true(is.na(fila_zzz$capitulo))
+    }
+    # A00 si debe tener capitulo
+    fila_a00 <- resultado[resultado$codigo == "A00", ]
+    expect_equal(fila_a00$capitulo, "A00")
+  })
+})
+
+test_that("parsear_cie10_minsal filtra filas con NA en codigo y descripcion corta", {
+  skip_on_cran()
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    df <- data.frame(
+      codigo = c("A00", NA, "AB", "B01.0"),
+      descripcion = c("Colera", NA, "Corta", "Tifoidea"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(df, "filtro.xlsx")
+
+    resultado <- ciecl:::parsear_cie10_minsal("filtro.xlsx")
+
+    # NA en codigo se filtra, "AB" (nchar < 3) se filtra
+    expect_equal(nrow(resultado), 2)
+    expect_true(all(resultado$codigo %in% c("A00", "B01.0")))
+  })
+})
+
+test_that("generar_cie10_cl emite mensaje Parseando antes de error", {
+  skip_on_cran()
+  skip_if_not_installed("usethis")
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  withr::with_tempdir({
+    df <- data.frame(
+      codigo = c("A00", "B01.0", "C02.1"),
+      descripcion = c("Colera", "Tifoidea", "Tumor"),
+      stringsAsFactors = FALSE
+    )
+    writexl::write_xlsx(df, "test_cie10.xlsx")
+
+    # generar_cie10_cl llama usethis::use_data() que requiere estar en un paquete,
+    # pero el message "Parseando" se emite antes de eso
+    msgs <- character()
+    tryCatch(
+      withCallingHandlers(
+        ciecl:::generar_cie10_cl(archivo_path = "test_cie10.xlsx"),
+        message = function(m) {
+          msgs <<- c(msgs, conditionMessage(m))
+          invokeRestart("muffleMessage")
+        }
+      ),
+      error = function(e) NULL
+    )
+    expect_true(any(grepl("Parseando", msgs)))
+  })
+})

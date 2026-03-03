@@ -209,3 +209,175 @@ test_that("cie11_search informa sobre httr2 faltante", {
     "httr2"
   )
 })
+
+# ==============================================================================
+# PRUEBAS CON HTTP MOCKING (local_mocked_bindings)
+# Cubren lineas 41-95 de cie-api.R: OAuth token + search + parsing
+# ==============================================================================
+
+test_that("cie11_search retorna resultados con mock HTTP exitoso", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        # Token response
+        list(access_token = "mock_token_abc123")
+      } else {
+        # Search response con resultados
+        list(destinationEntities = data.frame(
+          theCode = c("5A00", "5A01", "5A02"),
+          title = c(
+            "<em class='found'>Diabetes</em> mellitus tipo 1",
+            "<em class='found'>Diabetes</em> mellitus tipo 2",
+            "Otra <em class='found'>diabetes</em> mellitus"
+          ),
+          chapter = c("05", "05", "05"),
+          stringsAsFactors = FALSE
+        ))
+      }
+    },
+    .package = "httr2"
+  )
+
+  resultado <- cie11_search("diabetes", api_key = "test_id:test_secret")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 3)
+  expect_equal(resultado$codigo, c("5A00", "5A01", "5A02"))
+  # Verificar que HTML tags fueron limpiados
+
+  expect_false(grepl("<em", resultado$titulo[1]))
+  expect_true(grepl("Diabetes mellitus tipo 1", resultado$titulo[1]))
+  expect_equal(resultado$capitulo, c("05", "05", "05"))
+})
+
+test_that("cie11_search respeta max_results con mock", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        list(access_token = "mock_token")
+      } else {
+        list(destinationEntities = data.frame(
+          theCode = c("5A00", "5A01", "5A02", "5A03", "5A04"),
+          title = paste("Resultado", 1:5),
+          chapter = rep("05", 5),
+          stringsAsFactors = FALSE
+        ))
+      }
+    },
+    .package = "httr2"
+  )
+
+  resultado <- cie11_search("diabetes", api_key = "id:secret", max_results = 2)
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 2)
+})
+
+test_that("cie11_search retorna tibble vacio sin destinationEntities", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        list(access_token = "mock_token")
+      } else {
+        # Sin destinationEntities
+        list(error = FALSE, errorMessage = "")
+      }
+    },
+    .package = "httr2"
+  )
+
+  expect_message(
+    resultado <- cie11_search("xyznonexistent", api_key = "id:secret"),
+    "Sin resultados"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+  expect_true(all(c("codigo", "titulo", "capitulo") %in% names(resultado)))
+})
+
+test_that("cie11_search limpia HTML tags correctamente con mock", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        list(access_token = "mock_token")
+      } else {
+        list(destinationEntities = data.frame(
+          theCode = "BA00",
+          title = "<em class='found'>Hipertensi\u00f3n</em> <em class='found'>arterial</em> esencial",
+          chapter = "11",
+          stringsAsFactors = FALSE
+        ))
+      }
+    },
+    .package = "httr2"
+  )
+
+  resultado <- cie11_search("hipertension", api_key = "id:secret")
+
+  expect_equal(nrow(resultado), 1)
+  expect_equal(resultado$titulo[1], "Hipertensi\u00f3n arterial esencial")
+  expect_false(grepl("<em", resultado$titulo[1]))
+})
+
+test_that("cie11_search retorna tibble vacio con destinationEntities vacio", {
+  skip_if_not_installed("httr2")
+
+  call_count <- 0L
+
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      structure(list(call_id = call_count), class = "httr2_response")
+    },
+    resp_body_json = function(resp, ...) {
+      if (resp$call_id == 1L) {
+        list(access_token = "mock_token")
+      } else {
+        # destinationEntities presente pero vacio
+        list(destinationEntities = list())
+      }
+    },
+    .package = "httr2"
+  )
+
+  expect_message(
+    resultado <- cie11_search("nada", api_key = "id:secret"),
+    "Sin resultados"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})

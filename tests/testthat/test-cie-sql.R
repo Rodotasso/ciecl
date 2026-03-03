@@ -461,3 +461,114 @@ test_that("build_cache_atomic crea cache completo", {
   expect_true(DBI::dbExistsTable(con, "cie10_fts"))
   expect_true(DBI::dbExistsTable(con, "cie10_meta"))
 })
+
+# ==============================================================================
+# PRUEBAS .ciecl_env y .onUnload (zzz.R)
+# ==============================================================================
+
+test_that(".ciecl_env tiene estructura correcta", {
+  env <- ciecl:::.ciecl_env
+  expect_true(is.environment(env))
+  expect_true("con" %in% ls(env, all.names = TRUE))
+  expect_true("db_path" %in% ls(env, all.names = TRUE))
+})
+
+test_that(".onUnload cierra conexion y limpia env", {
+  skip_on_cran()
+  ciecl:::get_cie10_db()
+  env <- ciecl:::.ciecl_env
+  expect_false(is.null(env$con))
+
+  onUnload <- getFromNamespace(".onUnload", "ciecl")
+  onUnload(libpath = .libPaths()[1])
+
+  expect_null(env$con)
+  expect_null(env$db_path)
+})
+
+test_that(".onUnload no falla sin conexion activa", {
+  ciecl:::cie10_disconnect()
+  onUnload <- getFromNamespace(".onUnload", "ciecl")
+  expect_no_error(onUnload(libpath = .libPaths()[1]))
+})
+
+# ==============================================================================
+# PRUEBAS BRANCHES ADICIONALES cie-sql.R
+# ==============================================================================
+
+test_that("get_cie10_db reconstruye FTS5 si falta en pooled", {
+  skip_on_cran()
+  con <- ciecl:::get_cie10_db()
+  DBI::dbExecute(con, "DROP TABLE IF EXISTS cie10_fts")
+  # Forzar re-check via pooling (misma conexion valida, mismo path)
+  con2 <- ciecl:::get_cie10_db()
+  tablas <- DBI::dbListTables(con2)
+  expect_true(any(grepl("cie10_fts", tablas)))
+  ciecl::cie10_disconnect()
+})
+
+test_that("get_cie10_db reconstruye si version no coincide en pooled", {
+  skip_on_cran()
+  con <- ciecl:::get_cie10_db()
+  # Modificar version en pooled connection -> trigger rebuild en pooling path
+  DBI::dbExecute(con, "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'")
+  con2 <- ciecl:::get_cie10_db()
+  ver <- DBI::dbGetQuery(con2, "SELECT value FROM cie10_meta WHERE key = 'cache_version'")
+  expect_equal(ver$value, as.character(utils::packageVersion("ciecl")))
+  ciecl::cie10_disconnect()
+})
+
+test_that("get_cie10_db limpia conexion invalida", {
+  skip_on_cran()
+  on.exit(ciecl::cie10_disconnect(), add = TRUE)
+  con <- ciecl:::get_cie10_db()
+  DBI::dbDisconnect(con)
+  # .ciecl_env aun tiene referencia invalida
+  con2 <- ciecl:::get_cie10_db()
+  expect_true(DBI::dbIsValid(con2))
+  ciecl::cie10_disconnect()
+})
+
+test_that("get_cie10_db reconstruye si tabla cie10 falta", {
+  skip_on_cran()
+  ciecl::cie10_disconnect()
+  con_direct <- DBI::dbConnect(RSQLite::SQLite(),
+    file.path(tools::R_user_dir("ciecl", "data"), "cie10.db"))
+  on.exit(try(DBI::dbDisconnect(con_direct), silent = TRUE), add = TRUE)
+  DBI::dbExecute(con_direct, "DROP TABLE IF EXISTS cie10")
+  DBI::dbDisconnect(con_direct)
+  con2 <- ciecl:::get_cie10_db()
+  expect_true(DBI::dbExistsTable(con2, "cie10"))
+  ciecl::cie10_disconnect()
+})
+
+test_that("cie10_sql maneja error de ejecucion SQL", {
+  skip_on_cran()
+  expect_error(ciecl::cie10_sql("SELECT * FROM tabla_inexistente"))
+})
+
+test_that("cache_is_current retorna FALSE cuando query falla", {
+  skip_on_cran()
+  tmp_db <- tempfile(fileext = ".db")
+  on.exit(unlink(tmp_db), add = TRUE)
+  con <- DBI::dbConnect(RSQLite::SQLite(), tmp_db)
+  on.exit(try(DBI::dbDisconnect(con), silent = TRUE), add = TRUE)
+  # Crear tabla cie10_meta con schema incorrecto para que el SELECT falle
+  DBI::dbExecute(con, "CREATE TABLE cie10_meta (x INTEGER)")
+  expect_false(ciecl:::cache_is_current(con))
+})
+
+test_that("build_cache_atomic limpia .tmp residual", {
+  skip_on_cran()
+  on.exit(ciecl::cie10_disconnect(), add = TRUE)
+  ciecl::cie10_disconnect()
+  cache_dir <- tools::R_user_dir("ciecl", "data")
+  tmp_file <- file.path(cache_dir, "cie10.db.tmp")
+  if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
+  file.create(tmp_file)
+  expect_true(file.exists(tmp_file))
+  suppressMessages(ciecl:::cie10_clear_cache())
+  con <- ciecl:::get_cie10_db()
+  expect_false(file.exists(tmp_file))
+  ciecl::cie10_disconnect()
+})
