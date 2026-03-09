@@ -320,10 +320,12 @@ test_that("cie_validate_vector rechaza formatos invalidos", {
   expect_true(all(!resultado))
 })
 
-test_that("cie_validate_vector maneja minusculas", {
-  # Debe funcionar con minusculas
-  resultado <- cie_validate_vector("e11.0")
-  expect_true(resultado)
+test_that("cie_validate_vector normaliza antes de validar", {
+  # Punto duplicado se normaliza a valido (E11..0 -> E11.0)
+  expect_true(cie_validate_vector("E11..0"))
+
+  # Minusculas se normalizan
+  expect_true(cie_validate_vector("e11.0"))
 })
 
 test_that("cie_validate_vector strict mode", {

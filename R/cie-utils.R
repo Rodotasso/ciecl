@@ -146,7 +146,7 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
     validos_db <- codigos_norm %in% codigos_db
     resultado <- validos_formato & validos_db
 
-    invalidos <- codigos[!resultado]
+    invalidos <- codigos[!resultado & !is.na(codigos)]
     if (length(invalidos) > 0) {
       warning("Codigos no encontrados en DB MINSAL: ", paste(invalidos, collapse = ", "))
     }

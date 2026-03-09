@@ -553,7 +553,7 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   # Preservar rangos (guion entre codigos) antes de normalizar,
   # ya que cie_normalizar convierte guiones a puntos
   if (normalizar) {
-    es_rango_input <- stringr::str_detect(codigo_input, "^[A-Z]\\d{2,3}-[A-Z]\\d{2,3}$")
+    es_rango_input <- stringr::str_detect(codigo_input, "^[A-Z][0-9.]{2,}-[A-Z][0-9.]{2,}$")
     codigo_norm <- ifelse(
       es_rango_input,
       codigo_input,
