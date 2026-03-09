@@ -548,6 +548,18 @@ test_that("cie_lookup con normalizar procesa codigo sin punto", {
   expect_equal(resultado$codigo, "E11.0")
 })
 
+test_that("cie_lookup con normalizar elimina sufijo X DEIS", {
+  skip_on_cran()
+
+  resultado <- cie_lookup("N10X", normalizar = TRUE)
+  expect_equal(nrow(resultado), 1)
+  expect_equal(resultado$codigo, "N10")
+
+  # Vector con multiples codigos X
+  res2 <- cie_lookup(c("I10X", "N40X"), normalizar = TRUE)
+  expect_equal(nrow(res2), 2)
+})
+
 test_that("cie_lookup maneja codigos especiales daga/asterisco", {
   skip_on_cran()
 

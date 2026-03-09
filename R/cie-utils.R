@@ -127,11 +127,14 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
   # Estandar: [A-Z]\d{2}\.\d{1,2} (con punto: E11.0, E11.00)
   patron <- "^[A-Z]\\d{2}(\\d|\\.\\d{1,2})?$"
 
+  # Normalizar antes de validar formato (I10X -> I10, N10X -> N10)
+  codigos_norm <- cie_normalizar(codigos, buscar_db = FALSE)
+
   # Manejar NAs: retornar FALSE para NAs
   validos_formato <- ifelse(
-    is.na(codigos),
+    is.na(codigos_norm),
     FALSE,
-    stringr::str_detect(toupper(codigos), patron)
+    stringr::str_detect(toupper(codigos_norm), patron)
   )
   
   if (strict) {
@@ -140,9 +143,9 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
     
     codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
     
-    validos_db <- codigos %in% codigos_db
+    validos_db <- codigos_norm %in% codigos_db
     resultado <- validos_formato & validos_db
-    
+
     invalidos <- codigos[!resultado]
     if (length(invalidos) > 0) {
       warning("Codigos no encontrados en DB MINSAL: ", paste(invalidos, collapse = ", "))

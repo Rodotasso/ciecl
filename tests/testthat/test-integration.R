@@ -231,7 +231,7 @@ test_that("escenario: limpieza de datos con codigos sucios", {
   codigos_sucios <- c(
     "E110",     # Sin punto - valido
     "e11.0",    # Minusculas - valido
-    " E11.0 ",  # Espacios - invalido (debe trim antes)
+    " E11.0 ",  # Espacios - valido (se normaliza con trim)
     "E11",      # Categoria - valido
     "DIABETES", # Texto (invalido)
     NA,         # NA - invalido
@@ -239,9 +239,9 @@ test_that("escenario: limpieza de datos con codigos sucios", {
     "E11.0"     # Correcto - valido
   )
 
-  # 1. Validar formato (nota: espacios hacen invalido el codigo)
+  # 1. Validar formato (normaliza internamente: trim, punto, sufijo X)
   formato_ok <- cie_validate_vector(codigos_sucios)
-  expect_equal(formato_ok, c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(formato_ok, c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE))
 
   # 2. Filtrar solo validos
   codigos_validos <- codigos_sucios[formato_ok]

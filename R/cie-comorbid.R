@@ -49,6 +49,9 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     data <- data[nchar(trimws(data[[code]])) > 0, ]
   }
 
+  # Normalizar codigos (elimina sufijo X DEIS, agrega punto, etc.)
+  data[[code]] <- cie_normalizar(data[[code]], buscar_db = FALSE)
+
   # Mapear a nomenclatura comorbidity package
   map_full <- switch(map,
     "charlson" = "charlson_icd10_quan",

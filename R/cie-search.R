@@ -549,12 +549,15 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
     }, USE.NAMES = FALSE)
   }
   
-  # Normalizar formato si se solicita: agregar punto si falta (E110 -> E11.0)
+  # Normalizar formato si se solicita (elimina sufijo X DEIS, agrega punto, etc.)
+  # Preservar rangos (guion entre codigos) antes de normalizar,
+  # ya que cie_normalizar convierte guiones a puntos
   if (normalizar) {
+    es_rango_input <- stringr::str_detect(codigo_input, "^[A-Z]\\d{2,3}-[A-Z]\\d{2,3}$")
     codigo_norm <- ifelse(
-      stringr::str_detect(codigo_input, "^[A-Z]\\d{3,}$") & !stringr::str_detect(codigo_input, "\\."),
-      stringr::str_replace(codigo_input, "^([A-Z]\\d{2})(\\d.*)$", "\\1.\\2"),
-      codigo_input
+      es_rango_input,
+      codigo_input,
+      cie_normalizar(codigo_input, buscar_db = FALSE)
     )
   } else {
     codigo_norm <- codigo_input

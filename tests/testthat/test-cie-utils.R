@@ -65,6 +65,13 @@ test_that("cie_validate_vector detecta formatos invalidos", {
   expect_equal(validos, c(TRUE, TRUE, FALSE))
 })
 
+test_that("cie_validate_vector acepta codigos con sufijo X DEIS", {
+  expect_true(cie_validate_vector("I10X"))
+  expect_true(cie_validate_vector("N10X"))
+  expect_equal(cie_validate_vector(c("I10X", "N40X", "INVALIDO")),
+               c(TRUE, TRUE, FALSE))
+})
+
 test_that("cie_expand genera hijos correctos", {
   skip_on_cran()
 
