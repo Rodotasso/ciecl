@@ -1,0 +1,57 @@
+url: https://rodotasso.github.io/ciecl/
+
+template:
+  bootstrap: 5
+  lang: es
+  bootswatch: slate
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+
+reference:
+  - title: "Busqueda de codigos"
+    desc: "Funciones para buscar codigos CIE-10 por texto o codigo"
+    contents:
+      - cie_search
+      - cie_lookup
+      - cie_siglas
+      - cie_guia_busqueda
+  - title: "Base de datos SQL"
+    desc: "Acceso directo a la base SQLite CIE-10"
+    contents:
+      - cie10_sql
+      - cie10_clear_cache
+      - cie10_disconnect
+  - title: "Comorbilidades"
+    desc: "Indices de comorbilidad Charlson y Elixhauser"
+    contents:
+      - cie_comorbid
+      - cie_map_comorbid
+  - title: "Validacion y utilidades"
+    desc: "Normalizacion, validacion y expansion de codigos"
+    contents:
+      - cie_normalizar
+      - cie_validate_vector
+      - cie_expand
+  - title: "API CIE-11"
+    desc: "Busqueda en la clasificacion CIE-11 via API OMS"
+    contents:
+      - cie11_search
+  - title: "Visualizacion"
+    desc: "Tablas interactivas para exploracion de codigos"
+    contents:
+      - cie_table
+  - title: "Datos"
+    desc: "Dataset CIE-10 Chile oficial MINSAL/DEIS"
+    contents:
+      - cie10_cl
+
+articles:
+  - title: "Guias"
+    contents:
+      - ciecl
+      - ciecl-en
+      - idiomas
+      - instalacion

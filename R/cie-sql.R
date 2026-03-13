@@ -199,18 +199,12 @@ cache_is_current <- function(con) {
 #' @return tibble resultado query
 #' @export
 #' @examples
-#' \donttest{
 #' # Buscar diabetes
 #' cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%'")
 #'
+#' \donttest{
 #' # Contar por capitulo
 #' cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
-#' }
-#'
-#' # Join con datos pacientes (externo)
-#' \dontrun{
-#' cie10_sql("SELECT p.id, c.descripcion
-#'            FROM pacientes p JOIN cie10 c ON p.codigo = c.codigo")
 #' }
 cie10_sql <- function(query, close = TRUE) {
   # Normalizar query: eliminar espacios y saltos de linea al inicio
@@ -256,7 +250,7 @@ cie10_sql <- function(query, close = TRUE) {
 #' @return No return value, called for side effects (deletes SQLite cache).
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cie10_clear_cache()  # Elimina cie10.db local
 #' }
 cie10_clear_cache <- function() {
@@ -301,7 +295,7 @@ cie10_clear_cache <- function() {
 #' @return No return value, called for side effects.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cie10_disconnect()
 #' }
 cie10_disconnect <- function() {

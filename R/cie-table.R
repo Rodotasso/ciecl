@@ -6,7 +6,7 @@
 #' @export
 #' @importFrom dplyr select everything
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cie_table("E11")  # Diabetes tipo 2 completo
 #' }
 cie_table <- function(codigo, interactive = TRUE) {

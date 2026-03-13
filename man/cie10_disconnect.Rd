@@ -14,7 +14,7 @@ Cierra la conexion reutilizable al archivo SQLite.
 Util para liberar el lock del archivo .db.
 }
 \examples{
-\dontrun{
+\donttest{
 cie10_disconnect()
 }
 }

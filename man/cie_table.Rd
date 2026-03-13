@@ -18,7 +18,7 @@ Objeto gt table HTML
 Generar tabla HTML interactiva GT de codigo CIE-10
 }
 \examples{
-\dontrun{
+\donttest{
 cie_table("E11")  # Diabetes tipo 2 completo
 }
 }

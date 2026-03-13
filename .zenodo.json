@@ -5,7 +5,7 @@
     {
       "name": "Tasso Suazo, Rodolfo",
       "affiliation": "Universidad de Chile",
-      "orcid": ""
+      "orcid": "0000-0002-1264-4933"
     }
   ],
   "keywords": [
@@ -27,7 +27,7 @@
   "license": "MIT",
   "upload_type": "software",
   "programming_language": "R",
-  "version": "1.0.0",
+  "version": "0.9.3",
   "language": "spa",
   "access_right": "open",
   "related_identifiers": [

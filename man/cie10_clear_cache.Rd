@@ -13,7 +13,7 @@ No return value, called for side effects (deletes SQLite cache).
 Limpiar cache SQLite (forzar rebuild)
 }
 \examples{
-\dontrun{
+\donttest{
 cie10_clear_cache()  # Elimina cie10.db local
 }
 }

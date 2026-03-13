@@ -117,7 +117,8 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
 #'
 #' @param codigos Character vector codigos (ej. c("E11.0", "Z00.0"))
 #' @param strict Logical, validar existencia en DB (default FALSE)
-#' @return Logical vector misma longitud input
+#' @return Logical vector de la misma longitud que `codigos`. TRUE si el
+#'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 #' @export
 #' @examples
 #' cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
@@ -160,7 +161,8 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
 #' Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 #'
 #' @param codigo String codigo padre (ej. "E11")
-#' @return Character vector codigos hijos
+#' @return Character vector con todos los codigos hijos del codigo padre.
+#'   Vector vacio si el codigo no existe en la base de datos.
 #' @export
 #' @examples
 #' cie_expand("E11")

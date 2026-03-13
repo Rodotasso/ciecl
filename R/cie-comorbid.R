@@ -13,7 +13,7 @@ NULL
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' df <- data.frame(
 #'   id_pac = c(1, 1, 2, 2),
 #'   diag = c("E11.0", "I21.0", "C50.9", "E10.9")

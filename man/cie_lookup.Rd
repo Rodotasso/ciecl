@@ -38,8 +38,10 @@ tibble con codigo(s) matcheado(s)
 Busqueda exacta por codigo CIE-10
 }
 \examples{
+# Busqueda directa por codigo
+cie_lookup("E11.0")
+
 \donttest{
-cie_lookup("E11.0")       # Con punto
 cie_lookup("E110")        # Sin punto
 cie_lookup("E11")         # Solo categoria
 cie_lookup("E11", expandir = TRUE)  # Todos E11.x
@@ -50,10 +52,8 @@ cie_lookup("E110", descripcion_completa = TRUE)
 # Extraer codigo de texto con ruido (solo codigo escalar)
 cie_lookup("CIE:E11.0", extract = TRUE)
 cie_lookup("E11.0-confirmado", extract = TRUE)
-# Nota: Para vectores multiples usar extract=FALSE (default)
 # Buscar por siglas medicas
 cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
-cie_lookup("EPOC", check_siglas = TRUE)
 }
 }

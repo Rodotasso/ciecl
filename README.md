@@ -5,7 +5,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP">
 
 **Grupo de Ciencia de Datos para Salud Pública** \| Universidad de Chile
 
@@ -227,7 +227,7 @@ MIT + datos MINSAL dominio público (Decreto 356/2017)
 
 <p align="center">
 
-<img src="man/figures/logo-CDSP_color.png" height="100" alt="Grupo de Ciencia de Datos para Salud Pública">
+<img src="man/figures/logo-CDSP_color.png" height="60" alt="Grupo de Ciencia de Datos para Salud Pública">
 </p>
 
 **Grupo de Ciencia de Datos para Salud Pública**<br> Escuela de Salud

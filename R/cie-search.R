@@ -240,8 +240,8 @@ cie_siglas <- function(categoria = NULL) {
 
   resultado <- tibble::tibble(
     sigla = names(siglas),
-    termino_busqueda = sapply(siglas, function(x) x$termino),
-    categoria = sapply(siglas, function(x) x$categoria)
+    termino_busqueda = vapply(siglas, function(x) x$termino, character(1)),
+    categoria = vapply(siglas, function(x) x$categoria, character(1))
   )
 
   # Filtrar por categoria si se especifica
@@ -424,14 +424,14 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 
   if (length(palabras_fuzzy) > 0) {
     # Calcular score basado en cuantas palabras coinciden
-    scores_palabras <- sapply(seq_along(base_texto_sin_tildes), function(i) {
+    scores_palabras <- vapply(seq_along(base_texto_sin_tildes), function(i) {
       texto_base <- base_texto_sin_tildes[i]
       # Contar palabras que aparecen en la descripcion
-      matches <- sapply(palabras_fuzzy, function(p) {
+      matches <- vapply(palabras_fuzzy, function(p) {
         stringr::str_detect(texto_base, stringr::fixed(p))
-      })
+      }, logical(1))
       sum(matches) / length(palabras_fuzzy)
-    })
+    }, numeric(1))
 
     # Si hay coincidencias parciales de palabras
     if (any(scores_palabras > 0)) {
@@ -450,7 +450,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 
   # ESTRATEGIA 3: Fuzzy matching con Jaro-Winkler (para typos)
   # Calcular similitud de cada palabra del texto con palabras de la descripcion
-  scores_fuzzy <- sapply(seq_along(base_texto_sin_tildes), function(i) {
+  scores_fuzzy <- vapply(seq_along(base_texto_sin_tildes), function(i) {
     texto_base <- base_texto_sin_tildes[i]
     palabras_base <- unlist(stringr::str_split(texto_base, "\\s+"))
     palabras_base <- palabras_base[nchar(palabras_base) >= 3]
@@ -458,13 +458,13 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     if (length(palabras_base) == 0) return(0)
 
     # Para cada palabra del texto buscar la mejor coincidencia en la descripcion
-    best_scores <- sapply(palabras_fuzzy, function(p) {
+    best_scores <- vapply(palabras_fuzzy, function(p) {
       if (length(palabras_base) == 0) return(0)
       max(stringdist::stringsim(p, palabras_base, method = "jw"))
-    })
+    }, numeric(1))
 
     mean(best_scores)
-  })
+  }, numeric(1))
 
   # Filtrar + ordenar resultados fuzzy
   resultado <- base %>%
@@ -497,8 +497,10 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @return tibble con codigo(s) matcheado(s)
 #' @export
 #' @examples
+#' # Busqueda directa por codigo
+#' cie_lookup("E11.0")
+#'
 #' \donttest{
-#' cie_lookup("E11.0")       # Con punto
 #' cie_lookup("E110")        # Sin punto
 #' cie_lookup("E11")         # Solo categoria
 #' cie_lookup("E11", expandir = TRUE)  # Todos E11.x
@@ -509,11 +511,9 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' # Extraer codigo de texto con ruido (solo codigo escalar)
 #' cie_lookup("CIE:E11.0", extract = TRUE)
 #' cie_lookup("E11.0-confirmado", extract = TRUE)
-#' # Nota: Para vectores multiples usar extract=FALSE (default)
 #' # Buscar por siglas medicas
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
-#' cie_lookup("EPOC", check_siglas = TRUE)
 #' }
 cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_completa = FALSE, extract = FALSE, check_siglas = FALSE) {
   # Manejar vector vacio
@@ -540,13 +540,13 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE, descripcion_
   
   # Buscar siglas medicas
   if (check_siglas) {
-    codigo_input <- sapply(codigo_input, function(x) {
+    codigo_input <- vapply(codigo_input, function(x) {
       codigo_sigla <- sigla_to_codigo(x)
       if (!is.null(codigo_sigla)) {
         return(codigo_sigla)
       }
       return(x)
-    }, USE.NAMES = FALSE)
+    }, character(1), USE.NAMES = FALSE)
   }
   
   # Normalizar formato si se solicita (elimina sufijo X DEIS, agrega punto, etc.)
