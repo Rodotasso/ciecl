@@ -18,6 +18,9 @@ Objeto gt table HTML
 Generar tabla HTML interactiva GT de codigo CIE-10
 }
 \examples{
+# Requiere paquete gt
+requireNamespace("gt", quietly = TRUE)
+
 \donttest{
 cie_table("E11")  # Diabetes tipo 2 completo
 }

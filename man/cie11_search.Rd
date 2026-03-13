@@ -23,8 +23,11 @@ tibble con codigos CIE-11 + titulos o vacio si error
 Buscar codigos CIE-11 via API OMS
 }
 \examples{
+# Ver parametros disponibles
+args(cie11_search)
+
 \dontrun{
-# Requiere credenciales OMS gratuitas
+# Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
 Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 cie11_search("depresion mayor")
 }

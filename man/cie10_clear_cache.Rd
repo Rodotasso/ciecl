@@ -13,6 +13,9 @@ No return value, called for side effects (deletes SQLite cache).
 Limpiar cache SQLite (forzar rebuild)
 }
 \examples{
+# Ver ubicacion del cache
+tools::R_user_dir("ciecl", "data")
+
 \donttest{
 cie10_clear_cache()  # Elimina cie10.db local
 }

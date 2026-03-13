@@ -87,7 +87,7 @@ test_that("get_siglas_medicas tiene categorias validas", {
   get_siglas_medicas <- ciecl:::get_siglas_medicas
 
   siglas <- get_siglas_medicas()
-  categorias <- unique(sapply(siglas, function(x) x$categoria))
+  categorias <- unique(vapply(siglas, function(x) x$categoria, character(1)))
 
   # Categorias esperadas
   esperadas <- c("cardiovascular", "respiratoria", "metabolica",

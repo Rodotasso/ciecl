@@ -14,6 +14,9 @@ Cierra la conexion reutilizable al archivo SQLite.
 Util para liberar el lock del archivo .db.
 }
 \examples{
+# Verificar si hay conexion activa
+is.null(ciecl:::.ciecl_env$con)
+
 \donttest{
 cie10_disconnect()
 }

@@ -13,6 +13,9 @@ NULL
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @export
 #' @examples
+#' # Ver documentacion de parametros
+#' args(cie_comorbid)
+#'
 #' \donttest{
 #' df <- data.frame(
 #'   id_pac = c(1, 1, 2, 2),

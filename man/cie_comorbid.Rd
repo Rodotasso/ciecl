@@ -24,6 +24,9 @@ data.frame ancho con scores comorbilidad por paciente
 Calcular comorbilidades Charlson/Elixhauser para Chile
 }
 \examples{
+# Ver documentacion de parametros
+args(cie_comorbid)
+
 \donttest{
 df <- data.frame(
   id_pac = c(1, 1, 2, 2),

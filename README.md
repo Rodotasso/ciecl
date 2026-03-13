@@ -19,7 +19,6 @@ status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/
 release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitas&color=blue)
-[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
 <!-- badges: end -->
 
 **Clasificación Internacional de Enfermedades (CIE-10) oficial de Chile
@@ -195,7 +194,7 @@ Basado en catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
 - **Fuente**: [Departamento de Estadísticas e Información de Salud
   (DEIS)](https://deis.minsal.cl)
 - **Centro FIC Chile**: <https://deis.minsal.cl/centrofic/>
-- **Repositorio de documentos**: <https://repositoriodeis.minsal.cl>
+- **Repositorio de documentos**: `https://repositoriodeis.minsal.cl`
 
 Los datos CIE-10 son de uso público según [Decreto 356 Exento
 (2017)](https://www.bcn.cl/leychile/navegar?i=1112064) del Ministerio de

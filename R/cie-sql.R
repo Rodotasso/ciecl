@@ -250,6 +250,9 @@ cie10_sql <- function(query, close = TRUE) {
 #' @return No return value, called for side effects (deletes SQLite cache).
 #' @export
 #' @examples
+#' # Ver ubicacion del cache
+#' tools::R_user_dir("ciecl", "data")
+#'
 #' \donttest{
 #' cie10_clear_cache()  # Elimina cie10.db local
 #' }
@@ -295,6 +298,9 @@ cie10_clear_cache <- function() {
 #' @return No return value, called for side effects.
 #' @export
 #' @examples
+#' # Verificar si hay conexion activa
+#' is.null(ciecl:::.ciecl_env$con)
+#'
 #' \donttest{
 #' cie10_disconnect()
 #' }

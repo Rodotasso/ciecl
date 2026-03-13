@@ -6,6 +6,9 @@
 #' @export
 #' @importFrom dplyr select everything
 #' @examples
+#' # Requiere paquete gt
+#' requireNamespace("gt", quietly = TRUE)
+#'
 #' \donttest{
 #' cie_table("E11")  # Diabetes tipo 2 completo
 #' }
