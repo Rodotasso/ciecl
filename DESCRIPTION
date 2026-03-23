@@ -4,7 +4,7 @@ Version: 0.9.3
 Authors@R:
     person("Rodolfo", "Tasso Suazo",
            email = "rtasso@uchile.cl",
-           role = c("aut", "cre", "cph"),
+           role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1264-4933"))
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes

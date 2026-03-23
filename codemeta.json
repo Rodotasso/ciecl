@@ -30,15 +30,6 @@
       "@id": "https://orcid.org/0000-0002-1264-4933"
     }
   ],
-  "copyrightHolder": [
-    {
-      "@type": "Person",
-      "givenName": "Rodolfo",
-      "familyName": "Tasso Suazo",
-      "email": "rtasso@uchile.cl",
-      "@id": "https://orcid.org/0000-0002-1264-4933"
-    }
-  ],
   "maintainer": [
     {
       "@type": "Person",
