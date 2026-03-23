@@ -4,7 +4,7 @@ author: "Rodolfo Tasso Suazo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduccion a ciecl}
+  %\VignetteIndexEntry{Introduccion a ciecl: CIE-10 Chile en R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
