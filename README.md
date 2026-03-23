@@ -5,7 +5,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="60" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
 **Grupo de Ciencia de Datos para Salud Pública** \| Universidad de Chile
 

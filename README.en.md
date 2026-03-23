@@ -2,7 +2,7 @@
 
 > **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="60" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
 **Data Science for Public Health Group** | University of Chile
 
