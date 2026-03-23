@@ -1,0 +1,10 @@
+/* Logo CDSP */
+img[alt="CDSP"] {
+  max-height: 50px !important;
+  height: 50px !important;
+}
+
+img[alt="Grupo de Ciencia de Datos para Salud P\00FAblica"] {
+  max-height: 60px !important;
+  height: 60px !important;
+}

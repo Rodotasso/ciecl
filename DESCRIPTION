@@ -46,4 +46,5 @@ URL: https://rodotasso.github.io/ciecl/,
     https://github.com/Rodotasso/ciecl
 BugReports: https://github.com/Rodotasso/ciecl/issues
 Config/testthat/edition: 3
+Config/Needs/website: pkgdown
 Language: es
