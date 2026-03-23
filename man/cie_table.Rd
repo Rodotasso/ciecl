@@ -12,7 +12,7 @@ cie_table(codigo, interactive = TRUE)
 \item{interactive}{Logical, tabla gt reactable (default TRUE)}
 }
 \value{
-Objeto gt table HTML
+Objeto de clase \code{gt_tbl} (tabla HTML interactiva)
 }
 \description{
 Generar tabla HTML interactiva GT de codigo CIE-10
@@ -25,3 +25,7 @@ requireNamespace("gt", quietly = TRUE)
 cie_table("E11")  # Diabetes tipo 2 completo
 }
 }
+\seealso{
+\code{\link{cie_search}}, \code{\link{cie_lookup}}
+}
+\concept{visualizacion}

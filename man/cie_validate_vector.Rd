@@ -21,3 +21,11 @@ Validar vector de codigos CIE-10 formato
 \examples{
 cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
 }
+\seealso{
+\code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+
+Other validacion: 
+\code{\link{cie_expand}()},
+\code{\link{cie_normalizar}()}
+}
+\concept{validacion}

@@ -35,3 +35,10 @@ df <- data.frame(
 cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
 }
 }
+\seealso{
+\code{\link{cie_map_comorbid}}, \code{\link{cie_normalizar}}
+
+Other comorbilidades: 
+\code{\link{cie_map_comorbid}()}
+}
+\concept{comorbilidades}

@@ -60,3 +60,12 @@ cie_search("diabetis")
 cie_search("bacteriana", campo = "inclusion")
 }
 }
+\seealso{
+\code{\link{cie_lookup}}, \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
+
+Other busqueda: 
+\code{\link{cie_guia_busqueda}()},
+\code{\link{cie_lookup}()},
+\code{\link{cie_siglas}()}
+}
+\concept{busqueda}

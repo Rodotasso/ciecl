@@ -57,3 +57,12 @@ cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
 }
 }
+\seealso{
+\code{\link{cie_search}}, \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+
+Other busqueda: 
+\code{\link{cie_guia_busqueda}()},
+\code{\link{cie_search}()},
+\code{\link{cie_siglas}()}
+}
+\concept{busqueda}

@@ -2,7 +2,9 @@
 #'
 #' @param codigo String codigo (ej. "E11" muestra jerarquia)
 #' @param interactive Logical, tabla gt reactable (default TRUE)
-#' @return Objeto gt table HTML
+#' @return Objeto de clase \code{gt_tbl} (tabla HTML interactiva)
+#' @family visualizacion
+#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
 #' @export
 #' @importFrom dplyr select everything
 #' @examples

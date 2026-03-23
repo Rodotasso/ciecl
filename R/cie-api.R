@@ -6,6 +6,8 @@
 #' @param lang Character, idioma respuesta ("es" o "en")
 #' @param max_results Integer, maximo resultados (default 10)
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
+#' @family api
+#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
 #' @export
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr slice_head select matches

@@ -32,3 +32,7 @@ Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 cie11_search("depresion mayor")
 }
 }
+\seealso{
+\code{\link{cie_search}}, \code{\link{cie_lookup}}
+}
+\concept{api}

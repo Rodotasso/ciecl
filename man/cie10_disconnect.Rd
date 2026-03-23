@@ -21,3 +21,11 @@ is.null(ciecl:::.ciecl_env$con)
 cie10_disconnect()
 }
 }
+\seealso{
+\code{\link{cie10_sql}}, \code{\link{cie10_clear_cache}}
+
+Other sql: 
+\code{\link{cie10_clear_cache}()},
+\code{\link{cie10_sql}()}
+}
+\concept{sql}

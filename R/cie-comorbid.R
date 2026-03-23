@@ -11,6 +11,8 @@ NULL
 #' @param map Character, esquema comorbilidad ("charlson" o "elixhauser")
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
 #' @return data.frame ancho con scores comorbilidad por paciente
+#' @family comorbilidades
+#' @seealso \code{\link{cie_map_comorbid}}, \code{\link{cie_normalizar}}
 #' @export
 #' @examples
 #' # Ver documentacion de parametros
@@ -92,6 +94,8 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' 
 #' @param codigos Character vector codigos CIE-10
 #' @return tibble con codigo + categoria_comorbilidad
+#' @family comorbilidades
+#' @seealso \code{\link{cie_comorbid}}, \code{\link{cie_normalizar}}
 #' @export
 #' @examples
 #' cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))

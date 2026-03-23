@@ -197,6 +197,8 @@ cache_is_current <- function(con) {
 #' @param query String SQL valido SQLite (SELECT/WHERE/JOIN)
 #' @param close Logical, ignorado (conexion pooled). Mantenido por compatibilidad.
 #' @return tibble resultado query
+#' @family sql
+#' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}}, \code{\link{cie_search}}
 #' @export
 #' @examples
 #' # Buscar diabetes
@@ -248,6 +250,8 @@ cie10_sql <- function(query, close = TRUE) {
 #' Limpiar cache SQLite (forzar rebuild)
 #'
 #' @return No return value, called for side effects (deletes SQLite cache).
+#' @family sql
+#' @seealso \code{\link{cie10_sql}}, \code{\link{cie10_disconnect}}
 #' @export
 #' @examples
 #' # Ver ubicacion del cache
@@ -296,6 +300,8 @@ cie10_clear_cache <- function() {
 #' Util para liberar el lock del archivo .db.
 #'
 #' @return No return value, called for side effects.
+#' @family sql
+#' @seealso \code{\link{cie10_sql}}, \code{\link{cie10_clear_cache}}
 #' @export
 #' @examples
 #' # Verificar si hay conexion activa

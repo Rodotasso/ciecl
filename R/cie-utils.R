@@ -25,6 +25,8 @@
 #' @param codigos Character vector de codigos en cualquier formato
 #' @param buscar_db Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)
 #' @return Character vector con codigos normalizados al formato con punto
+#' @family validacion
+#' @seealso \code{\link{cie_validate_vector}}, \code{\link{cie_expand}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' cie_normalizar("E110")     # Retorna "E11.0"
@@ -119,6 +121,8 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
 #' @param strict Logical, validar existencia en DB (default FALSE)
 #' @return Logical vector de la misma longitud que `codigos`. TRUE si el
 #'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
+#' @family validacion
+#' @seealso \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
@@ -163,6 +167,8 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
 #' @param codigo String codigo padre (ej. "E11")
 #' @return Character vector con todos los codigos hijos del codigo padre.
 #'   Vector vacio si el codigo no existe en la base de datos.
+#' @family validacion
+#' @seealso \code{\link{cie_normalizar}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' cie_expand("E11")

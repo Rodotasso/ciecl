@@ -224,6 +224,8 @@ extract_cie_from_text <- function(texto) {
 #'   "psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
 #'   Si es NULL (default), retorna todas las siglas.
 #' @return tibble con columnas: sigla, termino_busqueda, categoria
+#' @family busqueda
+#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' # Ver todas las siglas
@@ -279,6 +281,8 @@ cie_siglas <- function(categoria = NULL) {
 #' @param verbose Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en scripts.
 #' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
 #'   Incluye atributo "sigla_expandida" si se uso una sigla.
+#' @family busqueda
+#' @seealso \code{\link{cie_lookup}}, \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
@@ -495,6 +499,8 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
 #' @return tibble con codigo(s) matcheado(s)
+#' @family busqueda
+#' @seealso \code{\link{cie_search}}, \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' # Busqueda directa por codigo
@@ -702,7 +708,9 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 #'
 #' Muestra tabla comparativa de cuando usar cada funcion de busqueda.
 #'
-#' @return data.frame con guia de uso
+#' @return tibble con guia comparativa de funciones de busqueda
+#' @family busqueda
+#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}, \code{\link{cie_siglas}}
 #' @export
 #' @examples
 #' cie_guia_busqueda()
@@ -741,6 +749,6 @@ cie_guia_busqueda <- function() {
     check.names = FALSE,
     stringsAsFactors = FALSE
   )
-  
-  return(guia)
+
+  return(tibble::as_tibble(guia))
 }
