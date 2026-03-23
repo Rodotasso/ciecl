@@ -5,7 +5,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
 **Grupo de Ciencia de Datos para Salud Pública** \| Universidad de Chile
 
@@ -18,6 +18,8 @@ status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/
 [![GitHub
 release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
+[![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitas&color=blue)
 <!-- badges: end -->
 

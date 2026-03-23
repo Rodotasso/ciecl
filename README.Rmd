@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="50" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
 **Grupo de Ciencia de Datos para Salud Pública** | Universidad de Chile
 
