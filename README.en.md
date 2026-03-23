@@ -12,6 +12,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
+[![Codecov](https://codecov.io/gh/RodoTasso/ciecl/branch/main/graph/badge.svg)](https://codecov.io/gh/RodoTasso/ciecl)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitors&color=blue)
 <!-- badges: end -->
 
