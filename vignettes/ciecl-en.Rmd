@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 library(ciecl)
 ```
 
-> **Version 0.9.0**: Release candidate for CRAN with FTS5 optimizations.
+> **Version 0.9.3**: Available on CRAN with SQLite optimizations and XLSX support.
 
 ## About the dataset
 
@@ -38,28 +38,28 @@ devtools::install_github("RodoTasso/ciecl")
 
 ## Fast SQL search
 
-```{r eval=FALSE}
+```{r}
 # All type 2 diabetes codes
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 ```
 
 ## Search by code
 
-```{r eval=FALSE}
+```{r}
 # Single code search
 cie_lookup("E11.0")
 
 # Vectorized search - multiple codes at once
 codes <- c("E11.0", "I10", "Z00", "J44.0")
-results <- cie_lookup(codes)
+cie_lookup(codes)
 
 # Hierarchical expansion
-cie_lookup("E11", expandir = TRUE)  # Returns all E11.x
+cie_lookup("E11", expandir = TRUE)
 ```
 
 ## Fuzzy search with typos
 
-```{r eval=FALSE}
+```{r}
 # Finds even if misspelled
 cie_search("diabetis with coma", threshold = 0.75)
 ```
