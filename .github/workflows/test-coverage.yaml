@@ -6,7 +6,9 @@ on:
 
 name: test-coverage
 
-permissions: read-all
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   test-coverage:
@@ -36,9 +38,10 @@ jobs:
           covr::to_cobertura(cov)
         shell: Rscript {0}
 
-      - uses: codecov/codecov-action@v4
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' && true || false }}
-          file: ./cobertura.xml
-          plugin: noop
-          token: ${{ secrets.CODECOV_TOKEN }}
+          name: coverage-report
+          path: ./cobertura.xml
+          retention-days: 30
