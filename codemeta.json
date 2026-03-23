@@ -287,7 +287,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "813.676KB",
+  "fileSize": "817.801KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -295,8 +295,10 @@
       "author": [
         {
           "@type": "Person",
-          "givenName": ["Rodolfo", "Tasso"],
-          "familyName": "Suazo"
+          "givenName": "Rodolfo",
+          "familyName": "Tasso Suazo",
+          "email": "rtasso@uchile.cl",
+          "@id": "https://orcid.org/0000-0002-1264-4933"
         }
       ],
       "name": "ciecl: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile",
@@ -304,8 +306,8 @@
       "description": "R package version 0.9.3. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018"
     }
   ],
-  "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/main/NEWS.md",
   "readme": "https://github.com/Rodotasso/ciecl/blob/main/README.md",
-  "contIntegration": "https://github.com/RodoTasso/ciecl/actions/workflows/r.yml",
+  "contIntegration": ["https://github.com/Rodotasso/ciecl/actions/workflows/r.yml", "https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml"],
   "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#stable"
 }
