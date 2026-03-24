@@ -26,11 +26,16 @@
 ^dev$
 ^CLAUDE\.md$
 ^README\.en\.md$
+^README\.es\.Rmd$
+^README\.es\.md$
 ^\.zenodo\.json$
 ^CRAN-SUBMISSION$
 ^tools/build_sqlite_cache\.R$
 ^tools/audit_elite_cran\.R$
 ^tools/benchmark_large_scale\.R$
+^tools/create_hex_logo\.R$
+^man/figures/logo_menta\.png$
+^man/figures/logo_verde\.png$
 ^codemeta\.json$
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$

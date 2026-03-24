@@ -4,7 +4,7 @@ Gracias por tu interes en contribuir a `ciecl`. Este documento describe como par
 
 ## Reportar bugs
 
-Si encuentras un bug, por favor abre un [issue en GitHub](https://github.com/Rodotasso/ciecl/issues) con:
+Si encuentras un bug, por favor abre un [issue en GitHub](https://github.com/RodoTasso/ciecl/issues) con:
 
 - Descripcion clara del problema
 - Codigo reproducible minimo (reprex)
@@ -44,4 +44,4 @@ Al participar en este proyecto, aceptas cumplir con el [Codigo de Conducta](CODE
 
 ## Preguntas
 
-Para preguntas generales, abre un [issue](https://github.com/Rodotasso/ciecl/issues) con la etiqueta "question".
+Para preguntas generales, abre un [issue](https://github.com/RodoTasso/ciecl/issues) con la etiqueta "question".

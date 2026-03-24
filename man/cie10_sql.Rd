@@ -27,7 +27,8 @@ cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
 }
 }
 \seealso{
-\code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}}, \code{\link{cie_search}}
+\code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
+\code{\link{cie_search}}
 
 Other sql: 
 \code{\link{cie10_clear_cache}()},

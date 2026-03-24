@@ -22,10 +22,13 @@ Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).}
 
 \item{normalizar}{Logical, normalizar formato de codigos automaticamente (default TRUE)}
 
-\item{descripcion_completa}{Logical, agregar columna descripcion_completa con formato "CODIGO - DESCRIPCION" (default FALSE)}
+\item{descripcion_completa}{Logical, agregar columna descripcion_completa
+con formato "CODIGO - DESCRIPCION" (default FALSE)}
 
-\item{extract}{Logical, extraer codigo CIE-10 de texto con prefijos/sufijos (default FALSE).
-IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1). Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0".
+\item{extract}{Logical, extraer codigo CIE-10 de texto con
+prefijos/sufijos (default FALSE).
+IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1).
+Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0".
 Para vectores multiples usar extract=FALSE (default).}
 
 \item{check_siglas}{Logical, buscar siglas medicas comunes (default FALSE).

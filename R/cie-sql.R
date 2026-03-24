@@ -130,8 +130,11 @@ build_cache_atomic <- function(cache_dir, db_path) {
       )
     ")
     pkg_version <- as.character(utils::packageVersion("ciecl"))
-    DBI::dbExecute(con, "INSERT OR REPLACE INTO cie10_meta (key, value) VALUES ('cache_version', ?)",
-                   params = list(pkg_version))
+    DBI::dbExecute(
+      con,
+      "INSERT OR REPLACE INTO cie10_meta (key, value) VALUES ('cache_version', ?)",
+      params = list(pkg_version)
+    )
 
     # Cerrar antes de renombrar
     DBI::dbDisconnect(con)
@@ -198,7 +201,8 @@ cache_is_current <- function(con) {
 #' @param close Logical, ignorado (conexion pooled). Mantenido por compatibilidad.
 #' @return tibble resultado query
 #' @family sql
-#' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}}, \code{\link{cie_search}}
+#' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
+#'   \code{\link{cie_search}}
 #' @export
 #' @examples
 #' # Buscar diabetes
@@ -225,7 +229,10 @@ cie10_sql <- function(query, close = TRUE) {
   )
 
   for (keyword in keywords_peligrosos) {
-    if (stringr::str_detect(query_norm, stringr::regex(keyword, ignore_case = TRUE))) {
+    keyword_found <- stringr::str_detect(
+      query_norm, stringr::regex(keyword, ignore_case = TRUE)
+    )
+    if (keyword_found) {
       stop("Query contiene keyword no permitido (seguridad)")
     }
   }

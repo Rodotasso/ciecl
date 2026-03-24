@@ -224,7 +224,7 @@ Based on official **ICD-10 MINSAL/DEIS v2018** catalog:
 
 - **Source**: [Department of Health Statistics and Information (DEIS)](https://deis.minsal.cl)
 - **FIC Chile Center**: <https://deis.minsal.cl/centrofic/>
-- **Documents repository**: <https://repositoriodeis.minsal.cl>
+- **Documents repository**: <https://deis.minsal.cl>
 
 ICD-10 data is for public use according to [Decree 356 Exempt (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
 from the Ministry of Health establishing official ICD-10 use in Chile.

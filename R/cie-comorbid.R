@@ -43,14 +43,16 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   # Advertir sobre NAs en columna de codigos
   n_na <- sum(is.na(data[[code]]))
   if (n_na > 0) {
-    warning("Columna '", code, "' contiene ", n_na, " valores NA que seran ignorados")
+    warning("Columna '", code, "' contiene ", n_na,
+            " valores NA que seran ignorados")
     data <- data[!is.na(data[[code]]), ]
   }
 
   # Advertir sobre codigos vacios
   n_empty <- sum(nchar(trimws(data[[code]])) == 0)
   if (n_empty > 0) {
-    warning("Columna '", code, "' contiene ", n_empty, " valores vacios que seran ignorados")
+    warning("Columna '", code, "' contiene ", n_empty,
+            " valores vacios que seran ignorados")
     data <- data[nchar(trimws(data[[code]])) > 0, ]
   }
 

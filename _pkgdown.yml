@@ -2,7 +2,7 @@ url: https://rodotasso.github.io/ciecl/
 
 template:
   bootstrap: 5
-  lang: es
+  lang: en
 
 navbar:
   structure:
@@ -48,10 +48,10 @@ reference:
       - cie10_cl
 
 articles:
-  - title: "Guias"
+  - title: "Guides"
     contents:
       - ciecl
-      - ciecl-en
+      - ciecl-es
       - idiomas
       - instalacion
 

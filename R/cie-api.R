@@ -78,9 +78,12 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
     json <- httr2::resp_body_json(search_resp, simplifyVector = TRUE)
     
     # Parsear resultados
-    if ("destinationEntities" %in% names(json) && length(json$destinationEntities) > 0) {
+    has_results <- "destinationEntities" %in% names(json) &&
+      length(json$destinationEntities) > 0
+    if (has_results) {
       # Limpiar HTML tags del titulo
-      titulos_limpios <- gsub("<em class='found'>|</em>", "", json$destinationEntities$title)
+      html_pattern <- "<em class='found'>|</em>"
+      titulos_limpios <- gsub(html_pattern, "", json$destinationEntities$title)
       
       resultados <- tibble::tibble(
         codigo = json$destinationEntities$theCode,
