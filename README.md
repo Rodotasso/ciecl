@@ -27,7 +27,7 @@ release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://githu
 para R**.
 
 Paquete especializado para búsqueda, validación y análisis de códigos
-CIE-10 en el contexto chileno. Incluye 39,873 códigos (categorías y
+CIE-10 en el contexto chileno. Incluye 39,877 códigos (categorías y
 subcategorías) con búsqueda optimizada, cálculo de comorbilidades y
 acceso a la API CIE-11 de la OMS.
 
@@ -84,7 +84,7 @@ diabete_codes <- cie_search("diabetes")
 
 ## Características principales
 
-- **39,873 códigos CIE-10**: Incluye todas las categorías (3 dígitos) y
+- **39,877 códigos CIE-10**: Incluye todas las categorías (3 dígitos) y
   subcategorías (4+ dígitos)
 - **Búsqueda fuzzy**: Algoritmo de distancia Levenshtein para tolerar
   errores de escritura

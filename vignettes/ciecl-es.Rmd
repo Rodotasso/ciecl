@@ -23,7 +23,7 @@ library(ciecl)
 
 ## Acerca del dataset
 
-El paquete incluye **39,873 codigos CIE-10** del catalogo oficial MINSAL/DEIS v2018,
+El paquete incluye **39,877 codigos CIE-10** del catalogo oficial MINSAL/DEIS v2018,
 incluyendo categorias (3 digitos) y subcategorias (4+ digitos).
 
 ## Instalacion

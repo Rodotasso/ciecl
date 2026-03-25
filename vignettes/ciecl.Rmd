@@ -23,7 +23,7 @@ library(ciecl)
 
 ## About the dataset
 
-The package includes **39,873 ICD-10 codes** from the official MINSAL/DEIS v2018 catalog,
+The package includes **39,877 ICD-10 codes** from the official MINSAL/DEIS v2018 catalog,
 including categories (3 digits) and subcategories (4+ digits).
 
 ## Installation

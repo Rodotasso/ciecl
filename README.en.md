@@ -19,7 +19,7 @@
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
 
 Specialized package for searching, validating, and analyzing ICD-10 codes
-in the Chilean context. Includes **39,873 codes** (categories and
+in the Chilean context. Includes **39,877 codes** (categories and
 subcategories) from the official MINSAL/DEIS v2018 catalog, with optimized
 search, comorbidity calculation, and WHO ICD-11 API access.
 
@@ -65,7 +65,7 @@ diabetes_codes <- cie_search("diabetes")
 
 ## Main features
 
-- **39,873 ICD-10 codes**: Complete official MINSAL/DEIS v2018 catalog
+- **39,877 ICD-10 codes**: Complete official MINSAL/DEIS v2018 catalog
 - **Fuzzy search**: Jaro-Winkler algorithm to tolerate spelling errors
 - **Direct SQL**: Full database access for complex queries
 - **Vectorization**: Processes thousands of codes simultaneously
