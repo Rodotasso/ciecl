@@ -1,0 +1,228 @@
+---
+title: "Caso de uso: Egresos hospitalarios con ciecl"
+author: "Rodolfo Tasso Suazo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Caso de uso: Egresos hospitalarios con ciecl}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(ciecl)
+library(dplyr)
+```
+
+Los registros administrativos de salud en Chile (egresos hospitalarios DEIS,
+urgencias, morbilidad) codifican diagnosticos en CIE-10 con variaciones de
+formato que dificultan el analisis: codigos sin punto (`J189`), con sufijo `X`
+(`I10X`, convencion DEIS), en minusculas (`j44`) o con espacios (`E 11.0`).
+
+Esta vignette muestra el flujo completo para trabajar con una base de egresos
+hospitalarios: normalizar codigos, enriquecer con descripciones, analizar
+frecuencias y calcular comorbilidades.
+
+## Datos de ejemplo
+
+Simulamos una base de egresos con el formato tipico de los datos DEIS:
+codigos sin punto, con variaciones de formato y algunos invalidos.
+
+```{r datos}
+egresos <- data.frame(
+  id_egreso    = 1:30,
+  diag1        = c(
+    # Sin punto (formato DEIS mas comun)
+    "J189", "E119", "K359", "N390", "I10X",
+    "O800", "Z380", "J440", "C509", "I259",
+    # Con sufijo X (convencion DEIS para categoria sin subcategoria)
+    "I10X", "N40X", "K800", "J069", "A099",
+    # Con punto (formato normalizado)
+    "E11.0", "I50.9", "J18.9", "Z00.0", "K21.0",
+    # Variaciones: minusculas, con espacios
+    "j44", "e11", "E 11.0", "J 18.9", "i10x",
+    # Invalidos intencionales
+    "ABCD", "999", "J189", "E119", "K359"
+  ),
+  sexo         = rep(c("M", "F"), 15),
+  edad         = c(45, 67, 23, 55, 72, 28, 3, 61, 49, 38,
+                   70, 58, 44, 31, 65, 52, 41, 29, 77, 36,
+                   63, 48, 55, 34, 70, 25, 41, 67, 22, 59),
+  dias_estancia = c(3, 7, 2, 4, 5, 1, 2, 8, 12, 6,
+                    4, 3, 5, 2, 9, 6, 4, 3, 7, 5,
+                    8, 6, 4, 3, 5, 2, 11, 7, 3, 6),
+  stringsAsFactors = FALSE
+)
+
+cat("Registros:", nrow(egresos), "\n")
+cat("Codigos unicos:", length(unique(egresos$diag1)), "\n")
+head(egresos)
+```
+
+## 1. Normalizar codigos
+
+Los codigos crudos presentan multiples variaciones. `cie_normalizar()` los
+convierte al formato estandar CIE-10 con punto:
+
+```{r normalizar}
+codigos_crudos <- unique(egresos$diag1)
+
+# Mostrar variaciones antes de normalizar
+cat("Antes de normalizar:\n")
+problematicos <- c("I10X", "j44", "E 11.0", "E119")
+cat(paste(" ", problematicos), sep = "\n")
+
+cat("\nDespues de cie_normalizar():\n")
+normalizados <- cie_normalizar(problematicos)
+cat(paste(" ", problematicos, "->", normalizados), sep = "\n")
+```
+
+La funcion maneja automaticamente el sufijo `X` segun la convencion DEIS:
+lo elimina en codigos cortos (`I10X` → `I10`) pero lo preserva como
+placeholder en codigos largos de trauma (`S72X01A` se mantiene intacto).
+
+## 2. Buscar descripciones
+
+Con los codigos originales de la base (sin normalizar previamente),
+`cie_lookup()` con `normalizar = TRUE` hace la conversion internamente:
+
+```{r lookup}
+codigos_unicos <- unique(egresos$diag1)
+
+resultado <- cie_lookup(
+  codigo             = codigos_unicos,
+  normalizar         = TRUE,
+  descripcion_completa = TRUE
+)
+
+cat("Codigos encontrados:", nrow(resultado), "de", length(codigos_unicos), "\n")
+cat("Tasa de exito:", round(nrow(resultado) / length(codigos_unicos) * 100, 1), "%\n\n")
+
+head(resultado[, c("codigo", "descripcion")])
+```
+
+## 3. Enriquecer la base de egresos
+
+Unimos las descripciones al data.frame original. Como los codigos DEIS no
+tienen punto y `cie_lookup()` devuelve codigos con punto, eliminamos el punto
+para el join:
+
+```{r enriquecer}
+# Tabla de lookup: codigo_sin_punto -> descripcion completa
+tabla_lookup <- resultado %>%
+  mutate(
+    codigo_sin_punto = gsub("\\.", "", codigo),
+    diag_completo    = paste0(codigo, " - ", descripcion)
+  ) %>%
+  select(codigo_sin_punto, diag_completo)
+
+# Normalizar codigos en la base antes del join
+# (quitar punto, X final, espacios internos, convertir a mayusculas)
+egresos_enriquecidos <- egresos %>%
+  mutate(
+    codigo_busqueda = gsub("\\s+", "", toupper(diag1)),   # mayusculas, sin espacios
+    codigo_busqueda = gsub("X$", "", codigo_busqueda),    # quitar X final
+    codigo_busqueda = gsub("\\.", "", codigo_busqueda)    # quitar punto
+  ) %>%
+  left_join(tabla_lookup, by = c("codigo_busqueda" = "codigo_sin_punto")) %>%
+  mutate(
+    diag_completo = if_else(is.na(diag_completo), diag1, diag_completo)
+  ) %>%
+  select(-codigo_busqueda)
+
+n_con_desc <- sum(grepl(" - ", egresos_enriquecidos$diag_completo))
+cat("Registros con descripcion:", n_con_desc, "de", nrow(egresos_enriquecidos), "\n\n")
+
+egresos_enriquecidos %>%
+  select(id_egreso, diag1, diag_completo, edad, dias_estancia) %>%
+  head(8)
+```
+
+## 4. Top diagnosticos
+
+```{r top_diag}
+top_diag <- egresos_enriquecidos %>%
+  filter(grepl(" - ", diag_completo)) %>%
+  count(diag_completo, sort = TRUE) %>%
+  mutate(pct = round(n / sum(n) * 100, 1)) %>%
+  head(10)
+
+top_diag
+```
+
+## 5. Busqueda por texto (fuzzy search)
+
+`cie_search()` encuentra codigos por descripcion, tolerando errores tipograficos:
+
+```{r busqueda_texto}
+# Busqueda exacta
+cie_search("neumonia", max_results = 4)
+```
+
+```{r busqueda_typo}
+# Con error tipografico intencional ("diabetis")
+cie_search("diabetis", threshold = 0.75, max_results = 4)
+```
+
+## 6. Validacion de codigos
+
+Identifica los codigos invalidos antes de procesar la base:
+
+```{r validacion}
+validos <- cie_validate_vector(codigos_unicos)
+
+cat("Codigos validos:", sum(validos), "\n")
+cat("Codigos invalidos:", sum(!validos), "\n\n")
+
+invalidos <- codigos_unicos[!validos]
+if (length(invalidos) > 0) {
+  cat("Codigos no reconocidos:\n")
+  cat(paste(" ", invalidos), sep = "\n")
+}
+```
+
+## 7. Comorbilidades Charlson
+
+Para calcular indices de comorbilidad se requiere el paquete `comorbidity`.
+Los codigos deben estar en formato largo (un codigo por fila):
+
+```{r comorbilidades, eval=FALSE}
+# Requiere: install.packages("comorbidity")
+df_largo <- egresos_enriquecidos %>%
+  select(id_egreso, diag1)
+
+cie_comorbid(df_largo, id = "id_egreso", code = "diag1", map = "charlson")
+```
+
+## Flujo completo en resumen
+
+```r
+library(ciecl)
+library(dplyr)
+
+# 1. Lookup vectorizado (acepta formatos mixtos)
+desc <- cie_lookup(egresos$diag1, normalizar = TRUE, descripcion_completa = TRUE)
+
+# 2. Join con datos originales
+egresos <- egresos %>%
+  left_join(
+    desc %>% mutate(codigo_sin_punto = gsub("\\.", "", codigo)) %>%
+             select(codigo_sin_punto, descripcion),
+    by = c("diag1" = "codigo_sin_punto")
+  )
+
+# 3. Busqueda por texto
+cie_search("insuficiencia cardiaca", max_results = 5)
+
+# 4. Validar antes de procesar
+cie_validate_vector(egresos$diag1)
+```
+
+## Fuente de datos
+
+- Datos CIE-10 Chile: Centro FIC DEIS <https://deis.minsal.cl/centrofic/>
+- Repositorio del paquete: <https://github.com/RodoTasso/ciecl>
