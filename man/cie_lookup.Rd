@@ -14,13 +14,16 @@ cie_lookup(
 )
 }
 \arguments{
-\item{codigo}{Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
-o rango (ej. "E10-E14"). Acepta vectores de multiples codigos.
-Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).}
+\item{codigo}{Character vector de codigos
+(ej. "E11", "E11.0", c("E11.0", "Z00"))
+o rango (ej. "E10-E14"). Acepta vectores.
+Soporta formatos: con punto (E11.0),
+sin punto (E110), o solo categoria (E11).}
 
 \item{expandir}{Logical, expandir jerarquia completa (default FALSE)}
 
-\item{normalizar}{Logical, normalizar formato de codigos automaticamente (default TRUE)}
+\item{normalizar}{Logical, normalizar formato de codigos
+automaticamente (default TRUE)}
 
 \item{descripcion_completa}{Logical, agregar columna descripcion_completa
 con formato "CODIGO - DESCRIPCION" (default FALSE)}
@@ -61,7 +64,8 @@ cie_lookup("DM2", check_siglas = TRUE)
 }
 }
 \seealso{
-\code{\link{cie_search}}, \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+\code{\link{cie_search}},
+\code{\link{cie_normalizar}}, \code{\link{cie_expand}}
 
 Other busqueda: 
 \code{\link{cie_guia_busqueda}()},

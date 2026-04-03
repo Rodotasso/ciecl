@@ -132,7 +132,8 @@ build_cache_atomic <- function(cache_dir, db_path) {
     pkg_version <- as.character(utils::packageVersion("ciecl"))
     DBI::dbExecute(
       con,
-      "INSERT OR REPLACE INTO cie10_meta (key, value) VALUES ('cache_version', ?)",
+      "INSERT OR REPLACE INTO cie10_meta
+       (key, value) VALUES ('cache_version', ?)",
       params = list(pkg_version)
     )
 
@@ -150,7 +151,10 @@ build_cache_atomic <- function(cache_dir, db_path) {
     # Cleanup en caso de error
     if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
     if (file.exists(tmp_path)) file.remove(tmp_path)
-    stop("Error construyendo cache SQLite: ", conditionMessage(e), call. = FALSE)
+    stop(
+      "Error construyendo cache SQLite: ",
+      conditionMessage(e), call. = FALSE
+    )
   })
 }
 
@@ -198,7 +202,8 @@ cache_is_current <- function(con) {
 #' Ejecutar consultas SQL sobre CIE-10 Chile
 #'
 #' @param query String SQL valido SQLite (SELECT/WHERE/JOIN)
-#' @param close Logical, ignorado (conexion pooled). Mantenido por compatibilidad.
+#' @param close Logical, ignorado (conexion pooled).
+#'   Mantenido por compatibilidad.
 #' @return tibble resultado query
 #' @family sql
 #' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
@@ -242,7 +247,9 @@ cie10_sql <- function(query, close = TRUE) {
   query_sin_strings <- query_norm
   query_sin_strings <- stringr::str_remove_all(query_sin_strings, "'[^']*'")
   query_sin_strings <- stringr::str_remove_all(query_sin_strings, "--[^\n]*")
-  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "(?s)/\\*.*?\\*/")
+  query_sin_strings <- stringr::str_remove_all(
+    query_sin_strings, "(?s)/\\*.*?\\*/"
+  )
   if (stringr::str_detect(query_sin_strings, ";")) {
     stop("Multiples statements SQL no permitidos (seguridad)")
   }
@@ -264,7 +271,7 @@ cie10_sql <- function(query, close = TRUE) {
 #' # Ver ubicacion del cache
 #' tools::R_user_dir("ciecl", "data")
 #'
-#' \donttest{
+#' \dontrun{
 #' cie10_clear_cache()  # Elimina cie10.db local
 #' }
 cie10_clear_cache <- function() {

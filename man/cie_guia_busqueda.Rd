@@ -16,7 +16,8 @@ Muestra tabla comparativa de cuando usar cada funcion de busqueda.
 cie_guia_busqueda()
 }
 \seealso{
-\code{\link{cie_search}}, \code{\link{cie_lookup}}, \code{\link{cie_siglas}}
+\code{\link{cie_search}},
+\code{\link{cie_lookup}}, \code{\link{cie_siglas}}
 
 Other busqueda: 
 \code{\link{cie_lookup}()},

@@ -1,38 +1,38 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+about: Reportar un error en ciecl / Report a bug in ciecl
+title: '[BUG] '
+labels: 'bug'
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Descripcion del bug / Describe the bug**
+Descripcion clara y concisa del error.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Ejemplo reproducible / Reprex**
+Proporciona un ejemplo minimo reproducible ([reprex](https://reprex.tidyverse.org/)):
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+```r
+library(ciecl)
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+# Codigo que produce el error
+```
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Comportamiento esperado / Expected behavior**
+Que esperabas que ocurriera.
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Informacion del sistema / Session info**
+Pega la salida de:
 
-**Additional context**
-Add any other context about the problem here.
+```r
+sessionInfo()
+packageVersion("ciecl")
+```
+
+- **SO / OS**: [ej: Windows 11, macOS 14, Ubuntu 22.04]
+- **Version de R / R version**: [ej: 4.4.1]
+- **Version de ciecl**: [ej: 0.9.3]
+
+**Contexto adicional / Additional context**
+Cualquier informacion adicional relevante.

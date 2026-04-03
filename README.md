@@ -19,7 +19,7 @@ status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/
 release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
-[![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/RodoTasso/ciecl/dev/badges/coverage.json)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitas&color=blue)
 <!-- badges: end -->
 
@@ -209,12 +209,17 @@ verificación y validación humana de todo el código y documentación.
 
 ## Contribuir
 
-Las contribuciones son bienvenidas:
+Las contribuciones son bienvenidas. Por favor lee la
+[guia de contribucion](CONTRIBUTING.md) antes de enviar cambios.
 
 - Reportar bugs en [GitHub
   Issues](https://github.com/RodoTasso/ciecl/issues)
 - Sugerir mejoras o nuevas funcionalidades
 - Enviar pull requests
+
+Por favor ten en cuenta que este proyecto se publica con un
+[Codigo de Conducta](CODE_OF_CONDUCT.md).
+Al participar en este proyecto, aceptas cumplir sus terminos.
 
 ## Licencia
 

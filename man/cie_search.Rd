@@ -14,17 +14,21 @@ cie_search(
 )
 }
 \arguments{
-\item{texto}{String termino medico en espanol o sigla (ej. "diabetes", "IAM", "TBC")}
+\item{texto}{String termino medico en espanol o sigla
+(ej. "diabetes", "IAM", "TBC")}
 
-\item{threshold}{Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)}
+\item{threshold}{Numeric entre 0 y 1, umbral similitud
+Jaro-Winkler (default 0.70)}
 
 \item{max_results}{Integer, maximo resultados a retornar (default 50)}
 
 \item{campo}{Character, campo busqueda ("descripcion" o "inclusion")}
 
-\item{solo_fuzzy}{Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)}
+\item{solo_fuzzy}{Logical, usar solo busqueda fuzzy
+sin busqueda exacta (default FALSE)}
 
-\item{verbose}{Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en scripts.}
+\item{verbose}{Logical, mostrar mensajes informativos
+(default TRUE). Usar FALSE en scripts.}
 }
 \value{
 tibble ordenado por score descendente (1.0 = coincidencia exacta).
@@ -61,7 +65,8 @@ cie_search("bacteriana", campo = "inclusion")
 }
 }
 \seealso{
-\code{\link{cie_lookup}}, \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
+\code{\link{cie_lookup}},
+\code{\link{cie_siglas}}, \code{\link{cie10_sql}}
 
 Other busqueda: 
 \code{\link{cie_guia_busqueda}()},

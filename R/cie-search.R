@@ -16,7 +16,10 @@ normalizar_tildes <- function(texto) {
   # Usar chartr() que es mas rapido para sustituciones multiples
   # Caracteres con tilde -> sin tilde
   chartr(
-    "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1\u00c1\u00c9\u00cd\u00d3\u00da\u00dc\u00d1",
+    paste0(
+      "\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1",
+      "\u00c1\u00c9\u00cd\u00d3\u00da\u00dc\u00d1"
+    ),
     "aeiouunAEIOUUN",
     texto
   )
@@ -460,7 +463,8 @@ sigla_to_codigo <- function(sigla) {
 #' @keywords internal
 #' @noRd
 extract_cie_from_text <- function(texto) {
-  # Fix #2: Patron estricto para extraer codigo CIE-10: letra + 2-3 digitos + punto opcional + 0-2 digitos
+  # Fix #2: Patron estricto para extraer codigo CIE-10:
+  # letra + 2-3 digitos + punto opcional + 0-2 digitos
   # Solo extrae si esta rodeado de no-alfanumericos o en extremos
   patron <- "(?:^|[^A-Z0-9])([A-Z][0-9]{2}[0-9]?\\.?[0-9X]{0,2})(?:$|[^A-Z0-9])"
   
@@ -520,7 +524,8 @@ cie_siglas <- function(categoria = NULL) {
 
     if (!categoria %in% categorias_validas) {
       warning("Categoria '", categoria, "' no encontrada. ",
-              "Categorias validas: ", paste(categorias_validas, collapse = ", "))
+              "Categorias validas: ",
+              paste(categorias_validas, collapse = ", "))
       return(resultado[0, ])
     }
 
@@ -540,16 +545,21 @@ cie_siglas <- function(categoria = NULL) {
 #' La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
 #' Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 #'
-#' @param texto String termino medico en espanol o sigla (ej. "diabetes", "IAM", "TBC")
-#' @param threshold Numeric entre 0 y 1, umbral similitud Jaro-Winkler (default 0.70)
+#' @param texto String termino medico en espanol o sigla
+#'   (ej. "diabetes", "IAM", "TBC")
+#' @param threshold Numeric entre 0 y 1, umbral similitud
+#'   Jaro-Winkler (default 0.70)
 #' @param max_results Integer, maximo resultados a retornar (default 50)
 #' @param campo Character, campo busqueda ("descripcion" o "inclusion")
-#' @param solo_fuzzy Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)
-#' @param verbose Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en scripts.
+#' @param solo_fuzzy Logical, usar solo busqueda fuzzy
+#'   sin busqueda exacta (default FALSE)
+#' @param verbose Logical, mostrar mensajes informativos
+#'   (default TRUE). Usar FALSE en scripts.
 #' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
 #'   Incluye atributo "sigla_expandida" si se uso una sigla.
 #' @family busqueda
-#' @seealso \code{\link{cie_lookup}}, \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
+#' @seealso \code{\link{cie_lookup}},
+#'   \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
@@ -649,7 +659,9 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
       if (campo == "descripcion") {
         query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
       } else {
-        query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+        query_sql <- sprintf(
+          "SELECT codigo, descripcion, categoria, %s FROM cie10",
+          campo)
       }
     }
   } else {
@@ -657,20 +669,26 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     if (campo == "descripcion") {
       query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
     } else {
-      query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+      query_sql <- sprintf(
+        "SELECT codigo, descripcion, categoria, %s FROM cie10",
+        campo)
     }
   }
 
-  base <- DBI::dbGetQuery(con, query_sql, params = query_params) %>% tibble::as_tibble()
+  base <- DBI::dbGetQuery(con, query_sql, params = query_params) %>%
+    tibble::as_tibble()
 
   # Si FTS5 no retorno resultados, intentar carga completa para fuzzy
   if (nrow(base) == 0 && length(palabras) > 0) {
     if (campo == "descripcion") {
       query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
     } else {
-      query_sql <- sprintf("SELECT codigo, descripcion, categoria, %s FROM cie10", campo)
+      query_sql <- sprintf(
+        "SELECT codigo, descripcion, categoria, %s FROM cie10",
+        campo)
     }
-    base <- DBI::dbGetQuery(con, query_sql) %>% tibble::as_tibble()
+    base <- DBI::dbGetQuery(con, query_sql) %>%
+      tibble::as_tibble()
   }
 
   # Normalizar texto de la base (minusculas + sin tildes)
@@ -759,11 +777,14 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 
 #' Busqueda exacta por codigo CIE-10
 #'
-#' @param codigo Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00"))
-#'   o rango (ej. "E10-E14"). Acepta vectores de multiples codigos.
-#'   Soporta formatos: con punto (E11.0), sin punto (E110), o solo categoria (E11).
+#' @param codigo Character vector de codigos
+#'   (ej. "E11", "E11.0", c("E11.0", "Z00"))
+#'   o rango (ej. "E10-E14"). Acepta vectores.
+#'   Soporta formatos: con punto (E11.0),
+#'   sin punto (E110), o solo categoria (E11).
 #' @param expandir Logical, expandir jerarquia completa (default FALSE)
-#' @param normalizar Logical, normalizar formato de codigos automaticamente (default TRUE)
+#' @param normalizar Logical, normalizar formato de codigos
+#'   automaticamente (default TRUE)
 #' @param descripcion_completa Logical, agregar columna descripcion_completa
 #'   con formato "CODIGO - DESCRIPCION" (default FALSE)
 #' @param extract Logical, extraer codigo CIE-10 de texto con
@@ -775,7 +796,8 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
 #' @return tibble con codigo(s) matcheado(s)
 #' @family busqueda
-#' @seealso \code{\link{cie_search}}, \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+#' @seealso \code{\link{cie_search}},
+#'   \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' # Busqueda directa por codigo
@@ -832,11 +854,15 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
     }, character(1), USE.NAMES = FALSE)
   }
   
-  # Normalizar formato si se solicita (elimina sufijo X DEIS, agrega punto, etc.)
+  # Normalizar formato si se solicita
+  # (elimina sufijo X DEIS, agrega punto, etc.)
   # Preservar rangos (guion entre codigos) antes de normalizar,
   # ya que cie_normalizar convierte guiones a puntos
   if (normalizar) {
-    es_rango_input <- stringr::str_detect(codigo_input, "^[A-Z][0-9.]{2,}-[A-Z][0-9.]{2,}$")
+    es_rango_input <- stringr::str_detect(
+      codigo_input,
+      "^[A-Z][0-9.]{2,}-[A-Z][0-9.]{2,}$"
+    )
     codigo_norm <- ifelse(
       es_rango_input,
       codigo_input,
@@ -861,19 +887,35 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
     # Query batch para codigos normales (sin rangos)
     if (length(codigos_normales) > 0) {
       # Sanitizar codigos (solo alfanumericos y punto)
-      codigos_safe <- codigos_normales[stringr::str_detect(codigos_normales, "^[A-Za-z0-9.]+$")]
+      codigos_safe <- codigos_normales[
+        stringr::str_detect(
+          codigos_normales, "^[A-Za-z0-9.]+$"
+        )
+      ]
 
       if (length(codigos_safe) > 0) {
         con <- get_cie10_db()
 
         if (expandir) {
           # Expandir: usar LIKE para cada codigo
-          likes <- paste0("codigo LIKE '", codigos_safe, "%'", collapse = " OR ")
-          query <- sprintf("SELECT * FROM cie10 WHERE %s ORDER BY codigo", likes)
+          likes <- paste0(
+            "codigo LIKE '", codigos_safe, "%'",
+            collapse = " OR "
+          )
+          query <- sprintf(
+            "SELECT * FROM cie10 WHERE %s ORDER BY codigo",
+            likes
+          )
         } else {
           # Exacto: usar IN clause
-          codigos_sql <- paste0("'", codigos_safe, "'", collapse = ",")
-          query <- sprintf("SELECT * FROM cie10 WHERE codigo IN (%s)", codigos_sql)
+          codigos_sql <- paste0(
+            "'", codigos_safe, "'",
+            collapse = ","
+          )
+          query <- sprintf(
+            "SELECT * FROM cie10 WHERE codigo IN (%s)",
+            codigos_sql
+          )
         }
 
         resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
@@ -885,7 +927,9 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
       resultados_rango <- lapply(codigos_rango, function(cod) {
         cie_lookup_single(cod, expandir = expandir)
       })
-      resultado <- dplyr::bind_rows(resultado, dplyr::bind_rows(resultados_rango))
+      resultado <- dplyr::bind_rows(
+        resultado, dplyr::bind_rows(resultados_rango)
+      )
     }
 
     # Eliminar duplicados
@@ -904,7 +948,8 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
         )
     } else {
       # Asegurar que la columna existe incluso cuando el resultado esta vacio
-      # Necesitamos usar tibble::add_column() para mantener la estructura de tibble
+      # Necesitamos usar tibble::add_column()
+      # para mantener la estructura de tibble
       resultado <- resultado %>%
         tibble::add_column(descripcion_completa = character(0))
     }
@@ -933,7 +978,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   }
 
   # Sanitizar entrada para prevenir SQL injection
-  # Solo permitir caracteres validos para codigos CIE-10: letras, numeros, punto, guion
+  # Solo permitir caracteres validos para codigos CIE-10:
+  # letras, numeros, punto, guion
   if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
     message("x Codigo con caracteres invalidos: ", codigo_norm)
     return(cie10_empty_tibble())
@@ -945,7 +991,10 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   if (expandir) {
     # Buscar jerarquia completa (E11 -> E11.x)
     query <- "SELECT * FROM cie10 WHERE codigo LIKE ? ORDER BY codigo"
-    resultado <- DBI::dbGetQuery(con, query, params = list(paste0(codigo_norm, "%")))
+    resultado <- DBI::dbGetQuery(
+      con, query,
+      params = list(paste0(codigo_norm, "%"))
+    )
   } else if (stringr::str_detect(codigo_norm, "-")) {
     # Rango (ej. "E10-E14")
     partes <- stringr::str_split(codigo_norm, "-")[[1]]
@@ -987,7 +1036,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 #'
 #' @return tibble con guia comparativa de funciones de busqueda
 #' @family busqueda
-#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}, \code{\link{cie_siglas}}
+#' @seealso \code{\link{cie_search}},
+#'   \code{\link{cie_lookup}}, \code{\link{cie_siglas}}
 #' @export
 #' @examples
 #' cie_guia_busqueda()

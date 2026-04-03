@@ -53,7 +53,9 @@ parsear_cie10_minsal <- function(xls_path) {
       codigo = dplyr::all_of(col_codigo[1]),
       descripcion = dplyr::all_of(col_desc[1]),
       categoria = dplyr::any_of(
-        names(raw)[stringr::str_detect(names(raw), "cat|tipo|categor[i\u00ed]a")]
+        names(raw)[stringr::str_detect(
+          names(raw), "cat|tipo|categor[i\u00ed]a"
+        )]
       ),
       inclusion = dplyr::any_of(
         names(raw)[stringr::str_detect(names(raw), "incl")]

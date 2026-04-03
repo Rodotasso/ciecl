@@ -16,7 +16,7 @@ Limpiar cache SQLite (forzar rebuild)
 # Ver ubicacion del cache
 tools::R_user_dir("ciecl", "data")
 
-\donttest{
+\dontrun{
 cie10_clear_cache()  # Elimina cie10.db local
 }
 }

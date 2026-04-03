@@ -1,7 +1,8 @@
 #' Normalizar codigos CIE-10 a formato con punto
 #'
 #' @description
-#' Convierte codigos CIE-10 de diferentes formatos al formato estandar (con punto).
+#' Convierte codigos CIE-10 de diferentes formatos al
+#' formato estandar (con punto).
 #' Maneja multiples variaciones de entrada comunes en datos clinicos.
 #' 
 #' @details
@@ -23,10 +24,12 @@
 #' Ambos simbolos se eliminan para normalizacion.
 #' 
 #' @param codigos Character vector de codigos en cualquier formato
-#' @param buscar_db Logical, buscar codigo en base de datos si no se encuentra exacto (default TRUE)
+#' @param buscar_db Logical, buscar codigo en base de datos
+#'   si no se encuentra exacto (default TRUE)
 #' @return Character vector con codigos normalizados al formato con punto
 #' @family validacion
-#' @seealso \code{\link{cie_validate_vector}}, \code{\link{cie_expand}}, \code{\link{cie_lookup}}
+#' @seealso \code{\link{cie_validate_vector}},
+#'   \code{\link{cie_expand}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' cie_normalizar("E110")     # Retorna "E11.0"
@@ -87,7 +90,8 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
   # Agregar punto si no lo tiene (E110 -> E11.0)
   # Solo para codigos de 4+ caracteres sin punto: [A-Z]\d{3,}
   codigos_norm <- ifelse(
-    stringr::str_detect(codigos_norm, "^[A-Z]\\d{3,}$") & !stringr::str_detect(codigos_norm, "\\."),
+    stringr::str_detect(codigos_norm, "^[A-Z]\\d{3,}$") &
+      !stringr::str_detect(codigos_norm, "\\."),
     stringr::str_replace(codigos_norm, "^([A-Z]\\d{2})(\\d.*)$", "\\1.\\2"),
     codigos_norm
   )
@@ -96,7 +100,9 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
     # Verificar que existan en la base de datos
     con <- get_cie10_db()
 
-    codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
+    codigos_db <- DBI::dbGetQuery(
+      con, "SELECT DISTINCT codigo FROM cie10"
+    )$codigo
 
     # Verificacion vectorizada contra DB
     no_na <- !is.na(codigos_norm)
@@ -146,14 +152,19 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
     # Validar existencia en DB (conexion pooled)
     con <- get_cie10_db()
     
-    codigos_db <- DBI::dbGetQuery(con, "SELECT DISTINCT codigo FROM cie10")$codigo
+    codigos_db <- DBI::dbGetQuery(
+      con, "SELECT DISTINCT codigo FROM cie10"
+    )$codigo
     
     validos_db <- codigos_norm %in% codigos_db
     resultado <- validos_formato & validos_db
 
     invalidos <- codigos[!resultado & !is.na(codigos)]
     if (length(invalidos) > 0) {
-      warning("Codigos no encontrados en DB MINSAL: ", paste(invalidos, collapse = ", "))
+      warning(
+        "Codigos no encontrados en DB MINSAL: ",
+        paste(invalidos, collapse = ", ")
+      )
     }
     
     return(resultado)
@@ -174,7 +185,8 @@ cie_validate_vector <- function(codigos, strict = FALSE) {
 #' cie_expand("E11")
 cie_expand <- function(codigo) {
   # Manejar NA o cadena vacia
-  if (length(codigo) == 0 || is.na(codigo) || nchar(stringr::str_trim(codigo)) == 0) {
+  if (length(codigo) == 0 || is.na(codigo) ||
+      nchar(stringr::str_trim(codigo)) == 0) {
     return(character(0))
   }
 
