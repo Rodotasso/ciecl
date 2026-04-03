@@ -1,7 +1,6 @@
 #' Generar tabla HTML interactiva GT de codigo CIE-10
 #'
 #' @param codigo String codigo (ej. "E11" muestra jerarquia)
-#' @param interactive Logical, tabla gt reactable (default TRUE)
 #' @return Objeto de clase \code{gt_tbl} (tabla HTML interactiva)
 #' @family visualizacion
 #' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
@@ -14,7 +13,7 @@
 #' \donttest{
 #' cie_table("E11")  # Diabetes tipo 2 completo
 #' }
-cie_table <- function(codigo, interactive = TRUE) {
+cie_table <- function(codigo) {
   # Verificar que gt este instalado
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop("El paquete 'gt' es necesario para esta funci\u00f3n.\n",

@@ -110,18 +110,6 @@ cie_map_comorbid <- function(codigos) {
     ))
   }
 
-  # Mapeo manual categorias MINSAL (extender segun necesidad)
-  mapeo_chile <- tibble::tribble(
-    ~patron,        ~categoria,
-    "^E10|^E11",    "Diabetes",
-    "^I50",         "Insuficiencia cardiaca",
-    "^I21|^I22",    "Infarto miocardio",
-    "^C[0-9]{2}",   "Neoplasia maligna",
-    "^J40|^J44",    "EPOC",
-    "^N18",         "Enfermedad renal cronica",
-    "^F[0-9]{2}",   "Trastornos mentales"
-  )
-
   # Categorizacion vectorizada con case_when
   resultado <- tibble::tibble(
     codigo = codigos,

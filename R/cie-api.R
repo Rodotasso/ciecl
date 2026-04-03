@@ -21,6 +21,21 @@
 #' cie11_search("depresion mayor")
 #' }
 cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
+  # Validacion de inputs
+  if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
+    stop("'texto' debe ser un string de largo 1")
+  }
+  if (nchar(trimws(texto)) == 0) {
+    stop("'texto' no puede estar vacio")
+  }
+  if (!is.character(lang) || !lang %in% c("es", "en")) {
+    stop("'lang' debe ser \"es\" o \"en\"")
+  }
+  if (!is.numeric(max_results) || length(max_results) != 1 ||
+      max_results < 1 || max_results != as.integer(max_results)) {
+    stop("'max_results' debe ser un entero positivo")
+  }
+
   # Verificar que httr2 este instalado
   if (!requireNamespace("httr2", quietly = TRUE)) {
     stop("El paquete 'httr2' es necesario para esta funci\u00f3n.\n",

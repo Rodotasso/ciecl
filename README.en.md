@@ -7,6 +7,7 @@
 **Data Science for Public Health Group** | University of Chile
 
 <!-- badges: start -->
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![GitHub release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
@@ -74,6 +75,20 @@ diabetes_codes <- cie_search("diabetes")
 - **Hierarchical expansion**: Gets all subcodes from a category
 - **ICD-11 API**: Search in updated international classification (WHO)
 - **Minimal dependencies**: Only 8 required packages for core functionality
+
+## Comparison with similar packages
+
+| Feature | ciecl | icd (CRAN) | comorbidity (CRAN) | touch (CRAN) |
+|---|---|---|---|---|
+| Official Chilean ICD-10 (MINSAL/DEIS) | **Yes** | No | No | No |
+| Fuzzy search (Jaro-Winkler) | **Yes** | No | No | No |
+| Chilean medical abbreviations (IAM, ACV, EPOC) | **Yes** | No | No | No |
+| Charlson/Elixhauser comorbidities | Yes | Yes | **Yes** | No |
+| WHO ICD-11 API | **Yes** | No | No | No |
+| SQLite cache with FTS5 | **Yes** | No | No | No |
+| Local Chilean adaptation | **Yes** | USA/generic only | No | USA only (ICD-10-CM) |
+
+The ICD-10 codes included in `ciecl` are established by Chilean Decree 356/2017 (Ministry of Health) as the official disease classification system. The dataset is not modifiable by the package — it can only be updated by institutional decree from MINSAL through DEIS.
 
 ## Installation
 

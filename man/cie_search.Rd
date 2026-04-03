@@ -32,7 +32,8 @@ sin busqueda exacta (default FALSE)}
 }
 \value{
 tibble ordenado por score descendente (1.0 = coincidencia exacta).
-Incluye atributo "sigla_expandida" si se uso una sigla.
+Si el texto corresponde a una sigla medica, se expande
+automaticamente antes de buscar.
 }
 \description{
 Busca en descripciones CIE-10 usando multiples estrategias:

@@ -187,15 +187,29 @@ test_that("cie11_search maneja texto de busqueda con caracteres especiales", {
   expect_s3_class(resultado2, "tbl_df")
 })
 
-test_that("cie11_search maneja texto vacio", {
+test_that("cie11_search rechaza texto vacio", {
   skip_if_not_installed("httr2")
 
-  # Texto vacio debe dar error o warning, no crash
-  expect_warning(
-    resultado <- cie11_search("", api_key = "test:test"),
-    "Error API"
+  # Texto vacio debe dar error con validacion de input
+  expect_error(
+    cie11_search("", api_key = "test:test"),
+    "vacio"
   )
-  expect_s3_class(resultado, "tbl_df")
+})
+
+test_that("cie11_search valida tipos de input", {
+  skip_if_not_installed("httr2")
+
+  expect_error(cie11_search(123), "string")
+  expect_error(cie11_search(c("a", "b")), "string")
+  expect_error(cie11_search(NA_character_), "string")
+  expect_error(
+    cie11_search("test", lang = "fr", api_key = "a:b"), "lang"
+  )
+  expect_error(
+    cie11_search("test", max_results = -1, api_key = "a:b"),
+    "entero positivo"
+  )
 })
 
 # ==============================================================================

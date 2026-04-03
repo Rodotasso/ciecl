@@ -4,12 +4,10 @@
 \alias{cie_table}
 \title{Generar tabla HTML interactiva GT de codigo CIE-10}
 \usage{
-cie_table(codigo, interactive = TRUE)
+cie_table(codigo)
 }
 \arguments{
 \item{codigo}{String codigo (ej. "E11" muestra jerarquia)}
-
-\item{interactive}{Logical, tabla gt reactable (default TRUE)}
 }
 \value{
 Objeto de clase \code{gt_tbl} (tabla HTML interactiva)

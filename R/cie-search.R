@@ -556,7 +556,8 @@ cie_siglas <- function(categoria = NULL) {
 #' @param verbose Logical, mostrar mensajes informativos
 #'   (default TRUE). Usar FALSE en scripts.
 #' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
-#'   Incluye atributo "sigla_expandida" si se uso una sigla.
+#'   Si el texto corresponde a una sigla medica, se expande
+#'   automaticamente antes de buscar.
 #' @family busqueda
 #' @seealso \code{\link{cie_lookup}},
 #'   \code{\link{cie_siglas}}, \code{\link{cie10_sql}}

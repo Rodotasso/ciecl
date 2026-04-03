@@ -13,6 +13,7 @@
 
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![GitHub
@@ -86,8 +87,8 @@ diabete_codes <- cie_search("diabetes")
 
 - **39,877 códigos CIE-10**: Incluye todas las categorías (3 dígitos) y
   subcategorías (4+ dígitos)
-- **Búsqueda fuzzy**: Algoritmo de distancia Levenshtein para tolerar
-  errores de escritura
+- **Búsqueda fuzzy**: Algoritmo Jaro-Winkler para tolerar errores de
+  escritura
 - **SQL directo**: Acceso completo a la base de datos para consultas
   complejas
 - **Vectorización**: Procesa miles de códigos simultáneamente
@@ -97,8 +98,22 @@ diabete_codes <- cie_search("diabetes")
 - **Expansión jerárquica**: Obtiene todos los subcodes de una categoría
 - **API CIE-11**: Búsqueda en la clasificación internacional actualizada
   (OMS)
-- **Sin dependencias pesadas**: Solo requiere readxl, dplyr, stringr,
-  DBI y RSQLite
+- **Dependencias minimas**: Solo 8 paquetes requeridos para
+  funcionalidad core
+
+## Comparación con paquetes similares
+
+| Característica | ciecl | icd (CRAN) | comorbidity (CRAN) | touch (CRAN) |
+|---|---|---|---|---|
+| CIE-10 Chile oficial MINSAL/DEIS | **Sí** | No | No | No |
+| Búsqueda fuzzy (Jaro-Winkler) | **Sí** | No | No | No |
+| Siglas médicas chilenas (IAM, ACV, EPOC) | **Sí** | No | No | No |
+| Comorbilidades Charlson/Elixhauser | Sí | Sí | **Sí** | No |
+| API CIE-11 OMS | **Sí** | No | No | No |
+| Cache SQLite con FTS5 | **Sí** | No | No | No |
+| Adaptación local Chile | **Sí** | Solo USA/genérico | No | Solo USA (ICD-10-CM) |
+
+Los códigos CIE-10 incluidos en `ciecl` están establecidos por el Decreto 356/2017 del Ministerio de Salud de Chile como el sistema oficial de clasificación de enfermedades. El dataset no es modificable por el paquete — solo puede ser actualizado por decreto institucional del MINSAL a través del DEIS.
 
 ## Instalación
 
