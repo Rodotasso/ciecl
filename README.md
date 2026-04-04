@@ -1,7 +1,6 @@
 
-> **Language / Idioma:**
-> [English](https://github.com/RodoTasso/ciecl/blob/main/README.en.md)
-> \| **Español**
+> **Language / Idioma:** **English** \|
+> [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

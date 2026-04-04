@@ -1,6 +1,6 @@
 <!-- README.en.md - English version -->
 
-> **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)
+> **Language / Idioma:** **English** | [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
 
 # ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="60" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 

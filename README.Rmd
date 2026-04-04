@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-> **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.es.md)
+> **Language / Idioma:** **English** | [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
