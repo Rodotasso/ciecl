@@ -1,0 +1,13 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  caso-uso-egresos: caso-uso-egresos.html
+  ciecl-es: ciecl-es.html
+  ciecl: ciecl.html
+  idiomas: idiomas.html
+  instalacion: instalacion.html
+last_built: 2026-04-04T15:41Z
+urls:
+  reference: https://rodotasso.github.io/ciecl/reference
+  article: https://rodotasso.github.io/ciecl/articles
