@@ -25,9 +25,9 @@ test_that("cie_table maneja codigo invalido", {
   expect_error(cie_table("XXXXX"), "no encontrado")
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES cie_table()
-# ==============================================================================
+# ============================================================
 
 test_that("cie_table genera tabla gt correctamente", {
   skip_if_not_installed("gt")

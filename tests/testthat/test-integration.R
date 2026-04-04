@@ -1,9 +1,9 @@
 # test-integration.R
 # Pruebas de integracion que verifican flujos de trabajo completos
 
-# ==============================================================================
+# ============================================================
 # FLUJOS DE TRABAJO TIPICOS DE USUARIO
-# ==============================================================================
+# ============================================================
 
 test_that("flujo: buscar termino -> obtener codigos -> validar", {
   skip_on_cran()
@@ -99,9 +99,9 @@ test_that("flujo: SQL personalizado -> procesamiento -> validacion", {
   expect_true("descripcion_completa" %in% names(detalles))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE CONSISTENCIA ENTRE FUNCIONES
-# ==============================================================================
+# ============================================================
 
 test_that("cie_lookup y cie10_sql retornan mismos datos", {
   skip_on_cran()
@@ -166,9 +166,9 @@ test_that("cie_validate_vector y cie_lookup son coherentes", {
   expect_true(all(resultado$codigo %in% codigos[validacion]))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE ESCENARIOS REALES
-# ==============================================================================
+# ============================================================
 
 test_that("escenario: analisis de egreso hospitalario", {
   skip_on_cran()
@@ -256,9 +256,9 @@ test_that("escenario: limpieza de datos con codigos sucios", {
   expect_gt(nrow(resultado), 0)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE RENDIMIENTO BASICAS
-# ==============================================================================
+# ============================================================
 
 test_that("busquedas multiples son razonablemente rapidas", {
   skip_on_cran()
@@ -295,9 +295,9 @@ test_that("validacion de vector grande es rapida", {
   expect_length(resultado, 10000)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE INTEROPERABILIDAD CON dplyr
-# ==============================================================================
+# ============================================================
 
 test_that("resultados funcionan con dplyr::filter", {
   skip_on_cran()
@@ -338,9 +338,9 @@ test_that("resultados funcionan con dplyr::group_by y summarise", {
   expect_true("n" %in% names(resumen))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE API CIE-11 (SOLO SI HAY CREDENCIALES)
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search falla gracefully sin credenciales", {
   skip_on_cran()

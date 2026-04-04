@@ -32,9 +32,9 @@ test_that("cie10_sql emite deprecation warning para argumento close", {
   )
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES cie10_sql()
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_sql ejecuta queries SQL con clausulas WHERE/LIKE/GROUP/ORDER", {
   skip_on_cran()
@@ -149,9 +149,9 @@ test_that("cie10_sql maneja query con saltos de linea", {
   expect_equal(nrow(resultado), 1)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS get_cie10_db()
-# ==============================================================================
+# ============================================================
 
 test_that("get_cie10_db retorna conexion DBI valida", {
   skip_on_cran()
@@ -195,9 +195,9 @@ test_that("get_cie10_db tabla tiene columnas esperadas", {
   expect_true("descripcion" %in% columnas)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS cie10_clear_cache()
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
@@ -240,9 +240,9 @@ test_that("cie10_clear_cache retorna invisible NULL", {
   expect_null(resultado)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES COBERTURA - Semicolon dentro de strings
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_sql permite semicolon dentro de strings", {
   skip_on_cran()
@@ -324,9 +324,9 @@ test_that("cie10_sql bloquea EXEC", {
   )
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS get_cie10_db() creacion directorio cache
-# ==============================================================================
+# ============================================================
 
 test_that("get_cie10_db crea directorio cache si no existe", {
   skip_on_cran()
@@ -358,9 +358,9 @@ test_that("get_cie10_db inicializa indices en DB nueva", {
   expect_true("idx_desc" %in% indices$name)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS CONNECTION POOLING
-# ==============================================================================
+# ============================================================
 
 test_that("get_cie10_db reutiliza conexion (pooling)", {
   skip_on_cran()
@@ -414,9 +414,9 @@ test_that("cie10_disconnect es idempotente", {
   })
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS CACHE VERSIONADO
-# ==============================================================================
+# ============================================================
 
 test_that("cache incluye tabla cie10_meta con version", {
   skip_on_cran()
@@ -474,9 +474,9 @@ test_that("version mismatch fuerza rebuild", {
   expect_equal(meta$value, as.character(utils::packageVersion("ciecl")))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS BUILD ATOMICO
-# ==============================================================================
+# ============================================================
 
 test_that("build_cache_atomic crea cache completo", {
   skip_on_cran()
@@ -496,9 +496,9 @@ test_that("build_cache_atomic crea cache completo", {
   expect_true(DBI::dbExistsTable(con, "cie10_meta"))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS .ciecl_env y .onUnload (zzz.R)
-# ==============================================================================
+# ============================================================
 
 test_that(".ciecl_env tiene estructura correcta", {
   env <- ciecl:::.ciecl_env
@@ -526,9 +526,9 @@ test_that(".onUnload no falla sin conexion activa", {
   expect_no_error(onUnload(libpath = .libPaths()[1]))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS BRANCHES ADICIONALES cie-sql.R
-# ==============================================================================
+# ============================================================
 
 test_that("get_cie10_db reconstruye FTS5 si falta en pooled", {
   skip_on_cran()

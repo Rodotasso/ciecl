@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Tools for working with the International Classification of Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms (Jaro-Winkler), Charlson and Elixhauser comorbidity calculation, 'WHO' 'ICD-11' 'API' integration, and hierarchical code validation. Data from Centro FIC Chile 'DEIS' \url{https://deis.minsal.cl/centrofic/}.
+Tools for working with the International Classification of Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms ('Jaro-Winkler'), Charlson and Elixhauser comorbidity calculation, 'WHO' 'ICD-11' 'API' integration, and hierarchical code validation. Data from Centro FIC Chile 'DEIS' \url{https://deis.minsal.cl/centrofic/}.
 }
 \seealso{
 Useful links:

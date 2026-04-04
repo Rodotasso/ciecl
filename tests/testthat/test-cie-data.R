@@ -1,9 +1,9 @@
 # test-cie-data.R
 # Pruebas para funciones de generacion de datos CIE-10
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS parsear_cie10_minsal()
-# ==============================================================================
+# ============================================================
 
 test_that("parsear_cie10_minsal requiere readxl", {
   # Solo testear si readxl NO esta instalado
@@ -117,9 +117,9 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
   expect_type(resultado$es_cruz, "logical")
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ciecl:::generar_cie10_cl()
-# ==============================================================================
+# ============================================================
 
 test_that("generar_cie10_cl requiere usethis", {
   # Solo testear si usethis NO esta instalado
@@ -237,9 +237,9 @@ test_that("generar_cie10_cl autodeteccion prueba todas las rutas", {
   })
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DATASET cie10_cl
-# ==============================================================================
+# ============================================================
 
 test_that("dataset cie10_cl codigos son unicos", {
   skip_on_cran()
@@ -287,9 +287,9 @@ test_that("dataset cie10_cl contiene codigos de capitulos clinicos principales",
   expect_true("J" %in% letras_iniciales)  # Respiratorias
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE INTEGRIDAD DE DATOS
-# ==============================================================================
+# ============================================================
 
 test_that("dataset cie10_cl sin valores NA en columnas criticas", {
   skip_on_cran()
@@ -324,9 +324,9 @@ test_that("dataset cie10_cl capitulos extraidos correctamente", {
   }
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES PARA COBERTURA
-# ==============================================================================
+# ============================================================
 
 test_that("parsear_cie10_minsal verifica codigos con formato correcto", {
   skip_on_cran()
@@ -474,9 +474,9 @@ test_that("generar_cie10_cl valida parametros y parsea XLS", {
 })
 
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS parsear_cie10_minsal() CON MOCK DATA
-# ==============================================================================
+# ============================================================
 
 test_that("parsear_cie10_minsal con mock XLSX detecta columnas codigo/descripcion", {
   skip_on_cran()
@@ -715,9 +715,9 @@ test_that("parsear_cie10_minsal incluye columna categoria si existe", {
   })
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES PARA COVERAGE (branches faltantes)
-# ==============================================================================
+# ============================================================
 
 test_that("parsear_cie10_minsal funciona sin columnas opcionales", {
   skip_on_cran()

@@ -1,9 +1,9 @@
 # test-robustness.R
 # Pruebas de robustez, concurrencia y estabilidad del paquete
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE ROBUSTEZ DE CONEXION SQLite
-# ==============================================================================
+# ============================================================
 
 test_that("multiples conexiones consecutivas funcionan", {
   skip_on_cran()
@@ -49,9 +49,9 @@ test_that("funciones diferentes pueden ejecutarse intercaladas", {
   expect_true(length(resultado5) > 0)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE MEMORIA Y RECURSOS
-# ==============================================================================
+# ============================================================
 
 test_that("queries grandes no causan problemas de memoria", {
   skip_on_cran()
@@ -94,9 +94,9 @@ test_that("cie_lookup con vector grande funciona", {
   expect_s3_class(resultado, "tbl_df")
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE CACHE Y ESTADO
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_clear_cache funciona sin base de datos", {
   skip_on_cran()
@@ -134,9 +134,9 @@ test_that("base de datos persiste entre llamadas", {
   expect_equal(resultado1$codigo, resultado2$codigo)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE INTEGRIDAD DE DATOS
-# ==============================================================================
+# ============================================================
 
 test_that("todos los codigos tienen descripcion", {
   skip_on_cran()
@@ -177,9 +177,9 @@ test_that("capitulos estan correctamente asignados", {
   expect_gt(nrow(resultado), 0)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE RECUPERACION DE ERRORES
-# ==============================================================================
+# ============================================================
 
 test_that("error en query no corrompe estado", {
   skip_on_cran()
@@ -219,9 +219,9 @@ test_that("texto invalido en search no afecta siguientes busquedas", {
   expect_gt(nrow(resultado_normal), 0)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE TIPOS DE RETORNO
-# ==============================================================================
+# ============================================================
 
 test_that("cie_lookup siempre retorna tibble", {
   skip_on_cran()
@@ -270,9 +270,9 @@ test_that("cie_map_comorbid siempre retorna tibble", {
   expect_s3_class(resultado_vacio, "tbl_df")
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE COLUMNAS ESPERADAS
-# ==============================================================================
+# ============================================================
 
 test_that("cie_lookup retorna columnas esperadas", {
   skip_on_cran()
@@ -299,9 +299,9 @@ test_that("cie_map_comorbid retorna columnas esperadas", {
   expect_equal(names(resultado), columnas_esperadas)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE LIMITES Y CASOS EXTREMOS
-# ==============================================================================
+# ============================================================
 
 test_that("cie_search con threshold 0 no crashea", {
   skip_on_cran()
@@ -347,9 +347,9 @@ test_that("cie_validate_vector con vector muy grande", {
   expect_equal(sum(resultado), 200)  # 100 E11.0 + 100 Z00
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES get_cie10_db()
-# ==============================================================================
+# ============================================================
 
 test_that("get_cie10_db retorna conexion DBI valida", {
   skip_on_cran()
@@ -391,9 +391,9 @@ test_that("get_cie10_db usa directorio cache correcto", {
   expect_true(file.exists(db_path))
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES cie10_clear_cache()
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
@@ -442,9 +442,9 @@ test_that("cie10_clear_cache retorna invisible NULL", {
   expect_null(resultado)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS cie10_sql() ADICIONALES
-# ==============================================================================
+# ============================================================
 
 test_that("cie10_sql bloquea DROP TABLE", {
   skip_on_cran()

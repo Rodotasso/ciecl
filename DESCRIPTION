@@ -9,7 +9,7 @@ Authors@R:
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes
     optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms
-    (Jaro-Winkler), Charlson and Elixhauser comorbidity calculation,
+    ('Jaro-Winkler'), Charlson and Elixhauser comorbidity calculation,
     'WHO' 'ICD-11' 'API' integration, and hierarchical code validation.
     Data from Centro FIC Chile 'DEIS' <https://deis.minsal.cl/centrofic/>.
 License: MIT + file LICENSE

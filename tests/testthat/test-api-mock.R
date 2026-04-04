@@ -1,13 +1,13 @@
 # test-api-mock.R
 # Pruebas de API CIE-11 con mocks y validacion de parametros
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE VALIDACION DE PARAMETROS cie11_search()
-# ==============================================================================
+# ============================================================
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE MANEJO DE ERRORES
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search maneja error de conexion gracefully", {
   skip_if_not_installed("httr2")
@@ -39,9 +39,9 @@ test_that("cie11_search retorna tibble vacio en error", {
   expect_equal(nrow(resultado), 0)
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE FORMATO DE API KEY
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search rechaza API key sin separador", {
   skip_if_not_installed("httr2")
@@ -80,9 +80,9 @@ test_that("cie11_search acepta API key con formato correcto",
   }
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE VARIABLE DE ENTORNO
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search usa ICD_API_KEY de environment", {
   skip_if_not_installed("httr2")
@@ -136,9 +136,9 @@ test_that("cie11_search prefiere argumento sobre environment", {
   expect_s3_class(resultado, "tbl_df")
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE DEPENDENCIA HTTR2
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search informa sobre httr2 faltante", {
   # Este test solo funciona si httr2 NO esta instalado
@@ -152,10 +152,10 @@ test_that("cie11_search informa sobre httr2 faltante", {
   )
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS CON HTTP MOCKING (local_mocked_bindings)
 # Cubren lineas 41-95 de cie-api.R: OAuth token + search + parsing
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search retorna resultados con mock HTTP exitoso", {
   skip_if_not_installed("httr2")
@@ -278,7 +278,9 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
       } else {
         list(destinationEntities = data.frame(
           theCode = "BA00",
-          title = "<em class='found'>Hipertensi\u00f3n</em> <em class='found'>arterial</em> esencial",
+          title = paste0(
+            "<em class='found'>Hipertensi\u00f3n</em> ",
+            "<em class='found'>arterial</em> esencial"),
           chapter = "11",
           stringsAsFactors = FALSE
         ))
@@ -294,7 +296,7 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
   expect_false(grepl("<em", resultado$titulo[1]))
 })
 
-test_that("cie11_search maneja JSON inesperado sin destinationEntities ni error", {
+test_that("cie11_search maneja JSON inesperado sin entities", {
   skip_if_not_installed("httr2")
 
   call_count <- 0L

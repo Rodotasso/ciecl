@@ -28,9 +28,9 @@ test_that("cie11_search requiere httr2", {
   )
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS CON API REAL (skip_on_cran, requiere ICD_API_KEY)
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search con API real retorna resultados", {
   skip_on_cran()
@@ -88,7 +88,7 @@ test_that("cie11_search con API real soporta idioma espanol", {
   expect_s3_class(resultado, "tbl_df")
   # Si hay resultados, deberian tener titulos en espanol
   if (nrow(resultado) > 0) {
-    # Al menos algunos titulos deberian tener caracteres espanol o palabras comunes
+    # Titulos deberian ser texto en espanol
     expect_type(resultado$titulo, "character")
   }
 })
@@ -148,9 +148,9 @@ test_that("cie11_search con API real limpia tags HTML", {
 })
 
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS DE ESTRUCTURA DE RESPUESTA DETALLADA
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search retorna tibble con tipos correctos incluso en error", {
   skip_if_not_installed("httr2")
@@ -220,9 +220,9 @@ test_that("cie11_search valida tipos de input", {
   )
 })
 
-# ==============================================================================
+# ============================================================
 # PRUEBAS ADICIONALES PARA COBERTURA
-# ==============================================================================
+# ============================================================
 
 test_that("cie11_search con API real busca hipertension", {
   skip_on_cran()
