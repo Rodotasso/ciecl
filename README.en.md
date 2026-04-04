@@ -2,24 +2,25 @@
 
 > **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)
 
-# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="80" alt="CDSP">
+# ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="60" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
 **Data Science for Public Health Group** | University of Chile
 
 <!-- badges: start -->
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![GitHub release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
-[![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/RodoTasso/ciecl/dev/badges/coverage.json)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitors&color=blue)
 <!-- badges: end -->
 
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
 
 Specialized package for searching, validating, and analyzing ICD-10 codes
-in the Chilean context. Includes **39,873 codes** (categories and
+in the Chilean context. Includes **39,877 codes** (categories and
 subcategories) from the official MINSAL/DEIS v2018 catalog, with optimized
 search, comorbidity calculation, and WHO ICD-11 API access.
 
@@ -65,7 +66,7 @@ diabetes_codes <- cie_search("diabetes")
 
 ## Main features
 
-- **39,873 ICD-10 codes**: Complete official MINSAL/DEIS v2018 catalog
+- **39,877 ICD-10 codes**: Complete official MINSAL/DEIS v2018 catalog
 - **Fuzzy search**: Jaro-Winkler algorithm to tolerate spelling errors
 - **Direct SQL**: Full database access for complex queries
 - **Vectorization**: Processes thousands of codes simultaneously
@@ -74,6 +75,20 @@ diabetes_codes <- cie_search("diabetes")
 - **Hierarchical expansion**: Gets all subcodes from a category
 - **ICD-11 API**: Search in updated international classification (WHO)
 - **Minimal dependencies**: Only 8 required packages for core functionality
+
+## Comparison with similar packages
+
+| Feature | ciecl | icd (CRAN) | comorbidity (CRAN) | touch (CRAN) |
+|---|---|---|---|---|
+| Official Chilean ICD-10 (MINSAL/DEIS) | **Yes** | No | No | No |
+| Fuzzy search (Jaro-Winkler) | **Yes** | No | No | No |
+| Chilean medical abbreviations (IAM, ACV, EPOC) | **Yes** | No | No | No |
+| Charlson/Elixhauser comorbidities | Yes | Yes | **Yes** | No |
+| WHO ICD-11 API | **Yes** | No | No | No |
+| SQLite cache with FTS5 | **Yes** | No | No | No |
+| Local Chilean adaptation | **Yes** | USA/generic only | No | USA only (ICD-10-CM) |
+
+The ICD-10 codes included in `ciecl` are established by Chilean Decree 356/2017 (Ministry of Health) as the official disease classification system. The dataset is not modifiable by the package — it can only be updated by institutional decree from MINSAL through DEIS.
 
 ## Installation
 
@@ -224,7 +239,7 @@ Based on official **ICD-10 MINSAL/DEIS v2018** catalog:
 
 - **Source**: [Department of Health Statistics and Information (DEIS)](https://deis.minsal.cl)
 - **FIC Chile Center**: <https://deis.minsal.cl/centrofic/>
-- **Documents repository**: <https://repositoriodeis.minsal.cl>
+- **Documents repository**: <https://deis.minsal.cl>
 
 ICD-10 data is for public use according to [Decree 356 Exempt (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
 from the Ministry of Health establishing official ICD-10 use in Chile.
@@ -236,11 +251,16 @@ with human verification and validation of all code and documentation.
 
 ## Contributing
 
-Contributions are welcome:
+Contributions are welcome. Please read the
+[contributing guide](CONTRIBUTING.md) before submitting changes.
 
 - Report bugs at [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
 - Suggest improvements or new features
 - Submit pull requests
+
+Please note that this project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
 ## License
 

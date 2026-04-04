@@ -12,7 +12,8 @@
 *.xls
 *.csv
 *.rds
-*.rda (excepto data/)
+*.rda
+!data/*.rda
 *.RData
 
 # PDFs generados
@@ -44,4 +45,11 @@ generar_dataset.R
 
 # Carpeta de desarrollo (documentación interna, scripts de prueba)
 dev/
+
+# Artefactos de desarrollo (se conservan en ciecl_archive/)
+DEPENDENCIAS.md
+CRAN-SUBMISSION
+
+# pkgdown output (generado automaticamente)
+docs/
 

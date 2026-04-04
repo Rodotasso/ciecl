@@ -1,42 +1,38 @@
 ---
-name: Reporte de bug
-about: Reportar un error en ciecl
+name: Bug report
+about: Reportar un error en ciecl / Report a bug in ciecl
 title: '[BUG] '
 labels: 'bug'
 assignees: ''
+
 ---
 
-**Descripcion del bug**
+**Descripcion del bug / Describe the bug**
 Descripcion clara y concisa del error.
 
-**Codigo reproducible (reprex)**
+**Ejemplo reproducible / Reprex**
+Proporciona un ejemplo minimo reproducible ([reprex](https://reprex.tidyverse.org/)):
 
 ```r
 library(ciecl)
-# Codigo minimo que reproduce el error
+
+# Codigo que produce el error
 ```
 
-**Comportamiento esperado**
+**Comportamiento esperado / Expected behavior**
 Que esperabas que ocurriera.
 
-**Comportamiento actual**
-Que ocurre en cambio.
-
-**sessionInfo()**
+**Informacion del sistema / Session info**
+Pega la salida de:
 
 ```r
 sessionInfo()
-# Pegar el output aqui
-```
-
-**Version del paquete**
-
-```r
 packageVersion("ciecl")
 ```
 
-**Sistema operativo**
-[ej. Windows 11, macOS 14 Sonoma, Ubuntu 22.04]
+- **SO / OS**: [ej: Windows 11, macOS 14, Ubuntu 22.04]
+- **Version de R / R version**: [ej: 4.4.1]
+- **Version de ciecl**: [ej: 0.9.3]
 
-**Contexto adicional**
-Cualquier otro detalle relevante sobre el problema.
+**Contexto adicional / Additional context**
+Cualquier informacion adicional relevante.
