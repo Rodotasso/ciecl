@@ -12,7 +12,8 @@
 *.xls
 *.csv
 *.rds
-*.rda (excepto data/)
+*.rda
+!data/*.rda
 *.RData
 
 # PDFs generados

@@ -68,8 +68,8 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
   tryCatch({
     # Paso 1: Obtener token OAuth
     token_url <- "https://icdaccessmanagement.who.int/connect/token"
-    token_req <- httr2::request(token_url) |>
-      httr2::req_method("POST") |>
+    token_req <- httr2::request(token_url) %>%
+      httr2::req_method("POST") %>%
       httr2::req_body_form(
         client_id = client_id,
         client_secret = client_secret,
@@ -86,12 +86,12 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
       "https://id.who.int/icd/release/11/", release, "/mms/search"
     )
     
-    search_req <- httr2::request(search_url) |>
+    search_req <- httr2::request(search_url) %>%
       httr2::req_url_query(
         q = texto,
         flatResults = "true",
         useFlexisearch = "true"
-      ) |>
+      ) %>%
       httr2::req_headers(
         Authorization = paste("Bearer", access_token),
         `API-Version` = "v2",
@@ -113,7 +113,7 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
         codigo = json$destinationEntities$theCode,
         titulo = titulos_limpios,
         capitulo = json$destinationEntities$chapter
-      ) |>
+      ) %>%
         dplyr::slice_head(n = max_results)
       
       return(resultados)

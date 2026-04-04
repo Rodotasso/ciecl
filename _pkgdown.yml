@@ -3,7 +3,7 @@ url: https://rodotasso.github.io/ciecl/
 template:
   bootstrap: 5
   light-switch: true
-  lang: en
+  lang: es
 
 navbar:
   structure:

@@ -2,11 +2,11 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "ciecl",
-  "description": "Tools for working with the International Classification of Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms (Jaro-Winkler), Charlson and Elixhauser comorbidity calculation, 'WHO' 'ICD-11' 'API' integration, and hierarchical code validation. Data from Centro FIC Chile 'DEIS' <https://deis.minsal.cl/centrofic/>.",
+  "description": "Tools for working with the International Classification of Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms ('Jaro-Winkler'), Charlson and Elixhauser comorbidity calculation, 'WHO' 'ICD-11' 'API' integration, and hierarchical code validation. Data from Centro FIC Chile 'DEIS' <https://deis.minsal.cl/centrofic/>.",
   "name": "ciecl: International Classification of Diseases 'ICD-10'/'ICD-11' for Chile",
   "relatedLink": ["https://rodotasso.github.io/ciecl/", "https://CRAN.R-project.org/package=ciecl"],
-  "codeRepository": "https://github.com/Rodotasso/ciecl",
-  "issueTracker": "https://github.com/Rodotasso/ciecl/issues",
+  "codeRepository": "https://github.com/RodoTasso/ciecl",
+  "issueTracker": "https://github.com/RodoTasso/ciecl/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "0.9.3",
   "programmingLanguage": {
@@ -40,18 +40,6 @@
     }
   ],
   "softwareSuggestions": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "bench",
-      "name": "bench",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=bench"
-    },
     {
       "@type": "SoftwareApplication",
       "identifier": "comorbidity",
@@ -278,7 +266,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "817.801KB",
+  "fileSize": "855.742KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -297,8 +285,8 @@
       "description": "R package version 0.9.3. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018"
     }
   ],
-  "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/main/NEWS.md",
+  "releaseNotes": "https://github.com/RodoTasso/ciecl/blob/master/NEWS.md",
   "readme": "https://github.com/Rodotasso/ciecl/blob/main/README.md",
-  "contIntegration": ["https://github.com/Rodotasso/ciecl/actions/workflows/r.yml", "https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml"],
+  "contIntegration": ["https://github.com/RodoTasso/ciecl/actions/workflows/r.yml", "https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml"],
   "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#stable"
 }

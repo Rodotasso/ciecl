@@ -26,20 +26,20 @@ cie_table <- function(codigo) {
     stop("Codigo no encontrado: ", codigo)
   }
   
-  tabla <- datos |>
-    dplyr::select(codigo, descripcion, inclusion, exclusion) |>
-    gt::gt() |>
+  tabla <- datos %>%
+    dplyr::select(codigo, descripcion, inclusion, exclusion) %>%
+    gt::gt() %>%
     gt::tab_header(
       title = sprintf("CIE-10 Chile: %s", codigo),
       subtitle = "Fuente: MINSAL/DEIS v2018"
-    ) |>
+    ) %>%
     gt::cols_label(
       codigo = "Codigo",
       descripcion = "Diagnostico",
       inclusion = "Incluye",
       exclusion = "Excluye"
-    ) |>
-    gt::fmt_markdown(columns = dplyr::everything()) |>
+    ) %>%
+    gt::fmt_markdown(columns = dplyr::everything()) %>%
     gt::tab_options(
       table.font.size = 12,
       heading.background.color = "#1f77b4"
