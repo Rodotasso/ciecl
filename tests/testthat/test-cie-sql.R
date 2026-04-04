@@ -23,6 +23,15 @@ test_that("cie10_sql bloquea queries peligrosas", {
   )
 })
 
+test_that("cie10_sql emite deprecation warning para argumento close", {
+  skip_on_cran()
+
+  expect_warning(
+    cie10_sql("SELECT COUNT(*) AS n FROM cie10", close = FALSE),
+    "deprecado"
+  )
+})
+
 # ==============================================================================
 # PRUEBAS ADICIONALES cie10_sql()
 # ==============================================================================

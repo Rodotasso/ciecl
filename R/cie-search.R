@@ -898,28 +898,31 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
         con <- get_cie10_db()
 
         if (expandir) {
-          # Expandir: usar LIKE para cada codigo
-          likes <- paste0(
-            "codigo LIKE '", codigos_safe, "%'",
+          # Expandir: LIKE parametrizado por cada codigo
+          placeholders <- paste(
+            rep("codigo LIKE ?", length(codigos_safe)),
             collapse = " OR "
           )
           query <- sprintf(
             "SELECT * FROM cie10 WHERE %s ORDER BY codigo",
-            likes
+            placeholders
           )
+          params <- paste0(codigos_safe, "%")
+          resultado <- DBI::dbGetQuery(
+            con, query, params = as.list(params)
+          ) %>% tibble::as_tibble()
         } else {
-          # Exacto: usar IN clause
-          codigos_sql <- paste0(
-            "'", codigos_safe, "'",
-            collapse = ","
-          )
+          # Exacto: IN clause parametrizada
+          placeholders <- paste(rep("?", length(codigos_safe)),
+                                collapse = ",")
           query <- sprintf(
             "SELECT * FROM cie10 WHERE codigo IN (%s)",
-            codigos_sql
+            placeholders
           )
+          resultado <- DBI::dbGetQuery(
+            con, query, params = as.list(codigos_safe)
+          ) %>% tibble::as_tibble()
         }
-
-        resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
       }
     }
 

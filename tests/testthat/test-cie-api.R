@@ -210,6 +210,14 @@ test_that("cie11_search valida tipos de input", {
     cie11_search("test", max_results = -1, api_key = "a:b"),
     "entero positivo"
   )
+  expect_error(
+    cie11_search("test", release = "invalid", api_key = "a:b"),
+    "YYYY-MM"
+  )
+  expect_error(
+    cie11_search("test", release = 2024, api_key = "a:b"),
+    "YYYY-MM"
+  )
 })
 
 # ==============================================================================

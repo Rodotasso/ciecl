@@ -119,7 +119,7 @@ cie_map_comorbid <- function(codigos) {
       stringr::str_detect(codigos, "^I50") ~ "Insuficiencia cardiaca",
       stringr::str_detect(codigos, "^I21|^I22") ~ "Infarto miocardio",
       stringr::str_detect(codigos, "^C[0-9]{2}") ~ "Neoplasia maligna",
-      stringr::str_detect(codigos, "^J40|^J44") ~ "EPOC",
+      stringr::str_detect(codigos, "^J4[0-4]") ~ "EPOC",
       stringr::str_detect(codigos, "^N18") ~ "Enfermedad renal cronica",
       stringr::str_detect(codigos, "^F[0-9]{2}") ~ "Trastornos mentales",
       .default = "Otra"

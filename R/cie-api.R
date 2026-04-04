@@ -5,6 +5,8 @@
 #'   Obtener en: https://icd.who.int/icdapi
 #' @param lang Character, idioma respuesta ("es" o "en")
 #' @param max_results Integer, maximo resultados (default 10)
+#' @param release Character, version de release CIE-11 a consultar
+#'   (default "2024-01"). Ver releases disponibles en la API OMS.
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @family api
 #' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
@@ -20,7 +22,8 @@
 #' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 #' cie11_search("depresion mayor")
 #' }
-cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
+cie11_search <- function(texto, api_key = NULL, lang = "es",
+                         max_results = 10, release = "2024-01") {
   # Validacion de inputs
   if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
     stop("'texto' debe ser un string de largo 1")
@@ -34,6 +37,10 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
   if (!is.numeric(max_results) || length(max_results) != 1 ||
       max_results < 1 || max_results != as.integer(max_results)) {
     stop("'max_results' debe ser un entero positivo")
+  }
+  if (!is.character(release) || length(release) != 1 ||
+      !grepl("^\\d{4}-\\d{2}$", release)) {
+    stop("'release' debe ser formato 'YYYY-MM' (ej. '2024-01')")
   }
 
   # Verificar que httr2 este instalado
@@ -75,7 +82,9 @@ cie11_search <- function(texto, api_key = NULL, lang = "es", max_results = 10) {
     access_token <- token_data$access_token
     
     # Paso 2: Buscar en CIE-11 con el token
-    search_url <- "https://id.who.int/icd/release/11/2024-01/mms/search"
+    search_url <- paste0(
+      "https://id.who.int/icd/release/11/", release, "/mms/search"
+    )
     
     search_req <- httr2::request(search_url) |>
       httr2::req_url_query(

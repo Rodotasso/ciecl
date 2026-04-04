@@ -9,8 +9,8 @@ cie10_sql(query, close = TRUE)
 \arguments{
 \item{query}{String SQL valido SQLite (SELECT/WHERE/JOIN)}
 
-\item{close}{Logical, ignorado (conexion pooled).
-Mantenido por compatibilidad.}
+\item{close}{Deprecated. Ignorado — la conexion es pooled y se
+gestiona automaticamente. Sera eliminado en una version futura.}
 }
 \value{
 tibble resultado query
