@@ -1,28 +1,83 @@
-# ciecl 0.9.3 (2026-03-01)
+# ciecl 0.9.6 (2026-04-04)
 
-## CRAN compliance
+*English summary below*
 
-* **Breaking**: `generar_cie10_cl()` ya no exportada (marcada `@noRd`).
-  Funcion de desarrollo que escribe en `data/` del paquete.
-  Si la necesitas, usa `ciecl:::generar_cie10_cl()`.
+## Preparacion rOpenSci
 
-* `cie_lookup()`: ejemplos envueltos en `\donttest{}` para evitar timeout
-  en CRAN check (inicializacion SQLite ~16s en primer uso).
+Version candidata para submission a rOpenSci. Cumple con rOpenSci Dev Guide
+2025 (Capitulos 1, 5, 6, 20). R CMD check: 0 errors, 0 warnings.
+Tests: 1148 PASS, 95.6% cobertura.
 
-* `comorbidity` y `gt` movidos de Imports a Suggests. Ambos se usan
-  con `requireNamespace()`, consistente con su uso opcional.
+### Nuevas funcionalidades
 
-* Mensajes de inicializacion de BD solo se emiten en sesiones interactivas
-  (`if (interactive())`).
+* **Connection pooling SQLite**: Cache atomico con versionado en
+  `get_cie10_db()`. Reutiliza conexiones activas, reconstruye si la
+  BD esta corrupta o desactualizada.
 
-## Fixes
+* **Vectorizacion mejorada**: `cie_map_comorbid()` y `cie_normalizar()`
+  refactorizados para procesamiento batch eficiente.
 
-* `generar_cie10_cl()`: auto-deteccion prioriza XLSX completo (39K+ codigos)
-  sobre XLS legado (~8K codigos). Parametro renombrado a `archivo_path`.
+* **pkgdown site**: Tema limpio compatible con rOpenSci, modo oscuro
+  (light-switch), logo hexagonal, favicons.
 
-* `cie_guia_busqueda()`: corregida referencia a funcion inexistente `cie_buscar()`.
+* **Vignette caso de uso**: `caso-uso-egresos` con datos simulados
+  de egresos hospitalarios usando columnas esenciales DEIS.
 
-* `tests/testthat/setup.R`: eliminada ruta absoluta hardcodeada.
+### Documentacion y comunidad
+
+* CONTRIBUTING.md y CODE_OF_CONDUCT.md bilingues (ingles + espanol)
+* SECURITY.md bilingue
+* PR template para rOpenSci
+* `@family` y `@seealso` en todas las funciones exportadas
+* Documentacion English-first con traducciones completas
+
+### CI/CD
+
+* GitHub Actions R-CMD-check multiplataforma (Windows, macOS, Ubuntu)
+* Workflow de test coverage
+* pkgdown deployment automatico desde main
+* R-hub workflow
+
+### Seguridad
+
+* FTS5 parametros sanitizados contra inyeccion SQL
+* Stripeo de comentarios SQL
+* Validacion estricta de inputs en funciones publicas
+
+### Fixes
+
+* Estandarizar pipes a `%>%` (magrittr) en todo el paquete
+* Corregir sintaxis invalida en `.gitignore`
+* Sincronizar `codemeta.json` con DESCRIPTION
+* `_pkgdown.yml` lang alineado con contenido (es)
+* Eliminar `inst/extdata/cie10.db` bundled (causaba NOTE de 21.3MB)
+* Compatibilidad multiplataforma: rutas absolutas, encoding, line endings
+* Logo hexagonal actualizado a version G16
+
+### Heredado de v0.9.3
+
+* **Breaking**: `generar_cie10_cl()` ya no exportada (marcada `@noRd`)
+* `comorbidity` y `gt` movidos de Imports a Suggests
+* Mensajes de BD solo en sesiones interactivas (`if (interactive())`)
+* `generar_cie10_cl()`: prioriza XLSX completo (39K+) sobre XLS legado
+* `cie_guia_busqueda()`: corregida referencia a funcion inexistente
+
+## English Summary
+
+### rOpenSci Preparation
+
+Release candidate for rOpenSci submission. Complies with rOpenSci Dev Guide
+2025 (Chapters 1, 5, 6, 20). R CMD check: 0 errors, 0 warnings.
+Tests: 1148 PASS, 95.6% coverage.
+
+* **SQLite connection pooling** with atomic versioned cache
+* **Vectorized** `cie_map_comorbid()` and `cie_normalizar()`
+* **pkgdown site** with dark mode, hex logo, favicons
+* **Hospital discharge vignette** with simulated DEIS data
+* Bilingual community files (CONTRIBUTING, CODE_OF_CONDUCT, SECURITY)
+* Multi-platform CI/CD (Windows, macOS, Ubuntu)
+* FTS5 SQL injection protection
+* Pipe standardization (`%>%`), gitignore fixes, codemeta sync
 
 ---
 
