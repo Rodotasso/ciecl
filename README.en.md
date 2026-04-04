@@ -1,7 +1,7 @@
 # ciecl
 
 > **Language / Idioma:** **English** \|
-> [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)
+> [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
 
 **Data Science for Public Health Group** \| University of Chile
 
