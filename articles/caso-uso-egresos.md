@@ -92,7 +92,7 @@ tiempo <- round(as.numeric(difftime(Sys.time(), inicio, units = "secs")), 2)
 cat("Codigos encontrados:", nrow(resultado_ciecl), "de", length(codigos_unicos), "\n")
 #> Codigos encontrados: 19 de 20
 cat("Tiempo de busqueda:", tiempo, "segundos\n")
-#> Tiempo de busqueda: 0.04 segundos
+#> Tiempo de busqueda: 0.03 segundos
 cat("Tasa de exito:", round(nrow(resultado_ciecl) / length(codigos_unicos) * 100, 1), "%\n\n")
 #> Tasa de exito: 95 %
 
