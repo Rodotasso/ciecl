@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-> **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.es.md)
+> **Language / Idioma:** **English** | [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -17,6 +17,7 @@ output: github_document
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
 [![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
 ![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitors&color=blue)
 <!-- badges: end -->
 
