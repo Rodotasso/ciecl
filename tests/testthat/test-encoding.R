@@ -151,8 +151,8 @@ test_that("cie_normalizar es consistente con diferentes inputs", {
   skip_on_cran()
 
   # Mismos resultados independientemente de mayusculas/minusculas
-  resultado_may <- cie_normalizar("E110", buscar_db = FALSE)
-  resultado_min <- cie_normalizar("e110", buscar_db = FALSE)
+  resultado_may <- cie_normalize("E110", search_db = FALSE)
+  resultado_min <- cie_normalize("e110", search_db = FALSE)
 
   expect_equal(resultado_may, resultado_min)
 })

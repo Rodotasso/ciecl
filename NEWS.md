@@ -1,3 +1,73 @@
+# ciecl 0.10.0 (en desarrollo — rev-ropensci)
+
+Respuesta a la revision editorial de rOpenSci. Unificacion de idioma
+(funciones y argumentos en ingles, documentacion en espanol) sin romper
+compatibilidad con CRAN.
+
+## Nueva funcion
+
+* **`cie_describe(codes)`**: devuelve un vector `character` con la
+  descripcion de cada codigo CIE-10, pensado para `mutate()` sin
+  `left_join`. Acepta el argumento `default` para codigos no encontrados.
+
+## Renombres con deprecacion (compatibilidad CRAN)
+
+Todos los argumentos y funciones en espanol siguen funcionando; emiten
+`lifecycle::deprecate_warn("0.10.0", ...)` al invocarse.
+
+* Funcion: `cie_normalizar()` -> `cie_normalize()`
+* Argumentos:
+  - `cie_lookup(codigo=, expandir=, normalizar=, descripcion_completa=)` ->
+    `cie_lookup(code=, expand=, normalize=, full_description=)`
+  - `cie_normalize(codigos=, buscar_db=)` -> `cie_normalize(codes=, search_db=)`
+  - `cie_validate_vector(codigos=)` -> `cie_validate_vector(codes=)`
+  - `cie_expand(codigo=)` -> `cie_expand(code=)`
+
+## Documentacion
+
+* README unificado paramétrico: un solo `README.Rmd` con `params$lang`
+  genera `README.md` (espanol canonico) y `README.en.md` (ingles
+  internacional). Ya no hay `README.es.Rmd` separado. Build via
+  `tools/build_readmes.R`.
+* `README.md` ahora en espanol (el editor rOpenSci lo pidio por el
+  target hispanohablante del paquete).
+* Vignette `idiomas.Rmd`: reescrita con tildes correctas ("tildes
+  preservadas", "espanol"), narrativa entre chunks, seccion Brasil/
+  Frances eliminada (fuera del scope `ciecl` = CIE Chile).
+* Vignette `instalacion.Rmd`: seccion `keyring` estilo babeldown para
+  guardar credenciales CIE-11 en el keychain del sistema.
+* `cie_normalize()` es la funcion recomendada en nueva documentacion.
+
+## Codigo
+
+* `parsear_cie10_minsal()` migrado a `rlang::check_installed("readxl")`
+  en vez de `requireNamespace`.
+* `generar_cie10_cl()` usa `save()` base en vez de
+  `usethis::use_data()`: elimina dependencia `usethis` del codigo
+  instalado. La funcion sigue siendo `@noRd @keywords internal`.
+* Archivo con espacio en `generar_cie10_cl()`: prioridad ahora a
+  `CIE-10-DEIS.xlsx` y `CIE-10.xlsx` sin espacios. `CIE-10 (1).xlsx`
+  (nombre original DEIS) queda como fallback.
+* Patron `names(raw)[stringr::str_detect(...)]` reemplazado por
+  `stringr::str_subset()` (5 sitios en `cie-data.R`).
+
+## Tests (convenciones rOpenSci)
+
+* `expect_no_match()` reemplaza `expect_false(any(grepl(...)))`.
+* `gc()` innecesario eliminado en `test-robustness.R`.
+* `skip_if(requireNamespace(...))` con mensaje explicito en test de
+  rama de error sin `httr2`.
+* Tests migrados a argumentos en ingles (`expand=`, `normalize=`,
+  `codes=`, etc.) para no generar warnings de deprecation propios.
+
+## Dependencias
+
+* `lifecycle` y `rlang` movidos a `Imports`.
+* `usethis` ya no se llama desde codigo del paquete (sigue en
+  `Suggests` solo para tests que lo necesitan).
+
+---
+
 # ciecl 0.9.6 (2026-04-04)
 
 *English summary below*

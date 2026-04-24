@@ -121,15 +121,18 @@ test_that("parsear_cie10_minsal detecta codigos daga y cruz", {
 # PRUEBAS ciecl:::generar_cie10_cl()
 # ============================================================
 
-test_that("generar_cie10_cl requiere usethis", {
-  # Solo testear si usethis NO esta instalado
-  skip_if(requireNamespace("usethis", quietly = TRUE),
-          "usethis esta instalado")
+test_that("generar_cie10_cl ya no depende de usethis", {
+  # generar_cie10_cl usa save() base, no usethis::use_data()
+  skip_if_not_installed("readxl")
 
-  expect_error(
-    ciecl:::generar_cie10_cl("test.xls"),
-    "usethis"
-  )
+  withr::with_tempdir({
+    # Archivo inexistente -> error de archivo, nunca menciona usethis
+    err <- tryCatch(
+      ciecl:::generar_cie10_cl("no-existe.xlsx"),
+      error = function(e) conditionMessage(e)
+    )
+    expect_false(grepl("usethis", err, ignore.case = TRUE))
+  })
 })
 
 test_that("generar_cie10_cl error si archivo no encontrado", {
@@ -427,7 +430,7 @@ test_that("parsear_cie10_minsal limpia descripciones", {
   )
 
   # Descripciones deben estar limpias (sin espacios extra al inicio/fin)
-  expect_false(any(grepl("^\\s|\\s$", resultado$descripcion)))
+  expect_no_match(resultado$descripcion, "^\\s|\\s$")
 })
 
 test_that("generar_cie10_cl valida parametros y parsea XLS", {

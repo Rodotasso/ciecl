@@ -209,20 +209,20 @@ test_that("cie_lookup expandir con codigo inexistente", {
 
   # Expandir codigo que no existe
   suppressMessages({
-    resultado <- cie_lookup("ZZZ", expandir = TRUE)
+    resultado <- cie_lookup("ZZZ", expand = TRUE)
   })
   expect_equal(nrow(resultado), 0)
 })
 
 # ============================================================
-# PRUEBAS PARA cie_normalizar()
+# PRUEBAS PARA cie_normalize()
 # ============================================================
 
 test_that("cie_normalizar maneja NA", {
   skip_on_cran()
 
   # NA como entrada
-  resultado <- cie_normalizar(NA_character_, buscar_db = FALSE)
+  resultado <- cie_normalize(NA_character_, search_db = FALSE)
   expect_true(is.na(resultado))
 })
 
@@ -230,7 +230,7 @@ test_that("cie_normalizar maneja vector con NAs", {
   skip_on_cran()
 
   codigos <- c("E110", NA, "I100")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos, search_db = FALSE)
 
   expect_equal(resultado[1], "E11.0")
   expect_true(is.na(resultado[2]))
@@ -240,7 +240,7 @@ test_that("cie_normalizar maneja vector con NAs", {
 test_that("cie_normalizar maneja cadena vacia", {
   skip_on_cran()
 
-  resultado <- cie_normalizar("", buscar_db = FALSE)
+  resultado <- cie_normalize("", search_db = FALSE)
   expect_equal(resultado, "")
 })
 
@@ -249,7 +249,7 @@ test_that("cie_normalizar maneja codigos ya normalizados", {
 
   # Codigos ya con punto no deben cambiar
   codigos <- c("E11.0", "I10.0", "Z00.0")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos, search_db = FALSE)
   expect_equal(resultado, codigos)
 })
 
@@ -257,7 +257,7 @@ test_that("cie_normalizar maneja codigos de 3 caracteres", {
   skip_on_cran()
 
   # Codigos de categoria (3 chars) no deben modificarse
-  resultado <- cie_normalizar("E11", buscar_db = FALSE)
+  resultado <- cie_normalize("E11", search_db = FALSE)
   expect_equal(resultado, "E11")
 })
 
@@ -265,7 +265,7 @@ test_that("cie_normalizar maneja codigos largos", {
   skip_on_cran()
 
   # Codigos de 5 digitos (E11.00 formato)
-  resultado <- cie_normalizar("E1100", buscar_db = FALSE)
+  resultado <- cie_normalize("E1100", search_db = FALSE)
   expect_equal(resultado, "E11.00")
 })
 

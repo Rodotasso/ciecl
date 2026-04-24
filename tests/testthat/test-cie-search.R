@@ -19,7 +19,7 @@ test_that("cie_lookup codigo exacto funciona", {
 test_that("cie_lookup expansion jerarquica funciona", {
   skip_on_cran()
   
-  hijos <- cie_lookup("E11", expandir = TRUE)
+  hijos <- cie_lookup("E11", expand = TRUE)
   expect_gt(nrow(hijos), 5)  # E11.0, E11.1, ...
   expect_true(all(stringr::str_starts(hijos$codigo, "E11")))
 })
@@ -91,7 +91,7 @@ test_that("cie_lookup puede generar descripcion_completa", {
   expect_false("descripcion_completa" %in% names(resultado_normal))
   
   # Con descripcion_completa
-  resultado_completo <- cie_lookup("E11.0", descripcion_completa = TRUE)
+  resultado_completo <- cie_lookup("E11.0", full_description = TRUE)
   expect_true("descripcion_completa" %in% names(resultado_completo))
   expect_true(stringr::str_detect(resultado_completo$descripcion_completa, "E11\\.0 - "))
 })
@@ -100,7 +100,7 @@ test_that("cie_lookup con descripcion_completa mantiene columna en dataframe vac
 
   # Bug fix: Cuando todos los codigos son invalidos, debe mantener la columna descripcion_completa
   suppressMessages({
-    resultado_vacio <- cie_lookup(codigo = c("XXXX", "YYYY", "ZZZZ"), descripcion_completa = TRUE)
+    resultado_vacio <- cie_lookup(codigo = c("XXXX", "YYYY", "ZZZZ"), full_description = TRUE)
   })
 
   # El dataframe debe estar vacio
@@ -364,12 +364,12 @@ test_that("cie_lookup maneja rangos validos", {
   expect_true(all(grepl("^E1[0-4]", resultado$codigo)))
 })
 
-test_that("cie_lookup con normalizar=FALSE preserva formato", {
+test_that("cie_lookup con normalize = FALSE preserva formato", {
   skip_on_cran()
 
   # Sin normalizacion, E110 no se convierte a E11.0
   suppressMessages({
-    resultado <- cie_lookup("E110", normalizar = FALSE)
+    resultado <- cie_lookup("E110", normalize = FALSE)
   })
 
   # Puede encontrar o no dependiendo del formato en DB
@@ -542,7 +542,7 @@ test_that("cie_lookup con normalizar procesa codigo sin punto", {
   skip_on_cran()
 
   # E110 -> E11.0
-  resultado <- cie_lookup("E110", normalizar = TRUE)
+  resultado <- cie_lookup("E110", normalize = TRUE)
 
   expect_equal(nrow(resultado), 1)
   expect_equal(resultado$codigo, "E11.0")
@@ -551,12 +551,12 @@ test_that("cie_lookup con normalizar procesa codigo sin punto", {
 test_that("cie_lookup con normalizar elimina sufijo X DEIS", {
   skip_on_cran()
 
-  resultado <- cie_lookup("N10X", normalizar = TRUE)
+  resultado <- cie_lookup("N10X", normalize = TRUE)
   expect_equal(nrow(resultado), 1)
   expect_equal(resultado$codigo, "N10")
 
   # Vector con multiples codigos X
-  res2 <- cie_lookup(c("I10X", "N40X"), normalizar = TRUE)
+  res2 <- cie_lookup(c("I10X", "N40X"), normalize = TRUE)
   expect_equal(nrow(res2), 2)
 })
 

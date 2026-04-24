@@ -1,14 +1,39 @@
 ---
 output: github_document
+params:
+  lang: "es"
 ---
 
-> **Language / Idioma:** **English** | [Español](https://rodotasso.github.io/ciecl/articles/ciecl-es.html)
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+lang <- params$lang
+es <- function(x, y) if (lang == "es") x else y
+```
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+```{r header-lang, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("> **Idioma / Language:** **Español** | [English](https://github.com/RodoTasso/ciecl/blob/main/README.en.md)\n\n")
+} else {
+  cat("> **Language / Idioma:** **English** | [Español](https://github.com/RodoTasso/ciecl/blob/main/README.md)\n\n")
+}
+```
+
+<!-- README generado desde README.Rmd. Editar este archivo, no los .md -->
 
 # ciecl <img src="man/figures/logo-CDSP_color.png" align="right" height="60" alt="CDSP"> <img src="man/figures/logo.png" align="right" height="139" alt="ciecl logo">
 
-**Data Science for Public Health Group** | University of Chile
+```{r affiliation, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("**Grupo de Ciencia de Datos para Salud Pública** | Universidad de Chile\n\n")
+} else {
+  cat("**Data Science for Public Health Group** | University of Chile\n\n")
+}
+```
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -18,272 +43,195 @@ output: github_document
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
 [![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 [![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
-![Visitors](https://komarev.com/ghpvc/?username=RodoTasso&repo=ciecl&label=Visitors&color=blue)
 <!-- badges: end -->
 
-**Official Chilean ICD-10 Classification (CIE-10) for R**.
+```{r intro, results='asis', echo=FALSE}
+if (lang == "es") {
+cat("**Clasificación Internacional de Enfermedades (CIE-10) oficial de Chile para R**.
 
-Specialized package for searching, validating, and analyzing ICD-10 codes
-in the Chilean context. Includes **39,877 codes** (categories and
-subcategories) from the official MINSAL/DEIS v2018 catalog, with optimized
-search, comorbidity calculation, and WHO ICD-11 API access.
+Paquete especializado para búsqueda, validación y análisis de códigos CIE-10 en el contexto chileno. Incluye el catálogo oficial MINSAL/DEIS v2018 con búsqueda optimizada, cálculo de comorbilidades y acceso a la API CIE-11 de la OMS.
+
+## Finalidad
+
+`ciecl` facilita el trabajo con códigos CIE-10 en investigación y análisis de datos de salud en Chile, eliminando la necesidad de manipular archivos Excel manualmente y proporcionando herramientas especializadas para:
+
+- Validación rápida de códigos diagnósticos
+- Búsqueda tolerante a errores tipográficos (fuzzy search Jaro-Winkler)
+- Cálculo automático de índices de comorbilidad (Charlson, Elixhauser)
+- Consultas SQL optimizadas sobre el catálogo completo
+- Expansión jerárquica de categorías (ej: `E11` → `E11.0`, `E11.1`, …, `E11.9`)
+- Acceso a la API CIE-11 de la OMS
+
+## Características
+
+- **Catálogo oficial CIE-10 Chile** (MINSAL/DEIS v2018) embebido como dataset
+- **Búsqueda fuzzy Jaro-Winkler** tolera errores tipográficos
+- **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
+- **Consultas SQL directas** con SQLite + FTS5
+- **Comorbilidades Charlson/Elixhauser** con `comorbidity`
+- **API CIE-11 OMS** vía `cie11_search()`
+- **Normalización robusta**: acepta `E110`, `E11.0`, `e 11 0`, `I10-0`, etc.
+- **Dependencias mínimas** (8 paquetes core; el resto en Suggests)
+
+El dataset está establecido por el [Decreto 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) del MINSAL como clasificación oficial de enfermedades. No es modificable por el paquete; solo se actualiza por decreto institucional.
+")
+} else {
+cat("**Official Chilean ICD-10 Classification (CIE-10) for R**.
+
+Specialized package for searching, validating, and analyzing ICD-10 codes in the Chilean context. Includes the official MINSAL/DEIS v2018 catalogue with optimized search, comorbidity computation, and WHO ICD-11 API access.
 
 ## Purpose
 
-`ciecl` facilitates working with ICD-10 codes in health research and
-data analysis in Chile, eliminating the need to manually manipulate
-Excel files and providing specialized tools for:
+`ciecl` facilitates working with ICD-10 codes in Chilean health research and data analysis, avoiding manual Excel manipulation and providing specialized tools for:
 
 - Fast validation of diagnostic codes
-- Error-tolerant search (fuzzy search)
-- Automatic calculation of comorbidity indices (Charlson, Elixhauser)
-- Optimized SQL queries over more than 39,000 codes
-- Hierarchical expansion of categories to subcategories
-  (e.g., E11 -> E11.0, E11.1, ..., E11.9)
+- Typo-tolerant search (Jaro-Winkler fuzzy search)
+- Automatic comorbidity indices (Charlson, Elixhauser)
+- Optimized SQL queries over the complete catalogue
+- Hierarchical expansion of categories (e.g., `E11` → `E11.0`, `E11.1`, …, `E11.9`)
+- Access to the WHO ICD-11 API
 
-## Why use ciecl
+## Features
 
-### Advantages:
+- **Official Chilean CIE-10 catalogue** (MINSAL/DEIS v2018) embedded as a dataset
+- **Jaro-Winkler fuzzy search** tolerant to typos
+- **Chilean medical abbreviations** (IAM, EPOC, DM2, HTA, TBC, …)
+- **Direct SQL queries** via SQLite + FTS5
+- **Charlson/Elixhauser comorbidities** using `comorbidity`
+- **WHO ICD-11 API** via `cie11_search()`
+- **Robust normalization**: accepts `E110`, `E11.0`, `e 11 0`, `I10-0`, etc.
+- **Minimal dependencies** (8 core packages; the rest in Suggests)
 
-1.  **Performance**: SQLite indexed database with 10-100x faster searches
-    than Excel
-2.  **Native integration**: Works directly in R without heavy external
-    dependencies
-3.  **Fuzzy search**: Finds "bacterial pneumonia" even if misspelled
-    (tolerates typos)
-4.  **Vectorized validation**: Processes thousands of codes in milliseconds
-5.  **Automatic normalization**: Accepts E110, E11.0, e11.0 interchangeably
-6.  **No encoding errors**: XLSX files have issues with accents on different
-    systems
-7.  **Reproducibility**: Version-controlled ICD-10 catalog (doesn't change
-    between computers)
-8.  **Predefined comorbidities**: Ready-to-use Charlson/Elixhauser mappings
-9.  **ICD-11 API**: Direct access to updated international classification
-10. **Smart cache**: Stores frequent queries for faster speed
-
-### Comparative example:
-
-``` r
-# With XLSX (slow, manual, error-prone)
-library(readxl)
-cie10 <- read_excel("CIE-10.xlsx")
-diabetes_codes <- cie10[grepl("diabetes", tolower(cie10$description)), ]
-
-# With ciecl (fast, robust, cached)
-library(ciecl)
-diabetes_codes <- cie_search("diabetes")
+The dataset is established by [Decree 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) of Chile's Ministry of Health as the official disease classification. It is not modifiable by the package; it can only be updated by MINSAL institutional decree.
+")
+}
 ```
 
-## Comparison with similar packages
+```{r install-header, results='asis', echo=FALSE}
+cat(if (lang == "es") "## Instalación\n\n" else "## Installation\n\n")
+```
 
-| Feature | ciecl | icd (CRAN) | comorbidity (CRAN) | touch (CRAN) |
-|---|---|---|---|---|
-| Official Chilean ICD-10 MINSAL/DEIS | **Yes** | No | No | No |
-| Fuzzy search (Jaro-Winkler) | **Yes** | No | No | No |
-| Chilean medical abbreviations (IAM, ACV, EPOC) | **Yes** | No | No | No |
-| Charlson/Elixhauser comorbidities | Yes | Yes | **Yes** | No |
-| WHO ICD-11 API | **Yes** | No | No | No |
-| SQLite cache with FTS5 | **Yes** | No | No | No |
-| Local Chilean adaptation | **Yes** | USA/generic only | No | USA only (ICD-10-CM) |
-
-The ICD-10 codes included in `ciecl` are established by Decree 356/2017 of Chile's Ministry of Health as the official disease classification system. The dataset is not modifiable by the package — it can only be updated by institutional decree from MINSAL through DEIS.
-
-## Main features
-
-- **39,877 ICD-10 codes**: Complete official MINSAL/DEIS v2018 catalog
-- **Fuzzy search**: Jaro-Winkler algorithm to tolerate spelling errors
-- **Direct SQL**: Full database access for complex queries
-- **Vectorization**: Processes thousands of codes simultaneously
-- **SQLite cache**: Stores frequent results for instant queries
-- **Comorbidities**: Validated Charlson and Elixhauser mappings
-- **Hierarchical expansion**: Gets all subcodes from a category
-- **ICD-11 API**: Search in updated international classification (WHO)
-- **Minimal dependencies**: Only 8 required packages for core functionality
-
-## Installation
-
-### All platforms (Windows, macOS, Linux)
-
-``` r
-# From CRAN
+```r
+# CRAN
 install.packages("ciecl")
 
-# From GitHub
+# GitHub (desarrollo)
 # install.packages("pak")
 pak::pak("RodoTasso/ciecl")
-
-# Alternative with devtools
-devtools::install_github("RodoTasso/ciecl")
-
-# Full installation (includes optional packages)
-pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
-### System requirements by platform
-
-#### Windows
-
-No additional system dependencies required. Installation works directly.
-
-#### macOS
-
-Make sure you have Xcode Command Line Tools installed:
-
-``` bash
-xcode-select --install
+```{r quickstart-header, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("## Uso rápido\n\n")
+} else {
+  cat("## Quick start\n\n")
+}
 ```
 
-#### Linux (Ubuntu/Debian)
-
-``` bash
-# Dependencies for compiling R packages
-sudo apt-get update
-sudo apt-get install -y \
-  r-base-dev \
-  libcurl4-openssl-dev \
-  libssl-dev \
-  libxml2-dev
-```
-
-**Note**: The package has **minimal dependencies** for core functionality.
-Additional packages are only required for specific functions.
-
-## Quick start
-
-``` r
+```{r example}
 library(ciecl)
 
-# Exact search (supports multiple formats)
-cie_lookup("E11.0")   # With dot
-cie_lookup("E110")    # Without dot
-cie_lookup("E11")     # Category only
+# Busqueda exacta por codigo
+cie_lookup("E11.0")
 
-# Vectorized - multiple codes
+# Multiples codigos
 cie_lookup(c("E11.0", "I10", "Z00"))
 
-# With complete formatted description
-cie_lookup("E110", descripcion_completa = TRUE)
+# Descripcion directa para usar en mutate()
+cie_describe(c("E11.0", "I10"))
 
-# Extract code from text with prefixes/suffixes (scalar code only)
-cie_lookup("CIE:E11.0", extract = TRUE)       # Returns E11.0
-cie_lookup("E11.0-confirmed", extract = TRUE) # Returns E11.0
-cie_lookup("dx-G20", extract = TRUE)          # Returns G20
-# Note: extract=TRUE only works with scalar codes, use FALSE for vectors
+# Busqueda fuzzy tolerante a errores
+cie_search("diabetis mellitus")
 
-# Fuzzy search with typos
-cie_search("diabetis mellitus")  # Finds "diabetes mellitus"
-
-# Search by medical abbreviations (88 supported abbreviations)
-cie_search("IAM")   # Acute Myocardial Infarction
-cie_search("TBC")   # Tuberculosis
-cie_search("DM2")   # Type 2 Diabetes Mellitus
-cie_search("EPOC")  # Chronic Obstructive Pulmonary Disease
-cie_search("HTA")   # Arterial Hypertension
-
-# See all available abbreviations
-cie_siglas()
-
-# Direct SQL
-cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 3")
-
-# Comorbidities (requires: install.packages("comorbidity"))
-df %>% cie_comorbid(id = "patient", code = "diagnosis", map = "charlson")
+# Siglas medicas chilenas
+cie_search("IAM")
 ```
 
-## ICD-11 Configuration (optional)
-
-To use `cie11_search()` and access the updated international
-classification, you need free WHO credentials:
-
-### Step 1: Get credentials
-
-1.  Visit <https://icd.who.int/icdapi>
-2.  Register with your email (free process)
-3.  You will receive a `Client ID` and `Client Secret`
-
-### Step 2: Configure in R
-
-**Option A: Environment variable (recommended)**
-
-Create a `.Renviron` file in your working directory or home:
-
-``` r
-# In .Renviron
-ICD_API_KEY=your_client_id:your_client_secret
+```{r comorb-example, eval=FALSE}
+# Comorbilidades (requiere: install.packages("comorbidity"))
+df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
 ```
 
-**Option B: In each session**
-
-``` r
-Sys.setenv(ICD_API_KEY = "your_client_id:your_client_secret")
+```{r api-intro, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("## API CIE-11 (opcional)\n\nPara usar `cie11_search()` necesitas credenciales gratuitas de la OMS (<https://icd.who.int/icdapi>). Recomendamos guardarlas con el paquete `keyring`:\n\n")
+} else {
+  cat("## ICD-11 API (optional)\n\nTo use `cie11_search()` you need free WHO credentials (<https://icd.who.int/icdapi>). We recommend storing them with the `keyring` package:\n\n")
+}
 ```
 
-### Step 3: Use ICD-11
-
-``` r
-library(ciecl)
-
-# Search in ICD-11 (requires httr2)
-cie11_search("diabetes mellitus", max_results = 5)
-#> # A tibble: 5 x 3
-#>   code    title                                    chapter
-#>   <chr>   <chr>                                    <chr>
-#> 1 5A14    Diabetes mellitus, unspecified type      05
-#> 2 5A11    Type 2 diabetes mellitus                 05
-#> 3 5A10    Type 1 diabetes mellitus                 05
+```{r api-example, eval=FALSE}
+keyring::key_set("ciecl_icd11")  # client_id:client_secret
+Sys.setenv(ICD_API_KEY = keyring::key_get("ciecl_icd11"))
+cie11_search("diabetes mellitus")
 ```
 
-**Note**: ICD-11 is optional. All core functions (ICD-10)
-work without an API key.
+```{r api-outro, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("Las funciones de CIE-10 (núcleo del paquete) funcionan sin API key.\n\n")
+} else {
+  cat("The CIE-10 functions (the core of the package) work without an API key.\n\n")
+}
+```
 
-## Data
+```{r data-footer, results='asis', echo=FALSE}
+if (lang == "es") {
+cat("## Datos
 
-Based on official **ICD-10 MINSAL/DEIS v2018** catalog:
+Catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
 
-- **Source**: [Department of Health Statistics and Information
-  (DEIS)](https://deis.minsal.cl)
-- **FIC Chile Center**: <https://deis.minsal.cl/centrofic/>
-- **Documents repository**: <https://deis.minsal.cl>
+- Fuente: [DEIS](https://deis.minsal.cl) — [Centro FIC Chile](https://deis.minsal.cl/centrofic/)
+- Dominio público según [Decreto 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
 
-ICD-10 data is for public use according to
-[Decree 356 Exempt (2017)](https://www.bcn.cl/leychile/navegar?i=1112064)
-from the Ministry of Health establishing official ICD-10 use in Chile.
+## Contribuir
+
+- Reportar bugs: <https://github.com/RodoTasso/ciecl/issues>
+- Contribuir: ver `CONTRIBUTING.md`
+
+## Licencia
+
+MIT + datos MINSAL de dominio público.
+
+## Autor
+
+**Rodolfo Tasso Suazo** — <rtasso@uchile.cl>
+Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública,
+Facultad de Medicina, Universidad de Chile.
+
+## Enlaces
+
+- Repositorio: <https://github.com/RodoTasso/ciecl>
+- DEIS MINSAL: <https://deis.minsal.cl>
+- API CIE-11: <https://icd.who.int/icdapi>
+")
+} else {
+cat("## Data
+
+Official **CIE-10 MINSAL/DEIS v2018** catalogue:
+
+- Source: [DEIS](https://deis.minsal.cl) — [Centro FIC Chile](https://deis.minsal.cl/centrofic/)
+- Public domain under [Decree 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
 
 ## Contributing
 
-Contributions are welcome:
-
-- Report bugs at [GitHub Issues](https://github.com/RodoTasso/ciecl/issues)
-- Suggest improvements or new features
-- Submit pull requests
+- Report bugs: <https://github.com/RodoTasso/ciecl/issues>
+- Contribute: see `CONTRIBUTING.md`
 
 ## License
 
-MIT (package code) + ICD-10 MINSAL public use data
+MIT + MINSAL public-domain data.
 
 ## Author
 
-**Rodolfo Tasso Suazo** | <rtasso@uchile.cl>
-
-### Institutional Affiliation
-
-<p align="center">
-<img src="man/figures/logo-CDSP_color.png" height="100"
-  alt="Data Science for Public Health Group">
-</p>
-
-**Data Science for Public Health Group**<br>
-School of Public Health, Faculty of Medicine<br>
-University of Chile
-
-This package was developed as part of the work of the Data Science for
-Public Health Group, dedicated to applying computational and statistical
-methods to improve public health research in Chile.
+**Rodolfo Tasso Suazo** — <rtasso@uchile.cl>
+Data Science for Public Health Group, School of Public Health,
+Faculty of Medicine, University of Chile.
 
 ## Links
 
-- **Repository**: <https://github.com/RodoTasso/ciecl>
-- **Report issues**: <https://github.com/RodoTasso/ciecl/issues>
-- **DEIS MINSAL**: <https://deis.minsal.cl>
-- **FIC Chile Center**: <https://deis.minsal.cl/centrofic/>
-- **WHO ICD-11 API**: <https://icd.who.int/icdapi>
+- Repository: <https://github.com/RodoTasso/ciecl>
+- DEIS MINSAL: <https://deis.minsal.cl>
+- ICD-11 API: <https://icd.who.int/icdapi>
+")
+}
+```

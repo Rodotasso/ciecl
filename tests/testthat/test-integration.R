@@ -62,7 +62,7 @@ test_that("flujo: normalizar codigos -> buscar -> mapear comorbilidad", {
   codigos_raw <- c("E110", "I509", "C509", "e11.0", " Z00 ")
 
   # 2. Normalizar codigos
-  codigos_norm <- cie_normalizar(codigos_raw, buscar_db = FALSE)
+  codigos_norm <- cie_normalize(codigos_raw, search_db = FALSE)
   expect_equal(length(codigos_norm), length(codigos_raw))
 
   # 3. Buscar detalles
@@ -95,7 +95,7 @@ test_that("flujo: SQL personalizado -> procesamiento -> validacion", {
   expect_true(all(validacion))
 
   # 3. Obtener detalles completos
-  detalles <- cie_lookup(codigos_cap4$codigo, descripcion_completa = TRUE)
+  detalles <- cie_lookup(codigos_cap4$codigo, full_description = TRUE)
   expect_true("descripcion_completa" %in% names(detalles))
 })
 
@@ -123,8 +123,8 @@ test_that("cie_expand y cie_lookup expandir dan mismos resultados", {
   # Via cie_expand
   hijos_expand <- cie_expand("E11")
 
-  # Via cie_lookup con expandir=TRUE
-  hijos_lookup <- cie_lookup("E11", expandir = TRUE)$codigo
+  # Via cie_lookup con expand = TRUE
+  hijos_lookup <- cie_lookup("E11", expand = TRUE)$codigo
 
   # Deben ser iguales
   expect_setequal(hijos_expand, hijos_lookup)
@@ -137,7 +137,7 @@ test_that("cie_normalizar y cie_lookup son coherentes", {
   codigo_raw <- "E110"
 
   # Normalizar
-  codigo_norm <- cie_normalizar(codigo_raw, buscar_db = FALSE)
+  codigo_norm <- cie_normalize(codigo_raw, search_db = FALSE)
   expect_equal(codigo_norm, "E11.0")
 
   # Buscar con codigo raw y normalizado
@@ -210,7 +210,7 @@ test_that("escenario: busqueda de codigos para estudio", {
   resultados_diabetes <- cie_search("diabetes mellitus tipo 2", threshold = 0.65)
 
   # 2. Buscar categoria general
-  categoria_e11 <- cie_lookup("E11", expandir = TRUE)
+  categoria_e11 <- cie_lookup("E11", expand = TRUE)
 
   # 3. Combinar resultados
   codigos_estudio <- unique(c(resultados_diabetes$codigo, categoria_e11$codigo))
@@ -220,7 +220,7 @@ test_that("escenario: busqueda de codigos para estudio", {
   expect_true(all(validacion))
 
   # 5. Obtener descripciones completas
-  descripciones <- cie_lookup(codigos_estudio, descripcion_completa = TRUE)
+  descripciones <- cie_lookup(codigos_estudio, full_description = TRUE)
   expect_true("descripcion_completa" %in% names(descripciones))
 })
 
@@ -247,7 +247,7 @@ test_that("escenario: limpieza de datos con codigos sucios", {
   codigos_validos <- codigos_sucios[formato_ok]
 
   # 3. Normalizar
-  codigos_norm <- cie_normalizar(codigos_validos, buscar_db = FALSE)
+  codigos_norm <- cie_normalize(codigos_validos, search_db = FALSE)
 
   # 4. Buscar en base
   suppressMessages({

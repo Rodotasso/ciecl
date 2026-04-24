@@ -2,30 +2,30 @@ test_that("cie_normalizar convierte formatos correctamente", {
   skip_on_cran()
   
   # Con punto (ya normalizado)
-  expect_equal(cie_normalizar("E11.0", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("E11.0", search_db = FALSE), "E11.0")
   
   # Sin punto (agrega punto)
-  expect_equal(cie_normalizar("E110", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("E110", search_db = FALSE), "E11.0")
   
   # Con sufijo X en codigos cortos (elimina X)
-  expect_equal(cie_normalizar("I10X", buscar_db = FALSE), "I10")
-  expect_equal(cie_normalizar("J00X", buscar_db = FALSE), "J00")
-  expect_equal(cie_normalizar("B54X", buscar_db = FALSE), "B54")
-  expect_equal(cie_normalizar("i10x", buscar_db = FALSE), "I10")  # minusculas
+  expect_equal(cie_normalize("I10X", search_db = FALSE), "I10")
+  expect_equal(cie_normalize("J00X", search_db = FALSE), "J00")
+  expect_equal(cie_normalize("B54X", search_db = FALSE), "B54")
+  expect_equal(cie_normalize("i10x", search_db = FALSE), "I10")  # minusculas
   
   # Codigos largos con X placeholder (preserva X)
   # En trauma/lesiones, X es placeholder obligatorio del 7o caracter
-  expect_equal(cie_normalizar("S72X01A", buscar_db = FALSE), "S72X01A")
-  expect_equal(cie_normalizar("T84X0XA", buscar_db = FALSE), "T84X0XA")
+  expect_equal(cie_normalize("S72X01A", search_db = FALSE), "S72X01A")
+  expect_equal(cie_normalize("T84X0XA", search_db = FALSE), "T84X0XA")
   
   # Vectorizado
   codigos <- c("E11.0", "I10.0", "Z00")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos, search_db = FALSE)
   expect_equal(resultado, c("E11.0", "I10.0", "Z00"))
   
   # Vectorizado con X (cortos y largos)
   codigos_x <- c("I10X", "J00X", "E110", "S72X01A")
-  resultado_x <- cie_normalizar(codigos_x, buscar_db = FALSE)
+  resultado_x <- cie_normalize(codigos_x, search_db = FALSE)
   expect_equal(resultado_x, c("I10", "J00", "E11.0", "S72X01A"))
 })
 
@@ -33,30 +33,30 @@ test_that("cie_normalizar maneja caracteres especiales", {
   skip_on_cran()
   
   # Espacios internos (error comun de captura)
-  expect_equal(cie_normalizar("E 11 0", buscar_db = FALSE), "E11.0")
-  expect_equal(cie_normalizar("I 10", buscar_db = FALSE), "I10")
-  expect_equal(cie_normalizar(" E11.0 ", buscar_db = FALSE), "E11.0")  # trim
+  expect_equal(cie_normalize("E 11 0", search_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("I 10", search_db = FALSE), "I10")
+  expect_equal(cie_normalize(" E11.0 ", search_db = FALSE), "E11.0")  # trim
   
   # Guiones en lugar de puntos
-  expect_equal(cie_normalizar("I10-0", buscar_db = FALSE), "I10.0")
-  expect_equal(cie_normalizar("E11-0", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("I10-0", search_db = FALSE), "I10.0")
+  expect_equal(cie_normalize("E11-0", search_db = FALSE), "E11.0")
   
   # Puntos multiples consecutivos
-  expect_equal(cie_normalizar("E..11.0", buscar_db = FALSE), "E.11.0")
-  expect_equal(cie_normalizar("I10..0", buscar_db = FALSE), "I10.0")
+  expect_equal(cie_normalize("E..11.0", search_db = FALSE), "E.11.0")
+  expect_equal(cie_normalize("I10..0", search_db = FALSE), "I10.0")
   
   # Puntos iniciales
-  expect_equal(cie_normalizar(".I10", buscar_db = FALSE), "I10")
-  expect_equal(cie_normalizar("..E11.0", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize(".I10", search_db = FALSE), "I10")
+  expect_equal(cie_normalize("..E11.0", search_db = FALSE), "E11.0")
   
   # Sistema daga/asterisco (codificacion dual CIE-10)
-  expect_equal(cie_normalizar("A17.0\u2020", buscar_db = FALSE), "A17.0")  # daga
-  expect_equal(cie_normalizar("G01*", buscar_db = FALSE), "G01")           # asterisco
-  expect_equal(cie_normalizar("A52.1\u2020", buscar_db = FALSE), "A52.1")  # parkinsonismo sifilitico
+  expect_equal(cie_normalize("A17.0\u2020", search_db = FALSE), "A17.0")  # daga
+  expect_equal(cie_normalize("G01*", search_db = FALSE), "G01")           # asterisco
+  expect_equal(cie_normalize("A52.1\u2020", search_db = FALSE), "A52.1")  # parkinsonismo sifilitico
   
   # Vectorizado con caracteres especiales
   codigos_especiales <- c("E 11 0", "I10-0", "A17.0\u2020", "G01*")
-  resultado <- cie_normalizar(codigos_especiales, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos_especiales, search_db = FALSE)
   expect_equal(resultado, c("E11.0", "I10.0", "A17.0", "G01"))
 })
 
@@ -81,49 +81,49 @@ test_that("cie_expand genera hijos correctos", {
 })
 
 # ============================================================
-# PRUEBAS ADICIONALES cie_normalizar() con buscar_db=TRUE
+# PRUEBAS ADICIONALES cie_normalize() con search_db = TRUE
 # ============================================================
 
-test_that("cie_normalizar con buscar_db=TRUE verifica existencia", {
+test_that("cie_normalizar con search_db = TRUE verifica existencia", {
   skip_on_cran()
 
   # Codigo que existe en la base
-  resultado <- cie_normalizar("E11.0", buscar_db = TRUE)
+  resultado <- cie_normalize("E11.0", search_db = TRUE)
   expect_equal(resultado, "E11.0")
 
   # Codigo de categoria (3 digitos)
-  resultado_cat <- cie_normalizar("E11", buscar_db = TRUE)
+  resultado_cat <- cie_normalize("E11", search_db = TRUE)
   # Puede agregar 0 si E110 existe, o mantenerse E11
   expect_true(resultado_cat %in% c("E11", "E110"))
 })
 
-test_that("cie_normalizar con buscar_db=TRUE es vectorizado", {
+test_that("cie_normalizar con search_db = TRUE es vectorizado", {
   skip_on_cran()
 
   codigos <- c("E11.0", "I10", "Z00")
-  resultado <- cie_normalizar(codigos, buscar_db = TRUE)
+  resultado <- cie_normalize(codigos, search_db = TRUE)
 
   expect_length(resultado, 3)
   expect_true("E11.0" %in% resultado)
 })
 
-test_that("cie_normalizar con buscar_db=TRUE maneja NAs", {
+test_that("cie_normalizar con search_db = TRUE maneja NAs", {
   skip_on_cran()
 
   codigos <- c(NA, "E11.0")
 
-  resultado <- cie_normalizar(codigos, buscar_db = TRUE)
+  resultado <- cie_normalize(codigos, search_db = TRUE)
   expect_length(resultado, 2)
   expect_true(is.na(resultado[1]))
   expect_equal(resultado[2], "E11.0")
 })
 
 
-test_that("cie_normalizar maneja codigo inexistente con buscar_db=TRUE", {
+test_that("cie_normalizar maneja codigo inexistente con search_db = TRUE", {
   skip_on_cran()
 
   # Codigo que no existe (retorna el codigo normalizado)
-  resultado <- cie_normalizar("X99.9", buscar_db = TRUE)
+  resultado <- cie_normalize("X99.9", search_db = TRUE)
   expect_equal(resultado, "X99.9")
 })
 
@@ -190,15 +190,15 @@ test_that("cie_expand maneja codigo con subcategorias", {
 })
 
 # ============================================================
-# PRUEBAS ADICIONALES COBERTURA - cie_normalizar()
+# PRUEBAS ADICIONALES COBERTURA - cie_normalize()
 # ============================================================
 
 test_that("cie_normalizar maneja minusculas y mayusculas mezcladas", {
   skip_on_cran()
 
-  expect_equal(cie_normalizar("e11.0", buscar_db = FALSE), "E11.0")
-  expect_equal(cie_normalizar("E11.0", buscar_db = FALSE), "E11.0")
-  expect_equal(cie_normalizar("e11", buscar_db = FALSE), "E11")
+  expect_equal(cie_normalize("e11.0", search_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("E11.0", search_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("e11", search_db = FALSE), "E11")
 })
 
 test_that("cie_normalizar maneja codigos con punto medio unicode", {
@@ -206,41 +206,41 @@ test_that("cie_normalizar maneja codigos con punto medio unicode", {
 
   # Punto medio (middot) a veces usado en sistemas
   # Unicode U+00B7 es eliminado por la funcion
-  expect_equal(cie_normalizar("E11\u00B70", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("E11\u00B70", search_db = FALSE), "E11.0")
 })
 
 test_that("cie_normalizar maneja vector con NAs", {
   skip_on_cran()
 
   codigos <- c("E11.0", NA, "I10")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos, search_db = FALSE)
 
   expect_length(resultado, 3)
   expect_true(is.na(resultado[2]))
 })
 
-test_that("cie_normalizar buscar_db=TRUE con codigo de 3 digitos que tiene extension", {
+test_that("cie_normalizar search_db = TRUE con codigo de 3 digitos que tiene extension", {
   skip_on_cran()
 
   # I10 es codigo sin subcategorias directas
-  resultado <- cie_normalizar("I10", buscar_db = TRUE)
+  resultado <- cie_normalize("I10", search_db = TRUE)
   # Debe mantenerse como I10 o agregar 0 si existe I100
   expect_true(nchar(resultado) >= 3)
 })
 
-test_that("cie_normalizar buscar_db=TRUE preserva codigo ya normalizado", {
+test_that("cie_normalizar search_db = TRUE preserva codigo ya normalizado", {
   skip_on_cran()
 
   # E11.0 existe en la base
-  resultado <- cie_normalizar("E11.0", buscar_db = TRUE)
+  resultado <- cie_normalize("E11.0", search_db = TRUE)
   expect_equal(resultado, "E11.0")
 })
 
-test_that("cie_normalizar buscar_db=TRUE con multiples codigos invalidos", {
+test_that("cie_normalizar search_db = TRUE con multiples codigos invalidos", {
   skip_on_cran()
 
   codigos <- c("XX9.9", "YY8.8", "ZZ7.7")
-  resultado <- cie_normalizar(codigos, buscar_db = TRUE)
+  resultado <- cie_normalize(codigos, search_db = TRUE)
 
   # Debe retornar los codigos normalizados aunque no existan
   expect_length(resultado, 3)
@@ -351,18 +351,18 @@ test_that("cie_expand retorna character vector", {
 test_that("cie_normalizar maneja codigo con espacios multiples", {
   skip_on_cran()
 
-  expect_equal(cie_normalizar("E  11  0", buscar_db = FALSE), "E11.0")
-  expect_equal(cie_normalizar("  E11.0  ", buscar_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("E  11  0", search_db = FALSE), "E11.0")
+  expect_equal(cie_normalize("  E11.0  ", search_db = FALSE), "E11.0")
 })
 
 test_that("cie_normalizar maneja combinacion de caracteres especiales", {
   skip_on_cran()
 
   # Daga + espacio + guion
-  expect_equal(cie_normalizar("A17\u2020 0", buscar_db = FALSE), "A17.0")
+  expect_equal(cie_normalize("A17\u2020 0", search_db = FALSE), "A17.0")
 
   # Asterisco + punto inicial
-  expect_equal(cie_normalizar(".G01*", buscar_db = FALSE), "G01")
+  expect_equal(cie_normalize(".G01*", search_db = FALSE), "G01")
 })
 
 test_that("cie_validate_vector strict=FALSE acepta formato correcto sin DB", {
@@ -380,7 +380,7 @@ test_that("cie_normalizar con codigos de trauma largos", {
   codigos_trauma <- c("S72.001A", "T84.50XA")
 
   # La funcion debe manejarlos sin error
-  resultado <- cie_normalizar(codigos_trauma, buscar_db = FALSE)
+  resultado <- cie_normalize(codigos_trauma, search_db = FALSE)
   expect_length(resultado, 2)
 })
 
@@ -388,60 +388,60 @@ test_that("cie_normalizar con codigos de trauma largos", {
 # PRUEBAS COBERTURA LINEAS 90-94: Extension cod_con_0 para codigos 3 digitos
 # ============================================================
 
-test_that("cie_normalizar buscar_db=TRUE extiende codigo 3 digitos con 0", {
+test_that("cie_normalizar search_db = TRUE extiende codigo 3 digitos con 0", {
   skip_on_cran()
 
   # E10 es categoria diabetes tipo 1
   # Si E10 no existe pero E100 si, debe retornar E100
   # O si E10 existe, retorna E10
-  resultado <- cie_normalizar("E10", buscar_db = TRUE)
+  resultado <- cie_normalize("E10", search_db = TRUE)
 
   # El resultado debe ser E10 o E100 (si se extendio)
   expect_true(resultado %in% c("E10", "E100"))
   expect_true(nchar(resultado) >= 3)
 })
 
-test_that("cie_normalizar buscar_db=TRUE con codigo 3 digitos que no tiene extension", {
+test_that("cie_normalizar search_db = TRUE con codigo 3 digitos que no tiene extension", {
   skip_on_cran()
 
   # Codigo de 3 digitos que existe en la DB
   # I10 es Hipertension esencial (codigo sin subcategorias directas numericas)
-  resultado <- cie_normalizar("I10", buscar_db = TRUE)
+  resultado <- cie_normalize("I10", search_db = TRUE)
 
   # Debe mantenerse I10 ya que existe en la DB
   expect_equal(resultado, "I10")
 })
 
-test_that("cie_normalizar buscar_db=TRUE con varios codigos 3 digitos", {
+test_that("cie_normalizar search_db = TRUE con varios codigos 3 digitos", {
   skip_on_cran()
 
   # Mezcla de codigos de 3 digitos
   codigos <- c("E10", "E11", "I10", "J00")
-  resultado <- cie_normalizar(codigos, buscar_db = TRUE)
+  resultado <- cie_normalize(codigos, search_db = TRUE)
 
   expect_length(resultado, 4)
   # Todos deben empezar con la letra original
   expect_true(all(substr(resultado, 1, 1) == c("E", "E", "I", "J")))
 })
 
-test_that("cie_normalizar buscar_db=TRUE codigo 3 digitos inexistente no se extiende", {
+test_that("cie_normalizar search_db = TRUE codigo 3 digitos inexistente no se extiende", {
   skip_on_cran()
 
   # Codigo que no existe en la base y tampoco existe con 0
-  resultado <- cie_normalizar("X99", buscar_db = TRUE)
+  resultado <- cie_normalize("X99", search_db = TRUE)
 
   # Debe retornar X99 ya que ni X99 ni X990 existen
   expect_equal(resultado, "X99")
 })
 
-test_that("cie_normalizar buscar_db=TRUE ejercita rama cod_con_0", {
+test_that("cie_normalizar search_db = TRUE ejercita rama cod_con_0", {
   skip_on_cran()
 
   # Buscar un codigo de 3 digitos donde el codigo base no existe
 
   # pero la extension con 0 podria existir
   # A09 (Diarrea y gastroenteritis) puede tener A090
-  resultado <- cie_normalizar("A09", buscar_db = TRUE)
+  resultado <- cie_normalize("A09", search_db = TRUE)
 
   # El resultado debe ser valido (A09 o A090)
   expect_true(nchar(resultado) >= 3)

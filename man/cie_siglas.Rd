@@ -34,6 +34,7 @@ cie_siglas() |> dplyr::filter(sigla == "iam")
 \code{\link{cie_search}}, \code{\link{cie_lookup}}
 
 Other busqueda: 
+\code{\link{cie_describe}()},
 \code{\link{cie_guia_busqueda}()},
 \code{\link{cie_lookup}()},
 \code{\link{cie_search}()}

@@ -20,7 +20,9 @@ test_that("cie11_search valida formato de API key", {
 })
 
 test_that("cie11_search requiere httr2", {
-  skip_if(requireNamespace("httr2", quietly = TRUE))
+  # Test de la rama de error cuando httr2 NO esta instalado.
+  # Skip si httr2 esta presente (no hay error que verificar).
+  skip_if(requireNamespace("httr2", quietly = TRUE), "httr2 esta instalado")
 
   expect_error(
     cie11_search("diabetes", api_key = "test:test"),
@@ -51,8 +53,8 @@ test_that("cie11_search con API real retorna resultados", {
   expect_true("capitulo" %in% names(resultado))
   expect_lte(nrow(resultado), 2)
   if (nrow(resultado) > 0) {
-    expect_false(any(grepl("<em", resultado$titulo, fixed = TRUE)))
-    expect_false(any(grepl("</em>", resultado$titulo, fixed = TRUE)))
+    expect_no_match(resultado$titulo, "<em", fixed = TRUE)
+    expect_no_match(resultado$titulo, "</em>", fixed = TRUE)
   }
 })
 
@@ -142,8 +144,8 @@ test_that("cie11_search con API real limpia tags HTML", {
 
   if (nrow(resultado) > 0) {
     # No deberia haber tags <em> en los titulos
-    expect_false(any(grepl("<em", resultado$titulo, fixed = TRUE)))
-    expect_false(any(grepl("</em>", resultado$titulo, fixed = TRUE)))
+    expect_no_match(resultado$titulo, "<em", fixed = TRUE)
+    expect_no_match(resultado$titulo, "</em>", fixed = TRUE)
   }
 })
 

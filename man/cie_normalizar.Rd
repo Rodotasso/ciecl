@@ -2,58 +2,30 @@
 % Please edit documentation in R/cie-utils.R
 \name{cie_normalizar}
 \alias{cie_normalizar}
-\title{Normalizar codigos CIE-10 a formato con punto}
+\title{Normalizar codigos CIE-10 (deprecated)}
 \usage{
 cie_normalizar(codigos, buscar_db = TRUE)
 }
 \arguments{
-\item{codigos}{Character vector de codigos en cualquier formato}
+\item{codigos}{Character vector de codigos}
 
-\item{buscar_db}{Logical, buscar codigo en base de datos
-si no se encuentra exacto (default TRUE)}
+\item{buscar_db}{Logical, buscar codigo en DB (default TRUE)}
 }
 \value{
-Character vector con codigos normalizados al formato con punto
+Character vector con codigos normalizados
 }
 \description{
-Convierte codigos CIE-10 de diferentes formatos al
-formato estandar (con punto).
-Maneja multiples variaciones de entrada comunes en datos clinicos.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
-La normalizacion incluye:
-\itemize{
-\item Conversion a mayusculas
-\item Eliminacion de espacios (inicio, fin e internos)
-\item Eliminacion de simbolos daga y asterisco (codificacion dual)
-\item Conversion de guiones a puntos (I10-0 -> I10.0)
-\item Eliminacion de puntos iniciales (.I10 -> I10)
-\item Correccion de puntos multiples (E..11 -> E.11)
-\item Eliminacion de sufijo X en codigos cortos (I10X -> I10)
-\item Preservacion de X en codigos largos (placeholder 7o caracter)
-\item Agregado de punto en posicion correcta (E110 -> E11.0)
-}
-
-El sistema de daga/asterisco indica codificacion dual donde la daga
-marca la enfermedad subyacente y el asterisco la manifestacion.
-Ambos simbolos se eliminan para normalizacion.
-}
-\examples{
-cie_normalizar("E110")     # Retorna "E11.0"
-cie_normalizar("E11")      # Retorna "E11" (categoria)
-cie_normalizar("I10X")     # Retorna "I10" (elimina X)
-cie_normalizar("E 11 0")   # Retorna "E11.0" (espacios internos)
-cie_normalizar("I10-0")    # Retorna "I10.0" (guion a punto)
-cie_normalizar("A17.0\u2020") # Retorna "A17.0" (elimina daga)
-cie_normalizar("G01*")     # Retorna "G01" (elimina asterisco)
-cie_normalizar(c("E110", "I10X", "Z00"))  # Vectorizado
+Alias en espanol de \code{\link[=cie_normalize]{cie_normalize()}}. Se mantiene por compatibilidad
+con codigo existente en CRAN. Usar \code{\link[=cie_normalize]{cie_normalize()}} en codigo nuevo.
 }
 \seealso{
-\code{\link{cie_validate_vector}},
-\code{\link{cie_expand}}, \code{\link{cie_lookup}}
-
 Other validacion: 
 \code{\link{cie_expand}()},
+\code{\link{cie_normalize}()},
 \code{\link{cie_validate_vector}()}
 }
 \concept{validacion}
+\keyword{internal}

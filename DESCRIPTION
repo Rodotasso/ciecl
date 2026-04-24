@@ -27,7 +27,9 @@ Imports:
     dplyr,
     tibble,
     tools,
-    utils
+    utils,
+    lifecycle,
+    rlang
 Suggests:
     comorbidity,
     gt,

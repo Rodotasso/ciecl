@@ -778,15 +778,15 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 
 #' Busqueda exacta por codigo CIE-10
 #'
-#' @param codigo Character vector de codigos
+#' @param code Character vector de codigos
 #'   (ej. "E11", "E11.0", c("E11.0", "Z00"))
 #'   o rango (ej. "E10-E14"). Acepta vectores.
 #'   Soporta formatos: con punto (E11.0),
 #'   sin punto (E110), o solo categoria (E11).
-#' @param expandir Logical, expandir jerarquia completa (default FALSE)
-#' @param normalizar Logical, normalizar formato de codigos
+#' @param expand Logical, expandir jerarquia completa (default FALSE)
+#' @param normalize Logical, normalizar formato de codigos
 #'   automaticamente (default TRUE)
-#' @param descripcion_completa Logical, agregar columna descripcion_completa
+#' @param full_description Logical, agregar columna `descripcion_completa`
 #'   con formato "CODIGO - DESCRIPCION" (default FALSE)
 #' @param extract Logical, extraer codigo CIE-10 de texto con
 #'   prefijos/sufijos (default FALSE).
@@ -795,10 +795,14 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #'   Para vectores multiples usar extract=FALSE (default).
 #' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
+#' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
+#' @param expandir `r lifecycle::badge("deprecated")` Use `expand`.
+#' @param normalizar `r lifecycle::badge("deprecated")` Use `normalize`.
+#' @param descripcion_completa `r lifecycle::badge("deprecated")` Use `full_description`.
 #' @return tibble con codigo(s) matcheado(s)
 #' @family busqueda
 #' @seealso \code{\link{cie_search}},
-#'   \code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+#'   \code{\link{cie_normalize}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' # Busqueda directa por codigo
@@ -807,11 +811,11 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' \donttest{
 #' cie_lookup("E110")        # Sin punto
 #' cie_lookup("E11")         # Solo categoria
-#' cie_lookup("E11", expandir = TRUE)  # Todos E11.x
+#' cie_lookup("E11", expand = TRUE)  # Todos E11.x
 #' # Vectorizado - multiples codigos y formatos
 #' cie_lookup(c("E11.0", "Z00", "I10"))
 #' # Con descripcion completa
-#' cie_lookup("E110", descripcion_completa = TRUE)
+#' cie_lookup("E110", full_description = TRUE)
 #' # Extraer codigo de texto con ruido (solo codigo escalar)
 #' cie_lookup("CIE:E11.0", extract = TRUE)
 #' cie_lookup("E11.0-confirmado", extract = TRUE)
@@ -819,11 +823,48 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
 #' }
-cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
-                       descripcion_completa = FALSE, extract = FALSE,
-                       check_siglas = FALSE) {
-  # Manejar vector vacio
+cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
+                       full_description = FALSE, extract = FALSE,
+                       check_siglas = FALSE,
+                       codigo = lifecycle::deprecated(),
+                       expandir = lifecycle::deprecated(),
+                       normalizar = lifecycle::deprecated(),
+                       descripcion_completa = lifecycle::deprecated()) {
+  # Deprecation: argumentos en espanol -> ingles
+  if (lifecycle::is_present(codigo)) {
+    lifecycle::deprecate_warn(
+      "0.10.0", "cie_lookup(codigo = )", "cie_lookup(code = )"
+    )
+    code <- codigo
+  }
+  if (lifecycle::is_present(expandir)) {
+    lifecycle::deprecate_warn(
+      "0.10.0", "cie_lookup(expandir = )", "cie_lookup(expand = )"
+    )
+    expand <- expandir
+  }
+  if (lifecycle::is_present(normalizar)) {
+    lifecycle::deprecate_warn(
+      "0.10.0", "cie_lookup(normalizar = )", "cie_lookup(normalize = )"
+    )
+    normalize <- normalizar
+  }
+  if (lifecycle::is_present(descripcion_completa)) {
+    lifecycle::deprecate_warn(
+      "0.10.0",
+      "cie_lookup(descripcion_completa = )",
+      "cie_lookup(full_description = )"
+    )
+    full_description <- descripcion_completa
+  }
 
+  # Alias internos para mantener el cuerpo de la funcion sin cambios
+  codigo <- code
+  expandir <- expand
+  normalizar <- normalize
+  descripcion_completa <- full_description
+
+  # Manejar vector vacio
   if (length(codigo) == 0) {
     return(cie10_empty_tibble(add_descripcion_completa = descripcion_completa))
   }
@@ -867,7 +908,7 @@ cie_lookup <- function(codigo, expandir = FALSE, normalizar = TRUE,
     codigo_norm <- ifelse(
       es_rango_input,
       codigo_input,
-      cie_normalizar(codigo_input, buscar_db = FALSE)
+      cie_normalize(codigo_input, search_db = FALSE)
     )
   } else {
     codigo_norm <- codigo_input

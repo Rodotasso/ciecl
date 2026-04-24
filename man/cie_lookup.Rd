@@ -5,27 +5,31 @@
 \title{Busqueda exacta por codigo CIE-10}
 \usage{
 cie_lookup(
-  codigo,
-  expandir = FALSE,
-  normalizar = TRUE,
-  descripcion_completa = FALSE,
+  code,
+  expand = FALSE,
+  normalize = TRUE,
+  full_description = FALSE,
   extract = FALSE,
-  check_siglas = FALSE
+  check_siglas = FALSE,
+  codigo = lifecycle::deprecated(),
+  expandir = lifecycle::deprecated(),
+  normalizar = lifecycle::deprecated(),
+  descripcion_completa = lifecycle::deprecated()
 )
 }
 \arguments{
-\item{codigo}{Character vector de codigos
+\item{code}{Character vector de codigos
 (ej. "E11", "E11.0", c("E11.0", "Z00"))
 o rango (ej. "E10-E14"). Acepta vectores.
 Soporta formatos: con punto (E11.0),
 sin punto (E110), o solo categoria (E11).}
 
-\item{expandir}{Logical, expandir jerarquia completa (default FALSE)}
+\item{expand}{Logical, expandir jerarquia completa (default FALSE)}
 
-\item{normalizar}{Logical, normalizar formato de codigos
+\item{normalize}{Logical, normalizar formato de codigos
 automaticamente (default TRUE)}
 
-\item{descripcion_completa}{Logical, agregar columna descripcion_completa
+\item{full_description}{Logical, agregar columna \code{descripcion_completa}
 con formato "CODIGO - DESCRIPCION" (default FALSE)}
 
 \item{extract}{Logical, extraer codigo CIE-10 de texto con
@@ -36,6 +40,14 @@ Para vectores multiples usar extract=FALSE (default).}
 
 \item{check_siglas}{Logical, buscar siglas medicas comunes (default FALSE).
 Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)}
+
+\item{codigo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{code}.}
+
+\item{expandir}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{expand}.}
+
+\item{normalizar}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{normalize}.}
+
+\item{descripcion_completa}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{full_description}.}
 }
 \value{
 tibble con codigo(s) matcheado(s)
@@ -50,11 +62,11 @@ cie_lookup("E11.0")
 \donttest{
 cie_lookup("E110")        # Sin punto
 cie_lookup("E11")         # Solo categoria
-cie_lookup("E11", expandir = TRUE)  # Todos E11.x
+cie_lookup("E11", expand = TRUE)  # Todos E11.x
 # Vectorizado - multiples codigos y formatos
 cie_lookup(c("E11.0", "Z00", "I10"))
 # Con descripcion completa
-cie_lookup("E110", descripcion_completa = TRUE)
+cie_lookup("E110", full_description = TRUE)
 # Extraer codigo de texto con ruido (solo codigo escalar)
 cie_lookup("CIE:E11.0", extract = TRUE)
 cie_lookup("E11.0-confirmado", extract = TRUE)
@@ -65,9 +77,10 @@ cie_lookup("DM2", check_siglas = TRUE)
 }
 \seealso{
 \code{\link{cie_search}},
-\code{\link{cie_normalizar}}, \code{\link{cie_expand}}
+\code{\link{cie_normalize}}, \code{\link{cie_expand}}
 
 Other busqueda: 
+\code{\link{cie_describe}()},
 \code{\link{cie_guia_busqueda}()},
 \code{\link{cie_search}()},
 \code{\link{cie_siglas}()}
