@@ -4,12 +4,16 @@
 \alias{cie_describe}
 \title{Obtener descripcion de codigos CIE-10 (vector)}
 \usage{
-cie_describe(codes, default = NA_character_)
+cie_describe(codes, normalize = FALSE, default = NA_character_)
 }
 \arguments{
 \item{codes}{Character vector de codigos CIE-10 (ej. "E11.0",
-c("E11.0", "I10")). Se normalizan internamente con
-\code{\link[=cie_normalize]{cie_normalize()}}, por lo que acepta "E110", "e11.0", etc.}
+c("E11.0", "I10")).}
+
+\item{normalize}{Logical, ¿intentar normalizar los codigos antes
+de buscar la descripcion? (default FALSE). Usar TRUE para
+limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
+auditar la calidad original del registro.}
 
 \item{default}{Valor devuelto cuando un codigo no se encuentra
 en el catalogo. Default \code{NA_character_}.}
@@ -25,26 +29,29 @@ pensado para usar dentro de \code{dplyr::mutate()} sin necesidad de
 un \code{left_join} contra \code{cie10_cl}.
 }
 \examples{
-# Uso escalar
-cie_describe("E11.0")
+# Auditoria: buscar tal cual (E110 no existe sin punto)
+cie_describe("E110", normalize = FALSE)
+
+# Rescate: normalizar antes de buscar
+cie_describe("E110", normalize = TRUE)
 
 \donttest{
-# Uso vectorizado
-cie_describe(c("E11.0", "I10", "Z00"))
-
-# Uso tipico dentro de mutate
-df <- data.frame(DIAG1 = c("E110", "I10", "XXX"))
-df$descripcion <- cie_describe(df$DIAG1)
+# Uso tipico en auditoria VIU (contar fallos de origen)
+diags <- c("E11.0", "E110", "I10X", "INVALIDO")
+descripciones <- cie_describe(diags, normalize = FALSE)
+sum(is.na(descripciones)) # Detecta 3 errores de registro
 }
 }
 \seealso{
 \code{\link[=cie_lookup]{cie_lookup()}} para resultado como tibble con todas
-las columnas; \code{\link[=cie_normalize]{cie_normalize()}} para normalizacion.
+las columnas; \code{\link[=cie_norm]{cie_norm()}} para normalizacion.
 
 Other busqueda: 
 \code{\link{cie_guia_busqueda}()},
+\code{\link{cie_guide}()},
 \code{\link{cie_lookup}()},
 \code{\link{cie_search}()},
+\code{\link{cie_short}()},
 \code{\link{cie_siglas}()}
 }
 \concept{busqueda}

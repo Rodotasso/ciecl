@@ -44,10 +44,7 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
   }
 
   # Verificar que httr2 este instalado
-  if (!requireNamespace("httr2", quietly = TRUE)) {
-    stop("El paquete 'httr2' es necesario para esta funci\u00f3n.\n",
-         "Inst\u00e1lalo con: install.packages('httr2')")
-  }
+  rlang::check_installed("httr2", reason = "para consultar la API oficial de la OMS (CIE-11).")
   
   # Obtener API key (env var o argumento)
   if (is.null(api_key)) {

@@ -24,7 +24,7 @@
 cie_table <- function(code, codigo = lifecycle::deprecated()) {
   if (lifecycle::is_present(codigo)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
+      "0.9.8",
       "cie_table(codigo = )",
       "cie_table(code = )"
     )
@@ -40,10 +40,13 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
   }
 
   # Reemplazar NA/vacio por em dash (U+2014) en columnas de texto.
-  # Los NA provienen del catalogo MINSAL cuando el campo no aplica al
-  # nivel (categoria 3 digitos vs subcategoria 4+).
-  # intToUtf8() mantiene el fuente ASCII-puro (requisito CRAN).
   em_dash <- intToUtf8(0x2014)
+  
+  # Identificar si columnas de notas estan vacias antes del reemplazo
+  notas_vacias <- sapply(c("inclusion", "exclusion"), function(col) {
+    all(is.na(datos[[col]]) | datos[[col]] == "")
+  })
+
   datos <- datos %>%
     dplyr::mutate(
       dplyr::across(
@@ -58,7 +61,17 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
     gt::tab_header(
       title = sprintf("CIE-10 Chile: %s", code),
       subtitle = "Fuente: MINSAL/DEIS v2018"
-    ) %>%
+    )
+
+  # Ocultar columnas vacias dinamicamente
+  if (notas_vacias["inclusion"]) {
+    tabla <- tabla %>% gt::cols_hide(columns = inclusion)
+  }
+  if (notas_vacias["exclusion"]) {
+    tabla <- tabla %>% gt::cols_hide(columns = exclusion)
+  }
+
+  tabla <- tabla %>%
     gt::cols_label(
       codigo = "Codigo",
       descripcion = "Diagnostico",

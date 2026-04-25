@@ -77,12 +77,14 @@ cie_lookup("DM2", check_siglas = TRUE)
 }
 \seealso{
 \code{\link{cie_search}},
-\code{\link{cie_normalize}}, \code{\link{cie_expand}}
+\code{\link{cie_norm}}, \code{\link{cie_expand}}
 
 Other busqueda: 
 \code{\link{cie_describe}()},
 \code{\link{cie_guia_busqueda}()},
+\code{\link{cie_guide}()},
 \code{\link{cie_search}()},
+\code{\link{cie_short}()},
 \code{\link{cie_siglas}()}
 }
 \concept{busqueda}

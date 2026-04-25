@@ -18,13 +18,13 @@ Character vector con codigos normalizados
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
-Alias en espanol de \code{\link[=cie_normalize]{cie_normalize()}}. Se mantiene por compatibilidad
-con codigo existente en CRAN. Usar \code{\link[=cie_normalize]{cie_normalize()}} en codigo nuevo.
+Alias en espanol de \code{\link[=cie_norm]{cie_norm()}}. Se mantiene por compatibilidad
+con codigo existente en CRAN. Usar \code{\link[=cie_norm]{cie_norm()}} en codigo nuevo.
 }
 \seealso{
 Other validacion: 
 \code{\link{cie_expand}()},
-\code{\link{cie_normalize}()},
+\code{\link{cie_norm}()},
 \code{\link{cie_validate_vector}()}
 }
 \concept{validacion}

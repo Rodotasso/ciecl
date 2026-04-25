@@ -1,4 +1,4 @@
-# ciecl 0.10.0 (en desarrollo — rev-ropensci)
+# ciecl 0.9.8 (en desarrollo — rev-ropensci)
 
 Respuesta a la revision editorial de rOpenSci. Unificacion de idioma
 (funciones y argumentos en ingles, documentacion en espanol) sin romper

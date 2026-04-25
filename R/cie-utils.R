@@ -34,32 +34,32 @@
 #'   \code{\link{cie_expand}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
-#' cie_normalize("E110")     # Retorna "E11.0"
-#' cie_normalize("E11")      # Retorna "E11" (categoria)
-#' cie_normalize("I10X")     # Retorna "I10" (elimina X)
-#' cie_normalize("E 11 0")   # Retorna "E11.0" (espacios internos)
-#' cie_normalize("I10-0")    # Retorna "I10.0" (guion a punto)
-#' cie_normalize(paste0("A17.0", intToUtf8(0x2020)))  # "A17.0" (elimina daga)
-#' cie_normalize("G01*")                              # "G01"   (elimina asterisco)
-#' cie_normalize(c("E110", "I10X", "Z00"))  # Vectorizado
-cie_normalize <- function(codes,
+#' cie_norm("E110")     # Retorna "E11.0"
+#' cie_norm("E11")      # Retorna "E11" (categoria)
+#' cie_norm("I10X")     # Retorna "I10" (elimina X)
+#' cie_norm("E 11 0")   # Retorna "E11.0" (espacios internos)
+#' cie_norm("I10-0")    # Retorna "I10.0" (guion a punto)
+#' cie_norm(paste0("A17.0", intToUtf8(0x2020)))  # "A17.0" (elimina daga)
+#' cie_norm("G01*")                              # "G01"   (elimina asterisco)
+#' cie_norm(c("E110", "I10X", "Z00"))  # Vectorizado
+cie_norm <- function(codes,
                           search_db = TRUE,
                           codigos = lifecycle::deprecated(),
                           buscar_db = lifecycle::deprecated()) {
   # Deprecation: argumentos en espanol -> ingles
   if (lifecycle::is_present(codigos)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
-      "cie_normalize(codigos = )",
-      "cie_normalize(codes = )"
+      "0.9.8",
+      "cie_norm(codigos = )",
+      "cie_norm(codes = )"
     )
     codes <- codigos
   }
   if (lifecycle::is_present(buscar_db)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
-      "cie_normalize(buscar_db = )",
-      "cie_normalize(search_db = )"
+      "0.9.8",
+      "cie_norm(buscar_db = )",
+      "cie_norm(search_db = )"
     )
     search_db <- buscar_db
   }
@@ -84,9 +84,10 @@ cie_normalize <- function(codes,
 
   # === LIMPIEZA DE CARACTERES ESPECIALES ===
   # Eliminar simbolos de codificacion dual MINSAL/DEIS:
-  # daga U+2020 (enfermedad subyacente), medio-punto U+00B7, asterisco (manifestacion).
+  # daga U+2020 (enfermedad subyacente), medio-punto U+00B7,
+  # asterisco (manifestacion), mas (+, etiologia alternativa).
   # Usamos intToUtf8() para mantener el fuente ASCII-puro (requisito CRAN).
-  pattern_duales <- paste0("[", intToUtf8(c(0x2020, 0x00B7)), "*]")
+  pattern_duales <- paste0("[", intToUtf8(c(0x2020, 0x00B7)), "*+]")
   codigos_norm <- stringr::str_replace_all(codigos_norm, pattern_duales, "")
 
   # Convertir guiones a puntos (comun en sistemas que no aceptan puntos)
@@ -149,8 +150,8 @@ cie_normalize <- function(codes,
 #'
 #' `r lifecycle::badge("deprecated")`
 #'
-#' Alias en espanol de [cie_normalize()]. Se mantiene por compatibilidad
-#' con codigo existente en CRAN. Usar [cie_normalize()] en codigo nuevo.
+#' Alias en espanol de [cie_norm()]. Se mantiene por compatibilidad
+#' con codigo existente en CRAN. Usar [cie_norm()] en codigo nuevo.
 #'
 #' @param codigos Character vector de codigos
 #' @param buscar_db Logical, buscar codigo en DB (default TRUE)
@@ -160,11 +161,32 @@ cie_normalize <- function(codes,
 #' @export
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
   lifecycle::deprecate_warn(
-    "0.10.0",
+    "0.9.8",
     "cie_normalizar()",
-    "cie_normalize()"
+    "cie_norm()"
   )
-  cie_normalize(codes = codigos, search_db = buscar_db)
+  cie_norm(codes = codigos, search_db = buscar_db)
+}
+
+#' @rdname cie_norm
+#' @export
+cie_normalize <- function(codes, search_db = TRUE,
+                          codigos = lifecycle::deprecated(),
+                          buscar_db = lifecycle::deprecated()) {
+  lifecycle::deprecate_warn(
+    "0.9.8",
+    "cie_normalize()",
+    "cie_norm()"
+  )
+  if (lifecycle::is_present(codigos)) {
+    lifecycle::deprecate_warn("0.9.8", "cie_normalize(codigos = )", "cie_normalize(codes = )")
+    codes <- codigos
+  }
+  if (lifecycle::is_present(buscar_db)) {
+    lifecycle::deprecate_warn("0.9.8", "cie_normalize(buscar_db = )", "cie_normalize(search_db = )")
+    search_db <- buscar_db
+  }
+  cie_norm(codes = codes, search_db = search_db)
 }
 
 #' Validar vector de codigos CIE-10 formato
@@ -175,7 +197,7 @@ cie_normalizar <- function(codigos, buscar_db = TRUE) {
 #' @return Logical vector de la misma longitud que `codes`. TRUE si el
 #'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 #' @family validacion
-#' @seealso \code{\link{cie_normalize}}, \code{\link{cie_expand}}
+#' @seealso \code{\link{cie_norm}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
@@ -184,7 +206,7 @@ cie_validate_vector <- function(codes,
                                 codigos = lifecycle::deprecated()) {
   if (lifecycle::is_present(codigos)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
+      "0.9.8",
       "cie_validate_vector(codigos = )",
       "cie_validate_vector(codes = )"
     )
@@ -197,7 +219,7 @@ cie_validate_vector <- function(codes,
   patron <- "^[A-Z]\\d{2}(\\d|\\.\\d{1,2})?$"
 
   # Normalizar antes de validar formato (I10X -> I10, N10X -> N10)
-  codigos_norm <- cie_normalize(codes, search_db = FALSE)
+  codigos_norm <- cie_norm(codes, search_db = FALSE)
 
   # Manejar NAs: retornar FALSE para NAs
   validos_formato <- ifelse(
@@ -238,14 +260,14 @@ cie_validate_vector <- function(codes,
 #' @return Character vector con todos los codigos hijos del codigo padre.
 #'   Vector vacio si el codigo no existe en la base de datos.
 #' @family validacion
-#' @seealso \code{\link{cie_normalize}}, \code{\link{cie_lookup}}
+#' @seealso \code{\link{cie_norm}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' cie_expand("E11")
 cie_expand <- function(code, codigo = lifecycle::deprecated()) {
   if (lifecycle::is_present(codigo)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
+      "0.9.8",
       "cie_expand(codigo = )",
       "cie_expand(code = )"
     )

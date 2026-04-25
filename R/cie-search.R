@@ -458,17 +458,17 @@ sigla_to_codigo <- function(sigla) {
 
 #' Extraer codigo CIE-10 de texto con ruido
 #'
-#' @param texto Character vector que puede contener prefijos/sufijos
+#' @param text Character vector que puede contener prefijos/sufijos
 #' @return Character vector con codigo CIE-10 extraido o original
 #' @keywords internal
 #' @noRd
-extract_cie_from_text <- function(texto) {
+extract_cie_from_text <- function(text) {
   # Fix #2: Patron estricto para extraer codigo CIE-10:
   # letra + 2-3 digitos + punto opcional + 0-2 digitos
   # Solo extrae si esta rodeado de no-alfanumericos o en extremos
   patron <- "(?:^|[^A-Z0-9])([A-Z][0-9]{2}[0-9]?\\.?[0-9X]{0,2})(?:$|[^A-Z0-9])"
   
-  extraido <- stringr::str_extract(toupper(texto), patron)
+  extraido <- stringr::str_extract(toupper(text), patron)
   
   # Extraer grupo capturado (quitar prefijos/sufijos)
   if (!is.na(extraido) && extraido != "") {
@@ -479,7 +479,7 @@ extract_cie_from_text <- function(texto) {
   resultado <- ifelse(
     !is.na(extraido) & extraido != "",
     extraido,
-    texto
+    text
   )
   
   return(resultado)
@@ -487,28 +487,42 @@ extract_cie_from_text <- function(texto) {
 
 #' Listar siglas medicas soportadas
 #'
-#' Muestra todas las siglas medicas que pueden usarse en cie_search().
+#' Muestra todas las siglas medicas que pueden usarse en [cie_search()].
+#' "Sigla" se conserva como termino local (concepto medico chileno) en la
+#' columna de salida; el nombre de la funcion usa `cie_short` por
+#' consistencia con el ecosistema R (verbos cortos en ingles).
 #'
-#' @param categoria Character opcional, filtrar por categoria. Valores validos:
+#' @param category Character opcional, filtrar por categoria. Valores validos:
 #'   "cardiovascular", "respiratoria", "metabolica", "gastrointestinal",
 #'   "infecciosa", "oncologica", "reumatologica", "neurologica",
 #'   "psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
 #'   Si es NULL (default), retorna todas las siglas.
+#' @param categoria `r lifecycle::badge("deprecated")` Use `category`.
 #' @return tibble con columnas: sigla, termino_busqueda, categoria
 #' @family busqueda
 #' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
 #' @export
 #' @examples
 #' # Ver todas las siglas
-#' cie_siglas()
+#' cie_short()
 #'
 #' # Filtrar por categoria
-#' cie_siglas("cardiovascular")
-#' cie_siglas("oncologica")
+#' cie_short("cardiovascular")
+#' cie_short("oncologica")
 #'
 #' # Buscar una sigla especifica
-#' cie_siglas() |> dplyr::filter(sigla == "iam")
-cie_siglas <- function(categoria = NULL) {
+#' cie_short() |> dplyr::filter(sigla == "iam")
+cie_short <- function(category = NULL,
+                      categoria = lifecycle::deprecated()) {
+  if (lifecycle::is_present(categoria)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_short(categoria = )",
+      "cie_short(category = )"
+    )
+    category <- categoria
+  }
+
   siglas <- get_siglas_medicas()
 
   resultado <- tibble::tibble(
@@ -517,22 +531,39 @@ cie_siglas <- function(categoria = NULL) {
     categoria = vapply(siglas, function(x) x$categoria, character(1))
   )
 
-  # Filtrar por categoria si se especifica
-  if (!is.null(categoria)) {
-    categoria <- tolower(categoria)
+  if (!is.null(category)) {
+    category <- tolower(category)
     categorias_validas <- unique(resultado$categoria)
 
-    if (!categoria %in% categorias_validas) {
-      warning("Categoria '", categoria, "' no encontrada. ",
+    if (!category %in% categorias_validas) {
+      warning("Categoria '", category, "' no encontrada. ",
               "Categorias validas: ",
               paste(categorias_validas, collapse = ", "))
       return(resultado[0, ])
     }
 
-    resultado <- resultado[resultado$categoria == categoria, ]
+    resultado <- resultado[resultado$categoria == category, ]
   }
 
   return(resultado)
+}
+
+#' Listar siglas medicas (deprecated)
+#'
+#' `r lifecycle::badge("deprecated")` Use [cie_short()].
+#'
+#' @param categoria Character opcional, filtrar por categoria
+#' @return tibble con columnas: sigla, termino_busqueda, categoria
+#' @family busqueda
+#' @keywords internal
+#' @export
+cie_siglas <- function(categoria = NULL) {
+  lifecycle::deprecate_warn(
+    "0.9.8",
+    "cie_siglas()",
+    "cie_short()"
+  )
+  cie_short(category = categoria)
 }
 
 #' Busqueda difusa (fuzzy) de terminos medicos CIE-10
@@ -545,8 +576,9 @@ cie_siglas <- function(categoria = NULL) {
 #' La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
 #' Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 #'
-#' @param texto String termino medico en espanol o sigla
+#' @param text String termino medico en espanol o sigla
 #'   (ej. "diabetes", "IAM", "TBC")
+#' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @param threshold Numeric entre 0 y 1, umbral similitud
 #'   Jaro-Winkler (default 0.70)
 #' @param max_results Integer, maximo resultados a retornar (default 50)
@@ -556,11 +588,11 @@ cie_siglas <- function(categoria = NULL) {
 #' @param verbose Logical, mostrar mensajes informativos
 #'   (default TRUE). Usar FALSE en scripts.
 #' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
-#'   Si el texto corresponde a una sigla medica, se expande
+#'   Si el text corresponde a una sigla medica, se expande
 #'   automaticamente antes de buscar.
 #' @family busqueda
 #' @seealso \code{\link{cie_lookup}},
-#'   \code{\link{cie_siglas}}, \code{\link{cie10_sql}}
+#'   \code{\link{cie_short}}, \code{\link{cie10_sql}}
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
@@ -581,14 +613,24 @@ cie_siglas <- function(categoria = NULL) {
 #' # Buscar en inclusiones
 #' cie_search("bacteriana", campo = "inclusion")
 #' }
-cie_search <- function(texto, threshold = 0.70, max_results = 50,
+cie_search <- function(text, threshold = 0.70, max_results = 50,
                        campo = c("descripcion", "inclusion"),
-                       solo_fuzzy = FALSE, verbose = TRUE) {
+                       solo_fuzzy = FALSE, verbose = TRUE,
+                       texto = lifecycle::deprecated()) {
+  if (lifecycle::is_present(texto)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_search(texto = )",
+      "cie_search(text = )"
+    )
+    text <- texto
+  }
+  
   campo <- match.arg(campo)
 
   # Validacion de parametros
-  if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
-    stop("texto debe ser un string character no-NA de longitud 1")
+  if (!is.character(text) || length(text) != 1 || is.na(text)) {
+    stop("text debe ser un string character no-NA de longitud 1")
   }
   if (threshold < 0 || threshold > 1) {
     stop("threshold debe estar entre 0 y 1")
@@ -597,7 +639,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
     stop("max_results debe ser >= 1")
   }
 
-  texto_limpio <- stringr::str_trim(texto)
+  texto_limpio <- stringr::str_trim(text)
 
   # Permitir siglas de 2 caracteres (DM, TB, FA, etc.)
   if (nchar(texto_limpio) < 2) {
@@ -802,7 +844,7 @@ cie_search <- function(texto, threshold = 0.70, max_results = 50,
 #' @return tibble con codigo(s) matcheado(s)
 #' @family busqueda
 #' @seealso \code{\link{cie_search}},
-#'   \code{\link{cie_normalize}}, \code{\link{cie_expand}}
+#'   \code{\link{cie_norm}}, \code{\link{cie_expand}}
 #' @export
 #' @examples
 #' # Busqueda directa por codigo
@@ -833,25 +875,25 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
   # Deprecation: argumentos en espanol -> ingles
   if (lifecycle::is_present(codigo)) {
     lifecycle::deprecate_warn(
-      "0.10.0", "cie_lookup(codigo = )", "cie_lookup(code = )"
+      "0.9.8", "cie_lookup(codigo = )", "cie_lookup(code = )"
     )
     code <- codigo
   }
   if (lifecycle::is_present(expandir)) {
     lifecycle::deprecate_warn(
-      "0.10.0", "cie_lookup(expandir = )", "cie_lookup(expand = )"
+      "0.9.8", "cie_lookup(expandir = )", "cie_lookup(expand = )"
     )
     expand <- expandir
   }
   if (lifecycle::is_present(normalizar)) {
     lifecycle::deprecate_warn(
-      "0.10.0", "cie_lookup(normalizar = )", "cie_lookup(normalize = )"
+      "0.9.8", "cie_lookup(normalizar = )", "cie_lookup(normalize = )"
     )
     normalize <- normalizar
   }
   if (lifecycle::is_present(descripcion_completa)) {
     lifecycle::deprecate_warn(
-      "0.10.0",
+      "0.9.8",
       "cie_lookup(descripcion_completa = )",
       "cie_lookup(full_description = )"
     )
@@ -908,7 +950,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
     codigo_norm <- ifelse(
       es_rango_input,
       codigo_input,
-      cie_normalize(codigo_input, search_db = FALSE)
+      cie_norm(codigo_input, search_db = FALSE)
     )
   } else {
     codigo_norm <- codigo_input
@@ -1082,11 +1124,11 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 #' @return tibble con guia comparativa de funciones de busqueda
 #' @family busqueda
 #' @seealso \code{\link{cie_search}},
-#'   \code{\link{cie_lookup}}, \code{\link{cie_siglas}}
+#'   \code{\link{cie_lookup}}, \code{\link{cie_short}}
 #' @export
 #' @examples
-#' cie_guia_busqueda()
-cie_guia_busqueda <- function() {
+#' cie_guide()
+cie_guide <- function() {
   guia <- data.frame(
     `Tengo...` = c(
       "Codigo exacto (E11.0)",
@@ -1123,4 +1165,21 @@ cie_guia_busqueda <- function() {
   )
 
   return(tibble::as_tibble(guia))
+}
+
+#' Guia de funciones de busqueda (deprecated)
+#'
+#' `r lifecycle::badge("deprecated")` Use [cie_guide()].
+#'
+#' @return tibble con guia comparativa
+#' @family busqueda
+#' @keywords internal
+#' @export
+cie_guia_busqueda <- function() {
+  lifecycle::deprecate_warn(
+    "0.9.8",
+    "cie_guia_busqueda()",
+    "cie_guide()"
+  )
+  cie_guide()
 }

@@ -8,54 +8,66 @@ template:
 navbar:
   structure:
     left: [intro, reference, articles, news]
-    right: [search, lightswitch, github]
+    right: [lang, search, lightswitch, github]
+  components:
+    lang:
+      icon: fa-language
+      text: "Idioma"
+      menu:
+        - text: "Español"
+          href: https://rodotasso.github.io/ciecl/
+        - text: "English"
+          href: https://rodotasso.github.io/ciecl/en/
 
 reference:
-  - title: "Busqueda de codigos"
-    desc: "Funciones para buscar codigos CIE-10 por texto o codigo"
+  - title: "Búsqueda y Exploración"
+    desc: "Funciones para buscar códigos CIE-10 por texto, sigla o código"
     contents:
       - cie_search
       - cie_lookup
-      - cie_siglas
-      - cie_guia_busqueda
-  - title: "Base de datos SQL"
-    desc: "Acceso directo a la base SQLite CIE-10"
+      - cie_describe
+      - cie_short
+      - cie_guide
+  - title: "Base de Datos SQL"
+    desc: "Acceso directo a la base SQLite CIE-10 integrada"
     contents:
       - cie10_sql
       - cie10_clear_cache
       - cie10_disconnect
   - title: "Comorbilidades"
-    desc: "Indices de comorbilidad Charlson y Elixhauser"
+    desc: "Índices de comorbilidad Charlson y Elixhauser adaptados a Chile"
     contents:
       - cie_comorbid
       - cie_map_comorbid
-  - title: "Validacion y utilidades"
-    desc: "Normalizacion, validacion y expansion de codigos"
+  - title: "Validación y Utilidades"
+    desc: "Normalización técnica, validación y expansión jerárquica de códigos"
     contents:
-      - cie_normalizar
+      - cie_norm
       - cie_validate_vector
       - cie_expand
   - title: "API CIE-11"
-    desc: "Busqueda en la clasificacion CIE-11 via API OMS"
+    desc: "Búsqueda en la clasificación CIE-11 via API oficial de la OMS"
     contents:
       - cie11_search
-  - title: "Visualizacion"
-    desc: "Tablas interactivas para exploracion de codigos"
+  - title: "Visualización"
+    desc: "Tablas interactivas para exploración jerárquica de códigos"
     contents:
       - cie_table
   - title: "Datos"
-    desc: "Dataset CIE-10 Chile oficial MINSAL/DEIS"
+    desc: "Dataset CIE-10 Chile oficial MINSAL/DEIS v2018"
     contents:
       - cie10_cl
 
 articles:
-  - title: "Guides"
+  - title: "Guías de Usuario"
     contents:
-      - ciecl
       - ciecl-es
       - caso-uso-egresos
       - idiomas
       - instalacion
+  - title: "English Documentation"
+    contents:
+      - ciecl
 
 footer:
   structure:

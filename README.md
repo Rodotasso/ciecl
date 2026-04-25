@@ -99,6 +99,12 @@ cie_lookup(c("E11.0", "I10", "Z00"))
 
 # Descripcion directa para usar en mutate()
 cie_describe(c("E11.0", "I10"))
+#> Warning: `cie_normalize()` was deprecated in ciecl 0.9.8.
+#> ℹ Please use `cie_norm()` instead.
+#> ℹ The deprecated feature was likely used in the ciecl package.
+#>   Please report the issue at <https://github.com/RodoTasso/ciecl/issues>.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 
 # Busqueda fuzzy tolerante a errores

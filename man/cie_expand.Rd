@@ -22,11 +22,11 @@ Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 cie_expand("E11")
 }
 \seealso{
-\code{\link{cie_normalize}}, \code{\link{cie_lookup}}
+\code{\link{cie_norm}}, \code{\link{cie_lookup}}
 
 Other validacion: 
+\code{\link{cie_norm}()},
 \code{\link{cie_normalizar}()},
-\code{\link{cie_normalize}()},
 \code{\link{cie_validate_vector}()}
 }
 \concept{validacion}

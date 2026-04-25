@@ -6,8 +6,11 @@
 #' un `left_join` contra `cie10_cl`.
 #'
 #' @param codes Character vector de codigos CIE-10 (ej. "E11.0",
-#'   c("E11.0", "I10")). Se normalizan internamente con
-#'   [cie_normalize()], por lo que acepta "E110", "e11.0", etc.
+#'   c("E11.0", "I10")).
+#' @param normalize Logical, ¿intentar normalizar los codigos antes
+#'   de buscar la descripcion? (default FALSE). Usar TRUE para
+#'   limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
+#'   auditar la calidad original del registro.
 #' @param default Valor devuelto cuando un codigo no se encuentra
 #'   en el catalogo. Default `NA_character_`.
 #' @return Character vector del mismo largo que `codes` con la
@@ -15,36 +18,43 @@
 #'   para codigos sin match.
 #' @family busqueda
 #' @seealso [cie_lookup()] para resultado como tibble con todas
-#'   las columnas; [cie_normalize()] para normalizacion.
+#'   las columnas; [cie_norm()] para normalizacion.
 #' @importFrom stats setNames
 #' @export
 #' @examples
-#' # Uso escalar
-#' cie_describe("E11.0")
+#' # Auditoria: buscar tal cual (E110 no existe sin punto)
+#' cie_describe("E110", normalize = FALSE)
+#'
+#' # Rescate: normalizar antes de buscar
+#' cie_describe("E110", normalize = TRUE)
 #'
 #' \donttest{
-#' # Uso vectorizado
-#' cie_describe(c("E11.0", "I10", "Z00"))
-#'
-#' # Uso tipico dentro de mutate
-#' df <- data.frame(DIAG1 = c("E110", "I10", "XXX"))
-#' df$descripcion <- cie_describe(df$DIAG1)
+#' # Uso tipico en auditoria VIU (contar fallos de origen)
+#' diags <- c("E11.0", "E110", "I10X", "INVALIDO")
+#' descripciones <- cie_describe(diags, normalize = FALSE)
+#' sum(is.na(descripciones)) # Detecta 3 errores de registro
 #' }
-cie_describe <- function(codes, default = NA_character_) {
+cie_describe <- function(codes, normalize = FALSE, default = NA_character_) {
   if (length(codes) == 0) {
     return(character(0))
   }
 
-  codes_norm <- cie_normalize(codes, search_db = FALSE)
+  # Flujo separado: normalizar solo si se pide (Rescate vs Auditoria)
+  if (isTRUE(normalize)) {
+    codes_to_search <- cie_norm(codes, search_db = FALSE)
+  } else {
+    codes_to_search <- as.character(codes)
+  }
+  
   resultado <- rep(default, length(codes))
 
-  no_na <- !is.na(codes_norm)
+  no_na <- !is.na(codes_to_search)
   if (!any(no_na)) {
     return(resultado)
   }
 
   con <- get_cie10_db()
-  codes_unicos <- unique(codes_norm[no_na])
+  codes_unicos <- unique(codes_to_search[no_na])
   placeholders <- paste(rep("?", length(codes_unicos)), collapse = ",")
   query <- sprintf(
     "SELECT codigo, descripcion FROM cie10 WHERE codigo IN (%s)",
@@ -57,7 +67,7 @@ cie_describe <- function(codes, default = NA_character_) {
   }
 
   lookup <- setNames(hits$descripcion, hits$codigo)
-  idx <- codes_norm %in% names(lookup)
-  resultado[idx] <- unname(lookup[codes_norm[idx]])
+  idx <- codes_to_search %in% names(lookup)
+  resultado[idx] <- unname(lookup[codes_to_search[idx]])
   resultado
 }
