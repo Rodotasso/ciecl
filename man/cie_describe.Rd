@@ -4,7 +4,12 @@
 \alias{cie_describe}
 \title{Obtener descripcion de codigos CIE-10 (vector)}
 \usage{
-cie_describe(codes, normalize = FALSE, default = NA_character_)
+cie_describe(
+  codes,
+  normalize = FALSE,
+  default = NA_character_,
+  codigos = lifecycle::deprecated()
+)
 }
 \arguments{
 \item{codes}{Character vector de codigos CIE-10 (ej. "E11.0",
@@ -17,6 +22,8 @@ auditar la calidad original del registro.}
 
 \item{default}{Valor devuelto cuando un codigo no se encuentra
 en el catalogo. Default \code{NA_character_}.}
+
+\item{codigos}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{codes}.}
 }
 \value{
 Character vector del mismo largo que \code{codes} con la

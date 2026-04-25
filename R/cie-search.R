@@ -578,15 +578,17 @@ cie_siglas <- function(categoria = NULL) {
 #'
 #' @param text String termino medico en espanol o sigla
 #'   (ej. "diabetes", "IAM", "TBC")
-#' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @param threshold Numeric entre 0 y 1, umbral similitud
 #'   Jaro-Winkler (default 0.70)
 #' @param max_results Integer, maximo resultados a retornar (default 50)
-#' @param campo Character, campo busqueda ("descripcion" o "inclusion")
-#' @param solo_fuzzy Logical, usar solo busqueda fuzzy
+#' @param field Character, campo busqueda ("descripcion" o "inclusion")
+#' @param only_fuzzy Logical, usar solo busqueda fuzzy
 #'   sin busqueda exacta (default FALSE)
 #' @param verbose Logical, mostrar mensajes informativos
 #'   (default TRUE). Usar FALSE en scripts.
+#' @param texto `r lifecycle::badge("deprecated")` Use `text`.
+#' @param campo `r lifecycle::badge("deprecated")` Use `field`.
+#' @param solo_fuzzy `r lifecycle::badge("deprecated")` Use `only_fuzzy`.
 #' @return tibble ordenado por score descendente (1.0 = coincidencia exacta).
 #'   Si el text corresponde a una sigla medica, se expande
 #'   automaticamente antes de buscar.
@@ -611,12 +613,15 @@ cie_siglas <- function(categoria = NULL) {
 #' cie_search("diabetis")
 #'
 #' # Buscar en inclusiones
-#' cie_search("bacteriana", campo = "inclusion")
+#' cie_search("bacteriana", field = "inclusion")
 #' }
 cie_search <- function(text, threshold = 0.70, max_results = 50,
-                       campo = c("descripcion", "inclusion"),
-                       solo_fuzzy = FALSE, verbose = TRUE,
-                       texto = lifecycle::deprecated()) {
+                       field = c("descripcion", "inclusion"),
+                       only_fuzzy = FALSE, verbose = TRUE,
+                       texto = lifecycle::deprecated(),
+                       campo = lifecycle::deprecated(),
+                       solo_fuzzy = lifecycle::deprecated()) {
+  # Deprecation: argumentos en espanol -> ingles
   if (lifecycle::is_present(texto)) {
     lifecycle::deprecate_warn(
       "0.9.8",
@@ -625,8 +630,24 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     )
     text <- texto
   }
+  if (lifecycle::is_present(campo)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_search(campo = )",
+      "cie_search(field = )"
+    )
+    field <- campo
+  }
+  if (lifecycle::is_present(solo_fuzzy)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_search(solo_fuzzy = )",
+      "cie_search(only_fuzzy = )"
+    )
+    only_fuzzy <- solo_fuzzy
+  }
   
-  campo <- match.arg(campo)
+  field <- match.arg(field)
 
   # Validacion de parametros
   if (!is.character(text) || length(text) != 1 || is.na(text)) {
@@ -684,7 +705,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
       texto_fts <- paste0(palabras_fts, "*", collapse = " OR ")
       query_params <- list(texto_fts)
 
-      if (campo == "descripcion") {
+      if (field == "descripcion") {
         query_sql <- "
           SELECT c.codigo, c.descripcion, c.categoria
           FROM cie10 c
@@ -695,26 +716,26 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
           SELECT c.codigo, c.descripcion, c.categoria, c.%s
           FROM cie10 c
           WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH ?)
-        ", campo)
+        ", field)
       }
     } else {
       # Sin palabras validas tras sanitizar, cargar todo
-      if (campo == "descripcion") {
+      if (field == "descripcion") {
         query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
       } else {
         query_sql <- sprintf(
           "SELECT codigo, descripcion, categoria, %s FROM cie10",
-          campo)
+          field)
       }
     }
   } else {
     # Sin palabras validas, cargar todo (fallback)
-    if (campo == "descripcion") {
+    if (field == "descripcion") {
       query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
     } else {
       query_sql <- sprintf(
         "SELECT codigo, descripcion, categoria, %s FROM cie10",
-        campo)
+        field)
     }
   }
 
@@ -723,24 +744,24 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
   # Si FTS5 no retorno resultados, intentar carga completa para fuzzy
   if (nrow(base) == 0 && length(palabras) > 0) {
-    if (campo == "descripcion") {
+    if (field == "descripcion") {
       query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
     } else {
       query_sql <- sprintf(
         "SELECT codigo, descripcion, categoria, %s FROM cie10",
-        campo)
+        field)
     }
     base <- DBI::dbGetQuery(con, query_sql) %>%
       tibble::as_tibble()
   }
 
   # Normalizar texto de la base (minusculas + sin tildes)
-  base_texto <- tolower(stringr::str_trim(base[[campo]]))
+  base_texto <- tolower(stringr::str_trim(base[[field]]))
   base_texto[is.na(base_texto)] <- ""
   base_texto_sin_tildes <- normalizar_tildes(base_texto)
 
   # ESTRATEGIA 1: Busqueda exacta por subcadena (mas rapida y precisa)
-  if (!solo_fuzzy) {
+  if (!only_fuzzy) {
     # Buscar coincidencias exactas (subcadena)
     matches_exactos <- stringr::str_detect(base_texto_sin_tildes,
                                            stringr::fixed(texto_sin_tildes))

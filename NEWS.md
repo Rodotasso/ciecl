@@ -15,11 +15,12 @@ compatibilidad con CRAN.
 Todos los argumentos y funciones en espanol siguen funcionando; emiten
 `lifecycle::deprecate_warn("0.10.0", ...)` al invocarse.
 
-* Funcion: `cie_normalizar()` -> `cie_normalize()`
+* Funcion: `cie_normalizar()` -> `cie_norm()`
+* Funcion: `cie_normalize()` -> `cie_norm()`
 * Argumentos:
   - `cie_lookup(codigo=, expandir=, normalizar=, descripcion_completa=)` ->
     `cie_lookup(code=, expand=, normalize=, full_description=)`
-  - `cie_normalize(codigos=, buscar_db=)` -> `cie_normalize(codes=, search_db=)`
+  - `cie_norm(codigos=, buscar_db=)` -> `cie_norm(codes=, search_db=)`
   - `cie_validate_vector(codigos=)` -> `cie_validate_vector(codes=)`
   - `cie_expand(codigo=)` -> `cie_expand(code=)`
 
@@ -36,7 +37,7 @@ Todos los argumentos y funciones en espanol siguen funcionando; emiten
   Frances eliminada (fuera del scope `ciecl` = CIE Chile).
 * Vignette `instalacion.Rmd`: seccion `keyring` estilo babeldown para
   guardar credenciales CIE-11 en el keychain del sistema.
-* `cie_normalize()` es la funcion recomendada en nueva documentacion.
+* `cie_norm()` es la funcion recomendada en nueva documentacion.
 
 ## Codigo
 

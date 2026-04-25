@@ -1,12 +1,13 @@
 #' Buscar codigos CIE-11 via API OMS
 #'
-#' @param texto String termino busqueda espanol/ingles
+#' @param text String termino busqueda espanol/ingles
 #' @param api_key String opcional, Client ID + Secret OMS separados ":"
 #'   Obtener en: https://icd.who.int/icdapi
 #' @param lang Character, idioma respuesta ("es" o "en")
 #' @param max_results Integer, maximo resultados (default 10)
 #' @param release Character, version de release CIE-11 a consultar
 #'   (default "2024-01"). Ver releases disponibles en la API OMS.
+#' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @family api
 #' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
@@ -22,14 +23,25 @@
 #' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 #' cie11_search("depresion mayor")
 #' }
-cie11_search <- function(texto, api_key = NULL, lang = "es",
-                         max_results = 10, release = "2024-01") {
-  # Validacion de inputs
-  if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
-    stop("'texto' debe ser un string de largo 1")
+cie11_search <- function(text, api_key = NULL, lang = "es",
+                         max_results = 10, release = "2024-01",
+                         texto = lifecycle::deprecated()) {
+  # Deprecation: argumento en espanol -> ingles
+  if (lifecycle::is_present(texto)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie11_search(texto = )",
+      "cie11_search(text = )"
+    )
+    text <- texto
   }
-  if (nchar(trimws(texto)) == 0) {
-    stop("'texto' no puede estar vacio")
+
+  # Validacion de inputs
+  if (!is.character(text) || length(text) != 1 || is.na(text)) {
+    stop("'text' debe ser un string de largo 1")
+  }
+  if (nchar(trimws(text)) == 0) {
+    stop("'text' no puede estar vacio")
   }
   if (!is.character(lang) || !lang %in% c("es", "en")) {
     stop("'lang' debe ser \"es\" o \"en\"")

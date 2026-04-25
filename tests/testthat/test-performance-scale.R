@@ -63,7 +63,7 @@ test_that("cie_normalizar 500K codigos < 5s", {
   codigos_sim[501:1000] <- paste0(" ", codigos_sim[501:1000], " ")
 
   t <- system.time({
-    resultado <- cie_normalize(codigos_sim, search_db = TRUE)
+    resultado <- cie_norm(codigos_sim, search_db = TRUE)
   })
 
   expect_true(t["elapsed"] < 5,

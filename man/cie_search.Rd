@@ -8,10 +8,12 @@ cie_search(
   text,
   threshold = 0.7,
   max_results = 50,
-  campo = c("descripcion", "inclusion"),
-  solo_fuzzy = FALSE,
+  field = c("descripcion", "inclusion"),
+  only_fuzzy = FALSE,
   verbose = TRUE,
-  texto = lifecycle::deprecated()
+  texto = lifecycle::deprecated(),
+  campo = lifecycle::deprecated(),
+  solo_fuzzy = lifecycle::deprecated()
 )
 }
 \arguments{
@@ -23,15 +25,19 @@ Jaro-Winkler (default 0.70)}
 
 \item{max_results}{Integer, maximo resultados a retornar (default 50)}
 
-\item{campo}{Character, campo busqueda ("descripcion" o "inclusion")}
+\item{field}{Character, campo busqueda ("descripcion" o "inclusion")}
 
-\item{solo_fuzzy}{Logical, usar solo busqueda fuzzy
+\item{only_fuzzy}{Logical, usar solo busqueda fuzzy
 sin busqueda exacta (default FALSE)}
 
 \item{verbose}{Logical, mostrar mensajes informativos
 (default TRUE). Usar FALSE en scripts.}
 
 \item{texto}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{text}.}
+
+\item{campo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{field}.}
+
+\item{solo_fuzzy}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{only_fuzzy}.}
 }
 \value{
 tibble ordenado por score descendente (1.0 = coincidencia exacta).
@@ -65,7 +71,7 @@ cie_search("DM2")
 cie_search("diabetis")
 
 # Buscar en inclusiones
-cie_search("bacteriana", campo = "inclusion")
+cie_search("bacteriana", field = "inclusion")
 }
 }
 \seealso{

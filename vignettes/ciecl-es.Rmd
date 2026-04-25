@@ -52,25 +52,25 @@ El siguiente ejemplo extrae los primeros cinco códigos de diabetes tipo 2 (cate
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 ```
 
-La función solo acepta consultas `SELECT` para proteger la integridad del catálogo.
+La función solo acepta consultas `SELECT` para proteger la integridad del catálogo. Esto garantiza que la base de datos local permanezca como una referencia de solo lectura y confiable para el análisis.
 
 ## Búsqueda por código conocido
 
-Cuando el código ya está disponible en los datos —por ejemplo, al preparar un informe con diagnósticos de egreso hospitalario— `cie_lookup()` recupera la descripción oficial a partir de uno o varios códigos.
+Cuando el código ya está disponible en los datos —por ejemplo, al preparar un informe con diagnósticos de egreso hospitalario— `cie_lookup()` recupera la descripción oficial a partir de uno o varios códigos. Esta función es el puente entre la codificación críptica de las bases de datos y la interpretación clínica humana.
 
 ```{r}
 # Un solo código
 cie_lookup("E11.0")
 ```
 
-La función acepta vectores, lo que facilita su uso dentro de un pipeline `dplyr`:
+La función acepta vectores, lo que facilita su uso dentro de un pipeline `dplyr` o cualquier flujo de trabajo vectorizado, devolviendo un `tibble` con la información estructurada:
 
 ```{r}
 # Múltiples códigos de distintos capítulos
 cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
 ```
 
-En análisis donde se trabaja a nivel de categoría (tres dígitos), puede ser necesario conocer todos los subcódigos que la componen. El argumento `expand = TRUE` desciende la jerarquía y devuelve la categoría junto con todos sus hijos:
+En análisis donde se trabaja a nivel de categoría (tres dígitos), puede ser necesario conocer todos los subcódigos que la componen para realizar agregaciones o filtros. El argumento `expand = TRUE` desciende la jerarquía y devuelve la categoría junto con todos sus hijos:
 
 ```{r}
 cie_lookup("E11", expand = TRUE)
@@ -78,13 +78,13 @@ cie_lookup("E11", expand = TRUE)
 
 ## Obtener descripciones para usar en tablas
 
-A veces solo se necesita el texto de la descripción, sin la estructura completa de `cie_lookup()`. La función `cie_describe()` devuelve un vector de caracteres con las descripciones en el mismo orden que los códigos recibidos, lista para usar en `mutate()` o en etiquetas de gráficos:
+A veces solo se necesita el texto de la descripción, sin la estructura completa de `cie_lookup()`. Por ejemplo, al crear etiquetas para un eje de gráfico o una columna rápida en un reporte. La función `cie_describe()` devuelve un vector de caracteres con las descripciones en el mismo orden que los códigos recibidos, lista para usar en `mutate()`:
 
 ```{r}
 cie_describe(c("E11.0", "I10"))
 ```
 
-Aplicado en un flujo de trabajo típico con datos de egresos hospitalarios:
+Este enfoque es particularmente potente cuando se combina con `dplyr` para enriquecer bases de datos masivas sin necesidad de realizar cruces complejos (`left_join`):
 
 ```{r}
 library(dplyr)
@@ -100,20 +100,20 @@ egresos %>%
 
 ## Búsqueda por texto con tolerancia a errores
 
-En los datos clínicos es común encontrar diagnósticos escritos en texto libre, con errores ortográficos o abreviaciones no estandarizadas. `cie_search()` implementa búsqueda fuzzy mediante similitud Jaro-Winkler, de modo que encuentra resultados incluso si el término de búsqueda contiene errores tipográficos.
+En los datos clínicos es común encontrar diagnósticos escritos en texto libre, con errores ortográficos o abreviaciones no estandarizadas que dificultan la codificación automática. `cie_search()` implementa búsqueda fuzzy mediante similitud Jaro-Winkler, permitiendo rescatar información de registros imperfectos.
 
-El parámetro `threshold` controla qué tan estricta es la coincidencia: valores más altos exigen mayor similitud. El rango útil habitual está entre 0.70 y 0.85:
+El parámetro `threshold` controla qué tan estricta es la coincidencia: valores cercanos a 1.0 exigen precisión casi absoluta, mientras que valores más bajos toleran mayores variaciones. El rango útil habitual para diagnósticos en español está entre 0.70 y 0.85:
 
 ```{r}
-# "diabetis" en lugar de "diabetes" — el error no impide encontrar el código
+# "diabetis" en lugar de "diabetes" — el error no impide encontrar el código correcto
 cie_search("diabetis con coma", threshold = 0.75)
 ```
 
+Observe que el resultado está ordenado por un puntaje (`score`), permitiendo al analista seleccionar la mejor coincidencia de forma estadística.
+
 ## Comorbilidades de Charlson y Elixhauser
 
-Los índices de comorbilidad —Charlson y Elixhauser— son ampliamente usados en investigación clínica y ajuste de riesgo. `cie_comorbid()` calcula estos índices a partir de un data frame con identificadores de paciente y sus códigos diagnósticos.
-
-Esta función requiere el paquete `comorbidity`. Si no está instalado, se puede agregar con `install.packages("comorbidity")`:
+La capacidad de estratificar pacientes según su carga de enfermedad es vital en investigación epidemiológica. Los índices de comorbilidad —Charlson y Elixhauser— se utilizan para predecir mortalidad y uso de recursos. `cie_comorbid()` automatiza este cálculo a partir de un flujo de datos tipo "egresos":
 
 ```{r eval=FALSE}
 # Requiere: install.packages("comorbidity")
@@ -125,16 +125,18 @@ df_pacientes <- data.frame(
 cie_comorbid(df_pacientes, id = "id_pac", code = "diagnostico", map = "charlson")
 ```
 
-El resultado es un data frame con una fila por paciente y columnas para cada condición del índice seleccionado, más la puntuación total ponderada.
+El resultado es un data frame procesado donde cada fila representa un paciente único con sus respectivas banderas de patología y puntuación total ponderada, listo para modelos de regresión o tablas descriptivas.
 
 ## Tablas formateadas con gt
 
-Para presentaciones e informes, `cie_table()` genera una tabla HTML enriquecida de los códigos de una categoría usando el paquete `gt`. Requiere tener `gt` instalado:
+Para presentaciones e informes finales, la estética de los datos es fundamental. `cie_table()` genera una tabla HTML enriquecida, aplicando formato condicional y ocultando automáticamente columnas vacías para una visualización limpia. Requiere tener `gt` instalado:
 
 ```{r eval=FALSE}
 # Requiere: install.packages("gt")
 cie_table("E11")
 ```
+
+Esta función detecta si campos como "Incluye" o "Excluye" vienen poblados desde la fuente oficial y ajusta el diseño de la tabla dinámicamente.
 
 ## Fuente de datos
 

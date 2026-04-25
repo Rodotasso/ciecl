@@ -62,7 +62,7 @@ test_that("flujo: normalizar codigos -> buscar -> mapear comorbilidad", {
   codigos_raw <- c("E110", "I509", "C509", "e11.0", " Z00 ")
 
   # 2. Normalizar codigos
-  codigos_norm <- cie_normalize(codigos_raw, search_db = FALSE)
+  codigos_norm <- cie_norm(codigos_raw, search_db = FALSE)
   expect_equal(length(codigos_norm), length(codigos_raw))
 
   # 3. Buscar detalles
@@ -130,14 +130,14 @@ test_that("cie_expand y cie_lookup expandir dan mismos resultados", {
   expect_setequal(hijos_expand, hijos_lookup)
 })
 
-test_that("cie_normalizar y cie_lookup son coherentes", {
+test_that("cie_norm y cie_lookup son coherentes", {
   skip_on_cran()
 
   # Codigo sin punto
   codigo_raw <- "E110"
 
   # Normalizar
-  codigo_norm <- cie_normalize(codigo_raw, search_db = FALSE)
+  codigo_norm <- cie_norm(codigo_raw, search_db = FALSE)
   expect_equal(codigo_norm, "E11.0")
 
   # Buscar con codigo raw y normalizado
@@ -247,7 +247,7 @@ test_that("escenario: limpieza de datos con codigos sucios", {
   codigos_validos <- codigos_sucios[formato_ok]
 
   # 3. Normalizar
-  codigos_norm <- cie_normalize(codigos_validos, search_db = FALSE)
+  codigos_norm <- cie_norm(codigos_validos, search_db = FALSE)
 
   # 4. Buscar en base
   suppressMessages({

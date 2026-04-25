@@ -31,7 +31,6 @@ test_that("cie11_search requiere httr2", {
 # ============================================================
 
 test_that("cie11_search con API real retorna resultados", {
-  skip_on_cran()
   skip_if_not_installed("httr2")
   skip_if_offline()
 

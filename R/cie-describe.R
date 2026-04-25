@@ -13,6 +13,7 @@
 #'   auditar la calidad original del registro.
 #' @param default Valor devuelto cuando un codigo no se encuentra
 #'   en el catalogo. Default `NA_character_`.
+#' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @return Character vector del mismo largo que `codes` con la
 #'   descripcion oficial MINSAL/DEIS. `NA_character_` (o `default`)
 #'   para codigos sin match.
@@ -34,7 +35,17 @@
 #' descripciones <- cie_describe(diags, normalize = FALSE)
 #' sum(is.na(descripciones)) # Detecta 3 errores de registro
 #' }
-cie_describe <- function(codes, normalize = FALSE, default = NA_character_) {
+cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
+                        codigos = lifecycle::deprecated()) {
+  if (lifecycle::is_present(codigos)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_describe(codigos = )",
+      "cie_describe(codes = )"
+    )
+    codes <- codigos
+  }
+
   if (length(codes) == 0) {
     return(character(0))
   }
