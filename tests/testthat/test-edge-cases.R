@@ -9,16 +9,16 @@ test_that("cie_search rechaza NA, vectores y tipos invalidos", {
   skip_on_cran()
 
   # NA debe dar error
-  expect_error(cie_search(NA), "texto debe ser un string character no-NA")
-  expect_error(cie_search(NA_character_), "texto debe ser un string character no-NA")
+  expect_error(cie_search(NA), "text debe ser un string character no-NA")
+  expect_error(cie_search(NA_character_), "text debe ser un string character no-NA")
 
   # Vectores de longitud != 1 deben dar error
-  expect_error(cie_search(c("diabetes", "cancer")), "texto debe ser un string character no-NA")
-  expect_error(cie_search(character(0)), "texto debe ser un string character no-NA")
+  expect_error(cie_search(c("diabetes", "cancer")), "text debe ser un string character no-NA")
+  expect_error(cie_search(character(0)), "text debe ser un string character no-NA")
 
   # Tipos invalidos deben dar error
-  expect_error(cie_search(123), "texto debe ser un string character no-NA")
-  expect_error(cie_search(list("diabetes")), "texto debe ser un string character no-NA")
+  expect_error(cie_search(123), "text debe ser un string character no-NA")
+  expect_error(cie_search(list("diabetes")), "text debe ser un string character no-NA")
 })
 
 test_that("cie_search maneja cadenas muy cortas", {
