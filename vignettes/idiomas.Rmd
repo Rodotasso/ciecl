@@ -80,10 +80,10 @@ completo y `ciecl` resuelva la sigla al término oficial del catálogo.
 
 ```{r}
 # Listar todas las siglas disponibles
-head(cie_siglas())
+head(cie_short())
 
 # Filtrar por categoría
-cie_siglas("cardiovascular")
+cie_short(category = "cardiovascular")
 
 # Usar la sigla directamente en búsqueda
 cie_search("IAM")   # Infarto Agudo del Miocardio
@@ -127,7 +127,7 @@ cie11_search("diabetes mellitus", lang = "en")
 El paquete está codificado en **UTF-8** y el dataset preserva todos los
 caracteres del español (tildes, eñe, diéresis) y los símbolos de
 codificación dual (daga †, asterisco \*) que aparecen en el catálogo
-MINSAL. Al buscar, `cie_search()` y `cie_normalizar()` saben limpiarlos.
+MINSAL. Al buscar, `cie_search()` y `cie_norm()` saben limpiarlos.
 
 ```{r}
 Encoding(cie10_cl$descripcion[1])

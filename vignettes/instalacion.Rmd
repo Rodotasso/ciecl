@@ -191,10 +191,10 @@ cie_search("diabetes")
 
 ### Error: "package 'ciecl' is not available"
 
-Asegurate de instalar desde GitHub, no desde CRAN (aun no esta disponible):
+Verifica que el repositorio de CRAN esté configurado en tu sesión de R y luego instala normalmente:
 
 ```{r}
-pak::pak("RodoTasso/ciecl")
+install.packages("ciecl")
 ```
 
 ### Error de compilacion en Linux
