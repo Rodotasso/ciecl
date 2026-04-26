@@ -133,19 +133,6 @@ MINSAL. Al buscar, `cie_search()` y `cie_norm()` saben limpiarlos.
 Encoding(cie10_cl$descripcion[1])
 ```
 
-## Alcance e internacionalización
-
-`ciecl` = **CIE Chile**. El paquete incluye exclusivamente la clasificación
-CIE-10 oficial de Chile (MINSAL/DEIS v2018) y el acceso multilingüe a la
-API CIE-11 de la OMS. No incluye ni planea incluir otros datasets
-nacionales (CID-10 Brasil, ICD-10-CM USA, CIM-10 Francia), porque escapan
-al alcance declarado y al nombre del paquete.
-
-Si necesitas clasificaciones de otros países, existen paquetes
-especializados en CRAN como `icd` (ICD-10-CM USA/genérico) o `comorbidity`
-(mapas transversales). `ciecl` puede combinarse con ellos cuando el flujo
-lo requiera.
-
 ## Referencias
 
 - **CIE-10 Chile**: <https://deis.minsal.cl/centrofic/>

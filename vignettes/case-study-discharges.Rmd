@@ -79,24 +79,33 @@ discharges %>%
   head(5)
 ```
 
-## 3. Semantic Enrichment with `cie_lookup()`
+## 3. Semantic Enrichment with `cie_describe()`
 
-After normalization, standardized clinical descriptions are assigned to facilitate result interpretation. `cie_lookup()` performs this task through an optimized query to the integrated catalog, returning full metadata for each code.
+After normalization, standardized clinical descriptions are assigned to facilitate result interpretation. The `ciecl` package provides the vectorized `cie_describe()` function, specifically designed to integrate into `dplyr` workflows efficiently.
+
+Unlike a traditional `left_join`, `cie_describe()` directly returns a character vector, avoiding the creation of additional join columns and keeping the code cleaner.
+
+```{r describe}
+# Direct integration of descriptions into the main dataframe
+discharges_full <- discharges %>%
+  mutate(
+    description = cie_describe(DIAG1_NORM)
+  )
+
+head(discharges_full %>% select(DISCHARGE_ID, DIAG1, description))
+```
+
+For cases where full metadata is required (chapter, category, group), `cie_lookup()` can still be used in conjunction with a table join:
 
 ```{r lookup}
-# Extracting descriptions for unique codes
-unique_codes <- unique(discharges$DIAG1_NORM)
-
-diagnosis_dictionary <- cie_lookup(
-  code = unique_codes,
+# Extracting full metadata via lookup + join
+metadata <- cie_lookup(
+  code = unique(discharges$DIAG1_NORM),
   full_description = TRUE
 )
 
-# Integrating descriptions into the main dataframe
-discharges_full <- discharges %>%
-  left_join(diagnosis_dictionary, by = c("DIAG1_NORM" = "codigo"))
-
-head(discharges_full %>% select(DISCHARGE_ID, DIAG1, descripcion))
+discharges_metadata <- discharges %>%
+  left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
 ```
 
 ## 4. Catalog Exploration with `cie_search()`

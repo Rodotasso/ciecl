@@ -79,24 +79,33 @@ egresos %>%
   head(5)
 ```
 
-## 3. Enriquecimiento semántico con `cie_lookup()`
+## 3. Enriquecimiento semántico con `cie_describe()`
 
-Tras la normalización, es necesario asignar las descripciones clínicas oficiales para facilitar la interpretación de los resultados. `cie_lookup()` realiza esta tarea mediante una consulta optimizada al catálogo integrado, devolviendo la metadata completa de cada código.
+Tras la normalización, es necesario asignar las descripciones clínicas oficiales para facilitar la interpretación de los resultados. El paquete `ciecl` ofrece la función vectorizada `cie_describe()`, diseñada específicamente para integrarse en flujos de `dplyr` de forma eficiente.
+
+A diferencia de un `left_join` tradicional, `cie_describe()` devuelve directamente un vector de caracteres, evitando la creación de columnas de unión adicionales y manteniendo el código más limpio.
+
+```{r describe}
+# Integración directa de descripciones al dataframe principal
+egresos_full <- egresos %>%
+  mutate(
+    descripcion = cie_describe(DIAG1_NORM)
+  )
+
+head(egresos_full %>% select(ID_EGRESO, DIAG1, descripcion))
+```
+
+Para casos donde se requiera la metadata completa (capítulo, categoría, grupo), se puede seguir utilizando `cie_lookup()` junto con un cruce de tablas:
 
 ```{r lookup}
-# Extracción de descripciones para códigos únicos
-codigos_unicos <- unique(egresos$DIAG1_NORM)
-
-diccionario_diagnosticos <- cie_lookup(
-  code = codigos_unicos,
+# Obtención de metadata completa vía lookup + join
+metadata <- cie_lookup(
+  code = unique(egresos$DIAG1_NORM),
   full_description = TRUE
 )
 
-# Integración de descripciones al dataframe principal
-egresos_full <- egresos %>%
-  left_join(diccionario_diagnosticos, by = c("DIAG1_NORM" = "codigo"))
-
-head(egresos_full %>% select(ID_EGRESO, DIAG1, descripcion))
+egresos_metadata <- egresos %>%
+  left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
 ```
 
 ## 4. Exploración del catálogo con `cie_search()`

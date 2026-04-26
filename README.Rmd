@@ -137,9 +137,12 @@ cie_lookup("E11.0")
 # Multiples codigos
 cie_lookup(c("E11.0", "I10", "Z00"))
 
-# Descripcion directa para usar en mutate()
+# Descripcion directa (vectorizada) para usar en mutate()
 cie_describe(c("E11.0", "I10"))
 
+# Ejemplo en flujo dplyr
+# egresos %>% mutate(desc = cie_describe(codigo))
+```
 # Busqueda fuzzy tolerante a errores
 cie_search("diabetis mellitus")
 
