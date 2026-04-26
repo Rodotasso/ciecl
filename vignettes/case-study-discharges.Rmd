@@ -1,0 +1,142 @@
+---
+title: "Case Study: Hospital Discharge Analysis (DEIS Chile)"
+author: "Rodolfo Tasso Suazo"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study: Hospital Discharge Analysis (DEIS Chile)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(ciecl)
+library(dplyr)
+```
+
+## Introduction
+
+This case study describes the technical workflow required to transform administrative health databases in Chile into a standardized analytical format. We use the **Hospital Discharge** databases published by the Department of Health Statistics and Information (DEIS) as a reference.
+
+Health administrative records frequently present structural inconsistencies in ICD-10 coding. The two most common variations in the Chilean context are:
+
+1.  **Compact formats**: Codes without a decimal point (e.g., `J189` instead of `J18.9`).
+2.  **Filler suffixes**: Use of the letter `X` to complete the field length in 3-digit categories (e.g., `I10X` for Essential hypertension).
+
+These variations hinder interoperability and cross-referencing with international standards. The `ciecl` package automates the correction of these inconsistencies in a vectorized and efficient manner.
+
+## 1. Original Data Structure
+
+A synthetic dataset is generated below that replicates the structure and typical anomalies found in DEIS `.csv` files. The `DIAG1` column represents the primary diagnosis with the aforementioned informal coding formats.
+
+```{r datos}
+set.seed(42)
+
+# Simulation of 200 records with typical DEIS Chile formats
+discharges <- data.frame(
+  DISCHARGE_ID = 1:200,
+  PATIENT_ID   = sample(1:50, 200, replace = TRUE),
+  YEAR         = sample(2018:2022, 200, replace = TRUE),
+  DIAG1        = sample(
+    c(
+      "J189", "O800", "Z380", "K359", "N390",
+      "I10X", "J449", "E119", "O829", "J069",
+      "K922", "N185", "I509", "C509", "A099",
+      "N40X", "K800", "I259", "J180", "E149"
+    ),
+    size    = 200,
+    replace = TRUE
+  ),
+  stringsAsFactors = FALSE
+)
+
+head(discharges)
+```
+
+## 2. Code Normalization with `cie_norm()`
+
+Normalization is the critical first step to ensure analysis integrity. The `cie_norm()` function processes codes by applying official MINSAL coding rules:
+
+*   **Suffix removal**: Identifies and removes the trailing `X`.
+*   **Punctuation formatting**: Inserts the decimal point in the standard position according to the ICD-10 hierarchy.
+*   **String cleaning**: Removes whitespace and non-printable characters.
+
+```{r normalizacion}
+# Cleaning and standardization of diagnoses
+discharges <- discharges %>%
+  mutate(
+    DIAG1_NORM = cie_norm(codes = DIAG1)
+  )
+
+# Comparison between original and normalized formats
+discharges %>% 
+  select(DIAG1, DIAG1_NORM) %>% 
+  distinct() %>% 
+  head(5)
+```
+
+## 3. Semantic Enrichment with `cie_lookup()`
+
+After normalization, standardized clinical descriptions are assigned to facilitate result interpretation. `cie_lookup()` performs this task through an optimized query to the integrated catalog, returning full metadata for each code.
+
+```{r lookup}
+# Extracting descriptions for unique codes
+unique_codes <- unique(discharges$DIAG1_NORM)
+
+diagnosis_dictionary <- cie_lookup(
+  code = unique_codes,
+  full_description = TRUE
+)
+
+# Integrating descriptions into the main dataframe
+discharges_full <- discharges %>%
+  left_join(diagnosis_dictionary, by = c("DIAG1_NORM" = "codigo"))
+
+head(discharges_full %>% select(DISCHARGE_ID, DIAG1, descripcion))
+```
+
+## 4. Catalog Exploration with `cie_search()`
+
+In exploratory phases, where the exact code is unknown or transcription errors in the original clinical descriptions are suspected, `cie_search()` allows text searches using string similarity (fuzzy matching).
+
+```{r busqueda}
+# Example of search with intentional typo ("diabetis")
+# The function returns the most likely matches ordered by score
+cie_search(text = "diabetis", threshold = 0.7)
+```
+
+## 5. Comorbidity Index Calculation with `cie_comorbid()`
+
+An advanced application of `ciecl` is population risk stratification through comorbidity indices. The `cie_comorbid()` function maps normalized diagnoses to Charlson or Elixhauser categories, adapted to the reality of Chilean data.
+
+```{r comorbilidad, eval=FALSE}
+# Requires the 'comorbidity' package to be installed
+# Calculation of the Charlson Index by patient identifier
+comorbidities <- cie_comorbid(
+  data = discharges,
+  id   = "PATIENT_ID",
+  code = "DIAG1",
+  map  = "charlson"
+)
+
+# The result allows immediate use in statistical models
+head(comorbidities, 10)
+```
+
+## Process Summary
+
+The `ciecl` workflow enables a reproducible transition from raw administrative data to an analytical dataset in four stages:
+
+1.  **Standardization**: Format correction using `cie_norm()`.
+2.  **Contextualization**: Assignment of official glosses with `cie_lookup()`.
+3.  **Validation**: Term discovery and checking with `cie_search()`.
+4.  **Aggregation**: Generation of complex clinical indicators with `cie_comorbid()`.
+
+---
+
+**Data source:**
+This tool uses the ICD-10 catalog standardized by the Centro FIC of the DEIS, Ministry of Health of Chile. For more information, visit [deis.minsal.cl](https://deis.minsal.cl).
