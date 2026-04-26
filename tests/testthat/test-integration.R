@@ -347,9 +347,7 @@ test_that("cie11_search falla gracefully sin credenciales", {
   skip_if_not_installed("httr2")
 
   # Limpiar credenciales temporalmente
-  old_key <- Sys.getenv("ICD_API_KEY")
-  Sys.unsetenv("ICD_API_KEY")
-  on.exit(if (nchar(old_key) > 0) Sys.setenv(ICD_API_KEY = old_key))
+  withr::local_envvar(ICD_API_KEY = "")
 
   # Sin credenciales, debe dar error informativo
   expect_error(

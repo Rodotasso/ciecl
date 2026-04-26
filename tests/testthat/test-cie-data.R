@@ -131,7 +131,7 @@ test_that("generar_cie10_cl ya no depende de usethis", {
       ciecl:::generar_cie10_cl("no-existe.xlsx"),
       error = function(e) conditionMessage(e)
     )
-    expect_false(grepl("usethis", err, ignore.case = TRUE))
+    expect_no_match(err, "usethis", ignore.case = TRUE)
   })
 })
 

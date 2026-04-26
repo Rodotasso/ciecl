@@ -76,7 +76,7 @@ test_that("cie11_search acepta API key con formato correcto",
 
   # Si hay error, no debe ser de formato
   if (error_msg != "no_error" && error_msg != "warning") {
-    expect_false(grepl("client_id:client_secret", error_msg))
+    expect_no_match(error_msg, "client_id:client_secret", fixed = TRUE)
   }
 })
 
@@ -87,18 +87,7 @@ test_that("cie11_search acepta API key con formato correcto",
 test_that("cie11_search usa ICD_API_KEY de environment", {
   skip_if_not_installed("httr2")
 
-  # Guardar valor original
-  old_key <- Sys.getenv("ICD_API_KEY", unset = NA)
-  on.exit({
-    if (is.na(old_key)) {
-      Sys.unsetenv("ICD_API_KEY")
-    } else {
-      Sys.setenv(ICD_API_KEY = old_key)
-    }
-  })
-
-  # Setear key de prueba
-  Sys.setenv(ICD_API_KEY = "env:key")
+  withr::local_envvar(ICD_API_KEY = "env:key")
 
   # Debe usar la key del environment (y fallar en autenticacion)
   expect_warning(
@@ -112,18 +101,7 @@ test_that("cie11_search usa ICD_API_KEY de environment", {
 test_that("cie11_search prefiere argumento sobre environment", {
   skip_if_not_installed("httr2")
 
-  # Guardar valor original
-  old_key <- Sys.getenv("ICD_API_KEY", unset = NA)
-  on.exit({
-    if (is.na(old_key)) {
-      Sys.unsetenv("ICD_API_KEY")
-    } else {
-      Sys.setenv(ICD_API_KEY = old_key)
-    }
-  })
-
-  # Setear key en environment
-  Sys.setenv(ICD_API_KEY = "env:key")
+  withr::local_envvar(ICD_API_KEY = "env:key")
 
   # Usar key de argumento (diferente)
   expect_warning(
@@ -195,7 +173,7 @@ test_that("cie11_search retorna resultados con mock HTTP exitoso", {
   expect_equal(resultado$codigo, c("5A00", "5A01", "5A02"))
   # Verificar que HTML tags fueron limpiados
 
-  expect_false(grepl("<em", resultado$titulo[1]))
+  expect_no_match(resultado$titulo[1], "<em", fixed = TRUE)
   expect_true(grepl("Diabetes mellitus tipo 1", resultado$titulo[1]))
   expect_equal(resultado$capitulo, c("05", "05", "05"))
 })
@@ -293,7 +271,7 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
 
   expect_equal(nrow(resultado), 1)
   expect_equal(resultado$titulo[1], "Hipertensi\u00f3n arterial esencial")
-  expect_false(grepl("<em", resultado$titulo[1]))
+  expect_no_match(resultado$titulo[1], "<em", fixed = TRUE)
 })
 
 test_that("cie11_search maneja JSON inesperado sin entities", {
