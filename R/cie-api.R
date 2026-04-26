@@ -79,6 +79,9 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
     token_url <- "https://icdaccessmanagement.who.int/connect/token"
     token_req <- httr2::request(token_url) %>%
       httr2::req_method("POST") %>%
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
+      httr2::req_timeout(30) %>%
+      httr2::req_retry(max_tries = 3) %>%
       httr2::req_body_form(
         client_id = client_id,
         client_secret = client_secret,
@@ -96,8 +99,12 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
     )
     
     search_req <- httr2::request(search_url) %>%
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
+      httr2::req_timeout(30) %>%
+      httr2::req_retry(max_tries = 3) %>%
+      httr2::req_throttle(rate = 10 / 60) %>% # 10 req/min para ser conservador
       httr2::req_url_query(
-        q = texto,
+        q = text,
         flatResults = "true",
         useFlexisearch = "true"
       ) %>%
@@ -127,7 +134,7 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
       
       return(resultados)
     } else {
-      message("Sin resultados CIE-11 para: ", texto)
+      message("Sin resultados CIE-11 para: ", text)
       return(tibble::tibble(
         codigo = character(), 
         titulo = character(),

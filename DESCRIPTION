@@ -29,11 +29,11 @@ Imports:
     tools,
     utils,
     lifecycle,
-    rlang
+    rlang,
+    httr2
 Suggests:
     comorbidity,
     gt,
-    httr2,
     readxl,
     usethis,
     withr,

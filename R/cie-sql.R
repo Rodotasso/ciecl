@@ -202,8 +202,9 @@ cache_is_current <- function(con) {
 #' Ejecutar consultas SQL sobre CIE-10 Chile
 #'
 #' @param query String SQL valido SQLite (SELECT/WHERE/JOIN)
-#' @param close Deprecated. Ignorado — la conexion es pooled y se
-#'   gestiona automaticamente. Sera eliminado en una version futura.
+#' @param close `r lifecycle::badge("deprecated")` Ignorado — la conexion
+#'   es pooled y se gestiona automaticamente. Sera eliminado en una
+#'   version futura.
 #' @return tibble resultado query
 #' @family sql
 #' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
@@ -217,13 +218,13 @@ cache_is_current <- function(con) {
 #' # Contar por capitulo
 #' cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
 #' }
-cie10_sql <- function(query, close = TRUE) {
-  if (!missing(close)) {
-    .Deprecated(msg = paste0(
-      "El argumento 'close' de cie10_sql() esta deprecado ",
-      "y sera eliminado en una version futura.\n",
-      "La conexion es pooled y se gestiona automaticamente."
-    ))
+cie10_sql <- function(query, close = lifecycle::deprecated()) {
+  if (lifecycle::is_present(close)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie10_sql(close = )",
+      details = "La conexion es pooled y se gestiona automaticamente."
+    )
   }
   # Normalizar query: eliminar espacios y saltos de linea al inicio
   query_norm <- stringr::str_trim(query)

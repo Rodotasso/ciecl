@@ -12,6 +12,12 @@ tibble con guia comparativa
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{\link[=cie_guide]{cie_guide()}}.
 }
+\examples{
+\dontrun{
+# Deprecated: usar cie_guide()
+cie_guia_busqueda()
+}
+}
 \seealso{
 Other busqueda: 
 \code{\link{cie_describe}()},

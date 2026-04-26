@@ -4,13 +4,14 @@
 \alias{cie10_sql}
 \title{Ejecutar consultas SQL sobre CIE-10 Chile}
 \usage{
-cie10_sql(query, close = TRUE)
+cie10_sql(query, close = lifecycle::deprecated())
 }
 \arguments{
 \item{query}{String SQL valido SQLite (SELECT/WHERE/JOIN)}
 
-\item{close}{Deprecated. Ignorado — la conexion es pooled y se
-gestiona automaticamente. Sera eliminado en una version futura.}
+\item{close}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Ignorado — la conexion
+es pooled y se gestiona automaticamente. Sera eliminado en una
+version futura.}
 }
 \value{
 tibble resultado query

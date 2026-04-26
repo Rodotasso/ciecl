@@ -447,7 +447,7 @@ sigla_to_codigo <- function(sigla) {
   }
 
   termino <- siglas[[sigla_lower]]$termino
-  resultado <- cie_search(termino, solo_fuzzy = TRUE, verbose = FALSE)
+  resultado <- cie_search(termino, only_fuzzy = TRUE, verbose = FALSE)
 
   if (nrow(resultado) > 0) {
     return(resultado$codigo[1])
@@ -557,6 +557,11 @@ cie_short <- function(category = NULL,
 #' @family busqueda
 #' @keywords internal
 #' @export
+#' @examples
+#' \dontrun{
+#' # Deprecated: usar cie_short()
+#' cie_siglas()
+#' }
 cie_siglas <- function(categoria = NULL) {
   lifecycle::deprecate_warn(
     "0.9.8",
@@ -1196,6 +1201,11 @@ cie_guide <- function() {
 #' @family busqueda
 #' @keywords internal
 #' @export
+#' @examples
+#' \dontrun{
+#' # Deprecated: usar cie_guide()
+#' cie_guia_busqueda()
+#' }
 cie_guia_busqueda <- function() {
   lifecycle::deprecate_warn(
     "0.9.8",

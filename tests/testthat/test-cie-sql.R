@@ -28,7 +28,7 @@ test_that("cie10_sql emite deprecation warning para argumento close", {
 
   expect_warning(
     cie10_sql("SELECT COUNT(*) AS n FROM cie10", close = FALSE),
-    "deprecado"
+    class = "lifecycle_warning_deprecated"
   )
 })
 

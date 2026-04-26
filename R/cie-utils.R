@@ -159,6 +159,11 @@ cie_norm <- function(codes,
 #' @family validacion
 #' @keywords internal
 #' @export
+#' @examples
+#' \dontrun{
+#' # Deprecated: usar cie_norm()
+#' cie_normalizar("E110")
+#' }
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
   lifecycle::deprecate_warn(
     "0.9.8",
