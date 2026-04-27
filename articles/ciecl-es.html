@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Introduccion a ciecl: CIE-10 Chile en R • ciecl</title>
+<title>Introducción a ciecl: CIE-10 Chile en R • ciecl</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Introduccion a ciecl: CIE-10 Chile en R">
+<meta property="og:title" content="Introducción a ciecl: CIE-10 Chile en R">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ciecl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,12 +35,34 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as">
+<li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
+    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma">
+<li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+  </ul>
+</li>
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
@@ -65,11 +87,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Introduccion a ciecl: CIE-10 Chile en R</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Introducción a ciecl: CIE-10 Chile en R</h1>
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-04-19</h4>
+            <h4 data-toc-skip class="date">2026-04-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/ciecl-es.Rmd" class="external-link"><code>vignettes/ciecl-es.Rmd</code></a></small>
       <div class="d-none name"><code>ciecl-es.Rmd</code></div>
@@ -78,32 +100,46 @@ Suazo</h4>
     
     
 <blockquote>
-<p><strong>Version 0.9.3</strong>: Disponible en CRAN con optimizaciones
-SQLite y soporte XLSX.</p>
+<p><strong>Versión 0.9.8</strong>: Disponible en CRAN con optimizaciones
+SQLite, soporte XLSX y argumentos estandarizados en inglés.</p>
 </blockquote>
 <div class="section level2">
-<h2 id="acerca-del-dataset">Acerca del dataset<a class="anchor" aria-label="anchor" href="#acerca-del-dataset"></a>
+<h2 id="el-problema-codificar-diagnósticos-en-chile">El problema: codificar diagnósticos en Chile<a class="anchor" aria-label="anchor" href="#el-problema-codificar-diagn%C3%B3sticos-en-chile"></a>
 </h2>
-<p>El paquete incluye <strong>39,877 codigos CIE-10</strong> del
-catalogo oficial MINSAL/DEIS v2018, incluyendo categorias (3 digitos) y
-subcategorias (4+ digitos).</p>
+<p>Los sistemas de información sanitaria chilenos —DEIS, GRD, REM—
+almacenan diagnósticos usando la clasificación CIE-10 en su versión
+oficial MINSAL/DEIS v2018. Trabajar con estos datos en R sin una
+referencia local obliga al analista a consultar PDFs, tablas Excel o
+sitios web, interrumpiendo el flujo de análisis.</p>
+<p><code>ciecl</code> resuelve este problema: incorpora los
+<strong>39.877 códigos CIE-10</strong> del catálogo oficial directamente
+en R, con funciones de búsqueda rápida, expansión jerárquica y cálculo
+de índices de comorbilidad.</p>
 </div>
 <div class="section level2">
-<h2 id="instalacion">Instalacion<a class="anchor" aria-label="anchor" href="#instalacion"></a>
+<h2 id="instalación">Instalación<a class="anchor" aria-label="anchor" href="#instalaci%C3%B3n"></a>
 </h2>
+<p>El paquete está disponible en CRAN. Para instalar la versión
+estable:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Desde GitHub (version beta)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Alternativa con devtools</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
+<p>Para la versión de desarrollo con las últimas correcciones:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Requiere el paquete pak</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="busqueda-sql-rapida">Busqueda SQL rapida<a class="anchor" aria-label="anchor" href="#busqueda-sql-rapida"></a>
+<h2 id="consultas-sql-directas-al-catálogo">Consultas SQL directas al catálogo<a class="anchor" aria-label="anchor" href="#consultas-sql-directas-al-cat%C3%A1logo"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Todos los codigos diabetes tipo 2</span></span>
-<span><span class="fu"><a href="../reference/cie10_sql.html">cie10_sql</a></span><span class="op">(</span><span class="st">"SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5"</span><span class="op">)</span></span>
+<p>La función <code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> expone el catálogo completo a
+través de SQLite, lo que permite filtrar con toda la expresividad de
+SQL. Esto es útil cuando se conoce la lógica del código pero no el texto
+exacto, por ejemplo para recuperar todos los subcódigos de una
+categoría.</p>
+<p>El siguiente ejemplo extrae los primeros cinco códigos de diabetes
+tipo 2 (categoría E11):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie10_sql.html">cie10_sql</a></span><span class="op">(</span><span class="st">"SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion                                           </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                 </span></span>
@@ -112,22 +148,33 @@ subcategorias (4+ digitos).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> E11.1  Diabetes mellitus tipo 2 con cetoacidosis             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> E11.2  Diabetes mellitus tipo 2 con complicaciones renales   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas</span></span></code></pre></div>
+<p>La función solo acepta consultas <code>SELECT</code> para proteger la
+integridad del catálogo. Esto garantiza que la base de datos local
+permanezca como una referencia de solo lectura y confiable para el
+análisis.</p>
 </div>
 <div class="section level2">
-<h2 id="busqueda-por-codigo">Busqueda por codigo<a class="anchor" aria-label="anchor" href="#busqueda-por-codigo"></a>
+<h2 id="búsqueda-por-código-conocido">Búsqueda por código conocido<a class="anchor" aria-label="anchor" href="#b%C3%BAsqueda-por-c%C3%B3digo-conocido"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Busqueda de un solo codigo</span></span>
+<p>Cuando el código ya está disponible en los datos —por ejemplo, al
+preparar un informe con diagnósticos de egreso hospitalario—
+<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> recupera la descripción oficial a partir de
+uno o varios códigos. Esta función es el puente entre la codificación
+críptica de las bases de datos y la interpretación clínica humana.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Un solo código</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span>
-<span></span>
-<span><span class="co"># Busqueda vectorizada - multiples codigos a la vez</span></span>
-<span><span class="va">codigos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span>, <span class="st">"J44.0"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="va">codigos</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
+<p>La función acepta vectores, lo que facilita su uso dentro de un
+pipeline <code>dplyr</code> o cualquier flujo de trabajo vectorizado,
+devolviendo un <code>tibble</code> con la información estructurada:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Múltiples códigos de distintos capítulos</span></span>
+<span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span>, <span class="st">"J44.0"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 10</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
@@ -135,10 +182,14 @@ subcategorias (4+ digitos).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span>
-<span></span>
-<span><span class="co"># Expansion jerarquica</span></span>
-<span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11"</span>, expandir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
+<p>En análisis donde se trabaja a nivel de categoría (tres dígitos),
+puede ser necesario conocer todos los subcódigos que la componen para
+realizar agregaciones o filtros. El argumento <code>expand = TRUE</code>
+desciende la jerarquía y devuelve la categoría junto con todos sus
+hijos:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 10</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
@@ -156,10 +207,63 @@ subcategorias (4+ digitos).</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="busqueda-fuzzy-con-typos">Busqueda fuzzy con typos<a class="anchor" aria-label="anchor" href="#busqueda-fuzzy-con-typos"></a>
+<h2 id="obtener-descripciones-para-usar-en-tablas">Obtener descripciones para usar en tablas<a class="anchor" aria-label="anchor" href="#obtener-descripciones-para-usar-en-tablas"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Encuentra aunque este mal escrito</span></span>
+<p>A veces solo se necesita el texto de la descripción, sin la
+estructura completa de <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>. Por ejemplo, al crear
+etiquetas para un eje de gráfico o una columna rápida en un reporte. La
+función <code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve un vector de caracteres con
+las descripciones en el mismo orden que los códigos recibidos, lista
+para usar en <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span></code></pre></div>
+<p>Este enfoque es particularmente potente cuando se combina con
+<code>dplyr</code> para enriquecer bases de datos masivas sin necesidad
+de realizar cruces complejos (<code>left_join</code>):</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span></span>
+<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  codigo_diag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"J44.0"</span>, <span class="st">"E11.0"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">egresos</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>descripcion <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">codigo_diag</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id codigo_diag</span></span>
+<span><span class="co">#&gt; 1  1       E11.0</span></span>
+<span><span class="co">#&gt; 2  2         I10</span></span>
+<span><span class="co">#&gt; 3  3       J44.0</span></span>
+<span><span class="co">#&gt; 4  4       E11.0</span></span>
+<span><span class="co">#&gt;                                                                                        descripcion</span></span>
+<span><span class="co">#&gt; 1                                                                Diabetes mellitus tipo 2 con coma</span></span>
+<span><span class="co">#&gt; 2                                                                 Hipertensión esencial (primaria)</span></span>
+<span><span class="co">#&gt; 3 Enfermedad pulmonar obstructiva crónica con infección aguda de las vías respiratorias inferiores</span></span>
+<span><span class="co">#&gt; 4                                                                Diabetes mellitus tipo 2 con coma</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="búsqueda-por-texto-con-tolerancia-a-errores">Búsqueda por texto con tolerancia a errores<a class="anchor" aria-label="anchor" href="#b%C3%BAsqueda-por-texto-con-tolerancia-a-errores"></a>
+</h2>
+<p>En los datos clínicos es común encontrar diagnósticos escritos en
+texto libre, con errores ortográficos o abreviaciones no estandarizadas
+que dificultan la codificación automática. <code><a href="../reference/cie_search.html">cie_search()</a></code>
+implementa búsqueda fuzzy mediante similitud Jaro-Winkler, permitiendo
+rescatar información de registros imperfectos.</p>
+<p>El parámetro <code>threshold</code> controla qué tan estricta es la
+coincidencia: valores cercanos a 1.0 exigen precisión casi absoluta,
+mientras que valores más bajos toleran mayores variaciones. El rango
+útil habitual para diagnósticos en español está entre 0.70 y 0.85:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># "diabetis" en lugar de "diabetes" — el error no impide encontrar el código correcto</span></span>
 <span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis con coma"</span>, threshold <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
@@ -175,30 +279,52 @@ subcategorias (4+ digitos).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E13.0  Otras diabetes mellitus especificadas, con coma        0.667 E13 OTRA…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E14.0  Diabetes mellitus, no especificada, con coma           0.667 E14 DIAB…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
+<p>Observe que el resultado está ordenado por un puntaje
+(<code>score</code>), permitiendo al analista seleccionar la mejor
+coincidencia de forma estadística.</p>
 </div>
 <div class="section level2">
-<h2 id="comorbilidades-charlson">Comorbilidades Charlson<a class="anchor" aria-label="anchor" href="#comorbilidades-charlson"></a>
+<h2 id="comorbilidades-de-charlson-y-elixhauser">Comorbilidades de Charlson y Elixhauser<a class="anchor" aria-label="anchor" href="#comorbilidades-de-charlson-y-elixhauser"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>La capacidad de estratificar pacientes según su carga de enfermedad
+es vital en investigación epidemiológica. Los índices de comorbilidad
+—Charlson y Elixhauser— se utilizan para predecir mortalidad y uso de
+recursos. <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> automatiza este cálculo a partir
+de un flujo de datos tipo “egresos”:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Requiere: install.packages("comorbidity")</span></span>
 <span><span class="va">df_pacientes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id_pac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  id_pac     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  diagnostico <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I50.9"</span>, <span class="st">"C50.9"</span>, <span class="st">"N18.5"</span>, <span class="st">"J44.0"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span><span class="va">df_pacientes</span>, id <span class="op">=</span> <span class="st">"id_pac"</span>, code <span class="op">=</span> <span class="st">"diagnostico"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></code></pre></div>
+<p>El resultado es un data frame procesado donde cada fila representa un
+paciente único con sus respectivas banderas de patología y puntuación
+total ponderada, listo para modelos de regresión o tablas
+descriptivas.</p>
 </div>
 <div class="section level2">
-<h2 id="tablas-interactivas">Tablas interactivas<a class="anchor" aria-label="anchor" href="#tablas-interactivas"></a>
+<h2 id="tablas-formateadas-con-gt">Tablas formateadas con gt<a class="anchor" aria-label="anchor" href="#tablas-formateadas-con-gt"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Para presentaciones e informes finales, la estética de los datos es
+fundamental. <code><a href="../reference/cie_table.html">cie_table()</a></code> genera una tabla HTML enriquecida,
+aplicando formato condicional y ocultando automáticamente columnas
+vacías para una visualización limpia. Requiere tener <code>gt</code>
+instalado:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Requiere: install.packages("gt")</span></span>
-<span><span class="fu"><a href="../reference/cie_table.html">cie_table</a></span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span>  <span class="co"># Visualizacion GT completa</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/cie_table.html">cie_table</a></span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span></span></code></pre></div>
+<p>Esta función detecta si campos como “Incluye” o “Excluye” vienen
+poblados desde la fuente oficial y ajusta el diseño de la tabla
+dinámicamente.</p>
 </div>
 <div class="section level2">
 <h2 id="fuente-de-datos">Fuente de datos<a class="anchor" aria-label="anchor" href="#fuente-de-datos"></a>
 </h2>
-<p>Datos oficiales CIE-10 Chile MINSAL/DEIS v2018:</p>
+<p>Los datos incluidos en <code>ciecl</code> provienen del catálogo
+oficial CIE-10 publicado por el Ministerio de Salud de Chile a través
+del Departamento de Estadísticas e Información de Salud (DEIS):</p>
 <ul>
 <li>Centro FIC Chile: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
 </li>
@@ -207,12 +333,12 @@ subcategorias (4+ digitos).</p>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="mas-informacion">Mas informacion<a class="anchor" aria-label="anchor" href="#mas-informacion"></a>
+<h2 id="más-información">Más información<a class="anchor" aria-label="anchor" href="#m%C3%A1s-informaci%C3%B3n"></a>
 </h2>
 <ul>
-<li>Reportar problemas: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
+<li>Reportar problemas o sugerencias: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
 </li>
-<li>Repositorio: <a href="https://github.com/RodoTasso/ciecl" class="external-link uri">https://github.com/RodoTasso/ciecl</a>
+<li>Repositorio del paquete: <a href="https://github.com/RodoTasso/ciecl" class="external-link uri">https://github.com/RodoTasso/ciecl</a>
 </li>
 </ul>
 </div>
@@ -223,7 +349,7 @@ subcategorias (4+ digitos).</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Rodolfo Tasso Suazo.</p>
+  <p>list(text = “Desarrollado por Rodolfo Tasso Suazo”)</p>
 </div>
 
 <div class="pkgdown-footer-right">

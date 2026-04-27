@@ -5,7 +5,7 @@ Ejecutar consultas SQL sobre CIE-10 Chile
 ## Usage
 
 ``` r
-cie10_sql(query, close = TRUE)
+cie10_sql(query, close = lifecycle::deprecated())
 ```
 
 ## Arguments
@@ -16,7 +16,7 @@ cie10_sql(query, close = TRUE)
 
 - close:
 
-  Deprecated. Ignorado — la conexion es pooled y se gestiona
+  **\[deprecated\]** Ignorado — la conexion es pooled y se gestiona
   automaticamente. Sera eliminado en una version futura.
 
 ## Value

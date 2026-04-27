@@ -6,23 +6,27 @@ en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 ## Usage
 
 ``` r
-cie_map_comorbid(codigos)
+cie_map_comorbid(codes, codigos = lifecycle::deprecated())
 ```
 
 ## Arguments
 
+- codes:
+
+  Character vector de codigos
+
 - codigos:
 
-  Character vector codigos CIE-10
+  **\[deprecated\]** Use `codes`.
 
 ## Value
 
-tibble con codigo + categoria_comorbilidad
+tibble con columnas: codigo, categoria
 
 ## See also
 
 [`cie_comorbid`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md),
-[`cie_normalizar`](https://rodotasso.github.io/ciecl/reference/cie_normalizar.md)
+[`cie_norm`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
 
 Other comorbilidades:
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)

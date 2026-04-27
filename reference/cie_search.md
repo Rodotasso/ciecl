@@ -12,18 +12,21 @@ Busca en descripciones CIE-10 usando multiples estrategias:
 
 ``` r
 cie_search(
-  texto,
+  text,
   threshold = 0.7,
   max_results = 50,
-  campo = c("descripcion", "inclusion"),
-  solo_fuzzy = FALSE,
-  verbose = TRUE
+  field = c("descripcion", "inclusion"),
+  only_fuzzy = FALSE,
+  verbose = TRUE,
+  texto = lifecycle::deprecated(),
+  campo = lifecycle::deprecated(),
+  solo_fuzzy = lifecycle::deprecated()
 )
 ```
 
 ## Arguments
 
-- texto:
+- text:
 
   String termino medico en espanol o sigla (ej. "diabetes", "IAM",
   "TBC")
@@ -36,11 +39,11 @@ cie_search(
 
   Integer, maximo resultados a retornar (default 50)
 
-- campo:
+- field:
 
   Character, campo busqueda ("descripcion" o "inclusion")
 
-- solo_fuzzy:
+- only_fuzzy:
 
   Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)
 
@@ -49,11 +52,23 @@ cie_search(
   Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en
   scripts.
 
+- texto:
+
+  **\[deprecated\]** Use `text`.
+
+- campo:
+
+  **\[deprecated\]** Use `field`.
+
+- solo_fuzzy:
+
+  **\[deprecated\]** Use `only_fuzzy`.
+
 ## Value
 
 tibble ordenado por score descendente (1.0 = coincidencia exacta). Si el
-texto corresponde a una sigla medica, se expande automaticamente antes
-de buscar.
+text corresponde a una sigla medica, se expande automaticamente antes de
+buscar.
 
 ## Details
 
@@ -63,12 +78,15 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 ## See also
 
 [`cie_lookup`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_siglas`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md),
+[`cie_short`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
 [`cie10_sql`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
 
 Other busqueda:
+[`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
 [`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md),
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
+[`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
 [`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
 
 ## Examples
@@ -160,7 +178,7 @@ cie_search("diabetis")
 #> # ℹ 40 more rows
 
 # Buscar en inclusiones
-cie_search("bacteriana", campo = "inclusion")
+cie_search("bacteriana", field = "inclusion")
 #> x Sin coincidencias >= threshold 0.7
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: codigo <chr>, descripcion <chr>, score <dbl>, categoria <chr>,

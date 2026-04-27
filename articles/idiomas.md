@@ -1,163 +1,259 @@
-# Soporte de Idiomas e Internacionalizacion
+# Soporte de idiomas e internacionalización
 
-## Idiomas Soportados
+## Idiomas soportados
 
-El paquete `ciecl` soporta busquedas en multiples idiomas:
+El paquete `ciecl` trabaja principalmente en español de Chile, pero
+ofrece búsqueda multilingüe cuando la fuente de datos lo permite. La
+tabla resume el comportamiento por función.
 
-| Funcion                                                                         | Idioma Dataset  | Idioma Busqueda | Notas                                 |
-|---------------------------------------------------------------------------------|-----------------|-----------------|---------------------------------------|
-| [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)     | Espanol (Chile) | \-              | Busqueda por codigo, idioma no aplica |
-| [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)     | Espanol (Chile) | Espanol         | Descripciones en espanol chileno      |
-| [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md) | Espanol/Ingles  | Espanol/Ingles  | Configurable via parametro `lang`     |
-| [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)       | Espanol (Chile) | SQL             | Descripciones en espanol              |
+| Función                                                                         | Idioma dataset   | Idioma búsqueda  | Notas                                 |
+|---------------------------------------------------------------------------------|------------------|------------------|---------------------------------------|
+| [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)     | Español (Chile)  | —                | Búsqueda por código; idioma no aplica |
+| [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)     | Español (Chile)  | Español          | Descripciones en español chileno      |
+| [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md) | Español / Inglés | Español / Inglés | Configurable vía parámetro `lang`     |
+| [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)       | Español (Chile)  | SQL              | Columna `descripcion` en español      |
 
-## Dataset CIE-10 Chile (Espanol)
+## Dataset CIE-10 Chile
 
-El dataset `cie10_cl` contiene **39,877 codigos** con descripciones en
-espanol de Chile, basado en el catalogo oficial MINSAL/DEIS v2018.
+El dataset `cie10_cl` contiene los códigos vigentes con descripciones en
+español chileno según el catálogo oficial MINSAL/DEIS v2018. Ver
+[`?cie10_cl`](https://rodotasso.github.io/ciecl/reference/cie10_cl.md)
+para el detalle de columnas.
 
 ``` r
 library(ciecl)
 
-# Ver estructura del dataset
-head(cie10_cl)
-#> # A tibble: 6 x 8
-#>   codigo descripcion                    categoria inclusion exclusion capitulo
-#>   <chr>  <chr>                          <chr>     <chr>     <chr>     <chr>
-#> 1 A00    Colera                         A00       ...       ...       01
-#> 2 A00.0  Colera debido a Vibrio...      A00       ...       ...       01
+head(cie10_cl[, c("codigo", "descripcion", "capitulo")])
+#> # A tibble: 6 × 3
+#>   codigo descripcion                                          capitulo
+#>   <chr>  <chr>                                                <chr>   
+#> 1 A00    Cólera                                               A00     
+#> 2 A00.0  Cólera debido a Vibrio cholerae O1, biotipo cholerae A00     
+#> 3 A00.1  Cólera debido a Vibrio cholerae O1, biotipo El Tor   A00     
+#> 4 A00.9  Cólera, no especificado                              A00     
+#> 5 A01    Fiebres tifoidea y paratifoidea                      A01     
+#> 6 A01.0  Fiebre tifoidea                                      A01
 ```
 
-### Caracteristicas del Espanol Chileno
+La columna `descripcion` conserva tildes y eñes del catálogo original.
+Esto es importante porque muchas rutinas de limpieza despojan los
+acentos; en `ciecl` la normalización ocurre solo en la etapa de
+*búsqueda*, no en el dato almacenado.
 
-- **Tildes preservadas**: “Neumonia”, “Rinon”, “Corazon”
-- **Terminologia local**: Usa terminos medicos comunes en Chile
-- **Sin anglicanismos**: Traducciones oficiales MINSAL
+### Características del español chileno
 
-## Busqueda Tolerante a Tildes
+- **Tildes preservadas en el dataset**: “Neumonía”, “Riñón”, “Corazón”.
+- **Terminología local**: Usa términos médicos comunes en Chile.
+- **Sin anglicismos**: Traducciones oficiales del MINSAL.
 
-La funcion
+## Búsqueda tolerante a tildes y eñes
+
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-normaliza automaticamente tildes, permitiendo buscar sin preocuparse por
-acentos:
+normaliza internamente la consulta para que el usuario pueda escribir
+con o sin tildes. Esto es especialmente útil en datos clínicos
+mezclados, donde el mismo término aparece con y sin acento.
 
 ``` r
-# Todas estas busquedas encuentran "neumonia"
+# Con o sin tilde: mismo resultado
 cie_search("neumonia")
+#> # A tibble: 50 × 4
+#>    codigo descripcion                                            score categoria
+#>    <chr>  <chr>                                                  <dbl> <chr>    
+#>  1 B01.2  Neumonía debida a varicela (J17.1*)                        1 B01 VARI…
+#>  2 B05.2  Sarampión complicado con neumonía (J17.1*)                 1 B05 SARA…
+#>  3 B20.6  Enfermedad por VIH, resultante en neumonía por Pneumo…     1 B20 ENFE…
+#>  4 J10.0  Influenza con neumonía, debida a otro virus de la inf…     1 J10 INFL…
+#>  5 J11.0  Influenza con neumonía, virus no identificado              1 J11 INFL…
+#>  6 J12    Neumonía viral, no clasificada en otra parte               1 J12 NEUM…
+#>  7 J12.0  Neumonía debida a adenovirus                               1 J12 NEUM…
+#>  8 J12.1  Neumonía debida a virus sincitial respiratorio             1 J12 NEUM…
+#>  9 J12.2  Neumonía debida a virus parainfluenza                      1 J12 NEUM…
+#> 10 J12.3  Neumonía por metapneumovirus humano                        1 J12 NEUM…
+#> # ℹ 40 more rows
 cie_search("neumonía")
+#> # A tibble: 50 × 4
+#>    codigo descripcion                                            score categoria
+#>    <chr>  <chr>                                                  <dbl> <chr>    
+#>  1 B01.2  Neumonía debida a varicela (J17.1*)                        1 B01 VARI…
+#>  2 B05.2  Sarampión complicado con neumonía (J17.1*)                 1 B05 SARA…
+#>  3 B20.6  Enfermedad por VIH, resultante en neumonía por Pneumo…     1 B20 ENFE…
+#>  4 J10.0  Influenza con neumonía, debida a otro virus de la inf…     1 J10 INFL…
+#>  5 J11.0  Influenza con neumonía, virus no identificado              1 J11 INFL…
+#>  6 J12    Neumonía viral, no clasificada en otra parte               1 J12 NEUM…
+#>  7 J12.0  Neumonía debida a adenovirus                               1 J12 NEUM…
+#>  8 J12.1  Neumonía debida a virus sincitial respiratorio             1 J12 NEUM…
+#>  9 J12.2  Neumonía debida a virus parainfluenza                      1 J12 NEUM…
+#> 10 J12.3  Neumonía por metapneumovirus humano                        1 J12 NEUM…
+#> # ℹ 40 more rows
 cie_search("NEUMONIA")
-
-# Funciona con n
-cie_search("rinon")     # Encuentra "rinon"
-cie_search("espanol")   # Encuentra terminos con "n"
+#> # A tibble: 50 × 4
+#>    codigo descripcion                                            score categoria
+#>    <chr>  <chr>                                                  <dbl> <chr>    
+#>  1 B01.2  Neumonía debida a varicela (J17.1*)                        1 B01 VARI…
+#>  2 B05.2  Sarampión complicado con neumonía (J17.1*)                 1 B05 SARA…
+#>  3 B20.6  Enfermedad por VIH, resultante en neumonía por Pneumo…     1 B20 ENFE…
+#>  4 J10.0  Influenza con neumonía, debida a otro virus de la inf…     1 J10 INFL…
+#>  5 J11.0  Influenza con neumonía, virus no identificado              1 J11 INFL…
+#>  6 J12    Neumonía viral, no clasificada en otra parte               1 J12 NEUM…
+#>  7 J12.0  Neumonía debida a adenovirus                               1 J12 NEUM…
+#>  8 J12.1  Neumonía debida a virus sincitial respiratorio             1 J12 NEUM…
+#>  9 J12.2  Neumonía debida a virus parainfluenza                      1 J12 NEUM…
+#> 10 J12.3  Neumonía por metapneumovirus humano                        1 J12 NEUM…
+#> # ℹ 40 more rows
 ```
 
-## Siglas Medicas Chilenas
-
-El paquete incluye **88 siglas medicas** comunes en el contexto clinico
-chileno:
+La misma lógica aplica a la eñe: buscar `"rinon"` encuentra “Riñón” en
+el catálogo.
 
 ``` r
-# Ver todas las siglas disponibles
-cie_siglas()
+cie_search("rinon")
+#> # A tibble: 49 × 4
+#>    codigo  descripcion                                           score categoria
+#>    <chr>   <chr>                                                 <dbl> <chr>    
+#>  1 C64     Tumor maligno del riñón, excepto de la pelvis renal       1 C64 TUMO…
+#>  2 C79.0   Tumor maligno secundario del riñón y de la pelvis re…     1 C79 TUMO…
+#>  3 D30.0   Tumor benigno del riñón                                   1 D30 TUMO…
+#>  4 D41.0   Tumor de comportamiento incierto o desconocido del r…     1 D41 TUMO…
+#>  5 M8964/3 Sarcoma de células claras del riñón (C64)                 1 M893-M89…
+#>  6 M8964/6 Sarcoma de células claras del riñón (C64), metastási…     1 M893-M89…
+#>  7 M9044/3 Sarcoma de células claras (excepto del riñón M8964/3)     1 M904-M90…
+#>  8 M9044/6 Sarcoma de células claras (excepto del riñón M8964/3…     1 M904-M90…
+#>  9 N13.2   Hidronefrosis con obstrucción por cálculos del riñón…     1 N13 UROP…
+#> 10 N20     Cálculo del riñón y del uréter                            1 N20 CÁLC…
+#> # ℹ 39 more rows
+```
 
-# Filtrar por categoria
-cie_siglas("cardiovascular")
-cie_siglas("respiratoria")
-cie_siglas("oncologica")
+## Siglas médicas chilenas
 
-# Buscar usando siglas
+El paquete incluye un diccionario de **siglas médicas** de uso clínico
+en Chile. Esto permite que un analista escriba `IAM` en vez del código
+completo y `ciecl` resuelva la sigla al término oficial del catálogo.
+
+``` r
+# Listar todas las siglas disponibles
+head(cie_short())
+#> # A tibble: 6 × 3
+#>   sigla   termino_busqueda         categoria     
+#>   <chr>   <chr>                    <chr>         
+#> 1 iam     infarto agudo miocardio  cardiovascular
+#> 2 iamcest infarto agudo miocardio  cardiovascular
+#> 3 iamsest infarto agudo miocardio  cardiovascular
+#> 4 sca     sindrome coronario agudo cardiovascular
+#> 5 hta     hipertension arterial    cardiovascular
+#> 6 aha     hipertension arterial    cardiovascular
+
+# Filtrar por categoría
+cie_short(category = "cardiovascular")
+#> # A tibble: 15 × 3
+#>    sigla   termino_busqueda              categoria     
+#>    <chr>   <chr>                         <chr>         
+#>  1 iam     infarto agudo miocardio       cardiovascular
+#>  2 iamcest infarto agudo miocardio       cardiovascular
+#>  3 iamsest infarto agudo miocardio       cardiovascular
+#>  4 sca     sindrome coronario agudo      cardiovascular
+#>  5 hta     hipertension arterial         cardiovascular
+#>  6 aha     hipertension arterial         cardiovascular
+#>  7 icc     insuficiencia cardiaca        cardiovascular
+#>  8 ic      insuficiencia cardiaca        cardiovascular
+#>  9 fa      fibrilacion auricular         cardiovascular
+#> 10 tep     embolia pulmonar              cardiovascular
+#> 11 tvp     trombosis venosa profunda     cardiovascular
+#> 12 eap     edema agudo pulmon            cardiovascular
+#> 13 acv     accidente cerebrovascular     cardiovascular
+#> 14 ave     accidente vascular encefalico cardiovascular
+#> 15 ait     isquemico transitorio         cardiovascular
+
+# Usar la sigla directamente en búsqueda
 cie_search("IAM")   # Infarto Agudo del Miocardio
-cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Cronica
+#> i Sigla detectada: IAM -> infarto agudo miocardio
+#> # A tibble: 50 × 4
+#>    codigo descripcion                                            score categoria
+#>    <chr>  <chr>                                                  <dbl> <chr>    
+#>  1 I21    Infarto agudo del miocardio                                1 I21 INFA…
+#>  2 I21.0  Infarto transmural agudo del miocardio de la pared an…     1 I21 INFA…
+#>  3 I21.1  Infarto transmural agudo del miocardio de la pared in…     1 I21 INFA…
+#>  4 I21.2  Infarto agudo transmural del miocardio de otros sitios     1 I21 INFA…
+#>  5 I21.3  Infarto transmural agudo del miocardio, de sitio no e…     1 I21 INFA…
+#>  6 I21.4  Infarto subendocárdico agudo del miocardio                 1 I21 INFA…
+#>  7 I21.9  Infarto agudo del miocardio, sin otra especificación       1 I21 INFA…
+#>  8 I23    Ciertas complicaciones presentes posteriores al infar…     1 I23 CIER…
+#>  9 I23.0  Hemopericardio como complicación presente posterior a…     1 I23 CIER…
+#> 10 I23.3  Ruptura de la pared cardíaca sin hemopericardio como …     1 I23 CIER…
+#> # ℹ 40 more rows
+cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Crónica
+#> i Sigla detectada: EPOC -> enfermedad pulmonar obstructiva cronica
+#> # A tibble: 3 × 4
+#>   codigo descripcion                                             score categoria
+#>   <chr>  <chr>                                                   <dbl> <chr>    
+#> 1 J44.0  Enfermedad pulmonar obstructiva crónica con infección …     1 J44 OTRA…
+#> 2 J44.1  Enfermedad pulmonar obstructiva crónica con exacerbaci…     1 J44 OTRA…
+#> 3 J44.9  Enfermedad pulmonar obstructiva crónica, no especifica…     1 J44 OTRA…
 cie_search("DM2")   # Diabetes Mellitus tipo 2
-cie_search("HTA")   # Hipertension Arterial
-cie_search("TBC")   # Tuberculosis
+#> i Sigla detectada: DM2 -> diabetes mellitus tipo 2
+#> # A tibble: 11 × 4
+#>    codigo descripcion                                            score categoria
+#>    <chr>  <chr>                                                  <dbl> <chr>    
+#>  1 E11.0  Diabetes mellitus tipo 2 con coma                          1 E11 DIAB…
+#>  2 E11.1  Diabetes mellitus tipo 2 con cetoacidosis                  1 E11 DIAB…
+#>  3 E11.2  Diabetes mellitus tipo 2 con complicaciones renales        1 E11 DIAB…
+#>  4 E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas     1 E11 DIAB…
+#>  5 E11.4  Diabetes mellitus tipo 2 con complicaciones neurológi…     1 E11 DIAB…
+#>  6 E11.5  Diabetes mellitus tipo 2 con complicaciones  circulat…     1 E11 DIAB…
+#>  7 E11.6  Diabetes mellitus tipo 2 con otras complicaciones  es…     1 E11 DIAB…
+#>  8 E11.7  Diabetes mellitus tipo 2 con complicaciones múltiples      1 E11 DIAB…
+#>  9 E11.8  Diabetes mellitus tipo 2 con complicaciones no especi…     1 E11 DIAB…
+#> 10 E11.9  Diabetes mellitus tipo 2 sin complicaciones                1 E11 DIAB…
+#> 11 O24.1  Diabetes mellitus tipo 2 preexistente                      1 O24 DIAB…
 ```
 
-### Categorias de Siglas
+La tabla siguiente resume las categorías disponibles y su tamaño
+aproximado. Los números pueden variar entre versiones del paquete.
 
-| Categoria        | Ejemplos                                        | Cantidad |
-|------------------|-------------------------------------------------|----------|
-| Cardiovascular   | IAM, HTA, ACV, FA, ICC                          | 15       |
-| Respiratoria     | TBC, EPOC, NAC, SDRA                            | 9        |
-| Metabolica       | DM, DM1, DM2, ERC, IRC                          | 7        |
-| Gastrointestinal | HDA, HDB, RGE, DHC                              | 9        |
-| Infecciosa       | VIH, ITU, ITS, sepsis                           | 8        |
-| Oncologica       | CA, LMA, LMC, LLA, LLC                          | 10       |
-| Neurologica      | TEC, EPI, EM, ELA                               | 8        |
-| Psiquiatrica     | TDAH, TOC, TAG, TEPT                            | 6        |
-| Otras            | Reumatologicas, pediatricas, gineco-obstetricas | 16       |
+| Categoría        | Ejemplos               |
+|------------------|------------------------|
+| Cardiovascular   | IAM, HTA, ACV, FA, ICC |
+| Respiratoria     | TBC, EPOC, NAC, SDRA   |
+| Metabólica       | DM, DM1, DM2, ERC, IRC |
+| Gastrointestinal | HDA, HDB, RGE, DHC     |
+| Infecciosa       | VIH, ITU, ITS, sepsis  |
+| Oncológica       | CA, LMA, LMC, LLA, LLC |
+| Neurológica      | TEC, EPI, EM, ELA      |
+| Psiquiátrica     | TDAH, TOC, TAG, TEPT   |
 
-## API CIE-11 Multilingue
+## API CIE-11 multilingüe
 
-La funcion
 [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-permite buscar en la clasificacion CIE-11 de la OMS en espanol o ingles:
+consulta la API oficial de la OMS y sí acepta idioma, porque el endpoint
+de la OMS está traducido a varios. En `ciecl` se expone el parámetro
+`lang = "es"` (por defecto) o `lang = "en"`.
 
 ``` r
-# Busqueda en espanol (default)
+# Búsqueda en español (por defecto)
 cie11_search("diabetes mellitus", lang = "es")
 
-# Busqueda en ingles
+# Búsqueda en inglés
 cie11_search("diabetes mellitus", lang = "en")
-
-# Comparar resultados
-es <- cie11_search("infarto", lang = "es")
-en <- cie11_search("infarction", lang = "en")
 ```
 
-### Configuracion de Idioma API
+> Nota: esta sección requiere credenciales de la API OMS. Ver la
+> vignette “Configuración de la API CIE-11” para cómo guardarlas con
+> `keyring`.
 
-El parametro `lang` acepta:
+## Encoding y caracteres especiales
 
-- `"es"` - Espanol (default)
-- `"en"` - Ingles
-
-``` r
-# Configurar idioma por defecto en sesion
-options(ciecl.lang = "es")
-
-# Ahora todas las busquedas CIE-11 usaran espanol
-cie11_search("neumonia")
-```
-
-## Encoding y Caracteres Especiales
-
-### UTF-8 por Defecto
-
-El paquete usa encoding UTF-8 para garantizar compatibilidad con
-caracteres especiales del espanol:
+El paquete está codificado en **UTF-8** y el dataset preserva todos los
+caracteres del español (tildes, eñe, diéresis) y los símbolos de
+codificación dual (daga †, asterisco \*) que aparecen en el catálogo
+MINSAL. Al buscar,
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
+y
+[`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
+saben limpiarlos.
 
 ``` r
-# Verificar encoding del dataset
 Encoding(cie10_cl$descripcion[1])
 #> [1] "UTF-8"
 ```
-
-### Caracteres Especiales Soportados
-
-| Caracter         | Ejemplo       | Soporte                |
-|------------------|---------------|------------------------|
-| Tildes           | a, e, i, o, u | Completo               |
-| Ene              | n             | Completo               |
-| Dieresis         | u             | Completo               |
-| Simbolos medicos | daga, cruz    | Preservados en dataset |
-
-## Contribuir Traducciones
-
-Si deseas contribuir traducciones o mejorar el soporte de idiomas:
-
-1.  Abre un issue en <https://github.com/RodoTasso/ciecl/issues>
-2.  Describe el idioma o mejora propuesta
-3.  Incluye ejemplos de uso
-
-### Traducciones Pendientes
-
-Portugues (Brasil) - Dataset CID-10
-
-Ingles - Dataset ICD-10-CM (USA)
-
-Frances - Dataset CIM-10
 
 ## Referencias
 

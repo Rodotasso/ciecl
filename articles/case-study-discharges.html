@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Caso de Uso: Análisis de Egresos Hospitalarios (DEIS Chile) • ciecl</title>
+<title>Case Study: Hospital Discharge Analysis (DEIS Chile) • ciecl</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Caso de Uso: Análisis de Egresos Hospitalarios (DEIS Chile)">
+<meta property="og:title" content="Case Study: Hospital Discharge Analysis (DEIS Chile)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -87,59 +87,59 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Caso de Uso: Análisis de Egresos Hospitalarios (DEIS Chile)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Case Study: Hospital Discharge Analysis (DEIS Chile)</h1>
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
             <h4 data-toc-skip class="date">2026-04-27</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/caso-uso-egresos.Rmd" class="external-link"><code>vignettes/caso-uso-egresos.Rmd</code></a></small>
-      <div class="d-none name"><code>caso-uso-egresos.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/case-study-discharges.Rmd" class="external-link"><code>vignettes/case-study-discharges.Rmd</code></a></small>
+      <div class="d-none name"><code>case-study-discharges.Rmd</code></div>
     </div>
 
     
     
 <div class="section level2">
-<h2 id="introducción">Introducción<a class="anchor" aria-label="anchor" href="#introducci%C3%B3n"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Este caso de uso describe el flujo de procesamiento técnico necesario
-para transformar bases de datos administrativas de salud en Chile hacia
-un formato analítico estandarizado. Se utilizan como referencia las
-bases de <strong>Egresos Hospitalarios</strong> publicadas por el
-Departamento de Estadísticas e Información de Salud (DEIS).</p>
-<p>Los registros administrativos de salud presentan frecuentemente
-inconsistencias estructurales en la codificación CIE-10. Las dos
-variaciones más comunes en el contexto chileno son:</p>
+<p>This case study describes the technical workflow required to
+transform administrative health databases in Chile into a standardized
+analytical format. We use the <strong>Hospital Discharge</strong>
+databases published by the Department of Health Statistics and
+Information (DEIS) as a reference.</p>
+<p>Health administrative records frequently present structural
+inconsistencies in ICD-10 coding. The two most common variations in the
+Chilean context are:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Formatos compactos</strong>: Códigos sin punto decimal (ej:
-<code>J189</code> en lugar de <code>J18.9</code>).</li>
+<strong>Compact formats</strong>: Codes without a decimal point
+(e.g., <code>J189</code> instead of <code>J18.9</code>).</li>
 <li>
-<strong>Sufijos de relleno</strong>: Uso de la letra <code>X</code>
-para completar la longitud del campo en categorías de 3 dígitos (ej:
-<code>I10X</code> para Hipertensión esencial).</li>
+<strong>Filler suffixes</strong>: Use of the letter <code>X</code>
+to complete the field length in 3-digit categories (e.g.,
+<code>I10X</code> for Essential hypertension).</li>
 </ol>
-<p>Estas variaciones dificultan la interoperabilidad y el cruce con
-estándares internacionales. El paquete <code>ciecl</code> automatiza la
-corrección de estas inconsistencias de forma vectorizada y
-eficiente.</p>
+<p>These variations hinder interoperability and cross-referencing with
+international standards. The <code>ciecl</code> package automates the
+correction of these inconsistencies in a vectorized and efficient
+manner.</p>
 </div>
 <div class="section level2">
-<h2 id="estructura-de-los-datos-originales">1. Estructura de los datos originales<a class="anchor" aria-label="anchor" href="#estructura-de-los-datos-originales"></a>
+<h2 id="original-data-structure">1. Original Data Structure<a class="anchor" aria-label="anchor" href="#original-data-structure"></a>
 </h2>
-<p>A continuación, se genera un conjunto de datos sintético que replica
-la estructura y las anomalías típicas encontradas en los archivos
-<code>.csv</code> del DEIS. La columna <code>DIAG1</code> representa el
-diagnóstico principal con los formatos informales mencionados.</p>
+<p>A synthetic dataset is generated below that replicates the structure
+and typical anomalies found in DEIS <code>.csv</code> files. The
+<code>DIAG1</code> column represents the primary diagnosis with the
+aforementioned informal coding formats.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Simulación de 200 registros con formatos típicos del DEIS Chile</span></span>
-<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  ID_EGRESO <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,</span>
-<span>  PACIENTE_ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  ANO       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">:</span><span class="fl">2022</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  DIAG1     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
+<span><span class="co"># Simulation of 200 records with typical DEIS Chile formats</span></span>
+<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  DISCHARGE_ID <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,</span>
+<span>  PATIENT_ID   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  YEAR         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">:</span><span class="fl">2022</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  DIAG1        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"J189"</span>, <span class="st">"O800"</span>, <span class="st">"Z380"</span>, <span class="st">"K359"</span>, <span class="st">"N390"</span>,</span>
 <span>      <span class="st">"I10X"</span>, <span class="st">"J449"</span>, <span class="st">"E119"</span>, <span class="st">"O829"</span>, <span class="st">"J069"</span>,</span>
@@ -152,41 +152,41 @@ diagnóstico principal con los formatos informales mencionados.</p>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   ID_EGRESO PACIENTE_ID  ANO DIAG1</span></span>
-<span><span class="co">#&gt; 1         1          49 2018  J189</span></span>
-<span><span class="co">#&gt; 2         2          37 2022  E119</span></span>
-<span><span class="co">#&gt; 3         3           1 2021  E149</span></span>
-<span><span class="co">#&gt; 4         4          25 2018  N390</span></span>
-<span><span class="co">#&gt; 5         5          10 2022  I10X</span></span>
-<span><span class="co">#&gt; 6         6          36 2021  C509</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">discharges</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   DISCHARGE_ID PATIENT_ID YEAR DIAG1</span></span>
+<span><span class="co">#&gt; 1            1         49 2018  J189</span></span>
+<span><span class="co">#&gt; 2            2         37 2022  E119</span></span>
+<span><span class="co">#&gt; 3            3          1 2021  E149</span></span>
+<span><span class="co">#&gt; 4            4         25 2018  N390</span></span>
+<span><span class="co">#&gt; 5            5         10 2022  I10X</span></span>
+<span><span class="co">#&gt; 6            6         36 2021  C509</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="normalización-de-códigos-con-cie_norm">2. Normalización de códigos con <code>cie_norm()</code><a class="anchor" aria-label="anchor" href="#normalizaci%C3%B3n-de-c%C3%B3digos-con-cie_norm"></a>
+<h2 id="code-normalization-with-cie_norm">2. Code Normalization with <code>cie_norm()</code><a class="anchor" aria-label="anchor" href="#code-normalization-with-cie_norm"></a>
 </h2>
-<p>La normalización es el primer paso crítico para garantizar la
-integridad del análisis. La función <code><a href="../reference/cie_norm.html">cie_norm()</a></code> procesa los
-códigos aplicando las reglas de codificación oficial MINSAL:</p>
+<p>Normalization is the critical first step to ensure analysis
+integrity. The <code><a href="../reference/cie_norm.html">cie_norm()</a></code> function processes codes by
+applying official MINSAL coding rules:</p>
 <ul>
 <li>
-<strong>Remoción de sufijos</strong>: Identifica y elimina la
-<code>X</code> de relleno.</li>
+<strong>Suffix removal</strong>: Identifies and removes the trailing
+<code>X</code>.</li>
 <li>
-<strong>Formateo de puntuación</strong>: Inserta el punto decimal en
-la posición estándar según la jerarquía CIE-10.</li>
+<strong>Punctuation formatting</strong>: Inserts the decimal point
+in the standard position according to the ICD-10 hierarchy.</li>
 <li>
-<strong>Limpieza de strings</strong>: Elimina espacios en blanco y
-caracteres no imprimibles.</li>
+<strong>String cleaning</strong>: Removes whitespace and
+non-printable characters.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Limpieza y estandarización de diagnósticos</span></span>
-<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="co"># Cleaning and standardization of diagnoses</span></span>
+<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    DIAG1_NORM <span class="op">=</span> <span class="fu"><a href="../reference/cie_norm.html">cie_norm</a></span><span class="op">(</span>codes <span class="op">=</span> <span class="va">DIAG1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Comparación entre formato original y normalizado</span></span>
-<span><span class="va">egresos</span> <span class="op">%&gt;%</span> </span>
+<span><span class="co"># Comparison between original and normalized formats</span></span>
+<span><span class="va">discharges</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
@@ -198,62 +198,62 @@ caracteres no imprimibles.</li>
 <span><span class="co">#&gt; 5  I10X        I10</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="enriquecimiento-semántico-con-cie_describe">3. Enriquecimiento semántico con <code>cie_describe()</code><a class="anchor" aria-label="anchor" href="#enriquecimiento-sem%C3%A1ntico-con-cie_describe"></a>
+<h2 id="semantic-enrichment-with-cie_describe">3. Semantic Enrichment with <code>cie_describe()</code><a class="anchor" aria-label="anchor" href="#semantic-enrichment-with-cie_describe"></a>
 </h2>
-<p>Tras la normalización, es necesario asignar las descripciones
-clínicas oficiales para facilitar la interpretación de los resultados.
-El paquete <code>ciecl</code> ofrece la función vectorizada
-<code><a href="../reference/cie_describe.html">cie_describe()</a></code>, diseñada específicamente para integrarse en
-flujos de <code>dplyr</code> de forma eficiente.</p>
-<p>A diferencia de un <code>left_join</code> tradicional,
-<code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve directamente un vector de
-caracteres, evitando la creación de columnas de unión adicionales y
-manteniendo el código más limpio.</p>
+<p>After normalization, standardized clinical descriptions are assigned
+to facilitate result interpretation. The <code>ciecl</code> package
+provides the vectorized <code><a href="../reference/cie_describe.html">cie_describe()</a></code> function,
+specifically designed to integrate into <code>dplyr</code> workflows
+efficiently.</p>
+<p>Unlike a traditional <code>left_join</code>,
+<code><a href="../reference/cie_describe.html">cie_describe()</a></code> directly returns a character vector,
+avoiding the creation of additional join columns and keeping the code
+cleaner.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Integración directa de descripciones al dataframe principal</span></span>
-<span><span class="va">egresos_full</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="co"># Direct integration of descriptions into the main dataframe</span></span>
+<span><span class="va">discharges_full</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    descripcion <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
+<span>    description <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos_full</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">ID_EGRESO</span>, <span class="va">DIAG1</span>, <span class="va">descripcion</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   ID_EGRESO DIAG1</span></span>
-<span><span class="co">#&gt; 1         1  J189</span></span>
-<span><span class="co">#&gt; 2         2  E119</span></span>
-<span><span class="co">#&gt; 3         3  E149</span></span>
-<span><span class="co">#&gt; 4         4  N390</span></span>
-<span><span class="co">#&gt; 5         5  I10X</span></span>
-<span><span class="co">#&gt; 6         6  C509</span></span>
-<span><span class="co">#&gt;                                                       descripcion</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">discharges_full</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">DISCHARGE_ID</span>, <span class="va">DIAG1</span>, <span class="va">description</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   DISCHARGE_ID DIAG1</span></span>
+<span><span class="co">#&gt; 1            1  J189</span></span>
+<span><span class="co">#&gt; 2            2  E119</span></span>
+<span><span class="co">#&gt; 3            3  E149</span></span>
+<span><span class="co">#&gt; 4            4  N390</span></span>
+<span><span class="co">#&gt; 5            5  I10X</span></span>
+<span><span class="co">#&gt; 6            6  C509</span></span>
+<span><span class="co">#&gt;                                                       description</span></span>
 <span><span class="co">#&gt; 1                                       Neumonía, no especificada</span></span>
 <span><span class="co">#&gt; 2                     Diabetes mellitus tipo 2 sin complicaciones</span></span>
 <span><span class="co">#&gt; 3 Diabetes mellitus, no especificada, sin mención de complicación</span></span>
 <span><span class="co">#&gt; 4              Infección de vías urinarias, sitio no especificado</span></span>
 <span><span class="co">#&gt; 5                                Hipertensión esencial (primaria)</span></span>
 <span><span class="co">#&gt; 6                 Tumor maligno de la mama, parte no especificada</span></span></code></pre></div>
-<p>Para casos donde se requiera la metadata completa (capítulo,
-categoría, grupo), se puede seguir utilizando <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>
-junto con un cruce de tablas:</p>
+<p>For cases where full metadata is required (chapter, category, group),
+<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> can still be used in conjunction with a table
+join:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Obtención de metadata completa vía lookup + join</span></span>
+<code class="sourceCode R"><span><span class="co"># Extracting full metadata via lookup + join</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span></span>
-<span>  code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">$</span><span class="va">DIAG1_NORM</span><span class="op">)</span>,</span>
+<span>  code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">discharges</span><span class="op">$</span><span class="va">DIAG1_NORM</span><span class="op">)</span>,</span>
 <span>  full_description <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">egresos_metadata</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">discharges_metadata</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">metadata</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIAG1_NORM"</span> <span class="op">=</span> <span class="st">"codigo"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="exploración-del-catálogo-con-cie_search">4. Exploración del catálogo con <code>cie_search()</code><a class="anchor" aria-label="anchor" href="#exploraci%C3%B3n-del-cat%C3%A1logo-con-cie_search"></a>
+<h2 id="catalog-exploration-with-cie_search">4. Catalog Exploration with <code>cie_search()</code><a class="anchor" aria-label="anchor" href="#catalog-exploration-with-cie_search"></a>
 </h2>
-<p>En fases exploratorias, donde no se conoce el código exacto o se
-sospecha de errores de transcripción en las glosas originales,
-<code><a href="../reference/cie_search.html">cie_search()</a></code> permite realizar búsquedas de texto mediante
-similitud de strings (fuzzy matching).</p>
+<p>In exploratory phases, where the exact code is unknown or
+transcription errors in the original clinical descriptions are
+suspected, <code><a href="../reference/cie_search.html">cie_search()</a></code> allows text searches using string
+similarity (fuzzy matching).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Ejemplo de búsqueda con error ortográfico intencional ("diabetis")</span></span>
-<span><span class="co"># La función retorna las coincidencias más probables ordenadas por score</span></span>
+<code class="sourceCode R"><span><span class="co"># Example of search with intentional typo ("diabetis")</span></span>
+<span><span class="co"># The function returns the most likely matches ordered by score</span></span>
 <span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"diabetis"</span>, threshold <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
@@ -271,51 +271,51 @@ similitud de strings (fuzzy matching).</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="cálculo-de-índices-de-comorbilidad-con-cie_comorbid">5. Cálculo de índices de comorbilidad con
-<code>cie_comorbid()</code><a class="anchor" aria-label="anchor" href="#c%C3%A1lculo-de-%C3%ADndices-de-comorbilidad-con-cie_comorbid"></a>
+<h2 id="comorbidity-index-calculation-with-cie_comorbid">5. Comorbidity Index Calculation with
+<code>cie_comorbid()</code><a class="anchor" aria-label="anchor" href="#comorbidity-index-calculation-with-cie_comorbid"></a>
 </h2>
-<p>Una aplicación avanzada de <code>ciecl</code> es la estratificación
-de riesgo poblacional mediante índices de comorbilidad. La función
-<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> mapea los diagnósticos normalizados hacia
-categorías de Charlson o Elixhauser, adaptadas a la realidad de los
-datos chilenos.</p>
+<p>An advanced application of <code>ciecl</code> is population risk
+stratification through comorbidity indices. The
+<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> function maps normalized diagnoses to
+Charlson or Elixhauser categories, adapted to the reality of Chilean
+data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requiere el paquete 'comorbidity' instalado</span></span>
-<span><span class="co"># Cálculo del Índice de Charlson por identificador de paciente</span></span>
-<span><span class="va">comorbilidades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">egresos</span>,</span>
-<span>  id <span class="op">=</span> <span class="st">"PACIENTE_ID"</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Requires the 'comorbidity' package to be installed</span></span>
+<span><span class="co"># Calculation of the Charlson Index by patient identifier</span></span>
+<span><span class="va">comorbidities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">discharges</span>,</span>
+<span>  id   <span class="op">=</span> <span class="st">"PATIENT_ID"</span>,</span>
 <span>  code <span class="op">=</span> <span class="st">"DIAG1"</span>,</span>
-<span>  map <span class="op">=</span> <span class="st">"charlson"</span></span>
+<span>  map  <span class="op">=</span> <span class="st">"charlson"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># El resultado permite el uso inmediato en modelos estadísticos</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">comorbilidades</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># The result allows immediate use in statistical models</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">comorbidities</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="resumen-del-proceso">Resumen del proceso<a class="anchor" aria-label="anchor" href="#resumen-del-proceso"></a>
+<h2 id="process-summary">Process Summary<a class="anchor" aria-label="anchor" href="#process-summary"></a>
 </h2>
-<p>El flujo de trabajo con <code>ciecl</code> permite una transición
-reproducible desde datos administrativos crudos hacia un dataset
-analítico en cuatro etapas:</p>
+<p>The <code>ciecl</code> workflow enables a reproducible transition
+from raw administrative data to an analytical dataset in four
+stages:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Estandarización</strong>: Corrección de formatos mediante
+<strong>Standardization</strong>: Format correction using
 <code><a href="../reference/cie_norm.html">cie_norm()</a></code>.</li>
 <li>
-<strong>Contextualización</strong>: Asignación de glosas oficiales
-con <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>.</li>
+<strong>Contextualization</strong>: Assignment of official glosses
+with <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>.</li>
 <li>
-<strong>Validación</strong>: Descubrimiento y chequeo de términos
-con <code><a href="../reference/cie_search.html">cie_search()</a></code>.</li>
+<strong>Validation</strong>: Term discovery and checking with
+<code><a href="../reference/cie_search.html">cie_search()</a></code>.</li>
 <li>
-<strong>Agregación</strong>: Generación de indicadores clínicos
-complejos con <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>.</li>
+<strong>Aggregation</strong>: Generation of complex clinical
+indicators with <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>.</li>
 </ol>
 <hr>
-<p><strong>Fuente de datos:</strong> Esta herramienta utiliza el
-catálogo CIE-10 estandarizado por el Centro FIC del DEIS, Ministerio de
-Salud de Chile. Para más información, visite <a href="https://deis.minsal.cl" class="external-link">deis.minsal.cl</a>.</p>
+<p><strong>Data source:</strong> This tool uses the ICD-10 catalog
+standardized by the Centro FIC of the DEIS, Ministry of Health of Chile.
+For more information, visit <a href="https://deis.minsal.cl" class="external-link">deis.minsal.cl</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

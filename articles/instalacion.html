@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ciecl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,12 +35,34 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as">
+<li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
+    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma">
+<li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+  </ul>
+</li>
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
@@ -69,7 +91,7 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-04-19</h4>
+            <h4 data-toc-skip class="date">2026-04-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/instalacion.Rmd" class="external-link"><code>vignettes/instalacion.Rmd</code></a></small>
       <div class="d-none name"><code>instalacion.Rmd</code></div>
@@ -203,18 +225,29 @@ internacional CIE-11 de la OMS, necesitas credenciales gratuitas.</p>
 </ol>
 </div>
 <div class="section level3">
-<h3 id="paso-2-configurar-variables-de-entorno">Paso 2: Configurar Variables de Entorno<a class="anchor" aria-label="anchor" href="#paso-2-configurar-variables-de-entorno"></a>
+<h3 id="paso-2-guardar-las-credenciales">Paso 2: Guardar las credenciales<a class="anchor" aria-label="anchor" href="#paso-2-guardar-las-credenciales"></a>
 </h3>
-<p><strong>Opcion A: Archivo .Renviron (recomendado para uso
-permanente)</strong></p>
-<p>Crea o edita el archivo <code>~/.Renviron</code>:</p>
+<p><strong>Opción A: <code>keyring</code> (recomendado)</strong></p>
+<p>El paquete <a href="https://r-lib.github.io/keyring/" class="external-link"><code>keyring</code></a> guarda
+secretos en el keychain nativo del sistema operativo (macOS Keychain,
+Windows Credential Store, Linux Secret Service), evitando que el
+<code>Client ID</code> y <code>Client Secret</code> queden en texto
+plano en <code>.Renviron</code>. Este es el patrón recomendado por
+rOpenSci (ver por ejemplo <code>babeldown</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Abrir archivo .Renviron para editar</span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Agrega la linea:</p>
+<code class="sourceCode R"><span><span class="co"># Una sola vez: guarda "client_id:client_secret" en el keychain</span></span>
+<span><span class="fu">keyring</span><span class="fu">::</span><span class="fu">key_set</span><span class="op">(</span><span class="st">"ciecl_icd11"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># En cada sesión en la que uses la API</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ICD_API_KEY <span class="op">=</span> <span class="fu">keyring</span><span class="fu">::</span><span class="fu">key_get</span><span class="op">(</span><span class="st">"ciecl_icd11"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Opción B: Archivo <code>.Renviron</code></strong></p>
+<p>Crea o edita <code>~/.Renviron</code> (por ejemplo con
+<code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code> si tienes <code>usethis</code>
+instalado) y agrega:</p>
 <pre><code><span><span class="va">ICD_API_KEY</span><span class="op">=</span><span class="va">tu_client_id</span><span class="op">:</span><span class="va">tu_client_secret</span></span></code></pre>
-<p>Reinicia R para que tome efecto.</p>
-<p><strong>Opcion B: En cada sesion (temporal)</strong></p>
+<p>Reinicia R para que tome efecto. No subas <code>.Renviron</code> a
+Git.</p>
+<p><strong>Opción C: Solo en la sesión actual (temporal)</strong></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ICD_API_KEY <span class="op">=</span> <span class="st">"tu_client_id:tu_client_secret"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -271,10 +304,10 @@ eficiente. La base de datos se crea automaticamente en:</p>
 <div class="section level3">
 <h3 id="error-package-ciecl-is-not-available">Error: “package ‘ciecl’ is not available”<a class="anchor" aria-label="anchor" href="#error-package-ciecl-is-not-available"></a>
 </h3>
-<p>Asegurate de instalar desde GitHub, no desde CRAN (aun no esta
-disponible):</p>
+<p>Verifica que el repositorio de CRAN esté configurado en tu sesión de
+R y luego instala normalmente:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="error-de-compilacion-en-linux">Error de compilacion en Linux<a class="anchor" aria-label="anchor" href="#error-de-compilacion-en-linux"></a>
@@ -319,7 +352,7 @@ disponible):</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Rodolfo Tasso Suazo.</p>
+  <p>list(text = “Desarrollado por Rodolfo Tasso Suazo”)</p>
 </div>
 
 <div class="pkgdown-footer-right">

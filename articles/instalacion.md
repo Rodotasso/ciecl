@@ -92,24 +92,35 @@ credenciales gratuitas.
 2.  Registrate con tu email (proceso gratuito)
 3.  Obtendras un `Client ID` y `Client Secret`
 
-### Paso 2: Configurar Variables de Entorno
+### Paso 2: Guardar las credenciales
 
-**Opcion A: Archivo .Renviron (recomendado para uso permanente)**
+**Opción A: `keyring` (recomendado)**
 
-Crea o edita el archivo `~/.Renviron`:
+El paquete [`keyring`](https://r-lib.github.io/keyring/) guarda secretos
+en el keychain nativo del sistema operativo (macOS Keychain, Windows
+Credential Store, Linux Secret Service), evitando que el `Client ID` y
+`Client Secret` queden en texto plano en `.Renviron`. Este es el patrón
+recomendado por rOpenSci (ver por ejemplo `babeldown`).
 
 ``` r
-# Abrir archivo .Renviron para editar
-usethis::edit_r_environ()
+# Una sola vez: guarda "client_id:client_secret" en el keychain
+keyring::key_set("ciecl_icd11")
+
+# En cada sesión en la que uses la API
+Sys.setenv(ICD_API_KEY = keyring::key_get("ciecl_icd11"))
 ```
 
-Agrega la linea:
+**Opción B: Archivo `.Renviron`**
+
+Crea o edita `~/.Renviron` (por ejemplo con
+[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html)
+si tienes `usethis` instalado) y agrega:
 
     ICD_API_KEY=tu_client_id:tu_client_secret
 
-Reinicia R para que tome efecto.
+Reinicia R para que tome efecto. No subas `.Renviron` a Git.
 
-**Opcion B: En cada sesion (temporal)**
+**Opción C: Solo en la sesión actual (temporal)**
 
 ``` r
 Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
@@ -167,11 +178,11 @@ cie_search("diabetes")
 
 ### Error: “package ‘ciecl’ is not available”
 
-Asegurate de instalar desde GitHub, no desde CRAN (aun no esta
-disponible):
+Verifica que el repositorio de CRAN esté configurado en tu sesión de R y
+luego instala normalmente:
 
 ``` r
-pak::pak("RodoTasso/ciecl")
+install.packages("ciecl")
 ```
 
 ### Error de compilacion en Linux

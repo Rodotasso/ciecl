@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ciecl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +15,29 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="articles/ciecl.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="reference/index.html">Referencia</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as"><li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/instalacion.html">Guía de Inicio</a></li>
+    <li><a class="dropdown-item" href="articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="articles/idiomas.html">Idiomas y Normalización</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/installation.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
+    <li><a class="dropdown-item" href="articles/ciecl.html">Internationalization</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Novedades</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma"><li><a class="dropdown-item" href="articles/ciecl-es.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="articles/ciecl.html">English (Documentation)</a></li>
+  </ul></li>
+<li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
@@ -151,7 +169,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Rodolfo Tasso Suazo.</p>
+  <p>list(text = “Desarrollado por Rodolfo Tasso Suazo”)</p>
 </div>
 
 <div class="pkgdown-footer-right">

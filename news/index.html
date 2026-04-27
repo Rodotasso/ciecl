@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ciecl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +15,29 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
-<li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as"><li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
+    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+  </ul></li>
+<li class="active nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma"><li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+  </ul></li>
+<li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
@@ -40,7 +58,80 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.6" id="ciecl-096-2026-04-04">ciecl 0.9.6 (2026-04-04)<a class="anchor" aria-label="anchor" href="#ciecl-096-2026-04-04"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-2026-04-25">ciecl 0.9.8 (2026-04-25)<a class="anchor" aria-label="anchor" href="#ciecl-098-2026-04-25"></a></h2>
+<p><em>English summary below</em></p>
+<div class="section level3">
+<h3 id="respuesta-a-revisión-ropensci-rev-ropensci-0-9-8">Respuesta a Revisión rOpenSci (rev-ropensci)<a class="anchor" aria-label="anchor" href="#respuesta-a-revisi%C3%B3n-ropensci-rev-ropensci-0-9-8"></a></h3>
+<p>Versión de cumplimiento editorial y técnico tras la revisión de Maëlle Salmon. Esta versión unifica la interfaz del paquete bajo estándares internacionales de R, manteniendo la documentación pedagógica en español para el contexto local.</p>
+<div class="section level4">
+<h4 id="cambios-que-rompen-compatibilidad-deprecaciones-0-9-8">Cambios que rompen compatibilidad (Deprecaciones)<a class="anchor" aria-label="anchor" href="#cambios-que-rompen-compatibilidad-deprecaciones-0-9-8"></a></h4>
+<ul><li>
+<p><strong>Internacionalización de la API</strong>: Todos los argumentos de las funciones públicas han sido migrados al inglés para consistencia con el ecosistema tidyverse (dplyr, httr2). Los argumentos antiguos en español emiten <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">lifecycle::deprecate_warn()</a></code> y serán eliminados en la versión 1.0.0.</p>
+<ul><li>
+<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>: <code>codigo</code> -&gt; <code>code</code>, <code>expandir</code> -&gt; <code>expand</code>, <code>normalizar</code> -&gt; <code>normalize</code>.</li>
+<li>
+<code><a href="../reference/cie_search.html">cie_search()</a></code>: <code>texto</code> -&gt; <code>text</code>, <code>campo</code> -&gt; <code>field</code>, <code>solo_fuzzy</code> -&gt; <code>only_fuzzy</code>.</li>
+<li>
+<code><a href="../reference/cie_short.html">cie_short()</a></code>: Reemplaza a <code><a href="../reference/cie_siglas.html">cie_siglas()</a></code>. Argumento <code>category</code>.</li>
+<li>
+<code><a href="../reference/cie11_search.html">cie11_search()</a></code>: <code>texto</code> -&gt; <code>text</code>.</li>
+</ul></li>
+<li><p><strong>Motor de Normalización Único</strong>: Se establece <code><a href="../reference/cie_norm.html">cie_norm()</a></code> como la función canónica. <code><a href="../reference/cie_norm.html">cie_normalize()</a></code> y <code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code> están ahora deprecadas.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="nuevas-funcionalidades-0-9-8">Nuevas funcionalidades<a class="anchor" aria-label="anchor" href="#nuevas-funcionalidades-0-9-8"></a></h4>
+<ul><li>
+<strong><code><a href="../reference/cie_describe.html">cie_describe()</a></code></strong>: Nueva función vectorizada para obtener descripciones CIE-10 directamente, facilitando su uso dentro de <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> sin necesidad de cruces manuales.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="auditoría-técnica-compliance-0-9-8">Auditoría Técnica (Compliance)<a class="anchor" aria-label="anchor" href="#auditor%C3%ADa-t%C3%A9cnica-compliance-0-9-8"></a></h4>
+<ul><li>
+<strong>API Resiliente (CIE-11)</strong>: Refactorización de <code><a href="../reference/cie11_search.html">cie11_search()</a></code> usando <code>httr2</code> con mejores prácticas de consumo web:
+<ul><li>Identificación clara mediante <code>User-Agent</code>.</li>
+<li>Política de reintentos (<code>req_retry</code>) para fallas temporales.</li>
+<li>Control de tasa (<code>req_throttle</code>) para respetar servidores de la OMS.</li>
+<li>
+<code>httr2</code> promovido de Suggests a <strong>Imports</strong>.</li>
+</ul></li>
+<li>
+<strong>Robustez de Tests</strong>: Limpieza masiva de la suite de pruebas. Se eliminaron warnings de deprecación internos y se migró a <code>withr</code> para la gestión de variables de entorno.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="documentación-y-homologación-0-9-8">Documentación y Homologación<a class="anchor" aria-label="anchor" href="#documentaci%C3%B3n-y-homologaci%C3%B3n-0-9-8"></a></h4>
+<ul><li>
+<strong>Guías en Espejo</strong>: Creación de versiones en inglés de todas las guías de usuario (<code>Case Study</code>, <code>Installation Guide</code>) para consistencia en el sitio <code>pkgdown</code>.</li>
+<li>
+<strong>README paramétrico</strong>: Unificación de <code>README.Rmd</code> para generar versiones sincronizadas en español e inglés. El README principal es ahora en español.</li>
+<li>
+<strong>Narrativa Profesional</strong>: Redacción mejorada en todas las vignettes, eliminando tonos informales por un lenguaje técnico de ingeniería de datos.</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="english-summary-0-9-8">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-9-8"></a></h3>
+<div class="section level4">
+<h4 id="ropensci-review-response-0-9-8">rOpenSci Review Response<a class="anchor" aria-label="anchor" href="#ropensci-review-response-0-9-8"></a></h4>
+<p>Comprehensive update focused on API consistency and technical compliance following rOpenSci peer review.</p>
+<ul><li>
+<strong>Breaking Changes (Deprecations)</strong>: Full API migration to English arguments (e.g., <code>code</code>, <code>expand</code>, <code>normalize</code>, <code>text</code>) using the <code>lifecycle</code> package. Old Spanish arguments remain functional but emit warnings.</li>
+<li>
+<strong>Streamlined Normalization</strong>: <code><a href="../reference/cie_norm.html">cie_norm()</a></code> is now the single canonical normalization motor.</li>
+<li>
+<strong>New Function</strong>: Added <code><a href="../reference/cie_describe.html">cie_describe()</a></code> for direct, vectorized description lookup within <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> calls.</li>
+<li>
+<strong>Technical Compliance</strong>:
+<ul><li>
+<code><a href="../reference/cie11_search.html">cie11_search()</a></code> now uses <code>httr2</code> with User-Agent, retry, and throttle policies.</li>
+<li>
+<code>httr2</code> promoted to <strong>Imports</strong>.</li>
+<li>Test suite cleaned of deprecation noise and updated to use <code>withr</code>.</li>
+</ul></li>
+<li>
+<strong>Documentation</strong>: Mirror versions of user guides provided in both English and Spanish. <code>pkgdown</code> site navigation localized to Spanish.</li>
+</ul><hr></div>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.6" id="ciecl-096-2026-04-04">ciecl 0.9.6 (2026-04-04)<a class="anchor" aria-label="anchor" href="#ciecl-096-2026-04-04"></a></h2><p class="text-muted">CRAN release: 2026-04-19</p>
 <p><em>English summary below</em></p>
 <div class="section level3">
 <h3 id="preparacion-ropensci-0-9-6">Preparacion rOpenSci<a class="anchor" aria-label="anchor" href="#preparacion-ropensci-0-9-6"></a></h3>
@@ -117,509 +208,7 @@
 <li>Multi-platform CI/CD (Windows, macOS, Ubuntu)</li>
 <li>FTS5 SQL injection protection</li>
 <li>Pipe standardization (<code>%&gt;%</code>), gitignore fixes, codemeta sync</li>
-</ul><hr></div>
-</div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.2" id="ciecl-092-2026-01-20">ciecl 0.9.2 (2026-01-20)<a class="anchor" aria-label="anchor" href="#ciecl-092-2026-01-20"></a></h2><p class="text-muted">CRAN release: 2026-01-27</p>
-<div class="section level3">
-<h3 id="cran-resubmission---example-timing-0-9-2">CRAN Resubmission - Example Timing<a class="anchor" aria-label="anchor" href="#cran-resubmission---example-timing-0-9-2"></a></h3>
-<ul><li>Ejemplos de <code><a href="../reference/cie_search.html">cie_search()</a></code> envueltos en <code>\donttest{}</code> para reducir tiempo de check</li>
-<li>Tiempo de ejemplos reducido de ~12s a ~2s</li>
-</ul><hr></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.1" id="ciecl-091-2026-01-19">ciecl 0.9.1 (2026-01-19)<a class="anchor" aria-label="anchor" href="#ciecl-091-2026-01-19"></a></h2>
-<p><em>English summary below</em></p>
-<div class="section level3">
-<h3 id="cran-resubmission-fixes-0-9-1">CRAN Resubmission Fixes<a class="anchor" aria-label="anchor" href="#cran-resubmission-fixes-0-9-1"></a></h3>
-<p>Correccion de errores reportados por CRAN en revision de v0.9.0.</p>
-<div class="section level4">
-<h4 id="bug-fixes-0-9-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h4>
-<ul><li>
-<strong>FTS5 tabla faltante</strong>: Agregar verificacion independiente de <code>cie10_fts</code>
-<ul><li>Si la BD tiene <code>cie10</code> pero no <code>cie10_fts</code> (cache corrupto), ahora se recrea</li>
-<li>Soluciona error “no such table: cie10_fts” en examples/tests</li>
-<li>Afecta <code>get_cie10_db()</code> en <code>R/cie-sql.R</code>
-</li>
-</ul></li>
-<li>
-<strong>Link invalido README</strong>: Cambiar link relativo <code>DEPENDENCIAS.md</code> a URL absoluta
-<ul><li>CRAN no incluye archivos de raiz en paquete instalado</li>
-<li>Ahora apunta a GitHub: <code>https://github.com/Rodotasso/ciecl/blob/main/DEPENDENCIAS.md</code>
-</li>
-</ul></li>
-<li>
-<strong>Script audit removido de tests/</strong>: Mover <code>audit_elite_cran.R</code> a <code>tools/</code>
-<ul><li>Contenia rutas hardcodeadas locales</li>
-<li>CRAN no ejecuta scripts en <code>tools/</code>
-</li>
-</ul></li>
 </ul></div>
-<div class="section level4">
-<h4 id="tests-y-validacion-0-9-1">Tests y Validacion<a class="anchor" aria-label="anchor" href="#tests-y-validacion-0-9-1"></a></h4>
-<ul><li>0 errores, 0 warnings en R CMD check (Windows, macOS, Linux)</li>
-<li>Examples de <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> y <code><a href="../reference/cie_search.html">cie_search()</a></code> ejecutan sin error</li>
-</ul></div>
-</div>
-<div class="section level3">
-<h3 id="english-summary-0-9-1">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-9-1"></a></h3>
-<div class="section level4">
-<h4 id="cran-resubmission-fixes-0-9-1-1">CRAN Resubmission Fixes<a class="anchor" aria-label="anchor" href="#cran-resubmission-fixes-0-9-1-1"></a></h4>
-<ul><li>
-<strong>Missing FTS5 table</strong>: Independent verification of <code>cie10_fts</code> table</li>
-<li>
-<strong>Invalid README link</strong>: Changed relative link to absolute GitHub URL</li>
-<li>
-<strong>Audit script moved</strong>: <code>audit_elite_cran.R</code> moved from tests/ to tools/</li>
-</ul><hr></div>
-</div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0" id="ciecl-090-2026-01-18">ciecl 0.9.0 (2026-01-18)<a class="anchor" aria-label="anchor" href="#ciecl-090-2026-01-18"></a></h2>
-<p><em>English summary below</em></p>
-<div class="section level3">
-<h3 id="optimizacion-de-rendimiento---fts5-0-9-0">Optimizacion de Rendimiento - FTS5<a class="anchor" aria-label="anchor" href="#optimizacion-de-rendimiento---fts5-0-9-0"></a></h3>
-<p>Version candidata a release con mejoras significativas de rendimiento.</p>
-<div class="section level4">
-<h4 id="nuevas-funcionalidades-0-9-0">Nuevas Funcionalidades<a class="anchor" aria-label="anchor" href="#nuevas-funcionalidades-0-9-0"></a></h4>
-<ul><li>
-<strong>FTS5 Full-Text Search</strong>: Busquedas de texto ~100x mas rapidas
-<ul><li>Tabla virtual SQLite FTS5 para pre-filtrado en SQL</li>
-<li>
-<code><a href="../reference/cie_search.html">cie_search()</a></code> ahora filtra en SQLite antes de traer datos a R</li>
-<li>Reduccion de tiempo de busqueda de ~30s a &lt;1s</li>
-</ul></li>
-<li>
-<strong>Vectorizacion de <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code></strong>: Query batch con IN clause
-<ul><li>Una sola conexion para multiples codigos (antes N conexiones)</li>
-<li>Mejora significativa para procesamiento de datasets grandes</li>
-</ul></li>
-</ul></div>
-<div class="section level4">
-<h4 id="seguridad-0-9-0">Seguridad<a class="anchor" aria-label="anchor" href="#seguridad-0-9-0"></a></h4>
-<ul><li>
-<strong>Sanitizacion SQL injection en FTS5</strong>: Solo caracteres alfanumericos permitidos</li>
-<li>Proteccion contra inyeccion de comandos FTS5 maliciosos</li>
-</ul></div>
-<div class="section level4">
-<h4 id="limpieza-de-proyecto-0-9-0">Limpieza de Proyecto<a class="anchor" aria-label="anchor" href="#limpieza-de-proyecto-0-9-0"></a></h4>
-<ul><li>Fixtures de prueba movidos fuera del paquete (reduccion ~2.5 MB)</li>
-<li>Eliminado <code>helper-fixtures.R</code> no utilizado</li>
-</ul></div>
-<div class="section level4">
-<h4 id="tests-y-validacion-0-9-0">Tests y Validacion<a class="anchor" aria-label="anchor" href="#tests-y-validacion-0-9-0"></a></h4>
-<ul><li>
-<strong>1088 tests</strong> pasando</li>
-<li>
-<strong>0 errores, 0 warnings</strong> en R CMD check</li>
-<li>Cobertura de tests mantenida</li>
-</ul></div>
-</div>
-<div class="section level3">
-<h3 id="english-summary-0-9-0">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-9-0"></a></h3>
-<div class="section level4">
-<h4 id="performance-optimization---fts5-0-9-0">Performance Optimization - FTS5<a class="anchor" aria-label="anchor" href="#performance-optimization---fts5-0-9-0"></a></h4>
-<p>Release candidate with significant performance improvements.</p>
-<ul><li>
-<strong>FTS5 Full-Text Search</strong>: ~100x faster text searches</li>
-<li>
-<strong>Vectorized <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code></strong>: Batch queries with IN clause</li>
-<li>
-<strong>SQL injection protection</strong>: Sanitized FTS5 inputs</li>
-<li>
-<strong>Project cleanup</strong>: Test fixtures moved outside package</li>
-</ul><p>Tests: 1088 passing | R CMD check: 0 errors, 0 warnings</p>
-<hr></div>
-</div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.8.0" id="ciecl-080-2026-01-17">ciecl 0.8.0 (2026-01-17)<a class="anchor" aria-label="anchor" href="#ciecl-080-2026-01-17"></a></h2>
-<p><em>English summary below</em></p>
-<div class="section level3">
-<h3 id="suite-de-tests-exhaustiva---cobertura-cran-0-8-0">Suite de Tests Exhaustiva - Cobertura CRAN<a class="anchor" aria-label="anchor" href="#suite-de-tests-exhaustiva---cobertura-cran-0-8-0"></a></h3>
-<p>Aumento masivo de cobertura de tests para cumplir estandares CRAN:</p>
-<ul><li>
-<strong>850 tests</strong> (antes 305)</li>
-<li>
-<strong>96.41% cobertura</strong> (meta CRAN &gt;80%)</li>
-<li>
-<strong>0 errores, 0 warnings, 0 notes</strong> en R CMD check</li>
-</ul><div class="section level4">
-<h4 id="nuevos-archivos-de-tests-0-8-0">Nuevos Archivos de Tests<a class="anchor" aria-label="anchor" href="#nuevos-archivos-de-tests-0-8-0"></a></h4>
-<ul><li>
-<code>test-cie-data.R</code>: Tests para funciones de generacion de datos
-<ul><li>
-<code>parsear_cie10_minsal()</code>: Parsing de XLS MINSAL</li>
-<li>
-<code>generar_cie10_cl()</code>: Generacion de dataset</li>
-<li>Validacion de dataset cie10_cl cargado</li>
-<li>Verificacion de estructura, unicidad y formatos</li>
-</ul></li>
-<li>
-<code>test-data-integrity.R</code>: Validacion de integridad del dataset cie10_cl
-<ul><li>Estructura de columnas correcta</li>
-<li>39,877 codigos unicos</li>
-<li>Sin NAs ni valores vacios en campos criticos</li>
-<li>Formato CIE-10 valido (&gt;95% de codigos)</li>
-<li>Codigos especificos conocidos (diabetes, hipertension, neoplasias, IAM)</li>
-</ul></li>
-<li>
-<code>test-utils-internal.R</code>: Tests de funciones internas
-<ul><li>
-<code>normalizar_tildes()</code>: Remocion de tildes y caracteres especiales</li>
-<li>
-<code>get_siglas_medicas()</code>: Diccionario de 88 siglas medicas</li>
-<li>
-<code>expandir_sigla()</code>: Expansion de siglas a terminos de busqueda</li>
-<li>
-<code>extract_cie_from_text()</code>: Extraccion de codigos de texto con ruido</li>
-<li>
-<code>cie10_empty_tibble()</code>: Tibble vacio con estructura correcta</li>
-<li>
-<code>sigla_to_codigo()</code>: Conversion de siglas a codigos CIE-10</li>
-<li>
-<code>cie_lookup_single()</code>: Busqueda interna de codigo unico</li>
-</ul></li>
-<li>
-<code>test-comorbid-validation.R</code>: Validacion exhaustiva de comorbilidades
-<ul><li>Calculo Charlson con datos sinteticos</li>
-<li>Calculo Elixhauser con categorias validadas</li>
-<li>Manejo de NA y codigos vacios</li>
-<li>Categorizacion correcta por patologia</li>
-</ul></li>
-<li>
-<code>test-api-mock.R</code>: Tests de API sin conexion real
-<ul><li>Validacion de parametros</li>
-<li>Manejo de errores</li>
-<li>Formato de API key</li>
-<li>Estructura de respuesta</li>
-</ul></li>
-</ul></div>
-<div class="section level4">
-<h4 id="tests-expandidos-0-8-0">Tests Expandidos<a class="anchor" aria-label="anchor" href="#tests-expandidos-0-8-0"></a></h4>
-<ul><li>
-<code>test-robustness.R</code>: +40 nuevos tests
-<ul><li>
-<code>get_cie10_db()</code>: Conexion DBI, creacion de indices</li>
-<li>
-<code><a href="../reference/cie10_clear_cache.html">cie10_clear_cache()</a></code>: Eliminacion idempotente</li>
-<li>
-<code><a href="../reference/cie10_sql.html">cie10_sql()</a></code>: Bloqueo de keywords peligrosos (DROP, DELETE, UPDATE, etc.)</li>
-<li>Proteccion contra SQL injection</li>
-</ul></li>
-<li>
-<code>test-cie-search.R</code>: +15 nuevos tests
-<ul><li>Edge cases de threshold (0.0, 1.0)</li>
-<li>Modo <code>solo_fuzzy=TRUE</code>
-</li>
-<li>Busqueda en campo <code>inclusion</code>
-</li>
-<li>Validacion de parametros incorrectos</li>
-<li>Normalizacion de tildes</li>
-<li><code><a href="../reference/cie_guia_busqueda.html">cie_guia_busqueda()</a></code></li>
-</ul></li>
-<li>
-<code>test-cie-table.R</code>: +8 nuevos tests
-<ul><li>Parametro <code>interactive</code>
-</li>
-<li>Expansion jerarquica</li>
-<li>Columnas esperadas</li>
-<li>Manejo de codigos invalidos</li>
-</ul></li>
-<li>
-<code>test-cie-utils.R</code>: +36 nuevos tests
-<ul><li>
-<code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code> con <code>buscar_db=TRUE</code> y edge cases</li>
-<li>
-<code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code> con <code>strict=TRUE</code> y validacion DB</li>
-<li>
-<code><a href="../reference/cie_expand.html">cie_expand()</a></code> con valores vacios/NA/NULL</li>
-<li>Manejo de caracteres especiales Unicode</li>
-<li>Cobertura: 94.55%</li>
-</ul></li>
-<li>
-<code>test-cie-api.R</code>: +12 nuevos tests
-<ul><li>Tests con API real (skip_on_cran, requiere ICD_API_KEY)</li>
-<li>Parsing de resultados JSON</li>
-<li>Manejo de busquedas sin resultados</li>
-<li>Limpieza de tags HTML</li>
-<li>Soporte idiomas es/en</li>
-</ul></li>
-<li>
-<code>test-cie-sql.R</code>: +15 nuevos tests
-<ul><li>Queries con WHERE, LIKE, GROUP BY, ORDER BY</li>
-<li>Bloqueo de ALTER, CREATE, TRUNCATE, ATTACH, PRAGMA</li>
-<li>Queries con saltos de linea</li>
-</ul></li>
-</ul></div>
-</div>
-<div class="section level3">
-<h3 id="mejoras-de-estabilidad-0-8-0">Mejoras de Estabilidad<a class="anchor" aria-label="anchor" href="#mejoras-de-estabilidad-0-8-0"></a></h3>
-<ul><li>API estable sin breaking changes</li>
-<li>Manejo robusto de errores en todas las funciones</li>
-<li>Conexiones DB con <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> garantizado</li>
-<li>Validacion de inputs en funciones publicas</li>
-</ul></div>
-<div class="section level3">
-<h3 id="english-summary-0-8-0">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-8-0"></a></h3>
-<div class="section level4">
-<h4 id="first-stable-release-0-8-0">First Stable Release<a class="anchor" aria-label="anchor" href="#first-stable-release-0-8-0"></a></h4>
-<p>First stable version of <code>ciecl</code>, the R package for working with Chile’s official ICD-10 classification (MINSAL/DEIS v2018).</p>
-</div>
-<div class="section level4">
-<h4 id="comprehensive-test-suite---cran-ready-0-8-0">Comprehensive Test Suite - CRAN Ready<a class="anchor" aria-label="anchor" href="#comprehensive-test-suite---cran-ready-0-8-0"></a></h4>
-<ul><li>
-<strong>850 tests</strong> (up from 305)</li>
-<li>
-<strong>96.41% coverage</strong> (CRAN target &gt;80%)</li>
-<li>
-<strong>0 errors, 0 warnings, 0 notes</strong> in R CMD check</li>
-</ul><p>New test files for: - Data generation functions (parsear_cie10_minsal, generar_cie10_cl) - Dataset integrity validation - Internal functions - Comorbidity validation - API mocking and real API tests - Expanded robustness tests - SQL security tests - Edge cases coverage</p>
-<p>Coverage by file: - cie-search.R: 99.38% - cie-sql.R: 97.37% - cie-comorbid.R: 96.77% - cie-utils.R: 94.55% - cie-table.R: 92.00%</p>
-</div>
-</div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="ciecl-010-2026-01-17">ciecl 0.1.0 (2026-01-17)<a class="anchor" aria-label="anchor" href="#ciecl-010-2026-01-17"></a></h2>
-<p><em>English summary below</em></p>
-<div class="section level3">
-<h3 id="tests-de-comorbilidad-0-1-0">Tests de Comorbilidad<a class="anchor" aria-label="anchor" href="#tests-de-comorbilidad-0-1-0"></a></h3>
-<p>Validacion exhaustiva de funciones <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> y <code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code> con bases sinteticas:</p>
-<div class="section level4">
-<h4 id="bases-de-prueba-generadas-0-1-0">Bases de Prueba Generadas<a class="anchor" aria-label="anchor" href="#bases-de-prueba-generadas-0-1-0"></a></h4>
-<ul><li>
-<code>15_comorbid_charlson.csv</code>: 500 pacientes, 2007 diagnosticos
-<ul><li>Codigos de 17 categorias Charlson (MI, CHF, PVD, CEVD, demencia, EPOC, etc.)</li>
-<li>Scores validados: rango 1-15 puntos</li>
-</ul></li>
-<li>
-<code>16_comorbid_elixhauser.csv</code>: 500 pacientes, 3219 diagnosticos
-<ul><li>Codigos de 31 categorias Elixhauser</li>
-<li>Categorias por paciente: 1-8</li>
-</ul></li>
-<li>
-<code>17_comorbid_mixto.csv</code>: 200 pacientes, edge cases
-<ul><li>50 pacientes con NA en diagnosticos (ignorados correctamente)</li>
-<li>50 pacientes con codigos invalidos mezclados</li>
-<li>50 pacientes con un solo codigo</li>
-<li>Validacion de robustez ante datos sucios</li>
-</ul></li>
-</ul></div>
-<div class="section level4">
-<h4 id="resultados-de-validacion-0-1-0">Resultados de Validacion<a class="anchor" aria-label="anchor" href="#resultados-de-validacion-0-1-0"></a></h4>
-<ul><li>
-<code>cie_comorbid(map="charlson")</code>: Calculo correcto de score_charlson</li>
-<li>
-<code>cie_comorbid(map="elixhauser")</code>: Calculo correcto de categorias booleanas</li>
-<li>Manejo robusto de NA y codigos vacios (warnings informativos)</li>
-<li>Codigos invalidos no afectan calculo de pacientes validos</li>
-</ul></div>
-<div class="section level4">
-<h4 id="codigos-cie-testeados-por-categoria-0-1-0">Codigos CIE-10 Testeados por Categoria<a class="anchor" aria-label="anchor" href="#codigos-cie-testeados-por-categoria-0-1-0"></a></h4>
-<ul><li>
-<strong>Infarto miocardio</strong>: I21.0-I22.9, I25.2</li>
-<li>
-<strong>Insuficiencia cardiaca</strong>: I50.0-I50.9, I11.0, I13.0</li>
-<li>
-<strong>Diabetes</strong>: E10.0-E14.9 (sin/con complicaciones)</li>
-<li>
-<strong>Enfermedad renal</strong>: N18.1-N18.9, N19</li>
-<li>
-<strong>EPOC</strong>: J40-J44.9</li>
-<li>
-<strong>Cancer</strong>: C18.x, C34.x, C50.x, C61, C67.x, C71.x, C73</li>
-<li>
-<strong>VIH/SIDA</strong>: B20-B24</li>
-</ul></div>
-</div>
-<div class="section level3">
-<h3 id="bug-fixes-0-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h3>
-<ul><li>
-<code>cie_lookup_single()</code>: Corregir emisión de warning para rangos invertidos
-<ul><li>Usar <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0()</a></code> en lugar de concatenación con comas en <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>
-</li>
-<li>Tests ahora suprimen warnings esperados con <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code>
-</li>
-</ul></li>
-</ul></div>
-<div class="section level3">
-<h3 id="mejoras-0-1-0">Mejoras<a class="anchor" aria-label="anchor" href="#mejoras-0-1-0"></a></h3>
-<ul><li>
-<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>: Documentación mejorada del parámetro <code>extract</code>:
-<ul><li>Advertencia clara de usar <code>extract=TRUE</code> solo con códigos escalares</li>
-<li>Ejemplos de uso correcto con prefijos/sufijos</li>
-<li>Evita confusiones con vectores múltiples</li>
-</ul></li>
-<li>
-<code>extract_cie_from_text()</code>: Función interna para extraer código CIE-10 de texto con ruido
-<ul><li>Soporta prefijos: “CIE:E11.0” -&gt; “E11.0”</li>
-<li>Soporta sufijos: “E11.0-confirmado” -&gt; “E11.0”</li>
-<li>Soporta ambos: “CIE:E11.0-prov” -&gt; “E11.0”</li>
-</ul></li>
-</ul></div>
-<div class="section level3">
-<h3 id="tests-0-1-0">Tests<a class="anchor" aria-label="anchor" href="#tests-0-1-0"></a></h3>
-<ul><li>
-<code>test-cie-search.R</code>: Modificar test de rangos invertidos para usar <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code>
-</li>
-<li>
-<code>test-edge-cases.R</code>: Modificar test de rangos para usar <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code>
-</li>
-</ul></div>
-<div class="section level3">
-<h3 id="english-summary-0-1-0">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-1-0"></a></h3>
-<div class="section level4">
-<h4 id="comorbidity-tests-0-1-0">Comorbidity Tests<a class="anchor" aria-label="anchor" href="#comorbidity-tests-0-1-0"></a></h4>
-<p>Exhaustive validation of <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> and <code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code> with synthetic datasets: * 500-patient Charlson test base with 2007 diagnoses * 500-patient Elixhauser test base with 3219 diagnoses * 200-patient mixed test base with edge cases (NA values, invalid codes)</p>
-</div>
-<div class="section level4">
-<h4 id="bug-fixes-0-1-0-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0-1"></a></h4>
-<ul><li>
-<code>cie_lookup_single()</code>: Fix warning emission for inverted ranges</li>
-</ul></div>
-<div class="section level4">
-<h4 id="improvements-0-1-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-1-0"></a></h4>
-<ul><li>
-<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>: Improved documentation for <code>extract</code> parameter</li>
-<li>
-<code>extract_cie_from_text()</code>: Internal function to extract ICD-10 codes from noisy text</li>
-</ul></div>
-</div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="ciecl-0109000-desarrollo---historico">ciecl 0.1.0.9000 (desarrollo - historico)<a class="anchor" aria-label="anchor" href="#ciecl-0109000-desarrollo---historico"></a></h2>
-<div class="section level3">
-<h3 id="nuevas-funcionalidades-0-1-0-9000">Nuevas funcionalidades<a class="anchor" aria-label="anchor" href="#nuevas-funcionalidades-0-1-0-9000"></a></h3>
-<ul><li>
-<code><a href="../reference/cie_search.html">cie_search()</a></code>: Soporte para <strong>88 siglas medicas</strong> comunes en Chile:
-<ul><li>Cardiovasculares: IAM, HTA, ACV, FA, ICC, TEP, TVP</li>
-<li>Respiratorias: TBC, EPOC, NAC, SDRA</li>
-<li>Metabolicas: DM, DM1, DM2, ERC, IRC</li>
-<li>Infecciosas: VIH, ITU, ITS</li>
-<li>Oncologicas: CA, LMA, LMC, LLA, LLC</li>
-<li>Neurologicas: TEC, EPI, EM, ELA</li>
-<li>Y muchas mas (ver <code><a href="../reference/cie_siglas.html">cie_siglas()</a></code>)</li>
-</ul></li>
-<li>
-<code><a href="../reference/cie_search.html">cie_search()</a></code>: Tolerancia a tildes mejorada:
-<ul><li>“neumonia” ahora encuentra “neumonía”</li>
-<li>“rinon” encuentra “riñón”</li>
-<li>“corazon” encuentra “corazón”</li>
-</ul></li>
-<li>
-<code><a href="../reference/cie_search.html">cie_search()</a></code>: Busqueda por subcadena como estrategia principal:
-<ul><li>Mas rapido y preciso para terminos exactos</li>
-<li>Fuzzy search como fallback para typos</li>
-</ul></li>
-<li>
-<code><a href="../reference/cie_siglas.html">cie_siglas()</a></code>: Nueva funcion para listar todas las siglas medicas soportadas</li>
-</ul></div>
-<div class="section level3">
-<h3 id="datos-0-1-0-9000">Datos<a class="anchor" aria-label="anchor" href="#datos-0-1-0-9000"></a></h3>
-<ul><li>Dataset <code>cie10_cl</code>: Agregados 4 codigos COVID-19 de actualizaciones OMS 2021:
-<ul><li>U08.9: Historia personal de COVID-19</li>
-<li>U09.9: Condicion post COVID-19 (COVID prolongado)</li>
-<li>U10.9: Sindrome inflamatorio multisistemico (PIMS)</li>
-<li>U12.9: Efecto adverso de vacunas COVID-19 (ESAVI)</li>
-<li>Total codigos: 39,877 (antes 39,873)</li>
-</ul></li>
-</ul></div>
-<div class="section level3">
-<h3 id="mejoras-0-1-0-9000">Mejoras<a class="anchor" aria-label="anchor" href="#mejoras-0-1-0-9000"></a></h3>
-<ul><li>
-<p><code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code>: Manejo robusto de caracteres especiales comunes en datos clinicos:</p>
-<ul><li>Espacios internos (E 11 0 -&gt; E11.0)</li>
-<li>Guiones en lugar de puntos (I10-0 -&gt; I10.0)</li>
-<li>Puntos multiples consecutivos (E..11 -&gt; E.11)</li>
-<li>Puntos iniciales (.I10 -&gt; I10)</li>
-<li>Simbolos daga y asterisco de codificacion dual (A17.0† -&gt; A17.0, G01* -&gt; G01)</li>
-</ul></li>
-<li><p><code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code>: Ahora elimina automaticamente el sufijo “X” de codigos CIE-10 (ej. I10X -&gt; I10, J00X -&gt; J00). Esto permite trabajar con codigos que usan “X” para indicar ausencia de subcategoria adicional.</p></li>
-<li><p><code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code>: Preserva X en codigos largos (&gt;5 chars) donde es placeholder obligatorio del 7o caracter de extension en trauma/lesiones (ej. S72X01A). Esto asegura compatibilidad con codificacion ICD-10-CM.</p></li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="ciecl-010-beta">ciecl 0.1.0 (BETA)<a class="anchor" aria-label="anchor" href="#ciecl-010-beta"></a></h2>
-<blockquote>
-<p><strong>NOTA</strong>: Esta es una version beta en desarrollo activo. La API puede cambiar antes de la version estable 1.0.0.</p>
-</blockquote>
-<div class="section level3">
-<h3 id="funcionalidades-principales-0-1-0">Funcionalidades principales<a class="anchor" aria-label="anchor" href="#funcionalidades-principales-0-1-0"></a></h3>
-<ul><li>Sistema de busqueda SQL optimizado con SQLite persistente</li>
-<li>Busqueda fuzzy con algoritmo Jaro-Winkler para matching de terminos medicos</li>
-<li>Calculo de comorbilidades Charlson y Elixhauser adaptadas a codigos chilenos</li>
-<li>Integracion con API CIE-11 de la OMS</li>
-<li>Validacion y expansion de codigos jerarquicos CIE-10</li>
-<li>Tablas interactivas con paquete gt (opcional)</li>
-<li>Dataset completo CIE-10 Chile oficial MINSAL/DEIS v2018</li>
-</ul></div>
-<div class="section level3">
-<h3 id="funciones-exportadas-0-1-0">Funciones exportadas<a class="anchor" aria-label="anchor" href="#funciones-exportadas-0-1-0"></a></h3>
-<div class="section level4">
-<h4 id="busqueda-y-consulta-0-1-0">Busqueda y consulta<a class="anchor" aria-label="anchor" href="#busqueda-y-consulta-0-1-0"></a></h4>
-<ul><li>
-<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> - Busqueda exacta por codigo (vectorizada)</li>
-<li>
-<code><a href="../reference/cie_search.html">cie_search()</a></code> - Busqueda fuzzy de terminos medicos</li>
-<li>
-<code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> - Consultas SQL directas sobre CIE-10</li>
-<li>
-<code><a href="../reference/cie11_search.html">cie11_search()</a></code> - Busqueda en API CIE-11 OMS (requiere credenciales)</li>
-</ul></div>
-<div class="section level4">
-<h4 id="utilidades-0-1-0">Utilidades<a class="anchor" aria-label="anchor" href="#utilidades-0-1-0"></a></h4>
-<ul><li>
-<code><a href="../reference/cie_expand.html">cie_expand()</a></code> - Expansion jerarquica de categorias</li>
-<li>
-<code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code> - Validacion formato de codigos</li>
-<li>
-<code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code> - Normalizacion de codigos</li>
-<li>
-<code><a href="../reference/cie10_clear_cache.html">cie10_clear_cache()</a></code> - Limpiar cache SQLite</li>
-</ul></div>
-<div class="section level4">
-<h4 id="comorbilidades-requiere-paquete-comorbidity-0-1-0">Comorbilidades (requiere paquete comorbidity)<a class="anchor" aria-label="anchor" href="#comorbilidades-requiere-paquete-comorbidity-0-1-0"></a></h4>
-<ul><li>
-<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> - Calculo de indices de comorbilidad</li>
-<li>
-<code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code> - Mapeo de categorias de comorbilidad</li>
-</ul></div>
-<div class="section level4">
-<h4 id="visualizacion-requiere-paquete-gt-0-1-0">Visualizacion (requiere paquete gt)<a class="anchor" aria-label="anchor" href="#visualizacion-requiere-paquete-gt-0-1-0"></a></h4>
-<ul><li>
-<code><a href="../reference/cie_table.html">cie_table()</a></code> - Tablas interactivas GT</li>
-</ul></div>
-<div class="section level4">
-<h4 id="generacion-de-datos-0-1-0">Generacion de datos<a class="anchor" aria-label="anchor" href="#generacion-de-datos-0-1-0"></a></h4>
-<ul><li>
-<code>generar_cie10_cl()</code> - Generar dataset desde XLS/XLSX MINSAL (requiere readxl)</li>
-</ul></div>
-</div>
-<div class="section level3">
-<h3 id="dataset-incluido-0-1-0">Dataset incluido<a class="anchor" aria-label="anchor" href="#dataset-incluido-0-1-0"></a></h3>
-<ul><li>
-<code>cie10_cl</code> - <strong>39,873 codigos</strong> CIE-10 Chile oficial MINSAL/DEIS v2018
-<ul><li>Incluye categorias (3 digitos) y subcategorias (4+ digitos)</li>
-<li>Columnas: codigo, descripcion, categoria, inclusion, exclusion, capitulo, es_daga, es_cruz</li>
-</ul></li>
-</ul></div>
-<div class="section level3">
-<h3 id="estado-del-desarrollo-0-1-0">Estado del desarrollo<a class="anchor" aria-label="anchor" href="#estado-del-desarrollo-0-1-0"></a></h3>
-<ul><li>Dataset generado y validado: 39,873 registros</li>
-<li>Tests unitarios: 8 archivos de tests</li>
-<li>R CMD check: 0 errores, 0 warnings</li>
-<li>Documentacion completa con roxygen2</li>
-<li>Vignette funcional incluida</li>
-</ul></div>
-<div class="section level3">
-<h3 id="notas-para-usuarios-beta-0-1-0">Notas para usuarios beta<a class="anchor" aria-label="anchor" href="#notas-para-usuarios-beta-0-1-0"></a></h3>
-<p>Esta version esta siendo probada activamente. Por favor reporta cualquier problema en: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a></p>
-</div>
-<div class="section level3">
-<h3 id="primera-release-0-1-0">Primera release<a class="anchor" aria-label="anchor" href="#primera-release-0-1-0"></a></h3>
-<p>Primera version beta del paquete ciecl para trabajar con Clasificacion Internacional de Enfermedades CIE-10 de Chile en R.</p>
-<p>Fuente de datos: <a href="https://deis.minsal.cl/centrofic/" class="external-link">Centro FIC Chile DEIS</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -627,7 +216,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Rodolfo Tasso Suazo.</p>
+  <p>list(text = “Desarrollado por Rodolfo Tasso Suazo”)</p>
 </div>
 
 <div class="pkgdown-footer-right">

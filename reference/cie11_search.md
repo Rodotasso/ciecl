@@ -6,17 +6,18 @@ Buscar codigos CIE-11 via API OMS
 
 ``` r
 cie11_search(
-  texto,
+  text,
   api_key = NULL,
   lang = "es",
   max_results = 10,
-  release = "2024-01"
+  release = "2024-01",
+  texto = lifecycle::deprecated()
 )
 ```
 
 ## Arguments
 
-- texto:
+- text:
 
   String termino busqueda espanol/ingles
 
@@ -38,6 +39,10 @@ cie11_search(
   Character, version de release CIE-11 a consultar (default "2024-01").
   Ver releases disponibles en la API OMS.
 
+- texto:
+
+  **\[deprecated\]** Use `text`.
+
 ## Value
 
 tibble con codigos CIE-11 + titulos o vacio si error
@@ -52,8 +57,8 @@ tibble con codigos CIE-11 + titulos o vacio si error
 ``` r
 # Ver parametros disponibles
 args(cie11_search)
-#> function (texto, api_key = NULL, lang = "es", max_results = 10, 
-#>     release = "2024-01") 
+#> function (text, api_key = NULL, lang = "es", max_results = 10, 
+#>     release = "2024-01", texto = lifecycle::deprecated()) 
 #> NULL
 
 # \donttest{
