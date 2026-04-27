@@ -4,23 +4,29 @@
 \alias{cie_table}
 \title{Generar tabla HTML interactiva GT de codigo CIE-10}
 \usage{
-cie_table(codigo)
+cie_table(code, codigo = lifecycle::deprecated())
 }
 \arguments{
-\item{codigo}{String codigo (ej. "E11" muestra jerarquia)}
+\item{code}{String codigo (ej. \code{"E11"} muestra la jerarquia).}
+
+\item{codigo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{code}.}
 }
 \value{
-Objeto de clase \code{gt_tbl} (tabla HTML interactiva)
+Objeto de clase \code{gt_tbl} (tabla HTML interactiva).
 }
 \description{
-Generar tabla HTML interactiva GT de codigo CIE-10
+Muestra la jerarquia de un codigo CIE-10 (categoria + subcategorias)
+como una tabla \code{gt}. Las columnas "Incluye" y "Excluye" pueden
+aparecer vacias en subcategorias: el catalogo MINSAL/DEIS no puebla
+esos campos en todos los niveles (suelen estar solo en la categoria
+de 3 digitos). Para evitar confusion visual, los \code{NA} se reemplazan
+por un guion largo (em dash).
 }
 \examples{
-# Requiere paquete gt
-requireNamespace("gt", quietly = TRUE)
-
 \donttest{
-cie_table("E11")  # Diabetes tipo 2 completo
+if (requireNamespace("gt", quietly = TRUE)) {
+  cie_table("E11")  # Diabetes mellitus tipo 2 completo
+}
 }
 }
 \seealso{

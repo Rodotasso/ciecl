@@ -15,16 +15,12 @@ NULL
 #' @keywords internal
 #' @noRd
 parsear_cie10_minsal <- function(xls_path) {
-  # Verificar que readxl este instalado
-  if (!requireNamespace("readxl", quietly = TRUE)) {
-    stop("El paquete 'readxl' es necesario para generar el dataset.\n",
-         "Inst\u00e1lalo con: install.packages('readxl')")
-  }
-  
+  rlang::check_installed("readxl", reason = "para leer el XLS/XLSX DEIS")
+
   if (!file.exists(xls_path)) {
     stop("Archivo XLS no encontrado: ", xls_path)
   }
-  
+
   # Leer XLS con deteccion automatica columnas
   raw <- readxl::read_excel(
     xls_path,
@@ -33,36 +29,32 @@ parsear_cie10_minsal <- function(xls_path) {
     skip = 0,
     .name_repair = "minimal"
   )
-  
+
   # Normalizar nombres
   names(raw) <- tolower(stringr::str_trim(names(raw)))
   names(raw) <- stringr::str_replace_all(names(raw), "\\s+", "_")
-  
+
   # Detectar columnas dinamicamente (soporta tildes: codigo/descripcion)
-  col_codigo <- names(raw)[stringr::str_detect(names(raw), "c[o\u00f3]d|clave")]
-  col_desc <- names(raw)[stringr::str_detect(names(raw), "desc|t[i\u00ed]tulo")]
-  
+  col_codigo <- stringr::str_subset(names(raw), "c[o\u00f3]d|clave")
+  col_desc <- stringr::str_subset(names(raw), "desc|t[i\u00ed]tulo")
+
   if (length(col_codigo) == 0 || length(col_desc) == 0) {
-    stop("No se detectaron columnas codigo/descripcion. Columnas: ", 
+    stop("No se detectaron columnas codigo/descripcion. Columnas: ",
          paste(names(raw), collapse = ", "))
   }
-  
+
+  col_categoria <- stringr::str_subset(names(raw), "cat|tipo|categor[i\u00ed]a")
+  col_inclusion <- stringr::str_subset(names(raw), "incl")
+  col_exclusion <- stringr::str_subset(names(raw), "excl")
+
   # Construir dataset
   cie10_limpio <- raw %>%
     dplyr::select(
       codigo = dplyr::all_of(col_codigo[1]),
       descripcion = dplyr::all_of(col_desc[1]),
-      categoria = dplyr::any_of(
-        names(raw)[stringr::str_detect(
-          names(raw), "cat|tipo|categor[i\u00ed]a"
-        )]
-      ),
-      inclusion = dplyr::any_of(
-        names(raw)[stringr::str_detect(names(raw), "incl")]
-      ),
-      exclusion = dplyr::any_of(
-        names(raw)[stringr::str_detect(names(raw), "excl")]
-      )
+      categoria = dplyr::any_of(col_categoria),
+      inclusion = dplyr::any_of(col_inclusion),
+      exclusion = dplyr::any_of(col_exclusion)
     ) %>%
     dplyr::mutate(
       codigo = stringr::str_trim(as.character(codigo)),
@@ -96,15 +88,14 @@ parsear_cie10_minsal <- function(xls_path) {
 #' @keywords internal
 #' @noRd
 generar_cie10_cl <- function(archivo_path = NULL) {
-  # Verificar que usethis este instalado
-  if (!requireNamespace("usethis", quietly = TRUE)) {
-    stop("El paquete 'usethis' es necesario para generar el dataset.\n",
-         "Inst\u00e1lalo con: install.packages('usethis')")
-  }
-
-  # Deteccion automatica si no se proporciona ruta (prioridad: XLSX > XLS)
+  # Deteccion automatica si no se proporciona ruta (prioridad: nombres sin
+  # espacios > nombres con espacios; XLSX > XLS)
   if (is.null(archivo_path)) {
     candidatos <- c(
+      normalizePath("../CIE-10-DEIS.xlsx", mustWork = FALSE),
+      normalizePath("CIE-10-DEIS.xlsx", mustWork = FALSE),
+      normalizePath("../CIE-10.xlsx", mustWork = FALSE),
+      normalizePath("CIE-10.xlsx", mustWork = FALSE),
       normalizePath("../CIE-10 (1).xlsx", mustWork = FALSE),
       normalizePath("CIE-10 (1).xlsx", mustWork = FALSE),
       normalizePath("../Lista-Tabular-CIE-10-1-1.xls", mustWork = FALSE),
@@ -117,13 +108,14 @@ generar_cie10_cl <- function(archivo_path = NULL) {
     archivo_path <- existentes[1]
   }
   xls_path <- archivo_path
-  
+
   message("Parseando: ", xls_path)
   cie10_cl <- parsear_cie10_minsal(xls_path)
-  
-  # Guardar en data/
-  usethis::use_data(cie10_cl, overwrite = TRUE, compress = "xz")
-  
+
+  # Guardar en data/ con save() base (evita dependencia de usethis)
+  dir.create("data", showWarnings = FALSE)
+  save(cie10_cl, file = "data/cie10_cl.rda", compress = "xz")
+
   message("Generado data/cie10_cl.rda con ", nrow(cie10_cl), " codigos")
   invisible(cie10_cl)
 }

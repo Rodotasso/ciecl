@@ -28,7 +28,7 @@ test_that("cie10_sql emite deprecation warning para argumento close", {
 
   expect_warning(
     cie10_sql("SELECT COUNT(*) AS n FROM cie10", close = FALSE),
-    "deprecado"
+    class = "lifecycle_warning_deprecated"
   )
 })
 
@@ -532,9 +532,17 @@ test_that(".onUnload no falla sin conexion activa", {
 
 test_that("get_cie10_db reconstruye FTS5 si falta en pooled", {
   skip_on_cran()
-  con <- ciecl:::get_cie10_db()
-  DBI::dbExecute(con, "DROP TABLE IF EXISTS cie10_fts")
-  # Forzar re-check via pooling (misma conexion valida, mismo path)
+  # Asegurar DB existe
+  ciecl:::get_cie10_db()
+  db_path <- ciecl:::.ciecl_env$db_path
+  cie10_disconnect()
+
+  # Hack de escritura directo
+  con_write <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  DBI::dbExecute(con_write, "DROP TABLE IF EXISTS cie10_fts")
+  DBI::dbDisconnect(con_write)
+
+  # Forzar re-check
   con2 <- ciecl:::get_cie10_db()
   tablas <- DBI::dbListTables(con2)
   expect_true(any(grepl("cie10_fts", tablas)))
@@ -543,9 +551,15 @@ test_that("get_cie10_db reconstruye FTS5 si falta en pooled", {
 
 test_that("get_cie10_db reconstruye si version no coincide en pooled", {
   skip_on_cran()
-  con <- ciecl:::get_cie10_db()
-  # Modificar version en pooled connection -> trigger rebuild en pooling path
-  DBI::dbExecute(con, "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'")
+  ciecl:::get_cie10_db()
+  db_path <- ciecl:::.ciecl_env$db_path
+  cie10_disconnect()
+
+  # Hack de escritura directo
+  con_write <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  DBI::dbExecute(con_write, "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'")
+  DBI::dbDisconnect(con_write)
+
   con2 <- ciecl:::get_cie10_db()
   ver <- DBI::dbGetQuery(con2, "SELECT value FROM cie10_meta WHERE key = 'cache_version'")
   expect_equal(ver$value, as.character(utils::packageVersion("ciecl")))

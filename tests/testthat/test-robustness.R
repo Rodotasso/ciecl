@@ -61,9 +61,7 @@ test_that("queries grandes no causan problemas de memoria", {
   expect_s3_class(resultado, "tbl_df")
   expect_lte(nrow(resultado), 5000)
 
-  # Liberar memoria
   rm(resultado)
-  gc()
 })
 
 test_that("cie_search con muchos resultados funciona", {
@@ -329,7 +327,7 @@ test_that("cie_lookup con expansion de categoria completa", {
   skip_on_cran()
 
   # Expandir categoria E (muy grande)
-  hijos <- cie_lookup("E", expandir = TRUE)
+  hijos <- cie_lookup("E", expand = TRUE)
   expect_s3_class(hijos, "tbl_df")
   expect_gt(nrow(hijos), 100)
 })
@@ -509,13 +507,13 @@ test_that("cie10_sql permite punto y coma dentro de strings", {
   expect_s3_class(resultado, "tbl_df")
 })
 
-test_that("cie10_sql con close=FALSE mantiene conexion", {
+test_that("cie10_sql con close=FALSE emite advertencia", {
   skip_on_cran()
 
-  # Este test verifica comportamiento interno
-  # La conexion no debe cerrarse si close=FALSE
-  resultado <- cie10_sql("SELECT COUNT(*) as n FROM cie10", close = TRUE)
-  expect_gt(resultado$n, 0)
+  expect_warning(
+    cie10_sql("SELECT COUNT(*) as n FROM cie10", close = TRUE),
+    class = "lifecycle_warning_deprecated"
+  )
 })
 
 test_that("cie10_sql normaliza espacios al inicio", {

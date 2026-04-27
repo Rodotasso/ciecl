@@ -6,58 +6,100 @@ template:
   lang: es
 
 navbar:
+  title: "ciecl"
   structure:
     left: [intro, reference, articles, news]
-    right: [search, lightswitch, github]
-
-reference:
-  - title: "Busqueda de codigos"
-    desc: "Funciones para buscar codigos CIE-10 por texto o codigo"
-    contents:
-      - cie_search
-      - cie_lookup
-      - cie_siglas
-      - cie_guia_busqueda
-  - title: "Base de datos SQL"
-    desc: "Acceso directo a la base SQLite CIE-10"
-    contents:
-      - cie10_sql
-      - cie10_clear_cache
-      - cie10_disconnect
-  - title: "Comorbilidades"
-    desc: "Indices de comorbilidad Charlson y Elixhauser"
-    contents:
-      - cie_comorbid
-      - cie_map_comorbid
-  - title: "Validacion y utilidades"
-    desc: "Normalizacion, validacion y expansion de codigos"
-    contents:
-      - cie_normalizar
-      - cie_validate_vector
-      - cie_expand
-  - title: "API CIE-11"
-    desc: "Busqueda en la clasificacion CIE-11 via API OMS"
-    contents:
-      - cie11_search
-  - title: "Visualizacion"
-    desc: "Tablas interactivas para exploracion de codigos"
-    contents:
-      - cie_table
-  - title: "Datos"
-    desc: "Dataset CIE-10 Chile oficial MINSAL/DEIS"
-    contents:
-      - cie10_cl
+    right: [lang, search, lightswitch, github]
+  components:
+    intro:
+      text: "Inicio"
+      href: index.html
+    reference:
+      text: "Referencia"
+      href: reference/index.html
+    articles:
+      text: "Guías"
+      menu:
+        - text: "Documentación en Español"
+        - text: "--------"
+        - text: "Guía de Inicio"
+          href: articles/instalacion.html
+        - text: "Caso de Uso: Egresos Hospitalarios"
+          href: articles/caso-uso-egresos.html
+        - text: "Idiomas y Normalización"
+          href: articles/idiomas.html
+        - text: "--------"
+        - text: "English Documentation"
+        - text: "--------"
+        - text: "Getting Started"
+          href: articles/installation.html
+        - text: "Case Study: Hospital Discharges"
+          href: articles/case-study-discharges.html
+        - text: "Internationalization"
+          href: articles/ciecl.html
+    news:
+      text: "Novedades"
+      href: news/index.html
+    lang:
+      text: "Idioma"
+      icon: fas fa-language
+      menu:
+        - text: "Español (Principal)"
+          href: articles/ciecl-es.html
+        - text: "English (Documentation)"
+          href: articles/ciecl.html
 
 articles:
-  - title: "Guides"
+  - title: "Documentación en Español"
     contents:
-      - ciecl
       - ciecl-es
       - caso-uso-egresos
       - idiomas
       - instalacion
+  - title: "English Documentation"
+    contents:
+      - ciecl
+      - case-study-discharges
+      - installation
+
+reference:
+  - title: "Búsqueda y Exploración"
+    subtitle: "Funciones para encontrar códigos y descripciones"
+    contents:
+      - cie_search
+      - cie_lookup
+      - cie_describe
+      - cie_short
+      - cie_guide
+  - title: "Datos y Catálogos"
+    subtitle: "Conjuntos de datos integrados"
+    contents:
+      - cie10_cl
+      - cie_table
+  - title: "Base de Datos SQL"
+    subtitle: "Acceso directo al catálogo integrado"
+    contents:
+      - cie10_sql
+      - cie10_clear_cache
+      - cie10_disconnect
+  - title: "API CIE-11"
+    subtitle: "Conexión con servidores de la OMS"
+    contents:
+      - cie11_search
+  - title: "Análisis y Comorbilidad"
+    contents:
+      - cie_comorbid
+      - cie_map_comorbid
+  - title: "Utilidades y Validación"
+    contents:
+      - cie_norm
+      - cie_expand
+      - cie_validate_vector
 
 footer:
   structure:
     left: developed_by
     right: built_with
+  components:
+    developed_by:
+      text: "Desarrollado por Rodolfo Tasso Suazo"

@@ -4,10 +4,12 @@
 \alias{cie_expand}
 \title{Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)}
 \usage{
-cie_expand(codigo)
+cie_expand(code, codigo = lifecycle::deprecated())
 }
 \arguments{
-\item{codigo}{String codigo padre (ej. "E11")}
+\item{code}{String codigo padre (ej. "E11")}
+
+\item{codigo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{code}.}
 }
 \value{
 Character vector con todos los codigos hijos del codigo padre.
@@ -20,9 +22,10 @@ Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 cie_expand("E11")
 }
 \seealso{
-\code{\link{cie_normalizar}}, \code{\link{cie_lookup}}
+\code{\link{cie_norm}}, \code{\link{cie_lookup}}
 
 Other validacion: 
+\code{\link{cie_norm}()},
 \code{\link{cie_normalizar}()},
 \code{\link{cie_validate_vector}()}
 }

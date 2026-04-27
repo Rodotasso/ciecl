@@ -5,15 +5,16 @@
 \title{Buscar codigos CIE-11 via API OMS}
 \usage{
 cie11_search(
-  texto,
+  text,
   api_key = NULL,
   lang = "es",
   max_results = 10,
-  release = "2024-01"
+  release = "2024-01",
+  texto = lifecycle::deprecated()
 )
 }
 \arguments{
-\item{texto}{String termino busqueda espanol/ingles}
+\item{text}{String termino busqueda espanol/ingles}
 
 \item{api_key}{String opcional, Client ID + Secret OMS separados ":"
 Obtener en: https://icd.who.int/icdapi}
@@ -24,6 +25,8 @@ Obtener en: https://icd.who.int/icdapi}
 
 \item{release}{Character, version de release CIE-11 a consultar
 (default "2024-01"). Ver releases disponibles en la API OMS.}
+
+\item{texto}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{text}.}
 }
 \value{
 tibble con codigos CIE-11 + titulos o vacio si error

@@ -2,26 +2,30 @@
 % Please edit documentation in R/cie-search.R
 \name{cie_guia_busqueda}
 \alias{cie_guia_busqueda}
-\title{Guia de funciones de busqueda CIE-10}
+\title{Guia de funciones de busqueda (deprecated)}
 \usage{
 cie_guia_busqueda()
 }
 \value{
-tibble con guia comparativa de funciones de busqueda
+tibble con guia comparativa
 }
 \description{
-Muestra tabla comparativa de cuando usar cada funcion de busqueda.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{\link[=cie_guide]{cie_guide()}}.
 }
 \examples{
+\dontrun{
+# Deprecated: usar cie_guide()
 cie_guia_busqueda()
 }
+}
 \seealso{
-\code{\link{cie_search}},
-\code{\link{cie_lookup}}, \code{\link{cie_siglas}}
-
 Other busqueda: 
+\code{\link{cie_describe}()},
+\code{\link{cie_guide}()},
 \code{\link{cie_lookup}()},
 \code{\link{cie_search}()},
+\code{\link{cie_short}()},
 \code{\link{cie_siglas}()}
 }
 \concept{busqueda}
+\keyword{internal}

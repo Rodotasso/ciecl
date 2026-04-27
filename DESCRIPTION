@@ -1,6 +1,6 @@
 Package: ciecl
 Title: International Classification of Diseases 'ICD-10'/'ICD-11' for Chile
-Version: 0.9.6
+Version: 0.9.8
 Authors@R:
     person("Rodolfo", "Tasso Suazo",
            email = "rtasso@uchile.cl",
@@ -27,11 +27,13 @@ Imports:
     dplyr,
     tibble,
     tools,
-    utils
+    utils,
+    lifecycle,
+    rlang,
+    httr2
 Suggests:
     comorbidity,
     gt,
-    httr2,
     readxl,
     usethis,
     withr,

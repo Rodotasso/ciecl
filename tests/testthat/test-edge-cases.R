@@ -9,16 +9,16 @@ test_that("cie_search rechaza NA, vectores y tipos invalidos", {
   skip_on_cran()
 
   # NA debe dar error
-  expect_error(cie_search(NA), "texto debe ser un string character no-NA")
-  expect_error(cie_search(NA_character_), "texto debe ser un string character no-NA")
+  expect_error(cie_search(NA), "text debe ser un string character no-NA")
+  expect_error(cie_search(NA_character_), "text debe ser un string character no-NA")
 
   # Vectores de longitud != 1 deben dar error
-  expect_error(cie_search(c("diabetes", "cancer")), "texto debe ser un string character no-NA")
-  expect_error(cie_search(character(0)), "texto debe ser un string character no-NA")
+  expect_error(cie_search(c("diabetes", "cancer")), "text debe ser un string character no-NA")
+  expect_error(cie_search(character(0)), "text debe ser un string character no-NA")
 
   # Tipos invalidos deben dar error
-  expect_error(cie_search(123), "texto debe ser un string character no-NA")
-  expect_error(cie_search(list("diabetes")), "texto debe ser un string character no-NA")
+  expect_error(cie_search(123), "text debe ser un string character no-NA")
+  expect_error(cie_search(list("diabetes")), "text debe ser un string character no-NA")
 })
 
 test_that("cie_search maneja cadenas muy cortas", {
@@ -92,11 +92,11 @@ test_that("cie_search maneja espacios multiples", {
   expect_gt(nrow(resultado2), 0)
 })
 
-test_that("cie_search maneja campo invalido", {
+test_that("cie_search maneja field invalido", {
   skip_on_cran()
 
-  # Campo invalido debe usar default o dar error
-  expect_error(cie_search("diabetes", campo = "inexistente"))
+  # field invalido debe usar default o dar error
+  expect_error(cie_search("diabetes", field = "inexistente"))
 })
 
 # ============================================================
@@ -209,63 +209,63 @@ test_that("cie_lookup expandir con codigo inexistente", {
 
   # Expandir codigo que no existe
   suppressMessages({
-    resultado <- cie_lookup("ZZZ", expandir = TRUE)
+    resultado <- cie_lookup("ZZZ", expand = TRUE)
   })
   expect_equal(nrow(resultado), 0)
 })
 
 # ============================================================
-# PRUEBAS PARA cie_normalizar()
+# PRUEBAS PARA cie_norm()
 # ============================================================
 
-test_that("cie_normalizar maneja NA", {
+test_that("cie_norm maneja NA", {
   skip_on_cran()
 
   # NA como entrada
-  resultado <- cie_normalizar(NA_character_, buscar_db = FALSE)
+  resultado <- cie_norm(NA_character_, search_db = FALSE)
   expect_true(is.na(resultado))
 })
 
-test_that("cie_normalizar maneja vector con NAs", {
+test_that("cie_norm maneja vector con NAs", {
   skip_on_cran()
 
   codigos <- c("E110", NA, "I100")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_norm(codigos, search_db = FALSE)
 
   expect_equal(resultado[1], "E11.0")
   expect_true(is.na(resultado[2]))
   expect_equal(resultado[3], "I10.0")
 })
 
-test_that("cie_normalizar maneja cadena vacia", {
+test_that("cie_norm maneja cadena vacia", {
   skip_on_cran()
 
-  resultado <- cie_normalizar("", buscar_db = FALSE)
+  resultado <- cie_norm("", search_db = FALSE)
   expect_equal(resultado, "")
 })
 
-test_that("cie_normalizar maneja codigos ya normalizados", {
+test_that("cie_norm maneja codigos ya normalizados", {
   skip_on_cran()
 
   # Codigos ya con punto no deben cambiar
   codigos <- c("E11.0", "I10.0", "Z00.0")
-  resultado <- cie_normalizar(codigos, buscar_db = FALSE)
+  resultado <- cie_norm(codigos, search_db = FALSE)
   expect_equal(resultado, codigos)
 })
 
-test_that("cie_normalizar maneja codigos de 3 caracteres", {
+test_that("cie_norm maneja codigos de 3 caracteres", {
   skip_on_cran()
 
   # Codigos de categoria (3 chars) no deben modificarse
-  resultado <- cie_normalizar("E11", buscar_db = FALSE)
+  resultado <- cie_norm("E11", search_db = FALSE)
   expect_equal(resultado, "E11")
 })
 
-test_that("cie_normalizar maneja codigos largos", {
+test_that("cie_norm maneja codigos largos", {
   skip_on_cran()
 
   # Codigos de 5 digitos (E11.00 formato)
-  resultado <- cie_normalizar("E1100", buscar_db = FALSE)
+  resultado <- cie_norm("E1100", search_db = FALSE)
   expect_equal(resultado, "E11.00")
 })
 

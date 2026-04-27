@@ -12,7 +12,7 @@ NULL
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @family comorbilidades
-#' @seealso \code{\link{cie_map_comorbid}}, \code{\link{cie_normalizar}}
+#' @seealso \code{\link{cie_map_comorbid}}, \code{\link{cie_norm}}
 #' @export
 #' @examples
 #' # Ver documentacion de parametros
@@ -28,10 +28,7 @@ NULL
 cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
                          assign0 = TRUE) {
   # Verificar que comorbidity este instalado
-  if (!requireNamespace("comorbidity", quietly = TRUE)) {
-    stop("El paquete 'comorbidity' es necesario para esta funci\u00f3n.\n",
-         "Inst\u00e1lalo con: install.packages('comorbidity')")
-  }
+  rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")
   
   map <- match.arg(map)
 
@@ -57,7 +54,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   }
 
   # Normalizar codigos (elimina sufijo X DEIS, agrega punto, etc.)
-  data[[code]] <- cie_normalizar(data[[code]], buscar_db = FALSE)
+  data[[code]] <- cie_norm(data[[code]], search_db = FALSE)
 
   # Mapear a nomenclatura comorbidity package
   map_full <- switch(map,
@@ -94,16 +91,26 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 #' 
-#' @param codigos Character vector codigos CIE-10
-#' @return tibble con codigo + categoria_comorbilidad
+#' @param codes Character vector de codigos
+#' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
+#' @return tibble con columnas: codigo, categoria
 #' @family comorbilidades
-#' @seealso \code{\link{cie_comorbid}}, \code{\link{cie_normalizar}}
+#' @seealso \code{\link{cie_comorbid}}, \code{\link{cie_norm}}
 #' @export
 #' @examples
 #' cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))
-cie_map_comorbid <- function(codigos) {
+cie_map_comorbid <- function(codes, codigos = lifecycle::deprecated()) {
+  if (lifecycle::is_present(codigos)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_map_comorbid(codigos = )",
+      "cie_map_comorbid(codes = )"
+    )
+    codes <- codigos
+  }
+
   # Manejar vector vacio
-  if (length(codigos) == 0) {
+  if (length(codes) == 0) {
     return(tibble::tibble(
       codigo = character(0),
       categoria = character(0)
@@ -112,16 +119,16 @@ cie_map_comorbid <- function(codigos) {
 
   # Categorizacion vectorizada con case_when
   resultado <- tibble::tibble(
-    codigo = codigos,
+    codigo = codes,
     categoria = dplyr::case_when(
-      is.na(codigos) ~ "Otra",
-      stringr::str_detect(codigos, "^E10|^E11") ~ "Diabetes",
-      stringr::str_detect(codigos, "^I50") ~ "Insuficiencia cardiaca",
-      stringr::str_detect(codigos, "^I21|^I22") ~ "Infarto miocardio",
-      stringr::str_detect(codigos, "^C[0-9]{2}") ~ "Neoplasia maligna",
-      stringr::str_detect(codigos, "^J4[0-4]") ~ "EPOC",
-      stringr::str_detect(codigos, "^N18") ~ "Enfermedad renal cronica",
-      stringr::str_detect(codigos, "^F[0-9]{2}") ~ "Trastornos mentales",
+      is.na(codes) ~ "Otra",
+      stringr::str_detect(codes, "^E10|^E11") ~ "Diabetes",
+      stringr::str_detect(codes, "^I50") ~ "Insuficiencia cardiaca",
+      stringr::str_detect(codes, "^I21|^I22") ~ "Infarto miocardio",
+      stringr::str_detect(codes, "^C[0-9]{2}") ~ "Neoplasia maligna",
+      stringr::str_detect(codes, "^J4[0-4]") ~ "EPOC",
+      stringr::str_detect(codes, "^N18") ~ "Enfermedad renal cronica",
+      stringr::str_detect(codes, "^F[0-9]{2}") ~ "Trastornos mentales",
       .default = "Otra"
     )
   )

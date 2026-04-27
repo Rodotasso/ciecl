@@ -42,3 +42,8 @@
 ^SECURITY\.md$
 ^badges$
 ^Rplots\.pdf$
+^tools/build_readmes\.R$
+^doc$
+^Meta$
+^README\.en\.html$
+^vignettes/ciecl-en\.html$

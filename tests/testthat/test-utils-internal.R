@@ -314,7 +314,7 @@ test_that("cie_lookup_single expande con patron LIKE", {
 
   cie_lookup_single <- ciecl:::cie_lookup_single
 
-  resultado <- cie_lookup_single("E11", expandir = TRUE)
+  resultado <- cie_lookup_single("E11", expand = TRUE)
 
   expect_s3_class(resultado, "tbl_df")
   expect_gt(nrow(resultado), 5)

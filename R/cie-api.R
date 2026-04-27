@@ -1,12 +1,13 @@
 #' Buscar codigos CIE-11 via API OMS
 #'
-#' @param texto String termino busqueda espanol/ingles
+#' @param text String termino busqueda espanol/ingles
 #' @param api_key String opcional, Client ID + Secret OMS separados ":"
 #'   Obtener en: https://icd.who.int/icdapi
 #' @param lang Character, idioma respuesta ("es" o "en")
 #' @param max_results Integer, maximo resultados (default 10)
 #' @param release Character, version de release CIE-11 a consultar
 #'   (default "2024-01"). Ver releases disponibles en la API OMS.
+#' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @family api
 #' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
@@ -22,14 +23,25 @@
 #' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 #' cie11_search("depresion mayor")
 #' }
-cie11_search <- function(texto, api_key = NULL, lang = "es",
-                         max_results = 10, release = "2024-01") {
-  # Validacion de inputs
-  if (!is.character(texto) || length(texto) != 1 || is.na(texto)) {
-    stop("'texto' debe ser un string de largo 1")
+cie11_search <- function(text, api_key = NULL, lang = "es",
+                         max_results = 10, release = "2024-01",
+                         texto = lifecycle::deprecated()) {
+  # Deprecation: argumento en espanol -> ingles
+  if (lifecycle::is_present(texto)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie11_search(texto = )",
+      "cie11_search(text = )"
+    )
+    text <- texto
   }
-  if (nchar(trimws(texto)) == 0) {
-    stop("'texto' no puede estar vacio")
+
+  # Validacion de inputs
+  if (!is.character(text) || length(text) != 1 || is.na(text)) {
+    stop("'text' debe ser un string de largo 1")
+  }
+  if (nchar(trimws(text)) == 0) {
+    stop("'text' no puede estar vacio")
   }
   if (!is.character(lang) || !lang %in% c("es", "en")) {
     stop("'lang' debe ser \"es\" o \"en\"")
@@ -44,10 +56,7 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
   }
 
   # Verificar que httr2 este instalado
-  if (!requireNamespace("httr2", quietly = TRUE)) {
-    stop("El paquete 'httr2' es necesario para esta funci\u00f3n.\n",
-         "Inst\u00e1lalo con: install.packages('httr2')")
-  }
+  rlang::check_installed("httr2", reason = "para consultar la API oficial de la OMS (CIE-11).")
   
   # Obtener API key (env var o argumento)
   if (is.null(api_key)) {
@@ -70,6 +79,9 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
     token_url <- "https://icdaccessmanagement.who.int/connect/token"
     token_req <- httr2::request(token_url) %>%
       httr2::req_method("POST") %>%
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
+      httr2::req_timeout(30) %>%
+      httr2::req_retry(max_tries = 3) %>%
       httr2::req_body_form(
         client_id = client_id,
         client_secret = client_secret,
@@ -87,8 +99,12 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
     )
     
     search_req <- httr2::request(search_url) %>%
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
+      httr2::req_timeout(30) %>%
+      httr2::req_retry(max_tries = 3) %>%
+      httr2::req_throttle(rate = 10 / 60) %>% # 10 req/min para ser conservador
       httr2::req_url_query(
-        q = texto,
+        q = text,
         flatResults = "true",
         useFlexisearch = "true"
       ) %>%
@@ -118,7 +134,7 @@ cie11_search <- function(texto, api_key = NULL, lang = "es",
       
       return(resultados)
     } else {
-      message("Sin resultados CIE-11 para: ", texto)
+      message("Sin resultados CIE-11 para: ", text)
       return(tibble::tibble(
         codigo = character(), 
         titulo = character(),
