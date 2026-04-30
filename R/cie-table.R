@@ -12,15 +12,11 @@
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
 #' @return Objeto de clase \code{gt_tbl} (tabla HTML interactiva).
 #' @family visualizacion
-#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
+#' @seealso [cie_search()], [cie_lookup()]
 #' @export
 #' @importFrom dplyr select everything mutate across
-#' @examples
-#' \donttest{
-#' if (requireNamespace("gt", quietly = TRUE)) {
-#'   cie_table("E11")  # Diabetes mellitus tipo 2 completo
-#' }
-#' }
+#' @examplesIf rlang::is_installed("gt")
+#' cie_table("E11")  # Diabetes mellitus tipo 2 completo
 cie_table <- function(code, codigo = lifecycle::deprecated()) {
   if (lifecycle::is_present(codigo)) {
     lifecycle::deprecate_warn(

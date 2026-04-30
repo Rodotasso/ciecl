@@ -1,8 +1,3 @@
-#' @importFrom stringr str_trim str_replace_all str_detect str_extract
-#' @importFrom dplyr select mutate filter all_of any_of %>%
-#' @importFrom tibble as_tibble
-NULL
-
 #' Parsear datos CIE-10 MINSAL/DEIS desde XLS
 #' 
 #' @description
@@ -12,10 +7,10 @@ NULL
 #' 
 #' @param xls_path Ruta al archivo XLS descargado DEIS
 #' @return tibble con 39,877 codigos CIE-10 Chile limpios
-#' @keywords internal
-#' @noRd
 parsear_cie10_minsal <- function(xls_path) {
-  rlang::check_installed("readxl", reason = "para leer el XLS/XLSX DEIS")
+  if (!requireNamespace("readxl", quietly = TRUE)) {
+    stop("Se requiere el paquete 'readxl' para leer el XLS/XLSX DEIS")
+  }
 
   if (!file.exists(xls_path)) {
     stop("Archivo XLS no encontrado: ", xls_path)
@@ -80,16 +75,8 @@ parsear_cie10_minsal <- function(xls_path) {
 #'   (opcional, deteccion automatica).
 #'   Debe ser una ruta de confianza; no usar con input de usuarios finales.
 #' @return Invisible tibble with generated 'ICD-10' data.
-#' @examples
-#' \dontrun{
-#' # Desde ciecl/ ejecutar:
-#' generar_cie10_cl()
-#' }
-#' @keywords internal
-#' @noRd
 generar_cie10_cl <- function(archivo_path = NULL) {
-  # Deteccion automatica si no se proporciona ruta (prioridad: nombres sin
-  # espacios > nombres con espacios; XLSX > XLS)
+  # Deteccion automatica si no se proporciona ruta
   if (is.null(archivo_path)) {
     candidatos <- c(
       normalizePath("../CIE-10-DEIS.xlsx", mustWork = FALSE),
@@ -112,31 +99,16 @@ generar_cie10_cl <- function(archivo_path = NULL) {
   message("Parseando: ", xls_path)
   cie10_cl <- parsear_cie10_minsal(xls_path)
 
-  # Guardar en data/ con save() base (evita dependencia de usethis)
-  dir.create("data", showWarnings = FALSE)
+  # Guardar en data/ con save() base
+  if (!dir.exists("data")) dir.create("data")
   save(cie10_cl, file = "data/cie10_cl.rda", compress = "xz")
 
   message("Generado data/cie10_cl.rda con ", nrow(cie10_cl), " codigos")
   invisible(cie10_cl)
 }
 
-#' Dataset CIE-10 Chile oficial MINSAL/DEIS v2018
-#'
-#' @format tibble con 39,877 filas (categorias y subcategorias):
-#' \describe{
-#'   \item{codigo}{Codigo CIE-10 (ej. "E11.0")}
-#'   \item{descripcion}{Diagnostico en espanol chileno}
-#'   \item{categoria}{Categoria jerarquica}
-#'   \item{seccion}{Seccion dentro del capitulo}
-#'   \item{capitulo_nombre}{Nombre descriptivo del capitulo}
-#'   \item{inclusion}{Terminos incluidos}
-#'   \item{exclusion}{Terminos excluidos}
-#'   \item{capitulo}{Capitulo CIE-10 (A-Z)}
-#'   \item{es_daga}{Logical, codigo daga (+)}
-#'   \item{es_cruz}{Logical, codigo asterisco (*)}
-#' }
-#' @source \url{https://deis.minsal.cl/centrofic/}
-#' @examples
-#' data(cie10_cl)
-#' head(cie10_cl)
-"cie10_cl"
+# Carga de paquetes necesarios para ejecucion manual del script
+if (interactive()) {
+  library(dplyr)
+  library(stringr)
+}

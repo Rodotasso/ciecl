@@ -74,8 +74,11 @@ test_that("cie11_search acepta API key con formato correcto",
     "warning"
   })
 
-  # Si hay error, no debe ser de formato
-  if (error_msg != "no_error" && error_msg != "warning") {
+  # Siempre hay assertion: si no hubo error, el test pasa trivialmente;
+  # si hubo error, el mensaje no debe ser de validacion de formato.
+  if (error_msg == "no_error" || error_msg == "warning") {
+    expect_true(TRUE)
+  } else {
     expect_no_match(error_msg, "client_id:client_secret", fixed = TRUE)
   }
 })

@@ -7,7 +7,7 @@
 
 test_that("normalizar_tildes remueve tildes correctamente", {
   # Acceder a funcion interna
-  normalizar_tildes <- ciecl:::normalizar_tildes
+  normalizar_tildes <- normalizar_tildes
 
   # Vocales minusculas con tilde
   expect_equal(normalizar_tildes("caf\u00e9"), "cafe")
@@ -26,7 +26,7 @@ test_that("normalizar_tildes remueve tildes correctamente", {
 })
 
 test_that("normalizar_tildes maneja vector vacio", {
-  normalizar_tildes <- ciecl:::normalizar_tildes
+  normalizar_tildes <- normalizar_tildes
 
   resultado <- normalizar_tildes(character(0))
   expect_length(resultado, 0)
@@ -34,7 +34,7 @@ test_that("normalizar_tildes maneja vector vacio", {
 })
 
 test_that("normalizar_tildes maneja texto sin tildes", {
-  normalizar_tildes <- ciecl:::normalizar_tildes
+  normalizar_tildes <- normalizar_tildes
 
   # Texto ya normalizado
   expect_equal(normalizar_tildes("diabetes"), "diabetes")
@@ -42,7 +42,7 @@ test_that("normalizar_tildes maneja texto sin tildes", {
 })
 
 test_that("normalizar_tildes es vectorizado", {
-  normalizar_tildes <- ciecl:::normalizar_tildes
+  normalizar_tildes <- normalizar_tildes
 
   entrada <- c("caf\u00e9", "ri\u00f1\u00f3n", "normal")
   esperado <- c("cafe", "rinon", "normal")
@@ -55,7 +55,7 @@ test_that("normalizar_tildes es vectorizado", {
 # ============================================================
 
 test_that("get_siglas_medicas retorna lista completa", {
-  get_siglas_medicas <- ciecl:::get_siglas_medicas
+  get_siglas_medicas <- get_siglas_medicas
 
   siglas <- get_siglas_medicas()
 
@@ -70,7 +70,7 @@ test_that("get_siglas_medicas retorna lista completa", {
 })
 
 test_that("get_siglas_medicas contiene siglas comunes", {
-  get_siglas_medicas <- ciecl:::get_siglas_medicas
+  get_siglas_medicas <- get_siglas_medicas
 
   siglas <- get_siglas_medicas()
 
@@ -84,7 +84,7 @@ test_that("get_siglas_medicas contiene siglas comunes", {
 })
 
 test_that("get_siglas_medicas tiene categorias validas", {
-  get_siglas_medicas <- ciecl:::get_siglas_medicas
+  get_siglas_medicas <- get_siglas_medicas
 
   siglas <- get_siglas_medicas()
   categorias <- unique(vapply(siglas, function(x) x$categoria, character(1)))
@@ -104,7 +104,7 @@ test_that("get_siglas_medicas tiene categorias validas", {
 # ============================================================
 
 test_that("expandir_sigla expande siglas conocidas", {
-  expandir_sigla <- ciecl:::expandir_sigla
+  expandir_sigla <- expandir_sigla
 
   # Siglas comunes
   expect_equal(expandir_sigla("iam"), "infarto agudo miocardio")
@@ -115,7 +115,7 @@ test_that("expandir_sigla expande siglas conocidas", {
 })
 
 test_that("expandir_sigla retorna NULL para no-siglas", {
-  expandir_sigla <- ciecl:::expandir_sigla
+  expandir_sigla <- expandir_sigla
 
   expect_null(expandir_sigla("diabetes"))
   expect_null(expandir_sigla("xyz123"))
@@ -123,7 +123,7 @@ test_that("expandir_sigla retorna NULL para no-siglas", {
 })
 
 test_that("expandir_sigla maneja espacios", {
-  expandir_sigla <- ciecl:::expandir_sigla
+  expandir_sigla <- expandir_sigla
 
   expect_equal(expandir_sigla("  iam  "), "infarto agudo miocardio")
   expect_equal(expandir_sigla(" DM "), "diabetes mellitus")
@@ -134,7 +134,7 @@ test_that("expandir_sigla maneja espacios", {
 # ============================================================
 
 test_that("extract_cie_from_text extrae codigo con prefijos", {
-  extract_cie <- ciecl:::extract_cie_from_text
+  extract_cie <- extract_cie_from_text
 
   # Prefijos comunes
   expect_equal(extract_cie("CIE:E11.0"), "E11.0")
@@ -143,7 +143,7 @@ test_that("extract_cie_from_text extrae codigo con prefijos", {
 })
 
 test_that("extract_cie_from_text extrae codigo con sufijos", {
-  extract_cie <- ciecl:::extract_cie_from_text
+  extract_cie <- extract_cie_from_text
 
   # Sufijos comunes
   expect_equal(extract_cie("E11.0-confirmado"), "E11.0")
@@ -152,7 +152,7 @@ test_that("extract_cie_from_text extrae codigo con sufijos", {
 })
 
 test_that("extract_cie_from_text maneja codigo limpio", {
-  extract_cie <- ciecl:::extract_cie_from_text
+  extract_cie <- extract_cie_from_text
 
   # Codigo sin ruido
   expect_equal(extract_cie("E11.0"), "E11.0")
@@ -161,7 +161,7 @@ test_that("extract_cie_from_text maneja codigo limpio", {
 })
 
 test_that("extract_cie_from_text maneja minusculas", {
-  extract_cie <- ciecl:::extract_cie_from_text
+  extract_cie <- extract_cie_from_text
 
   # Convierte a mayusculas
   expect_equal(extract_cie("e11.0"), "E11.0")
@@ -169,7 +169,7 @@ test_that("extract_cie_from_text maneja minusculas", {
 })
 
 test_that("extract_cie_from_text maneja texto sin codigo valido", {
-  extract_cie <- ciecl:::extract_cie_from_text
+  extract_cie <- extract_cie_from_text
 
   # Retorna original si no encuentra patron
   expect_equal(extract_cie("TEXTO SIN CODIGO"), "TEXTO SIN CODIGO")
@@ -181,7 +181,7 @@ test_that("extract_cie_from_text maneja texto sin codigo valido", {
 # ============================================================
 
 test_that("cie10_empty_tibble retorna tibble vacio con estructura correcta", {
-  cie10_empty_tibble <- ciecl:::cie10_empty_tibble
+  cie10_empty_tibble <- cie10_empty_tibble
 
   resultado <- cie10_empty_tibble()
 
@@ -197,7 +197,7 @@ test_that("cie10_empty_tibble retorna tibble vacio con estructura correcta", {
 })
 
 test_that("cie10_empty_tibble con descripcion_completa agrega columna", {
-  cie10_empty_tibble <- ciecl:::cie10_empty_tibble
+  cie10_empty_tibble <- cie10_empty_tibble
 
   resultado <- cie10_empty_tibble(add_descripcion_completa = TRUE)
 
@@ -208,7 +208,7 @@ test_that("cie10_empty_tibble con descripcion_completa agrega columna", {
 })
 
 test_that("cie10_empty_tibble tiene tipos correctos", {
-  cie10_empty_tibble <- ciecl:::cie10_empty_tibble
+  cie10_empty_tibble <- cie10_empty_tibble
 
   resultado <- cie10_empty_tibble()
 
@@ -225,7 +225,7 @@ test_that("cie10_empty_tibble tiene tipos correctos", {
 test_that("sigla_to_codigo convierte siglas a codigos CIE-10", {
   skip_on_cran()  # Requiere DB
 
-  sigla_to_codigo <- ciecl:::sigla_to_codigo
+  sigla_to_codigo <- sigla_to_codigo
 
   # IAM debe retornar codigo I21.x
   codigo_iam <- sigla_to_codigo("iam")
@@ -238,7 +238,7 @@ test_that("sigla_to_codigo convierte siglas a codigos CIE-10", {
 test_that("sigla_to_codigo retorna NULL para texto normal", {
   skip_on_cran()
 
-  sigla_to_codigo <- ciecl:::sigla_to_codigo
+  sigla_to_codigo <- sigla_to_codigo
 
   expect_null(sigla_to_codigo("diabetes"))
   expect_null(sigla_to_codigo("cualquier texto"))
@@ -251,7 +251,7 @@ test_that("sigla_to_codigo retorna NULL para texto normal", {
 test_that("cie_lookup_single funciona con codigo valido", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   resultado <- cie_lookup_single("E11.0")
 
@@ -263,7 +263,7 @@ test_that("cie_lookup_single funciona con codigo valido", {
 test_that("cie_lookup_single retorna vacio para codigo invalido", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   suppressMessages({
     resultado <- cie_lookup_single("XXXXX")
@@ -276,7 +276,7 @@ test_that("cie_lookup_single retorna vacio para codigo invalido", {
 test_that("cie_lookup_single maneja NA", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   resultado <- cie_lookup_single(NA_character_)
 
@@ -287,7 +287,7 @@ test_that("cie_lookup_single maneja NA", {
 test_that("cie_lookup_single maneja cadena vacia", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   resultado <- cie_lookup_single("")
 
@@ -298,7 +298,7 @@ test_that("cie_lookup_single maneja cadena vacia", {
 test_that("cie_lookup_single rechaza caracteres invalidos", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   # SQL injection attempt
   suppressMessages({
@@ -312,7 +312,7 @@ test_that("cie_lookup_single rechaza caracteres invalidos", {
 test_that("cie_lookup_single expande con patron LIKE", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   resultado <- cie_lookup_single("E11", expand = TRUE)
 
@@ -324,7 +324,7 @@ test_that("cie_lookup_single expande con patron LIKE", {
 test_that("cie_lookup_single maneja rangos", {
   skip_on_cran()
 
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   resultado <- cie_lookup_single("E10-E11")
 
@@ -333,7 +333,7 @@ test_that("cie_lookup_single maneja rangos", {
 })
 
 test_that("cie_lookup_single error con vector", {
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   expect_error(cie_lookup_single(c("E11.0", "I10")),
                "solo acepta un codigo")

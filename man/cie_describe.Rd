@@ -42,12 +42,12 @@ cie_describe("E110", normalize = FALSE)
 # Rescate: normalizar antes de buscar
 cie_describe("E110", normalize = TRUE)
 
-\donttest{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Uso tipico en auditoria VIU (contar fallos de origen)
 diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 descripciones <- cie_describe(diags, normalize = FALSE)
 sum(is.na(descripciones)) # Detecta 3 errores de registro
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=cie_lookup]{cie_lookup()}} para resultado como tibble con todas

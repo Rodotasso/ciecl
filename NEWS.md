@@ -18,6 +18,13 @@ manteniendo la documentación pedagógica en español para el contexto local.
   - `cie_lookup()`: `codigo` -> `code`, `expandir` -> `expand`, `normalizar` -> `normalize`.
   - `cie_search()`: `texto` -> `text`, `campo` -> `field`, `solo_fuzzy` -> `only_fuzzy`.
   - `cie_short()`: Reemplaza a `cie_siglas()`. Argumento `category`.
+
+### Cambios internos
+
+* El script generador del dataset (`generar_cie10_cl()`, `parsear_cie10_minsal()`) se movió a `data-raw/` siguiendo la convención de R packages. No afecta el uso del paquete: `data(cie10_cl)` sigue funcionando igual.
+* Tests del generador trasladados a sanity-check ejecutable desde `data-raw/`.
+* Eliminación masiva de `ciecl:::` en tests para favorecer `devtools::load_all()`.
+
   - `cie11_search()`: `texto` -> `text`.
 
 * **Motor de Normalización Único**: Se establece `cie_norm()` como la función

@@ -500,7 +500,7 @@ extract_cie_from_text <- function(text) {
 #' @param categoria `r lifecycle::badge("deprecated")` Use `category`.
 #' @return tibble con columnas: sigla, termino_busqueda, categoria
 #' @family busqueda
-#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
+#' @seealso [cie_search()], [cie_lookup()]
 #' @export
 #' @examples
 #' # Ver todas las siglas
@@ -557,11 +557,6 @@ cie_short <- function(category = NULL,
 #' @family busqueda
 #' @keywords internal
 #' @export
-#' @examples
-#' \dontrun{
-#' # Deprecated: usar cie_short()
-#' cie_siglas()
-#' }
 cie_siglas <- function(categoria = NULL) {
   lifecycle::deprecate_warn(
     "0.9.8",
@@ -598,8 +593,8 @@ cie_siglas <- function(categoria = NULL) {
 #'   Si el text corresponde a una sigla medica, se expande
 #'   automaticamente antes de buscar.
 #' @family busqueda
-#' @seealso \code{\link{cie_lookup}},
-#'   \code{\link{cie_short}}, \code{\link{cie10_sql}}
+#' @seealso [cie_lookup()],
+#'   [cie_short()], [cie10_sql()]
 #' @export
 #' @importFrom stringdist stringsim
 #' @importFrom dplyr mutate filter arrange desc slice_head select everything %>%
@@ -607,7 +602,7 @@ cie_siglas <- function(categoria = NULL) {
 #' # Busqueda basica
 #' cie_search("diabetes")
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' cie_search("neumonia")
 #'
 #' # Busqueda por siglas medicas
@@ -619,7 +614,6 @@ cie_siglas <- function(categoria = NULL) {
 #'
 #' # Buscar en inclusiones
 #' cie_search("bacteriana", field = "inclusion")
-#' }
 cie_search <- function(text, threshold = 0.70, max_results = 50,
                        field = c("descripcion", "inclusion"),
                        only_fuzzy = FALSE, verbose = TRUE,
@@ -869,14 +863,13 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 #' @param descripcion_completa `r lifecycle::badge("deprecated")` Use `full_description`.
 #' @return tibble con codigo(s) matcheado(s)
 #' @family busqueda
-#' @seealso \code{\link{cie_search}},
-#'   \code{\link{cie_norm}}, \code{\link{cie_expand}}
+#' @seealso [cie_search()], [cie_norm()], [cie_expand()]
 #' @export
 #' @examples
 #' # Busqueda directa por codigo
 #' cie_lookup("E11.0")
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' cie_lookup("E110")        # Sin punto
 #' cie_lookup("E11")         # Solo categoria
 #' cie_lookup("E11", expand = TRUE)  # Todos E11.x
@@ -890,7 +883,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 #' # Buscar por siglas medicas
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
-#' }
+
 cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
                        full_description = FALSE, extract = FALSE,
                        check_siglas = FALSE,
@@ -1149,8 +1142,8 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 #'
 #' @return tibble con guia comparativa de funciones de busqueda
 #' @family busqueda
-#' @seealso \code{\link{cie_search}},
-#'   \code{\link{cie_lookup}}, \code{\link{cie_short}}
+#' @seealso [cie_search()],
+#'   [cie_lookup()], [cie_short()]
 #' @export
 #' @examples
 #' cie_guide()
@@ -1202,10 +1195,9 @@ cie_guide <- function() {
 #' @keywords internal
 #' @export
 #' @examples
-#' \dontrun{
 #' # Deprecated: usar cie_guide()
 #' cie_guia_busqueda()
-#' }
+
 cie_guia_busqueda <- function() {
   lifecycle::deprecate_warn(
     "0.9.8",

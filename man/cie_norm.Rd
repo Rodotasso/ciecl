@@ -66,8 +66,8 @@ cie_norm("G01*")                              # "G01"   (elimina asterisco)
 cie_norm(c("E110", "I10X", "Z00"))  # Vectorizado
 }
 \seealso{
-\code{\link{cie_validate_vector}},
-\code{\link{cie_expand}}, \code{\link{cie_lookup}}
+\code{\link[=cie_validate_vector]{cie_validate_vector()}},
+\code{\link[=cie_expand]{cie_expand()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 
 Other validacion: 
 \code{\link{cie_expand}()},

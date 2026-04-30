@@ -21,12 +21,12 @@ knitr::opts_chunk$set(
 
 ### Desde CRAN (cuando este disponible)
 
-```{r}
+```{r eval=FALSE}
 install.packages("ciecl")
 ```
 ### Desde GitHub (version desarrollo)
 
-```{r}
+```{r eval=FALSE}
 # Opcion 1: pak (recomendado)
 install.packages("pak")
 pak::pak("RodoTasso/ciecl")
@@ -45,7 +45,7 @@ remotes::install_github("RodoTasso/ciecl")
 El paquete tiene dependencias minimas para funcionalidad core. Para habilitar
 todas las funcionalidades:
 
-```{r}
+```{r eval=FALSE}
 # Instalacion completa con todos los paquetes opcionales
 pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
@@ -141,7 +141,7 @@ Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
 
 ### Paso 3: Verificar Configuracion
 
-```{r}
+```{r eval=FALSE}
 # Verificar que la API key esta configurada
 Sys.getenv("ICD_API_KEY")
 
@@ -155,7 +155,7 @@ cie11_search("diabetes")
 El paquete usa SQLite para almacenar y buscar codigos CIE-10 de forma eficiente.
 La base de datos se crea automaticamente en:
 
-```{r}
+```{r eval=FALSE}
 # Ver ubicacion del cache
 tools::R_user_dir("ciecl", "data")
 ```
@@ -164,14 +164,14 @@ tools::R_user_dir("ciecl", "data")
 
 Si necesitas forzar una reconstruccion de la base de datos:
 
-```{r}
+```{r eval=FALSE}
 library(ciecl)
 cie10_clear_cache()
 ```
 
 ## Verificar Instalacion
 
-```{r}
+```{r eval=FALSE}
 library(ciecl)
 
 # Verificar que el paquete carga correctamente
@@ -193,7 +193,7 @@ cie_search("diabetes")
 
 Verifica que el repositorio de CRAN esté configurado en tu sesión de R y luego instala normalmente:
 
-```{r}
+```{r eval=FALSE}
 install.packages("ciecl")
 ```
 
