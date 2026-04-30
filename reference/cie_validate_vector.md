@@ -29,8 +29,8 @@ formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 
 ## See also
 
-[`cie_norm`](https://rodotasso.github.io/ciecl/reference/cie_norm.md),
-[`cie_expand`](https://rodotasso.github.io/ciecl/reference/cie_expand.md)
+[`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md),
+[`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md)
 
 Other validacion:
 [`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),

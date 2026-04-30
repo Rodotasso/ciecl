@@ -30,6 +30,20 @@ para el contexto local.
     Reemplaza a
     [`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md).
     Argumento `category`.
+
+#### Cambios internos
+
+- El script generador del dataset (`generar_cie10_cl()`,
+  `parsear_cie10_minsal()`) se movió a `data-raw/` siguiendo la
+  convención de R packages. No afecta el uso del paquete:
+  `data(cie10_cl)` sigue funcionando igual.
+
+- Tests del generador trasladados a sanity-check ejecutable desde
+  `data-raw/`.
+
+- Eliminación masiva de `ciecl:::` en tests para favorecer
+  `devtools::load_all()`.
+
   - [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md):
     `texto` -\> `text`.
 

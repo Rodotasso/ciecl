@@ -30,6 +30,7 @@ del DEIS. La columna `DIAG1` representa el diagnóstico principal con los
 formatos informales mencionados.
 
 ``` r
+
 set.seed(42)
 
 # Simulación de 200 registros con formatos típicos del DEIS Chile
@@ -74,6 +75,7 @@ procesa los códigos aplicando las reglas de codificación oficial MINSAL:
   imprimibles.
 
 ``` r
+
 # Limpieza y estandarización de diagnósticos
 egresos <- egresos %>%
   mutate(
@@ -108,6 +110,7 @@ devuelve directamente un vector de caracteres, evitando la creación de
 columnas de unión adicionales y manteniendo el código más limpio.
 
 ``` r
+
 # Integración directa de descripciones al dataframe principal
 egresos_full <- egresos %>%
   mutate(
@@ -137,6 +140,7 @@ grupo), se puede seguir utilizando
 junto con un cruce de tablas:
 
 ``` r
+
 # Obtención de metadata completa vía lookup + join
 metadata <- cie_lookup(
   code = unique(egresos$DIAG1_NORM),
@@ -156,6 +160,7 @@ permite realizar búsquedas de texto mediante similitud de strings (fuzzy
 matching).
 
 ``` r
+
 # Ejemplo de búsqueda con error ortográfico intencional ("diabetis")
 # La función retorna las coincidencias más probables ordenadas por score
 cie_search(text = "diabetis", threshold = 0.7)
@@ -184,6 +189,7 @@ mapea los diagnósticos normalizados hacia categorías de Charlson o
 Elixhauser, adaptadas a la realidad de los datos chilenos.
 
 ``` r
+
 # Requiere el paquete 'comorbidity' instalado
 # Cálculo del Índice de Charlson por identificador de paciente
 comorbilidades <- cie_comorbid(

@@ -28,12 +28,3 @@ Other busqueda:
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
 [`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md)
-
-## Examples
-
-``` r
-if (FALSE) { # \dontrun{
-# Deprecated: usar cie_short()
-cie_siglas()
-} # }
-```

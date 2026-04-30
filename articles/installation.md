@@ -13,6 +13,7 @@ automatically manages system dependencies and R package requirements.
 ### From CRAN (Stable Version)
 
 ``` r
+
 # Install pak if you don't have it
 if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 
@@ -25,6 +26,7 @@ pak::pkg_install("ciecl")
 To use the latest features from the `rev-ropensci` branch:
 
 ``` r
+
 pak::pkg_install("RodoTasso/ciecl@rev-ropensci")
 ```
 
@@ -34,18 +36,19 @@ The package has minimal dependencies for core functionality. To enable
 all features, including comorbidity indices and interactive tables:
 
 ``` r
+
 # Full installation with all optional packages
 pak::pkg_install("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
 ### Dependencies by Feature
 
-| Feature                           | Required Package | Installation                      |
-|-----------------------------------|------------------|-----------------------------------|
-| Charlson/Elixhauser Comorbidities | `comorbidity`    | `install.packages("comorbidity")` |
-| Interactive GT Tables             | `gt`             | `install.packages("gt")`          |
-| WHO ICD-11 API                    | `httr2`          | `install.packages("httr2")`       |
-| Read MINSAL Excel Files           | `readxl`         | `install.packages("readxl")`      |
+| Feature | Required Package | Installation |
+|----|----|----|
+| Charlson/Elixhauser Comorbidities | `comorbidity` | `install.packages("comorbidity")` |
+| Interactive GT Tables | `gt` | `install.packages("gt")` |
+| WHO ICD-11 API | `httr2` | `install.packages("httr2")` |
+| Read MINSAL Excel Files | `readxl` | `install.packages("readxl")` |
 
 ## System Requirements
 
@@ -107,6 +110,7 @@ Keychain, Windows Credential Store, Linux Secret Service), avoiding
 plain text secrets in your environment files.
 
 ``` r
+
 # Store credentials once (it will prompt for them)
 # Format: "client_id:client_secret"
 keyring::key_set("ciecl_icd11")
@@ -128,6 +132,7 @@ tracked by Git.
 ## Verify Installation
 
 ``` r
+
 library(ciecl)
 
 # Check package version
@@ -151,6 +156,7 @@ If you encounter errors related to the database connection or corrupt
 data, force a rebuild of the local cache:
 
 ``` r
+
 ciecl::cie10_clear_cache()
 ```
 
@@ -160,6 +166,7 @@ If you are behind a corporate proxy, configure your R environment before
 using the WHO API:
 
 ``` r
+
 Sys.setenv(https_proxy = "http://your-proxy-url:port")
 ```
 

@@ -60,6 +60,7 @@ institutional decree.
 ## Installation
 
 ``` r
+
 # CRAN
 install.packages("ciecl")
 
@@ -71,6 +72,7 @@ pak::pak("RodoTasso/ciecl")
 ## Quick start
 
 ``` r
+
 library(ciecl)
 
 # Busqueda exacta por codigo
@@ -132,6 +134,7 @@ cie_search("IAM")
 ```
 
 ``` r
+
 # Comorbilidades (requiere: install.packages("comorbidity"))
 df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
 ```
@@ -144,6 +147,7 @@ you need free WHO credentials (<https://icd.who.int/icdapi>). We
 recommend storing them with the `keyring` package:
 
 ``` r
+
 keyring::key_set("ciecl_icd11")  # client_id:client_secret
 Sys.setenv(ICD_API_KEY = keyring::key_get("ciecl_icd11"))
 cie11_search("diabetes mellitus")

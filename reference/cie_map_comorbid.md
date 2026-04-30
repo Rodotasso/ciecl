@@ -25,8 +25,8 @@ tibble con columnas: codigo, categoria
 
 ## See also
 
-[`cie_comorbid`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md),
-[`cie_norm`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
+[`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md),
+[`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
 
 Other comorbilidades:
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)

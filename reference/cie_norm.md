@@ -73,9 +73,9 @@ simbolos se eliminan para normalizacion.
 
 ## See also
 
-[`cie_validate_vector`](https://rodotasso.github.io/ciecl/reference/cie_validate_vector.md),
-[`cie_expand`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),
-[`cie_lookup`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_validate_vector()`](https://rodotasso.github.io/ciecl/reference/cie_validate_vector.md),
+[`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 
 Other validacion:
 [`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),

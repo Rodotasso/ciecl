@@ -5,12 +5,14 @@
 ### Desde CRAN (cuando este disponible)
 
 ``` r
+
 install.packages("ciecl")
 ```
 
 ### Desde GitHub (version desarrollo)
 
 ``` r
+
 # Opcion 1: pak (recomendado)
 install.packages("pak")
 pak::pak("RodoTasso/ciecl")
@@ -30,18 +32,19 @@ El paquete tiene dependencias minimas para funcionalidad core. Para
 habilitar todas las funcionalidades:
 
 ``` r
+
 # Instalacion completa con todos los paquetes opcionales
 pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
 ### Dependencias por Funcionalidad
 
-| Funcionalidad                      | Paquete Requerido | Instalacion                       |
-|------------------------------------|-------------------|-----------------------------------|
-| Comorbilidades Charlson/Elixhauser | `comorbidity`     | `install.packages("comorbidity")` |
-| Tablas interactivas GT             | `gt`              | `install.packages("gt")`          |
-| API CIE-11 OMS                     | `httr2`           | `install.packages("httr2")`       |
-| Leer archivos Excel MINSAL         | `readxl`          | `install.packages("readxl")`      |
+| Funcionalidad | Paquete Requerido | Instalacion |
+|----|----|----|
+| Comorbilidades Charlson/Elixhauser | `comorbidity` | `install.packages("comorbidity")` |
+| Tablas interactivas GT | `gt` | `install.packages("gt")` |
+| API CIE-11 OMS | `httr2` | `install.packages("httr2")` |
+| Leer archivos Excel MINSAL | `readxl` | `install.packages("readxl")` |
 
 ## Requisitos del Sistema
 
@@ -103,6 +106,7 @@ Credential Store, Linux Secret Service), evitando que el `Client ID` y
 recomendado por rOpenSci (ver por ejemplo `babeldown`).
 
 ``` r
+
 # Una sola vez: guarda "client_id:client_secret" en el keychain
 keyring::key_set("ciecl_icd11")
 
@@ -123,12 +127,14 @@ Reinicia R para que tome efecto. No subas `.Renviron` a Git.
 **Opción C: Solo en la sesión actual (temporal)**
 
 ``` r
+
 Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
 ```
 
 ### Paso 3: Verificar Configuracion
 
 ``` r
+
 # Verificar que la API key esta configurada
 Sys.getenv("ICD_API_KEY")
 
@@ -143,6 +149,7 @@ El paquete usa SQLite para almacenar y buscar codigos CIE-10 de forma
 eficiente. La base de datos se crea automaticamente en:
 
 ``` r
+
 # Ver ubicacion del cache
 tools::R_user_dir("ciecl", "data")
 ```
@@ -152,6 +159,7 @@ tools::R_user_dir("ciecl", "data")
 Si necesitas forzar una reconstruccion de la base de datos:
 
 ``` r
+
 library(ciecl)
 cie10_clear_cache()
 ```
@@ -159,6 +167,7 @@ cie10_clear_cache()
 ## Verificar Instalacion
 
 ``` r
+
 library(ciecl)
 
 # Verificar que el paquete carga correctamente
@@ -182,6 +191,7 @@ Verifica que el repositorio de CRAN esté configurado en tu sesión de R y
 luego instala normalmente:
 
 ``` r
+
 install.packages("ciecl")
 ```
 
@@ -201,6 +211,7 @@ Instala las dependencias del sistema mencionadas arriba.
 Limpia el cache y reinicia R:
 
 ``` r
+
 ciecl::cie10_clear_cache()
 ```
 

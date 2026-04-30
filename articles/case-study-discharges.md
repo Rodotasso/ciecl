@@ -29,6 +29,7 @@ represents the primary diagnosis with the aforementioned informal coding
 formats.
 
 ``` r
+
 set.seed(42)
 
 # Simulation of 200 records with typical DEIS Chile formats
@@ -72,6 +73,7 @@ function processes codes by applying official MINSAL coding rules:
 - **String cleaning**: Removes whitespace and non-printable characters.
 
 ``` r
+
 # Cleaning and standardization of diagnoses
 discharges <- discharges %>%
   mutate(
@@ -106,6 +108,7 @@ directly returns a character vector, avoiding the creation of additional
 join columns and keeping the code cleaner.
 
 ``` r
+
 # Direct integration of descriptions into the main dataframe
 discharges_full <- discharges %>%
   mutate(
@@ -134,6 +137,7 @@ For cases where full metadata is required (chapter, category, group),
 can still be used in conjunction with a table join:
 
 ``` r
+
 # Extracting full metadata via lookup + join
 metadata <- cie_lookup(
   code = unique(discharges$DIAG1_NORM),
@@ -152,6 +156,7 @@ errors in the original clinical descriptions are suspected,
 allows text searches using string similarity (fuzzy matching).
 
 ``` r
+
 # Example of search with intentional typo ("diabetis")
 # The function returns the most likely matches ordered by score
 cie_search(text = "diabetis", threshold = 0.7)
@@ -180,6 +185,7 @@ function maps normalized diagnoses to Charlson or Elixhauser categories,
 adapted to the reality of Chilean data.
 
 ``` r
+
 # Requires the 'comorbidity' package to be installed
 # Calculation of the Charlson Index by patient identifier
 comorbidities <- cie_comorbid(

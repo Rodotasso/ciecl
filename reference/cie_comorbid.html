@@ -97,7 +97,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="cie_map_comorbid.html">cie_map_comorbid</a></code>, <code><a href="cie_norm.html">cie_norm</a></code></p>
+    <div class="dont-index"><p><code><a href="cie_map_comorbid.html">cie_map_comorbid()</a></code>, <code><a href="cie_norm.html">cie_norm()</a></code></p>
 <p>Other comorbilidades:
 <code><a href="cie_map_comorbid.html">cie_map_comorbid()</a></code></p></div>
     </div>
@@ -110,20 +110,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assign0 = TRUE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  id_pac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  diag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I21.0"</span>, <span class="st">"C50.9"</span>, <span class="st">"E10.9"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cie_comorbid</span><span class="op">(</span><span class="va">df</span>, id <span class="op">=</span> <span class="st">"id_pac"</span>, code <span class="op">=</span> <span class="st">"diag"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 19</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id_pac    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab diabwc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      1     1     0     0     0        0     0      0     0     0     1      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>      2     0     0     0     0        0     0      0     0     0     1      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: hp &lt;int&gt;, rend &lt;int&gt;, canc &lt;int&gt;, msld &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   metacanc &lt;int&gt;, aids &lt;int&gt;, score_charlson &lt;dbl&gt;</span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

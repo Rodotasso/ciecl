@@ -61,7 +61,7 @@ tibble con 39,877 filas (categorias y subcategorias):
 ``` r
 data(cie10_cl)
 head(cie10_cl)
-#> # A tibble: 6 × 10
+#> # A tibble: 6 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 A00    Cólera            A00 CÓLE… A00-A0… Cap.01  CIERTA… NA        NA       
@@ -70,5 +70,6 @@ head(cie10_cl)
 #> 4 A00.9  Cólera, no espec… A00 CÓLE… A00-A0… Cap.01  CIERTA… NA        NA       
 #> 5 A01    Fiebres tifoidea… A01 FIEB… A00-A0… Cap.01  CIERTA… NA        NA       
 #> 6 A01.0  Fiebre tifoidea   A01 FIEB… A00-A0… Cap.01  CIERTA… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <lgl>, es_cruz <lgl>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <lgl>, es_cruz <lgl>,
+#> #   uso_cl <chr>
 ```

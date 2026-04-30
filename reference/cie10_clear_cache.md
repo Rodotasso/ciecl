@@ -14,8 +14,8 @@ No return value, called for side effects (deletes SQLite cache).
 
 ## See also
 
-[`cie10_sql`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md),
-[`cie10_disconnect`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
+[`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md),
+[`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
 
 Other sql:
 [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md),
@@ -28,8 +28,7 @@ Other sql:
 tools::R_user_dir("ciecl", "data")
 #> [1] "/home/runner/.local/share/R/ciecl"
 
-# \donttest{
+if (FALSE) { # interactive()
 cie10_clear_cache()  # Elimina cie10.db local
-#> i Cache no existe
-# }
+}
 ```

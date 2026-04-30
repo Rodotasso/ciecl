@@ -25,6 +25,7 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) with:
 4.  Run checks:
 
     ``` r
+
     devtools::test()
     devtools::check()
     ```
@@ -87,6 +88,7 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) con:
 4.  Ejecuta los checks:
 
     ``` r
+
     devtools::test()
     devtools::check()
     ```

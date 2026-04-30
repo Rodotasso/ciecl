@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Dataset CIE-10 Chile oficial MINSAL/DEIS v2018</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/cie-data.R" class="external-link"><code>R/cie-data.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/data.R" class="external-link"><code>R/data.R</code></a></small>
       <div class="d-none name"><code>cie10_cl.Rd</code></div>
     </div>
 
@@ -110,7 +110,7 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cie10_cl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cie10_cl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> A00    Cólera            A00 CÓLE… A00-A0… Cap.01  CIERTA… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span>
@@ -119,7 +119,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> A00.9  Cólera, no espec… A00 CÓLE… A00-A0… Cap.01  CIERTA… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> A01    Fiebres tifoidea… A01 FIEB… A00-A0… Cap.01  CIERTA… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> A01.0  Fiebre tifoidea   A01 FIEB… A00-A0… Cap.01  CIERTA… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;lgl&gt;, es_cruz &lt;lgl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;lgl&gt;, es_cruz &lt;lgl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

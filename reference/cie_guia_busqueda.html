@@ -84,10 +84,21 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Deprecated: usar cie_guide()</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Deprecated: usar cie_guide()</span></span></span>
 <span class="r-in"><span><span class="fu">cie_guia_busqueda</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`cie_guia_busqueda()` was deprecated in ciecl 0.9.8.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `cie_guide()` instead.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Tengo...                     `Usar funcion`                            Ejemplo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Codigo exacto (E11.0)        cie_lookup()                              <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Codigo sin punto (e110)      cie_lookup()                              <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Codigo con espacios (E 11.0) cie_lookup()                              <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Codigo con prefijos/sufijos  cie_lookup(extract = TRUE)                <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Codigo categoria (E11)       cie_lookup() o cie_lookup(expandir = TRU… <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Descripcion (diabetes)       cie_search()                              <span style="color: #949494;">"</span>cie_s…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> Sigla medica (IAM, DM2)      cie_lookup(check_siglas = TRUE)           <span style="color: #949494;">"</span>cie_l…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> No se que tengo              cie_search() con threshold bajo           <span style="color: #949494;">"</span>cie_s…</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

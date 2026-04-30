@@ -25,9 +25,9 @@ tibble resultado query
 
 ## See also
 
-[`cie10_clear_cache`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
-[`cie10_disconnect`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md),
-[`cie_search`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
+[`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
+[`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md),
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
 
 Other sql:
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
@@ -53,22 +53,8 @@ cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%'")
 #> 10 E11.8  Diabetes mellitus tipo 2 con complicaciones no especificadas          
 #> 11 E11.9  Diabetes mellitus tipo 2 sin complicaciones                           
 
-# \donttest{
+if (FALSE) { # interactive()
 # Contar por capitulo
 cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
-#> # A tibble: 2,053 × 2
-#>    capitulo     n
-#>    <chr>    <int>
-#>  1 A00          4
-#>  2 A01          6
-#>  3 A02          6
-#>  4 A03          7
-#>  5 A04         11
-#>  6 A05          8
-#>  7 A06         11
-#>  8 A07          7
-#>  9 A08          7
-#> 10 A09          3
-#> # ℹ 2,043 more rows
-# }
+}
 ```

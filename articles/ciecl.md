@@ -20,12 +20,14 @@ hierarchical expansion, fuzzy search, and comorbidity scoring.
 The package is available on CRAN:
 
 ``` r
+
 install.packages("ciecl")
 ```
 
 To install the development version with the latest fixes:
 
 ``` r
+
 # Requires the pak package
 pak::pak("RodoTasso/ciecl")
 ```
@@ -42,6 +44,7 @@ The example below fetches the first five type 2 diabetes codes (category
 E11):
 
 ``` r
+
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 #> # A tibble: 5 × 2
 #>   codigo descripcion                                           
@@ -63,29 +66,33 @@ diagnoses —
 retrieves the official description for one or more codes at once.
 
 ``` r
+
 # Single code
 cie_lookup("E11.0")
-#> # A tibble: 1 × 10
+#> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 The function accepts vectors, making it straightforward to use inside a
 `dplyr` pipeline:
 
 ``` r
+
 # Multiple codes from different chapters
 cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
-#> # A tibble: 4 × 10
+#> # A tibble: 4 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… NA        NA       
 #> 3 J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… NA        NA       
 #> 4 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 When working at the category level (three-digit codes), you may need all
@@ -94,8 +101,9 @@ hierarchy and returns the parent category together with all its
 children:
 
 ``` r
+
 cie_lookup("E11", expand = TRUE)
-#> # A tibble: 11 × 10
+#> # A tibble: 11 × 11
 #>    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion
 #>    <chr>  <chr>            <chr>     <chr>   <chr>           <chr>     <chr>    
 #>  1 E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
@@ -109,7 +117,8 @@ cie_lookup("E11", expand = TRUE)
 #>  9 E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 10 E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 11 E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 ## Extracting descriptions for use in tables and plots
@@ -125,6 +134,7 @@ input codes. This is designed for use inside
 axis labels in plots:
 
 ``` r
+
 cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 ```
@@ -132,6 +142,7 @@ cie_describe(c("E11.0", "I10"))
 A typical use case with hospital discharge data:
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -173,6 +184,7 @@ The `threshold` parameter controls strictness: higher values require
 closer matches. A range of 0.70 to 0.85 works well in practice:
 
 ``` r
+
 # "diabetis" instead of "diabetes" — the typo does not prevent finding the code
 cie_search("diabetis with coma", threshold = 0.75)
 #> # A tibble: 22 × 4
@@ -203,6 +215,7 @@ This function requires the `comorbidity` package. Install it with
 `install.packages("comorbidity")` if needed:
 
 ``` r
+
 # Requires: install.packages("comorbidity")
 patient_df <- data.frame(
   patient_id  = c(1, 1, 2, 2, 3),
@@ -223,6 +236,7 @@ generates an enriched HTML table of all codes within a category using
 the `gt` package. Requires `gt` to be installed:
 
 ``` r
+
 # Requires: install.packages("gt")
 cie_table("E11")
 ```

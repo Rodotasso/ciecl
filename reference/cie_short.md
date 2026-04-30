@@ -32,8 +32,8 @@ tibble con columnas: sigla, termino_busqueda, categoria
 
 ## See also
 
-[`cie_search`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_lookup`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 
 Other busqueda:
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),

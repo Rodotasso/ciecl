@@ -73,7 +73,15 @@
 <code><a href="../reference/cie_search.html">cie_search()</a></code>: <code>texto</code> -&gt; <code>text</code>, <code>campo</code> -&gt; <code>field</code>, <code>solo_fuzzy</code> -&gt; <code>only_fuzzy</code>.</li>
 <li>
 <code><a href="../reference/cie_short.html">cie_short()</a></code>: Reemplaza a <code><a href="../reference/cie_siglas.html">cie_siglas()</a></code>. Argumento <code>category</code>.</li>
+</ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="cambios-internos-0-9-8">Cambios internos<a class="anchor" aria-label="anchor" href="#cambios-internos-0-9-8"></a></h4>
+<ul><li><p>El script generador del dataset (<code>generar_cie10_cl()</code>, <code>parsear_cie10_minsal()</code>) se movió a <code>data-raw/</code> siguiendo la convención de R packages. No afecta el uso del paquete: <code>data(cie10_cl)</code> sigue funcionando igual.</p></li>
+<li><p>Tests del generador trasladados a sanity-check ejecutable desde <code>data-raw/</code>.</p></li>
 <li>
+<p>Eliminación masiva de <code>ciecl:::</code> en tests para favorecer <code>devtools::load_all()</code>.</p>
+<ul><li>
 <code><a href="../reference/cie11_search.html">cie11_search()</a></code>: <code>texto</code> -&gt; <code>text</code>.</li>
 </ul></li>
 <li><p><strong>Motor de Normalización Único</strong>: Se establece <code><a href="../reference/cie_norm.html">cie_norm()</a></code> como la función canónica. <code><a href="../reference/cie_norm.html">cie_normalize()</a></code> y <code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code> están ahora deprecadas.</p></li>

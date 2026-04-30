@@ -40,8 +40,9 @@ Other validacion:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 # Deprecated: usar cie_norm()
 cie_normalizar("E110")
-} # }
+#> Warning: `cie_normalizar()` was deprecated in ciecl 0.9.8.
+#> ℹ Please use `cie_norm()` instead.
+#> [1] "E11.0"
 ```

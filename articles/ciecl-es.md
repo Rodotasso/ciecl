@@ -20,12 +20,14 @@ rápida, expansión jerárquica y cálculo de índices de comorbilidad.
 El paquete está disponible en CRAN. Para instalar la versión estable:
 
 ``` r
+
 install.packages("ciecl")
 ```
 
 Para la versión de desarrollo con las últimas correcciones:
 
 ``` r
+
 # Requiere el paquete pak
 pak::pak("RodoTasso/ciecl")
 ```
@@ -43,6 +45,7 @@ El siguiente ejemplo extrae los primeros cinco códigos de diabetes tipo
 2 (categoría E11):
 
 ``` r
+
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
 #> # A tibble: 5 × 2
 #>   codigo descripcion                                           
@@ -68,13 +71,15 @@ función es el puente entre la codificación críptica de las bases de
 datos y la interpretación clínica humana.
 
 ``` r
+
 # Un solo código
 cie_lookup("E11.0")
-#> # A tibble: 1 × 10
+#> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 La función acepta vectores, lo que facilita su uso dentro de un pipeline
@@ -82,16 +87,18 @@ La función acepta vectores, lo que facilita su uso dentro de un pipeline
 `tibble` con la información estructurada:
 
 ``` r
+
 # Múltiples códigos de distintos capítulos
 cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
-#> # A tibble: 4 × 10
+#> # A tibble: 4 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… NA        NA       
 #> 3 J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… NA        NA       
 #> 4 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 En análisis donde se trabaja a nivel de categoría (tres dígitos), puede
@@ -100,8 +107,9 @@ agregaciones o filtros. El argumento `expand = TRUE` desciende la
 jerarquía y devuelve la categoría junto con todos sus hijos:
 
 ``` r
+
 cie_lookup("E11", expand = TRUE)
-#> # A tibble: 11 × 10
+#> # A tibble: 11 × 11
 #>    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion
 #>    <chr>  <chr>            <chr>     <chr>   <chr>           <chr>     <chr>    
 #>  1 E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
@@ -115,7 +123,8 @@ cie_lookup("E11", expand = TRUE)
 #>  9 E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 10 E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
 #> 11 E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 ```
 
 ## Obtener descripciones para usar en tablas
@@ -131,6 +140,7 @@ que los códigos recibidos, lista para usar en
 [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html):
 
 ``` r
+
 cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 ```
@@ -140,6 +150,7 @@ para enriquecer bases de datos masivas sin necesidad de realizar cruces
 complejos (`left_join`):
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -184,6 +195,7 @@ valores más bajos toleran mayores variaciones. El rango útil habitual
 para diagnósticos en español está entre 0.70 y 0.85:
 
 ``` r
+
 # "diabetis" en lugar de "diabetes" — el error no impide encontrar el código correcto
 cie_search("diabetis con coma", threshold = 0.75)
 #> # A tibble: 50 × 4
@@ -216,6 +228,7 @@ recursos.
 automatiza este cálculo a partir de un flujo de datos tipo “egresos”:
 
 ``` r
+
 # Requiere: install.packages("comorbidity")
 df_pacientes <- data.frame(
   id_pac     = c(1, 1, 2, 2, 3),
@@ -239,6 +252,7 @@ ocultando automáticamente columnas vacías para una visualización limpia.
 Requiere tener `gt` instalado:
 
 ``` r
+
 # Requiere: install.packages("gt")
 cie_table("E11")
 ```

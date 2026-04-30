@@ -6,12 +6,12 @@ El paquete `ciecl` trabaja principalmente en español de Chile, pero
 ofrece búsqueda multilingüe cuando la fuente de datos lo permite. La
 tabla resume el comportamiento por función.
 
-| Función                                                                         | Idioma dataset   | Idioma búsqueda  | Notas                                 |
-|---------------------------------------------------------------------------------|------------------|------------------|---------------------------------------|
-| [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)     | Español (Chile)  | —                | Búsqueda por código; idioma no aplica |
-| [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)     | Español (Chile)  | Español          | Descripciones en español chileno      |
-| [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md) | Español / Inglés | Español / Inglés | Configurable vía parámetro `lang`     |
-| [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)       | Español (Chile)  | SQL              | Columna `descripcion` en español      |
+| Función | Idioma dataset | Idioma búsqueda | Notas |
+|----|----|----|----|
+| [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md) | Español (Chile) | — | Búsqueda por código; idioma no aplica |
+| [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md) | Español (Chile) | Español | Descripciones en español chileno |
+| [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md) | Español / Inglés | Español / Inglés | Configurable vía parámetro `lang` |
+| [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md) | Español (Chile) | SQL | Columna `descripcion` en español |
 
 ## Dataset CIE-10 Chile
 
@@ -21,6 +21,7 @@ español chileno según el catálogo oficial MINSAL/DEIS v2018. Ver
 para el detalle de columnas.
 
 ``` r
+
 library(ciecl)
 
 head(cie10_cl[, c("codigo", "descripcion", "capitulo")])
@@ -54,6 +55,7 @@ con o sin tildes. Esto es especialmente útil en datos clínicos
 mezclados, donde el mismo término aparece con y sin acento.
 
 ``` r
+
 # Con o sin tilde: mismo resultado
 cie_search("neumonia")
 #> # A tibble: 50 × 4
@@ -106,6 +108,7 @@ La misma lógica aplica a la eñe: buscar `"rinon"` encuentra “Riñón” en
 el catálogo.
 
 ``` r
+
 cie_search("rinon")
 #> # A tibble: 49 × 4
 #>    codigo  descripcion                                           score categoria
@@ -130,6 +133,7 @@ en Chile. Esto permite que un analista escriba `IAM` en vez del código
 completo y `ciecl` resuelva la sigla al término oficial del catálogo.
 
 ``` r
+
 # Listar todas las siglas disponibles
 head(cie_short())
 #> # A tibble: 6 × 3
@@ -228,6 +232,7 @@ de la OMS está traducido a varios. En `ciecl` se expone el parámetro
 `lang = "es"` (por defecto) o `lang = "en"`.
 
 ``` r
+
 # Búsqueda en español (por defecto)
 cie11_search("diabetes mellitus", lang = "es")
 
@@ -251,6 +256,7 @@ y
 saben limpiarlos.
 
 ``` r
+
 Encoding(cie10_cl$descripcion[1])
 #> [1] "UTF-8"
 ```

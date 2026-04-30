@@ -49,8 +49,8 @@ tibble con codigos CIE-11 + titulos o vacio si error
 
 ## See also
 
-[`cie_search`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_lookup`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 
 ## Examples
 
@@ -61,13 +61,9 @@ args(cie11_search)
 #>     release = "2024-01", texto = lifecycle::deprecated()) 
 #> NULL
 
-# \donttest{
+if (FALSE) { # interactive()
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
 Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 cie11_search("depresion mayor")
-#> Warning: Error API CIE-11: HTTP 400 Bad Request.
-#> Retornando resultado vacio. Usa cie_search() para fallback local CIE-10
-#> # A tibble: 0 × 3
-#> # ℹ 3 variables: codigo <chr>, titulo <chr>, capitulo <chr>
-# }
+}
 ```

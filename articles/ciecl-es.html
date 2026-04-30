@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-04-27</h4>
+            <h4 data-toc-skip class="date">2026-04-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/ciecl-es.Rmd" class="external-link"><code>vignettes/ciecl-es.Rmd</code></a></small>
       <div class="d-none name"><code>ciecl-es.Rmd</code></div>
@@ -164,25 +164,27 @@ críptica de las bases de datos y la interpretación clínica humana.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Un solo código</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 11</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
 <p>La función acepta vectores, lo que facilita su uso dentro de un
 pipeline <code>dplyr</code> o cualquier flujo de trabajo vectorizado,
 devolviendo un <code>tibble</code> con la información estructurada:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Múltiples códigos de distintos capítulos</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span>, <span class="st">"J44.0"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 11</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
 <p>En análisis donde se trabaja a nivel de categoría (tres dígitos),
 puede ser necesario conocer todos los subcódigos que la componen para
 realizar agregaciones o filtros. El argumento <code>expand = TRUE</code>
@@ -190,7 +192,7 @@ desciende la jerarquía y devuelve la categoría junto con todos sus
 hijos:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 11</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
@@ -204,7 +206,8 @@ hijos:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="obtener-descripciones-para-usar-en-tablas">Obtener descripciones para usar en tablas<a class="anchor" aria-label="anchor" href="#obtener-descripciones-para-usar-en-tablas"></a>

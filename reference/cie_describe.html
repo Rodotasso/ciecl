@@ -132,13 +132,12 @@ las columnas; <code><a href="cie_norm.html">cie_norm()</a></code> para normaliza
 <span class="r-in"><span><span class="fu">cie_describe</span><span class="op">(</span><span class="st">"E110"</span>, normalize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Diabetes mellitus tipo 2 con coma"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Uso tipico en auditoria VIU (contar fallos de origen)</span></span></span>
 <span class="r-in"><span><span class="va">diags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"E110"</span>, <span class="st">"I10X"</span>, <span class="st">"INVALIDO"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">descripciones</span> <span class="op">&lt;-</span> <span class="fu">cie_describe</span><span class="op">(</span><span class="va">diags</span>, normalize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">descripciones</span><span class="op">)</span><span class="op">)</span> <span class="co"># Detecta 3 errores de registro</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
