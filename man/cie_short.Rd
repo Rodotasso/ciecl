@@ -36,7 +36,7 @@ cie_short("oncologica")
 cie_short() |> dplyr::filter(sigla == "iam")
 }
 \seealso{
-\code{\link{cie_search}}, \code{\link{cie_lookup}}
+\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 
 Other busqueda: 
 \code{\link{cie_describe}()},

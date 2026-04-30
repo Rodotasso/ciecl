@@ -15,12 +15,6 @@ tibble con columnas: sigla, termino_busqueda, categoria
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{\link[=cie_short]{cie_short()}}.
 }
-\examples{
-\dontrun{
-# Deprecated: usar cie_short()
-cie_siglas()
-}
-}
 \seealso{
 Other busqueda: 
 \code{\link{cie_describe}()},

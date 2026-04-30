@@ -44,7 +44,9 @@ get_cie10_db <- function() {
   # Cerrar conexion anterior si existe pero es invalida
 
   if (!is.null(.ciecl_env$con)) {
-    try(DBI::dbDisconnect(.ciecl_env$con), silent = TRUE)
+    if (DBI::dbIsValid(.ciecl_env$con)) {
+      suppressWarnings(DBI::dbDisconnect(.ciecl_env$con))
+    }
     .ciecl_env$con <- NULL
     .ciecl_env$db_path <- NULL
   }
@@ -207,17 +209,17 @@ cache_is_current <- function(con) {
 #'   version futura.
 #' @return tibble resultado query
 #' @family sql
-#' @seealso \code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
-#'   \code{\link{cie_search}}
+#' @seealso [cie10_clear_cache()], [cie10_disconnect()],
+#'   [cie_search()]
 #' @export
 #' @examples
 #' # Buscar diabetes
 #' cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%'")
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' # Contar por capitulo
 #' cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
-#' }
+
 cie10_sql <- function(query, close = lifecycle::deprecated()) {
   if (lifecycle::is_present(close)) {
     lifecycle::deprecate_warn(
@@ -273,19 +275,20 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 #'
 #' @return No return value, called for side effects (deletes SQLite cache).
 #' @family sql
-#' @seealso \code{\link{cie10_sql}}, \code{\link{cie10_disconnect}}
+#' @seealso [cie10_sql()], [cie10_disconnect()]
 #' @export
 #' @examples
 #' # Ver ubicacion del cache
 #' tools::R_user_dir("ciecl", "data")
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' cie10_clear_cache()  # Elimina cie10.db local
-#' }
 cie10_clear_cache <- function() {
   # Cerrar conexion pooled antes de borrar
   if (!is.null(.ciecl_env$con)) {
-    try(DBI::dbDisconnect(.ciecl_env$con), silent = TRUE)
+    if (DBI::dbIsValid(.ciecl_env$con)) {
+      suppressWarnings(DBI::dbDisconnect(.ciecl_env$con))
+    }
     .ciecl_env$con <- NULL
     .ciecl_env$db_path <- NULL
   }
@@ -323,18 +326,19 @@ cie10_clear_cache <- function() {
 #'
 #' @return No return value, called for side effects.
 #' @family sql
-#' @seealso \code{\link{cie10_sql}}, \code{\link{cie10_clear_cache}}
+#' @seealso [cie10_sql()], [cie10_clear_cache()]
 #' @export
 #' @examples
 #' # Verificar si hay conexion activa
 #' is.null(ciecl:::.ciecl_env$con)
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' cie10_disconnect()
-#' }
 cie10_disconnect <- function() {
   if (!is.null(.ciecl_env$con)) {
-    try(DBI::dbDisconnect(.ciecl_env$con), silent = TRUE)
+    if (DBI::dbIsValid(.ciecl_env$con)) {
+      suppressWarnings(DBI::dbDisconnect(.ciecl_env$con))
+    }
     .ciecl_env$con <- NULL
     .ciecl_env$db_path <- NULL
   }

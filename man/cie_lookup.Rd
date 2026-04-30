@@ -59,7 +59,7 @@ Busqueda exacta por codigo CIE-10
 # Busqueda directa por codigo
 cie_lookup("E11.0")
 
-\donttest{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cie_lookup("E110")        # Sin punto
 cie_lookup("E11")         # Solo categoria
 cie_lookup("E11", expand = TRUE)  # Todos E11.x
@@ -73,11 +73,10 @@ cie_lookup("E11.0-confirmado", extract = TRUE)
 # Buscar por siglas medicas
 cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{cie_search}},
-\code{\link{cie_norm}}, \code{\link{cie_expand}}
+\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_expand]{cie_expand()}}
 
 Other busqueda: 
 \code{\link{cie_describe}()},

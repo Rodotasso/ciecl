@@ -22,7 +22,7 @@ Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))
 }
 \seealso{
-\code{\link{cie_comorbid}}, \code{\link{cie_norm}}
+\code{\link[=cie_comorbid]{cie_comorbid()}}, \code{\link[=cie_norm]{cie_norm()}}
 
 Other comorbilidades: 
 \code{\link{cie_comorbid}()}

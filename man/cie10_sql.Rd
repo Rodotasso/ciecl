@@ -23,14 +23,14 @@ Ejecutar consultas SQL sobre CIE-10 Chile
 # Buscar diabetes
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11\%'")
 
-\donttest{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Contar por capitulo
 cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{cie10_clear_cache}}, \code{\link{cie10_disconnect}},
-\code{\link{cie_search}}
+\code{\link[=cie10_clear_cache]{cie10_clear_cache()}}, \code{\link[=cie10_disconnect]{cie10_disconnect()}},
+\code{\link[=cie_search]{cie_search()}}
 
 Other sql: 
 \code{\link{cie10_clear_cache}()},

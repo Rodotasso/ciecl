@@ -22,10 +22,8 @@ Alias en espanol de \code{\link[=cie_norm]{cie_norm()}}. Se mantiene por compati
 con codigo existente en CRAN. Usar \code{\link[=cie_norm]{cie_norm()}} en codigo nuevo.
 }
 \examples{
-\dontrun{
 # Deprecated: usar cie_norm()
 cie_normalizar("E110")
-}
 }
 \seealso{
 Other validacion: 

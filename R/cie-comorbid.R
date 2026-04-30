@@ -12,19 +12,18 @@ NULL
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
 #' @return data.frame ancho con scores comorbilidad por paciente
 #' @family comorbilidades
-#' @seealso \code{\link{cie_map_comorbid}}, \code{\link{cie_norm}}
+#' @seealso [cie_map_comorbid()], [cie_norm()]
 #' @export
 #' @examples
 #' # Ver documentacion de parametros
 #' args(cie_comorbid)
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' df <- data.frame(
 #'   id_pac = c(1, 1, 2, 2),
 #'   diag = c("E11.0", "I21.0", "C50.9", "E10.9")
 #' )
 #' cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
-#' }
 cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
                          assign0 = TRUE) {
   # Verificar que comorbidity este instalado
@@ -95,7 +94,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @return tibble con columnas: codigo, categoria
 #' @family comorbilidades
-#' @seealso \code{\link{cie_comorbid}}, \code{\link{cie_norm}}
+#' @seealso [cie_comorbid()], [cie_norm()]
 #' @export
 #' @examples
 #' cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))

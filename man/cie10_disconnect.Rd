@@ -17,12 +17,12 @@ Util para liberar el lock del archivo .db.
 # Verificar si hay conexion activa
 is.null(ciecl:::.ciecl_env$con)
 
-\donttest{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cie10_disconnect()
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{cie10_sql}}, \code{\link{cie10_clear_cache}}
+\code{\link[=cie10_sql]{cie10_sql()}}, \code{\link[=cie10_clear_cache]{cie10_clear_cache()}}
 
 Other sql: 
 \code{\link{cie10_clear_cache}()},

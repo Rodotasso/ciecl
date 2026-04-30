@@ -14,7 +14,7 @@ test_that("cie_lookup codigo exacto funciona", {
   skip_on_cran()
   
   resultado <- cie_lookup("E11.0")
-  expect_equal(nrow(resultado), 1)
+  expect_shape(resultado, nrow = 1)
   expect_equal(resultado$codigo, "E11.0")
 })
 
@@ -114,7 +114,7 @@ test_that("cie_lookup con normalizar procesa codigo sin punto", {
   # E110 -> E11.0
   resultado <- cie_lookup("E110", normalize = TRUE)
 
-  expect_equal(nrow(resultado), 1)
+  expect_shape(resultado, nrow = 1)
   expect_equal(resultado$codigo, "E11.0")
 })
 
@@ -122,14 +122,14 @@ test_that("extract_cie_from_text extrae codigo de texto con ruido", {
   skip_on_cran()
 
   # Con prefijo
-  resultado1 <- ciecl:::extract_cie_from_text("CIE:E11.0")
+  resultado1 <- extract_cie_from_text("CIE:E11.0")
   expect_equal(resultado1, "E11.0")
 
   # Con sufijo
-  resultado2 <- ciecl:::extract_cie_from_text("I10-confirmado")
+  resultado2 <- extract_cie_from_text("I10-confirmado")
   expect_equal(resultado2, "I10")
 
   # Sin ruido
-  resultado3 <- ciecl:::extract_cie_from_text("E11.0")
+  resultado3 <- extract_cie_from_text("E11.0")
   expect_equal(resultado3, "E11.0")
 })

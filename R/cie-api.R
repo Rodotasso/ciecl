@@ -10,7 +10,7 @@
 #' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @return tibble con codigos CIE-11 + titulos o vacio si error
 #' @family api
-#' @seealso \code{\link{cie_search}}, \code{\link{cie_lookup}}
+#' @seealso [cie_search()], [cie_lookup()]
 #' @export
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr slice_head select matches
@@ -18,11 +18,10 @@
 #' # Ver parametros disponibles
 #' args(cie11_search)
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
 #' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 #' cie11_search("depresion mayor")
-#' }
 cie11_search <- function(text, api_key = NULL, lang = "es",
                          max_results = 10, release = "2024-01",
                          texto = lifecycle::deprecated()) {

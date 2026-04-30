@@ -29,12 +29,11 @@
 #' # Rescate: normalizar antes de buscar
 #' cie_describe("E110", normalize = TRUE)
 #'
-#' \donttest{
+#' @examplesIf interactive()
 #' # Uso tipico en auditoria VIU (contar fallos de origen)
 #' diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 #' descripciones <- cie_describe(diags, normalize = FALSE)
 #' sum(is.na(descripciones)) # Detecta 3 errores de registro
-#' }
 cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
                         codigos = lifecycle::deprecated()) {
   if (lifecycle::is_present(codigos)) {
@@ -46,26 +45,30 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
     codes <- codigos
   }
 
+  if (!is.logical(normalize) || length(normalize) != 1L || is.na(normalize)) {
+    stop("`normalize` debe ser TRUE o FALSE.", call. = FALSE)
+  }
+
   if (length(codes) == 0) {
     return(character(0))
   }
 
   # Flujo separado: normalizar solo si se pide (Rescate vs Auditoria)
-  if (isTRUE(normalize)) {
-    codes_to_search <- cie_norm(codes, search_db = FALSE)
+  codes <- if (normalize) {
+    cie_norm(codes, search_db = FALSE)
   } else {
-    codes_to_search <- as.character(codes)
+    as.character(codes)
   }
   
   resultado <- rep(default, length(codes))
 
-  no_na <- !is.na(codes_to_search)
+  no_na <- !is.na(codes)
   if (!any(no_na)) {
     return(resultado)
   }
 
   con <- get_cie10_db()
-  codes_unicos <- unique(codes_to_search[no_na])
+  codes_unicos <- unique(codes[no_na])
   placeholders <- paste(rep("?", length(codes_unicos)), collapse = ",")
   query <- sprintf(
     "SELECT codigo, descripcion FROM cie10 WHERE codigo IN (%s)",
@@ -78,7 +81,7 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
   }
 
   lookup <- setNames(hits$descripcion, hits$codigo)
-  idx <- codes_to_search %in% names(lookup)
-  resultado[idx] <- unname(lookup[codes_to_search[idx]])
+  idx <- codes %in% names(lookup)
+  resultado[idx] <- unname(lookup[codes[idx]])
   resultado
 }

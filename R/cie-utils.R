@@ -30,8 +30,8 @@
 #' @param buscar_db `r lifecycle::badge("deprecated")` Use `search_db`.
 #' @return Character vector con codigos normalizados al formato con punto
 #' @family validacion
-#' @seealso \code{\link{cie_validate_vector}},
-#'   \code{\link{cie_expand}}, \code{\link{cie_lookup}}
+#' @seealso [cie_validate_vector()],
+#'   [cie_expand()], [cie_lookup()]
 #' @export
 #' @examples
 #' cie_norm("E110")     # Retorna "E11.0"
@@ -160,10 +160,9 @@ cie_norm <- function(codes,
 #' @keywords internal
 #' @export
 #' @examples
-#' \dontrun{
 #' # Deprecated: usar cie_norm()
 #' cie_normalizar("E110")
-#' }
+
 cie_normalizar <- function(codigos, buscar_db = TRUE) {
   lifecycle::deprecate_warn(
     "0.9.8",
@@ -202,7 +201,7 @@ cie_normalize <- function(codes, search_db = TRUE,
 #' @return Logical vector de la misma longitud que `codes`. TRUE si el
 #'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 #' @family validacion
-#' @seealso \code{\link{cie_norm}}, \code{\link{cie_expand}}
+#' @seealso [cie_norm()], [cie_expand()]
 #' @export
 #' @examples
 #' cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
@@ -265,7 +264,38 @@ cie_validate_vector <- function(codes,
 #' @return Character vector con todos los codigos hijos del codigo padre.
 #'   Vector vacio si el codigo no existe en la base de datos.
 #' @family validacion
-#' @seealso \code{\link{cie_norm}}, \code{\link{cie_lookup}}
+#' @seealso [cie_norm()], [cie_lookup()]
+#' @export
+#' @examples
+#' cie_expand("E11")
+cie_expand <- function(code, codigo = lifecycle::deprecated()) {
+  if (lifecycle::is_present(codigo)) {
+    lifecycle::deprecate_warn(
+      "0.9.8",
+      "cie_expand(codigo = )",
+      "cie_expand(code = )"
+    )
+    code <- codigo
+  }
+
+  # Manejar NA o cadena vacia
+  if (length(code) == 0 || is.na(code) ||
+      nchar(stringr::str_trim(code)) == 0) {
+    return(character(0))
+  }
+
+  hijos <- cie_lookup(code, expand = TRUE)$codigo
+  return(hijos)
+}
+
+#' Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
+#'
+#' @param code String codigo padre (ej. "E11")
+#' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
+#' @return Character vector con todos los codigos hijos del codigo padre.
+#'   Vector vacio si el codigo no existe en la base de datos.
+#' @family validacion
+#' @seealso [cie_norm()], [cie_lookup()]
 #' @export
 #' @examples
 #' cie_expand("E11")
