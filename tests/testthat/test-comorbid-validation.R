@@ -82,7 +82,7 @@ test_that("cie_comorbid maneja codigos vacios", {
   # Debe emitir warning por vacios
   expect_warning(
     resultado <- cie_comorbid(df_empty, id = "id", code = "dx", map = "charlson"),
-    "vacios"
+    "vac.os"
   )
 
   expect_s3_class(resultado, "tbl_df")

@@ -5,6 +5,6 @@ bibentry(
                   email = "rtasso@uchile.cl",
                   comment = c(ORCID = "0000-0002-1264-4933")),
   year = 2026,
-  note = "R package version 0.9.3. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018",
+  note = "R package version 0.9.8. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018",
   url = "https://github.com/Rodotasso/ciecl"
 )

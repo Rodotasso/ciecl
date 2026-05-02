@@ -449,7 +449,7 @@ test_that("cie10_sql bloquea DROP TABLE", {
 
   expect_error(
     cie10_sql("DROP TABLE cie10"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -458,7 +458,7 @@ test_that("cie10_sql bloquea DELETE", {
 
   expect_error(
     cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -467,7 +467,7 @@ test_that("cie10_sql bloquea UPDATE", {
 
   expect_error(
     cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -476,7 +476,7 @@ test_that("cie10_sql bloquea INSERT", {
 
   expect_error(
     cie10_sql("INSERT INTO cie10 VALUES ('X99', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0)"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 

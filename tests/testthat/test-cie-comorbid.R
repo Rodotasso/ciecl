@@ -192,7 +192,7 @@ test_that("cie_comorbid maneja strings vacios", {
 
   expect_warning(
     resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson"),
-    "vacios"
+    "vac.os"
   )
   expect_s3_class(resultado, "tbl_df")
 })
@@ -208,7 +208,7 @@ test_that("cie_comorbid maneja espacios en blanco", {
 
   expect_warning(
     resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson"),
-    "vacios"
+    "vac.os"
   )
   expect_s3_class(resultado, "tbl_df")
 })

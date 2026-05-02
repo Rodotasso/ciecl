@@ -2,10 +2,16 @@ Package: ciecl
 Title: International Classification of Diseases 'ICD-10'/'ICD-11' for Chile
 Version: 0.9.8
 Authors@R:
-    person("Rodolfo", "Tasso Suazo",
-           email = "rtasso@uchile.cl",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-1264-4933"))
+    c(person("Rodolfo", "Tasso Suazo",
+             email = "rtasso@uchile.cl",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0002-1264-4933")),
+      person("Grupo de Ciencia de Datos para Salud P\u00fablica",
+             role = "ctb",
+             comment = "Escuela de Salud P\u00fablica, U. de Chile"),
+      person("Centro FIC",
+             role = "ctb",
+             comment = "DEIS / MINSAL Chile"))
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes
     optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms
@@ -30,7 +36,8 @@ Imports:
     utils,
     lifecycle,
     rlang,
-    httr2
+    httr2,
+    cli (>= 3.6.0)
 Suggests:
     comorbidity,
     gt,
@@ -44,8 +51,8 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 URL: https://rodotasso.github.io/ciecl/,
-    https://github.com/RodoTasso/ciecl
-BugReports: https://github.com/RodoTasso/ciecl/issues
+    https://github.com/Rodotasso/ciecl
+BugReports: https://github.com/Rodotasso/ciecl/issues
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown
 Language: en, es

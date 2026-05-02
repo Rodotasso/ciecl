@@ -46,7 +46,7 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
   }
 
   if (!is.logical(normalize) || length(normalize) != 1L || is.na(normalize)) {
-    stop("`normalize` debe ser TRUE o FALSE.", call. = FALSE)
+    cli::cli_abort("{.arg normalize} debe ser {.code TRUE} o {.code FALSE}.")
   }
 
   if (length(codes) == 0) {

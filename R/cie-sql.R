@@ -148,14 +148,14 @@ build_cache_atomic <- function(cache_dir, db_path) {
     }
     file.rename(tmp_path, db_path)
 
-    if (interactive()) message("Cache SQLite creado: ", db_path)
+    if (interactive()) cli::cli_inform(c("v" = "Cache SQLite creado: {.path {db_path}}"))
   }, error = function(e) {
     # Cleanup en caso de error
     if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
     if (file.exists(tmp_path)) file.remove(tmp_path)
-    stop(
-      "Error construyendo cache SQLite: ",
-      conditionMessage(e), call. = FALSE
+    cli::cli_abort(
+      "Error construyendo cache SQLite: {conditionMessage(e)}",
+      parent = e
     )
   })
 }
@@ -173,7 +173,7 @@ build_fts <- function(con) {
     )
   ")
   DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
-  if (interactive()) message("Tabla FTS5 creada/reconstruida")
+  if (interactive()) cli::cli_inform(c("v" = "Tabla FTS5 creada/reconstruida"))
 }
 
 #' Verificar si el cache corresponde a la version actual del paquete
@@ -233,7 +233,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 
   # Validacion de seguridad: solo SELECT permitido
   if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
-    stop("Solo queries SELECT permitidas (seguridad)")
+    cli::cli_abort("Solo queries {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
 
  # Bloquear keywords peligrosos (case-insensitive)
@@ -248,7 +248,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
       query_norm, stringr::regex(keyword, ignore_case = TRUE)
     )
     if (keyword_found) {
-      stop("Query contiene keyword no permitido (seguridad)")
+      cli::cli_abort("Query contiene keyword no permitido (seguridad).", class = "ciecl_unsafe_query")
     }
   }
 
@@ -261,7 +261,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     query_sin_strings, "(?s)/\\*.*?\\*/"
   )
   if (stringr::str_detect(query_sin_strings, ";")) {
-    stop("Multiples statements SQL no permitidos (seguridad)")
+    cli::cli_abort("Multiples statements SQL no permitidos (seguridad).", class = "ciecl_unsafe_query")
   }
 
   con <- get_cie10_db()
@@ -311,9 +311,9 @@ cie10_clear_cache <- function() {
   }
 
   if (eliminados) {
-    message("Cache SQLite eliminado: ", db_path)
+    cli::cli_inform(c("v" = "Cache SQLite eliminado: {.path {db_path}}"))
   } else {
-    message("i Cache no existe")
+    cli::cli_inform(c("i" = "Cache no existe"))
   }
 
   invisible(NULL)

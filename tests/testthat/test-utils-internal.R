@@ -230,7 +230,7 @@ test_that("sigla_to_codigo convierte siglas a codigos CIE-10", {
   # IAM debe retornar codigo I21.x
   codigo_iam <- sigla_to_codigo("iam")
   if (!is.null(codigo_iam)) {
-    expect_true(grepl("^I2[0-5]", codigo_iam),
+    expect_match(codigo_iam, "^I2[0-5]",
                 info = paste("IAM deberia dar I2x, dio:", codigo_iam))
   }
 })
@@ -333,7 +333,7 @@ test_that("cie_lookup_single maneja rangos", {
 })
 
 test_that("cie_lookup_single error con vector", {
-  cie_lookup_single <- cie_lookup_single
+  cie_lookup_single <- ciecl:::cie_lookup_single
 
   expect_error(cie_lookup_single(c("E11.0", "I10")),
                "solo acepta un codigo")

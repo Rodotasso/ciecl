@@ -22,7 +22,7 @@
 #' # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
 #' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
 #' cie11_search("depresion mayor")
-cie11_search <- function(text, api_key = NULL, lang = "es",
+cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
                          max_results = 10, release = "2024-01",
                          texto = lifecycle::deprecated()) {
   # Deprecation: argumento en espanol -> ingles
@@ -35,23 +35,22 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
     text <- texto
   }
 
+  lang <- rlang::arg_match(lang)
+
   # Validacion de inputs
-  if (!is.character(text) || length(text) != 1 || is.na(text)) {
-    stop("'text' debe ser un string de largo 1")
+  if (!rlang::is_string(text)) {
+    cli::cli_abort("{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.")
   }
   if (nchar(trimws(text)) == 0) {
-    stop("'text' no puede estar vacio")
-  }
-  if (!is.character(lang) || !lang %in% c("es", "en")) {
-    stop("'lang' debe ser \"es\" o \"en\"")
+    cli::cli_abort("{.arg text} no puede estar vacio.")
   }
   if (!is.numeric(max_results) || length(max_results) != 1 ||
       max_results < 1 || max_results != as.integer(max_results)) {
-    stop("'max_results' debe ser un entero positivo")
+    cli::cli_abort("{.arg max_results} debe ser un entero positivo.")
   }
   if (!is.character(release) || length(release) != 1 ||
       !grepl("^\\d{4}-\\d{2}$", release)) {
-    stop("'release' debe ser formato 'YYYY-MM' (ej. '2024-01')")
+    cli::cli_abort("{.arg release} debe ser formato {.val YYYY-MM} (ej. {.val 2024-01}).")
   }
 
   # Verificar que httr2 este instalado
@@ -61,14 +60,14 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
   if (is.null(api_key)) {
     api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
     if (is.na(api_key)) {
-      stop("API key OMS requerida. Ver: https://icd.who.int/icdapi")
+      cli::cli_abort("API key OMS requerida. Ver: {.url https://icd.who.int/icdapi}")
     }
   }
   
   # Separar client_id y client_secret
   credentials <- strsplit(api_key, ":")[[1]]
   if (length(credentials) != 2) {
-    stop("API key debe tener formato 'client_id:client_secret'")
+    cli::cli_abort("API key debe tener formato {.val client_id:client_secret}")
   }
   client_id <- credentials[1]
   client_secret <- credentials[2]
@@ -133,7 +132,7 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
       
       return(resultados)
     } else {
-      message("Sin resultados CIE-11 para: ", text)
+      cli::cli_inform(c("i" = "Sin resultados CIE-11 para: {.val {text}}"))
       return(tibble::tibble(
         codigo = character(), 
         titulo = character(),
@@ -142,8 +141,11 @@ cie11_search <- function(text, api_key = NULL, lang = "es",
     }
     
   }, error = function(e) {
-    warning("Error API CIE-11: ", e$message, "\nRetornando resultado vacio. ",
-            "Usa cie_search() para fallback local CIE-10")
+    cli::cli_warn(c(
+      "Error API CIE-11: {e$message}",
+      "i" = "Retornando resultado vacio.",
+      "i" = "Usa {.fn cie_search} para fallback local CIE-10."
+    ))
     return(tibble::tibble(
       codigo = character(), 
       titulo = character(),

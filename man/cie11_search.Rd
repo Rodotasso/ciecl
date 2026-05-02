@@ -7,7 +7,7 @@
 cie11_search(
   text,
   api_key = NULL,
-  lang = "es",
+  lang = c("es", "en"),
   max_results = 10,
   release = "2024-01",
   texto = lifecycle::deprecated()

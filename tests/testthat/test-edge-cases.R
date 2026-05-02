@@ -9,16 +9,16 @@ test_that("cie_search rechaza NA, vectores y tipos invalidos", {
   skip_on_cran()
 
   # NA debe dar error
-  expect_error(cie_search(NA), "text debe ser un string character no-NA")
-  expect_error(cie_search(NA_character_), "text debe ser un string character no-NA")
+  expect_error(cie_search(NA), "string character no-NA")
+  expect_error(cie_search(NA_character_), "string character no-NA")
 
   # Vectores de longitud != 1 deben dar error
-  expect_error(cie_search(c("diabetes", "cancer")), "text debe ser un string character no-NA")
-  expect_error(cie_search(character(0)), "text debe ser un string character no-NA")
+  expect_error(cie_search(c("diabetes", "cancer")), "string character no-NA")
+  expect_error(cie_search(character(0)), "string character no-NA")
 
   # Tipos invalidos deben dar error
-  expect_error(cie_search(123), "text debe ser un string character no-NA")
-  expect_error(cie_search(list("diabetes")), "text debe ser un string character no-NA")
+  expect_error(cie_search(123), "string character no-NA")
+  expect_error(cie_search(list("diabetes")), "string character no-NA")
 })
 
 test_that("cie_search maneja cadenas muy cortas", {
@@ -30,9 +30,9 @@ test_that("cie_search maneja cadenas muy cortas", {
   expect_no_error(suppressMessages(cie_search("DM")))
 
   # Texto de 1 caracter o vacio debe dar error
-  expect_error(cie_search("a"), "Texto minimo 2 caracteres")
-  expect_error(cie_search(""), "Texto minimo 2 caracteres")
-  expect_error(cie_search(" "), "Texto minimo 2 caracteres")
+  expect_error(cie_search("a"), "minimo 2 caracteres")
+  expect_error(cie_search(""), "minimo 2 caracteres")
+  expect_error(cie_search(" "), "minimo 2 caracteres")
 })
 
 test_that("cie_search maneja threshold invalido", {
@@ -460,13 +460,13 @@ test_that("cie_comorbid detecta columnas inexistentes", {
   # Columna id incorrecta
   expect_error(
     cie_comorbid(df, id = "id_paciente", code = "codigo"),
-    "no existen en data"
+    "no existen"
   )
 
   # Columna code incorrecta
   expect_error(
     cie_comorbid(df, id = "paciente", code = "diagnostico"),
-    "no existen en data"
+    "no existen"
   )
 })
 
@@ -508,28 +508,28 @@ test_that("cie_comorbid maneja codigos con NA", {
 test_that("cie10_sql bloquea queries UPDATE", {
   expect_error(
     cie10_sql("UPDATE cie10 SET codigo = 'X' WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
 test_that("cie10_sql bloquea queries DELETE", {
   expect_error(
     cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
 test_that("cie10_sql bloquea queries INSERT", {
   expect_error(
     cie10_sql("INSERT INTO cie10 (codigo) VALUES ('TEST')"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
 test_that("cie10_sql bloquea queries ALTER", {
   expect_error(
     cie10_sql("ALTER TABLE cie10 ADD COLUMN test TEXT"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 

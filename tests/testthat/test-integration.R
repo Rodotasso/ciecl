@@ -63,7 +63,7 @@ test_that("flujo: normalizar codigos -> buscar -> mapear comorbilidad", {
 
   # 2. Normalizar codigos
   codigos_norm <- cie_norm(codigos_raw, search_db = FALSE)
-  expect_equal(length(codigos_norm), length(codigos_raw))
+  expect_length(codigos_norm, length(codigos_raw))
 
   # 3. Buscar detalles
   suppressMessages({

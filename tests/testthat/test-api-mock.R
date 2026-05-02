@@ -177,7 +177,7 @@ test_that("cie11_search retorna resultados con mock HTTP exitoso", {
   # Verificar que HTML tags fueron limpiados
 
   expect_no_match(resultado$titulo[1], "<em", fixed = TRUE)
-  expect_true(grepl("Diabetes mellitus tipo 1", resultado$titulo[1]))
+  expect_match(resultado$titulo[1], "Diabetes mellitus tipo 1")
   expect_equal(resultado$capitulo, c("05", "05", "05"))
 })
 

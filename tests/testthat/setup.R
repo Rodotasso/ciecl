@@ -5,7 +5,8 @@ if (identical(Sys.getenv("NOT_CRAN"), "")) {
   # Verificar si es un check de CRAN real mirando otras variables
   if (identical(Sys.getenv("_R_CHECK_PACKAGE_NAME_"), "")) {
     # No es R CMD check, establecer NOT_CRAN=true para tests locales
-    Sys.setenv(NOT_CRAN = "true")
+    # Usamos withr para asegurar que se restaure al finalizar la suite
+    withr::local_envvar(NOT_CRAN = "true", .local_envir = teardown_env())
   }
 }
 

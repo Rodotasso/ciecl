@@ -536,9 +536,10 @@ cie_short <- function(category = NULL,
     categorias_validas <- unique(resultado$categoria)
 
     if (!category %in% categorias_validas) {
-      warning("Categoria '", category, "' no encontrada. ",
-              "Categorias validas: ",
-              paste(categorias_validas, collapse = ", "))
+      cli::cli_warn(c(
+        "Categoria {.val {category}} no encontrada.",
+        "i" = "Categorias validas: {.val {categorias_validas}}"
+      ))
       return(resultado[0, ])
     }
 
@@ -646,34 +647,33 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     only_fuzzy <- solo_fuzzy
   }
   
-  field <- match.arg(field)
+  field <- rlang::arg_match(field)
 
   # Validacion de parametros
-  if (!is.character(text) || length(text) != 1 || is.na(text)) {
-    stop("text debe ser un string character no-NA de longitud 1")
+  if (!rlang::is_string(text)) {
+    cli::cli_abort("{.arg text} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {text}}.")
   }
   if (threshold < 0 || threshold > 1) {
-    stop("threshold debe estar entre 0 y 1")
+    cli::cli_abort("{.arg threshold} debe estar entre 0 y 1.")
   }
   if (max_results < 1) {
-    stop("max_results debe ser >= 1")
+    cli::cli_abort("{.arg max_results} debe ser >= 1.")
   }
 
   texto_limpio <- stringr::str_trim(text)
 
   # Permitir siglas de 2 caracteres (DM, TB, FA, etc.)
   if (nchar(texto_limpio) < 2) {
-    stop("Texto minimo 2 caracteres")
+    cli::cli_abort("Texto minimo 2 caracteres.")
   }
 
   # Verificar si es una sigla medica y expandirla
   sigla_expandida <- expandir_sigla(texto_limpio)
   texto_busqueda <- if (!is.null(sigla_expandida)) {
     if (verbose) {
-      message(
-        "i Sigla detectada: ",
-        toupper(texto_limpio), " -> ", sigla_expandida
-      )
+      cli::cli_inform(c(
+        "i" = "Sigla detectada: {.val {toupper(texto_limpio)}} -> {.val {sigla_expandida}}"
+      ))
     }
     sigla_expandida
   } else {
@@ -832,7 +832,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     dplyr::select(codigo, descripcion, score, dplyr::everything())
 
   if (nrow(resultado) == 0 && verbose) {
-    message("x Sin coincidencias >= threshold ", threshold)
+    cli::cli_inform(c("x" = "Sin coincidencias >= threshold {.val {threshold}}"))
   }
 
   return(resultado)
@@ -1070,7 +1070,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Asegurar que codigo_norm es un escalar (longitud 1)
   if (length(codigo_norm) != 1) {
-    stop("cie_lookup_single() solo acepta un codigo a la vez")
+    cli::cli_abort("{.fn cie_lookup_single} solo acepta un codigo a la vez.")
   }
 
   # Manejar NA
@@ -1087,7 +1087,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Solo permitir caracteres validos para codigos CIE-10:
   # letras, numeros, punto, guion
   if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
-    message("x Codigo con caracteres invalidos: ", codigo_norm)
+    cli::cli_inform(c("x" = "Codigo con caracteres invalidos: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 
@@ -1109,8 +1109,10 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
 
     # Advertir y corregir rangos invertidos (ej. "E14-E10" -> "E10-E14")
     if (inicio > fin) {
-      warning(paste0("Rango invertido detectado: '", codigo_norm, "'. ",
-                   "Corrigiendo a '", fin, "-", inicio, "'"))
+      cli::cli_warn(c(
+        "Rango invertido detectado: {.val {codigo_norm}}.",
+        "i" = "Corrigiendo a {.val {fin}-{inicio}}."
+      ))
       temp <- inicio
       inicio <- fin
       fin <- temp
@@ -1129,7 +1131,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Fix #3: Validar estrictamente codigos invalidos
   # Solo codigos CIE-10 validos existen en la base
   if (nrow(resultado) == 0) {
-    message("x Codigo no encontrado: ", codigo_norm)
+    cli::cli_inform(c("x" = "Codigo no encontrado: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 

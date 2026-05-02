@@ -14,13 +14,19 @@ Tools for working with the International Classification of Diseases ('ICD-10' Ch
 Useful links:
 \itemize{
   \item \url{https://rodotasso.github.io/ciecl/}
-  \item \url{https://github.com/RodoTasso/ciecl}
-  \item Report bugs at \url{https://github.com/RodoTasso/ciecl/issues}
+  \item \url{https://github.com/Rodotasso/ciecl}
+  \item Report bugs at \url{https://github.com/Rodotasso/ciecl/issues}
 }
 
 }
 \author{
 \strong{Maintainer}: Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Grupo de Ciencia de Datos para Salud Pública (Escuela de Salud Pública, U. de Chile) [contributor]
+  \item Centro FIC (DEIS / MINSAL Chile) [contributor]
+}
 
 }
 \keyword{internal}

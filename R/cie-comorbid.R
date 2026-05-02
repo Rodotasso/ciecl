@@ -28,28 +28,26 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
                          assign0 = TRUE) {
   # Verificar que comorbidity este instalado
   rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")
-  
-  map <- match.arg(map)
+
+  map <- rlang::arg_match(map)
 
   # Validar columnas existen
   if (!id %in% names(data) || !code %in% names(data)) {
-    stop("Columnas '", id, "' o '", code, "' no existen en data")
+    cli::cli_abort("Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.")
   }
 
   # Advertir sobre NAs en columna de codigos
   n_na <- sum(is.na(data[[code]]))
   if (n_na > 0) {
-    warning("Columna '", code, "' contiene ", n_na,
-            " valores NA que seran ignorados")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que seran ignorados.")
     data <- data[!is.na(data[[code]]), ]
   }
 
   # Advertir sobre codigos vacios
-  n_empty <- sum(nchar(trimws(data[[code]])) == 0)
+  n_empty <- sum(nchar(trimws(as.character(data[[code]]))) == 0, na.rm = TRUE)
   if (n_empty > 0) {
-    warning("Columna '", code, "' contiene ", n_empty,
-            " valores vacios que seran ignorados")
-    data <- data[nchar(trimws(data[[code]])) > 0, ]
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} codigos vacios que seran ignorados.")
+    data <- data[nchar(trimws(as.character(data[[code]]))) > 0, ]
   }
 
   # Normalizar codigos (elimina sufijo X DEIS, agrega punto, etc.)
