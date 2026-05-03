@@ -1,0 +1,9 @@
+linters: lintr::with_defaults(
+    object_name_linter(style = "snake_case"),
+    comment_edits_linter = NULL,
+    line_length_linter(120)
+  )
+exclusions: list(
+    "inst/extdata",
+    "data-raw"
+  )
