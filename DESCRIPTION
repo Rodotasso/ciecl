@@ -6,9 +6,9 @@ Authors@R:
              email = "rtasso@uchile.cl",
              role = c("aut", "cre"),
              comment = c(ORCID = "0000-0002-1264-4933")),
-      person("Grupo de Ciencia de Datos para Salud P\u00fablica",
+      person("Grupo de Ciencia de Datos para Salud Pública",
              role = "ctb",
-             comment = "Escuela de Salud P\u00fablica, U. de Chile"),
+             comment = "Escuela de Salud Pública, U. de Chile"),
       person("Centro FIC",
              role = "ctb",
              comment = "DEIS / MINSAL Chile"))
@@ -42,12 +42,10 @@ Suggests:
     comorbidity,
     gt,
     readxl,
-    usethis,
     withr,
     writexl,
     testthat (>= 3.1.5),
     knitr,
-    litedown (>= 0.9),
     rmarkdown
 VignetteBuilder: knitr
 URL: https://rodotasso.github.io/ciecl/,
