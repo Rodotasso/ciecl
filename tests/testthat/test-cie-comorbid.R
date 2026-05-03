@@ -75,7 +75,7 @@ test_that("cie_comorbid Charlson con cancer", {
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 2)
+  expect_length(resultado$id, 2)
 })
 
 test_that("cie_comorbid Charlson con insuficiencia cardiaca", {
@@ -106,7 +106,7 @@ test_that("cie_comorbid calcula Elixhauser", {
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "elixhauser")
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 2)
+  expect_length(resultado$id, 2)
 })
 
 test_that("cie_comorbid Elixhauser con hipertension", {

@@ -42,7 +42,7 @@ test_that("base de datos contiene descripciones con tildes correctas", {
   if (nrow(resultado) > 0) {
     # Buscar caracteres corruptos comunes
     descripciones <- resultado$descripcion
-    tiene_corruptos <- any(stringr::str_detect(descripciones, "\ufffd|Ã¡|Ã©|Ã\u00ad|Ã³|Ãº|Ã±"))
+    tiene_corruptos <- any(stringr::str_detect(descripciones, "�|Ã¡|Ã©|Ã­|Ã³|Ãº|Ã±"))
     expect_false(tiene_corruptos, info = "Las descripciones no deben tener caracteres corruptos")
   }
 })

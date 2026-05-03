@@ -23,8 +23,8 @@ cie10_clear_cache()  # Elimina cie10.db local
 \seealso{
 \code{\link[=cie10_sql]{cie10_sql()}}, \code{\link[=cie10_disconnect]{cie10_disconnect()}}
 
-Other sql: 
+Other sql_backend: 
 \code{\link{cie10_disconnect}()},
 \code{\link{cie10_sql}()}
 }
-\concept{sql}
+\concept{sql_backend}

@@ -47,7 +47,7 @@ test_that("cie_lookup con descripcion_completa mantiene columna en dataframe vac
   })
 
   # El dataframe debe estar vacio
-  expect_equal(nrow(resultado_vacio), 0)
+  expect_length(resultado_vacio$codigo, 0)
   expect_true("descripcion_completa" %in% names(resultado_vacio))
 })
 
@@ -77,8 +77,19 @@ test_that("cie_short filtra por categoria", {
   expect_true(all(cardio$categoria == "cardiovascular"))
 
   # Categoria invalida debe dar warning y retornar vacio
-  expect_warning(invalida <- cie_short("inexistente"), "no encontrada")
-  expect_equal(nrow(invalida), 0)
+  expect_snapshot(invalida <- cie_short("inexistente"))
+  expect_length(invalida$sigla, 0)
+})
+
+# ============================================================
+# PRUEBAS PARA cie_search() (validaciones)
+# ============================================================
+
+test_that("cie_search valida inputs", {
+  expect_snapshot(cie_search(123), error = TRUE)
+  expect_snapshot(cie_search("a"), error = TRUE)
+  expect_snapshot(cie_search("diabetes", threshold = 1.1), error = TRUE)
+  expect_snapshot(cie_search("diabetes", max_results = 0), error = TRUE)
 })
 
 # ============================================================
@@ -105,7 +116,7 @@ test_that("cie_search muestra mensaje Sin coincidencias con verbose=TRUE", {
     "Sin coincidencias"
   )
 
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup con normalizar procesa codigo sin punto", {

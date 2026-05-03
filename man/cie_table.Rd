@@ -30,4 +30,4 @@ cie_table("E11")  # Diabetes mellitus tipo 2 completo
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 }
-\concept{visualizacion}
+\concept{visualization}

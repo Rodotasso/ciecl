@@ -54,7 +54,8 @@ test_that("cie_search maneja max_results extremos", {
   # max_results = 1
 
   resultado <- cie_search("diabetes", threshold = 0.70, max_results = 1)
-  expect_lte(nrow(resultado), 1)
+  expect_s3_class(resultado, "tbl_df")
+  expect_lte(nrow(resultado), 1L)
 
   # max_results muy grande
   resultado_grande <- cie_search("diabetes", threshold = 0.60, max_results = 10000)
@@ -110,7 +111,7 @@ test_that("cie_lookup maneja NA en entrada", {
   suppressMessages({
     resultado <- cie_lookup(NA_character_)
   })
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup maneja vector vacio", {
@@ -118,7 +119,7 @@ test_that("cie_lookup maneja vector vacio", {
 
   # Vector vacio
   resultado <- cie_lookup(character(0))
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup maneja cadena vacia", {
@@ -127,7 +128,7 @@ test_that("cie_lookup maneja cadena vacia", {
   suppressMessages({
     resultado <- cie_lookup("")
   })
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup maneja codigo con espacios", {
@@ -192,7 +193,7 @@ test_that("cie_lookup maneja codigo con caracteres SQL peligrosos", {
       resultado <- cie_lookup(cod)
     })
     expect_s3_class(resultado, "tbl_df")
-    expect_equal(nrow(resultado), 0)
+    expect_length(resultado$codigo, 0)
   }
 
   # E11* se normaliza a E11 (asterisco = codificacion dual, se elimina)
@@ -201,7 +202,7 @@ test_that("cie_lookup maneja codigo con caracteres SQL peligrosos", {
     resultado_ast <- cie_lookup("E11*")
   })
   expect_s3_class(resultado_ast, "tbl_df")
-  expect_gt(nrow(resultado_ast), 0)
+  expect_gt(length(resultado_ast$codigo), 0)
 })
 
 test_that("cie_lookup expandir con codigo inexistente", {
@@ -211,7 +212,7 @@ test_that("cie_lookup expandir con codigo inexistente", {
   suppressMessages({
     resultado <- cie_lookup("ZZZ", expand = TRUE)
   })
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 # ============================================================

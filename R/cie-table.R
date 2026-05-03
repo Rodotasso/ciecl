@@ -10,8 +10,8 @@
 #'
 #' @param code String codigo (ej. `"E11"` muestra la jerarquia).
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
-#' @return Objeto de clase \code{gt_tbl} (tabla HTML interactiva).
-#' @family visualizacion
+#' @returns Objeto de clase `gt_tbl` (tabla HTML interactiva).
+#' @family visualization
 #' @seealso [cie_search()], [cie_lookup()]
 #' @export
 #' @importFrom dplyr select everything mutate across
@@ -32,7 +32,7 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
   datos <- cie_lookup(code, expand = TRUE)
 
   if (nrow(datos) == 0) {
-    cli::cli_abort("Codigo no encontrado: {.val {code}}")
+    cli::cli_abort("Codigo no encontrado: {.val {code}}", class = "ciecl_invalid_code")
   }
 
   # Reemplazar NA/vacio por em dash (U+2014) en columnas de texto.
@@ -43,7 +43,7 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
     all(is.na(datos[[col]]) | datos[[col]] == "")
   })
 
-  datos <- datos %>%
+  datos <- datos |>
     dplyr::mutate(
       dplyr::across(
         dplyr::any_of(c("inclusion", "exclusion", "descripcion")),
@@ -51,9 +51,9 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
       )
     )
 
-  tabla <- datos %>%
-    dplyr::select(codigo, descripcion, inclusion, exclusion) %>%
-    gt::gt() %>%
+  tabla <- datos |>
+    dplyr::select(codigo, descripcion, inclusion, exclusion) |>
+    gt::gt() |>
     gt::tab_header(
       title = sprintf("CIE-10 Chile: %s", code),
       subtitle = "Fuente: MINSAL/DEIS v2018"
@@ -61,20 +61,20 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
 
   # Ocultar columnas vacias dinamicamente
   if (notas_vacias["inclusion"]) {
-    tabla <- tabla %>% gt::cols_hide(columns = inclusion)
+    tabla <- tabla |> gt::cols_hide(columns = inclusion)
   }
   if (notas_vacias["exclusion"]) {
-    tabla <- tabla %>% gt::cols_hide(columns = exclusion)
+    tabla <- tabla |> gt::cols_hide(columns = exclusion)
   }
 
-  tabla <- tabla %>%
+  tabla <- tabla |>
     gt::cols_label(
       codigo = "Codigo",
       descripcion = "Diagnostico",
       inclusion = "Incluye",
       exclusion = "Excluye"
-    ) %>%
-    gt::fmt_markdown(columns = dplyr::everything()) %>%
+    ) |>
+    gt::fmt_markdown(columns = dplyr::everything()) |>
     gt::tab_options(
       table.font.size = 12,
       heading.background.color = "#1f77b4"

@@ -8,8 +8,8 @@
 #' @param release Character, version de release CIE-11 a consultar
 #'   (default "2024-01"). Ver releases disponibles en la API OMS.
 #' @param texto `r lifecycle::badge("deprecated")` Use `text`.
-#' @return tibble con codigos CIE-11 + titulos o vacio si error
-#' @family api
+#' @returns tibble con codigos CIE-11 + titulos o vacio si error
+#' @family api_who
 #' @seealso [cie_search()], [cie_lookup()]
 #' @export
 #' @importFrom tibble as_tibble
@@ -20,8 +20,9 @@
 #'
 #' @examplesIf interactive()
 #' # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-#' Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-#' cie11_search("depresion mayor")
+#' withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
+#'   cie11_search("depresion mayor")
+#' })
 cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
                          max_results = 10, release = "2024-01",
                          texto = lifecycle::deprecated()) {
@@ -39,18 +40,18 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
 
   # Validacion de inputs
   if (!rlang::is_string(text)) {
-    cli::cli_abort("{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.")
+    cli::cli_abort("{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.", class = "ciecl_invalid_input")
   }
   if (nchar(trimws(text)) == 0) {
-    cli::cli_abort("{.arg text} no puede estar vacio.")
+    cli::cli_abort("{.arg text} no puede estar vacio.", class = "ciecl_invalid_input")
   }
   if (!is.numeric(max_results) || length(max_results) != 1 ||
       max_results < 1 || max_results != as.integer(max_results)) {
-    cli::cli_abort("{.arg max_results} debe ser un entero positivo.")
+    cli::cli_abort("{.arg max_results} debe ser un entero positivo.", class = "ciecl_invalid_input")
   }
   if (!is.character(release) || length(release) != 1 ||
       !grepl("^\\d{4}-\\d{2}$", release)) {
-    cli::cli_abort("{.arg release} debe ser formato {.val YYYY-MM} (ej. {.val 2024-01}).")
+    cli::cli_abort("{.arg release} debe ser formato {.val YYYY-MM} (ej. {.val 2024-01}).", class = "ciecl_invalid_input")
   }
 
   # Verificar que httr2 este instalado
@@ -60,14 +61,14 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
   if (is.null(api_key)) {
     api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
     if (is.na(api_key)) {
-      cli::cli_abort("API key OMS requerida. Ver: {.url https://icd.who.int/icdapi}")
+      cli::cli_abort("API key OMS requerida. Ver: {.url https://icd.who.int/icdapi}", class = "ciecl_api_error")
     }
   }
   
   # Separar client_id y client_secret
   credentials <- strsplit(api_key, ":")[[1]]
   if (length(credentials) != 2) {
-    cli::cli_abort("API key debe tener formato {.val client_id:client_secret}")
+    cli::cli_abort("API key debe tener formato {.val client_id:client_secret}", class = "ciecl_invalid_input")
   }
   client_id <- credentials[1]
   client_secret <- credentials[2]
@@ -75,11 +76,11 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
   tryCatch({
     # Paso 1: Obtener token OAuth
     token_url <- "https://icdaccessmanagement.who.int/connect/token"
-    token_req <- httr2::request(token_url) %>%
-      httr2::req_method("POST") %>%
-      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
-      httr2::req_timeout(30) %>%
-      httr2::req_retry(max_tries = 3) %>%
+    token_req <- httr2::request(token_url) |>
+      httr2::req_method("POST") |>
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") |>
+      httr2::req_timeout(30) |>
+      httr2::req_retry(max_tries = 3) |>
       httr2::req_body_form(
         client_id = client_id,
         client_secret = client_secret,
@@ -96,16 +97,16 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
       "https://id.who.int/icd/release/11/", release, "/mms/search"
     )
     
-    search_req <- httr2::request(search_url) %>%
-      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") %>%
-      httr2::req_timeout(30) %>%
-      httr2::req_retry(max_tries = 3) %>%
-      httr2::req_throttle(rate = 10 / 60) %>% # 10 req/min para ser conservador
+    search_req <- httr2::request(search_url) |>
+      httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") |>
+      httr2::req_timeout(30) |>
+      httr2::req_retry(max_tries = 3) |>
+      httr2::req_throttle(rate = 10 / 60) |> # 10 req/min para ser conservador
       httr2::req_url_query(
         q = text,
         flatResults = "true",
         useFlexisearch = "true"
-      ) %>%
+      ) |>
       httr2::req_headers(
         Authorization = paste("Bearer", access_token),
         `API-Version` = "v2",
@@ -127,7 +128,7 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
         codigo = json$destinationEntities$theCode,
         titulo = titulos_limpios,
         capitulo = json$destinationEntities$chapter
-      ) %>%
+      ) |>
         dplyr::slice_head(n = max_results)
       
       return(resultados)

@@ -38,7 +38,7 @@ cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
 \seealso{
 \code{\link[=cie_map_comorbid]{cie_map_comorbid()}}, \code{\link[=cie_norm]{cie_norm()}}
 
-Other comorbilidades: 
+Other comorbidities: 
 \code{\link{cie_map_comorbid}()}
 }
-\concept{comorbilidades}
+\concept{comorbidities}

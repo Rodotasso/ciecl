@@ -305,7 +305,7 @@ test_that("resultados funcionan con dplyr::filter", {
   resultado <- cie_search("diabetes", threshold = 0.70, max_results = 20)
 
   # Filtrar con dplyr
-  filtrado <- resultado %>%
+  filtrado <- resultado |>
     dplyr::filter(score > 0.80)
 
   expect_s3_class(filtrado, "tbl_df")
@@ -317,7 +317,7 @@ test_that("resultados funcionan con dplyr::mutate", {
   resultado <- cie_lookup(c("E11.0", "E11.1", "E11.2"))
 
   # Mutar con dplyr
-  mutado <- resultado %>%
+  mutado <- resultado |>
     dplyr::mutate(codigo_corto = substr(codigo, 1, 3))
 
   expect_s3_class(mutado, "tbl_df")
@@ -330,8 +330,8 @@ test_that("resultados funcionan con dplyr::group_by y summarise", {
   resultado <- cie10_sql("SELECT codigo, capitulo FROM cie10 WHERE codigo LIKE 'E1%' LIMIT 100")
 
   # Agrupar y resumir
-  resumen <- resultado %>%
-    dplyr::group_by(capitulo) %>%
+  resumen <- resultado |>
+    dplyr::group_by(capitulo) |>
     dplyr::summarise(n = dplyr::n(), .groups = "drop")
 
   expect_s3_class(resumen, "tbl_df")

@@ -8,6 +8,19 @@ Versión de cumplimiento editorial y técnico tras la revisión de Maëlle Salmo
 Esta versión unifica la interfaz del paquete bajo estándares internacionales de R,
 manteniendo la documentación pedagógica en español para el contexto local.
 
+### Remediación r-lib y Calidad Técnica
+
+* **Migración total a `cli`**: Todos los errores, advertencias y mensajes informativos usan ahora `cli::cli_abort()`, `cli_warn()` y `cli_inform()` con clases de error personalizadas (`ciecl_invalid_input`, `ciecl_api_error`, etc.) para captura programática.
+* **Modernización de Roxygen**: 
+  - Migración masiva de `@return` a `@returns`.
+  - Uso de sintaxis markdown para enlaces internos y externos (`[fun()]`).
+  - Normalización de etiquetas `@family` a snake_case sin tildes.
+* **Refactor de Estructura**: El archivo `cie-search.R` se ha dividido en 4 módulos (`cie-search.R`, `cie-siglas.R`, `cie-lookup.R`, `cie-guide.R`) para mejorar la mantenibilidad.
+* **Pipe Nativo**: Migración de `%>%` al pipe nativo de R `|>` en todo el paquete (código, vignettes y tests).
+* **Aislamiento de Tests**: Implementación de `withr` para garantizar que las pruebas no contaminen el cache del usuario, utilizando directorios temporales aislados.
+* **Snapshots de Mensajes**: Uso de `testthat::expect_snapshot()` para asegurar la consistencia de los mensajes en español generados por el paquete.
+* **Limpieza de Suggests**: Removidos `usethis` y `litedown` de `Suggests:` por no ser referenciados en código, tests ni vignettes del paquete.
+
 ### Cambios que rompen compatibilidad (Deprecaciones)
 
 * **Internacionalización de la API**: Todos los argumentos de las funciones

@@ -40,11 +40,12 @@ args(cie11_search)
 
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-cie11_search("depresion mayor")
+withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
+  cie11_search("depresion mayor")
+})
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 }
-\concept{api}
+\concept{api_who}

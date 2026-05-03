@@ -15,7 +15,7 @@ cie_describe(
 \item{codes}{Character vector de codigos CIE-10 (ej. "E11.0",
 c("E11.0", "I10")).}
 
-\item{normalize}{Logical, ¿intentar normalizar los codigos antes
+\item{normalize}{Logical, intentar normalizar los codigos antes
 de buscar la descripcion? (default FALSE). Usar TRUE para
 limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
 auditar la calidad original del registro.}
@@ -53,12 +53,10 @@ sum(is.na(descripciones)) # Detecta 3 errores de registro
 \code{\link[=cie_lookup]{cie_lookup()}} para resultado como tibble con todas
 las columnas; \code{\link[=cie_norm]{cie_norm()}} para normalizacion.
 
-Other busqueda: 
+Other search: 
 \code{\link{cie_guia_busqueda}()},
 \code{\link{cie_guide}()},
 \code{\link{cie_lookup}()},
-\code{\link{cie_search}()},
-\code{\link{cie_short}()},
-\code{\link{cie_siglas}()}
+\code{\link{cie_search}()}
 }
-\concept{busqueda}
+\concept{search}

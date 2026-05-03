@@ -9,7 +9,7 @@ cie10_sql(query, close = lifecycle::deprecated())
 \arguments{
 \item{query}{String SQL valido SQLite (SELECT/WHERE/JOIN)}
 
-\item{close}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Ignorado — la conexion
+\item{close}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Ignorado - la conexion
 es pooled y se gestiona automaticamente. Sera eliminado en una
 version futura.}
 }
@@ -32,8 +32,8 @@ cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
 \code{\link[=cie10_clear_cache]{cie10_clear_cache()}}, \code{\link[=cie10_disconnect]{cie10_disconnect()}},
 \code{\link[=cie_search]{cie_search()}}
 
-Other sql: 
+Other sql_backend: 
 \code{\link{cie10_clear_cache}()},
 \code{\link{cie10_disconnect}()}
 }
-\concept{sql}
+\concept{sql_backend}

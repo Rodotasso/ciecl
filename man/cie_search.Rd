@@ -78,12 +78,10 @@ cie_search("bacteriana", field = "inclusion")
 \code{\link[=cie_lookup]{cie_lookup()}},
 \code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
 
-Other busqueda: 
+Other search: 
 \code{\link{cie_describe}()},
 \code{\link{cie_guia_busqueda}()},
 \code{\link{cie_guide}()},
-\code{\link{cie_lookup}()},
-\code{\link{cie_short}()},
-\code{\link{cie_siglas}()}
+\code{\link{cie_lookup}()}
 }
-\concept{busqueda}
+\concept{search}

@@ -7,17 +7,17 @@
 #'
 #' @param codes Character vector de codigos CIE-10 (ej. "E11.0",
 #'   c("E11.0", "I10")).
-#' @param normalize Logical, ¿intentar normalizar los codigos antes
+#' @param normalize Logical, intentar normalizar los codigos antes
 #'   de buscar la descripcion? (default FALSE). Usar TRUE para
 #'   limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
 #'   auditar la calidad original del registro.
 #' @param default Valor devuelto cuando un codigo no se encuentra
 #'   en el catalogo. Default `NA_character_`.
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
-#' @return Character vector del mismo largo que `codes` con la
+#' @returns Character vector del mismo largo que `codes` con la
 #'   descripcion oficial MINSAL/DEIS. `NA_character_` (o `default`)
 #'   para codigos sin match.
-#' @family busqueda
+#' @family search
 #' @seealso [cie_lookup()] para resultado como tibble con todas
 #'   las columnas; [cie_norm()] para normalizacion.
 #' @importFrom stats setNames
@@ -46,7 +46,7 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
   }
 
   if (!is.logical(normalize) || length(normalize) != 1L || is.na(normalize)) {
-    cli::cli_abort("{.arg normalize} debe ser {.code TRUE} o {.code FALSE}.")
+    cli::cli_abort("{.arg normalize} debe ser {.code TRUE} o {.code FALSE}.", class = "ciecl_invalid_input")
   }
 
   if (length(codes) == 0) {

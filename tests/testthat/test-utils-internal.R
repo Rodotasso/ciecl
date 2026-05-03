@@ -10,19 +10,19 @@ test_that("normalizar_tildes remueve tildes correctamente", {
   normalizar_tildes <- normalizar_tildes
 
   # Vocales minusculas con tilde
-  expect_equal(normalizar_tildes("caf\u00e9"), "cafe")
-  expect_equal(normalizar_tildes("\u00e1rbol"), "arbol")
-  expect_equal(normalizar_tildes("ri\u00f1\u00f3n"), "rinon")
-  expect_equal(normalizar_tildes("ma\u00eds"), "mais")
-  expect_equal(normalizar_tildes("bah\u00eda"), "bahia")
+  expect_equal(normalizar_tildes("café"), "cafe")
+  expect_equal(normalizar_tildes("árbol"), "arbol")
+  expect_equal(normalizar_tildes("riñón"), "rinon")
+  expect_equal(normalizar_tildes("maís"), "mais")
+  expect_equal(normalizar_tildes("bahía"), "bahia")
 
   # Vocales mayusculas con tilde
-  expect_equal(normalizar_tildes("\u00c1RBOL"), "ARBOL")
-  expect_equal(normalizar_tildes("ESPA\u00d1A"), "ESPANA")
+  expect_equal(normalizar_tildes("ÁRBOL"), "ARBOL")
+  expect_equal(normalizar_tildes("ESPAÑA"), "ESPANA")
 
   # Dieresis
-  expect_equal(normalizar_tildes("ping\u00fcino"), "pinguino")
-  expect_equal(normalizar_tildes("PING\u00dcINO"), "PINGUINO")
+  expect_equal(normalizar_tildes("pingüino"), "pinguino")
+  expect_equal(normalizar_tildes("PINGÜINO"), "PINGUINO")
 })
 
 test_that("normalizar_tildes maneja vector vacio", {
@@ -44,7 +44,7 @@ test_that("normalizar_tildes maneja texto sin tildes", {
 test_that("normalizar_tildes es vectorizado", {
   normalizar_tildes <- normalizar_tildes
 
-  entrada <- c("caf\u00e9", "ri\u00f1\u00f3n", "normal")
+  entrada <- c("café", "riñón", "normal")
   esperado <- c("cafe", "rinon", "normal")
 
   expect_equal(normalizar_tildes(entrada), esperado)
@@ -186,7 +186,7 @@ test_that("cie10_empty_tibble retorna tibble vacio con estructura correcta", {
   resultado <- cie10_empty_tibble()
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 
   # Columnas esperadas
   columnas <- c("codigo", "descripcion", "categoria", "seccion",
@@ -202,7 +202,7 @@ test_that("cie10_empty_tibble con descripcion_completa agrega columna", {
   resultado <- cie10_empty_tibble(add_descripcion_completa = TRUE)
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
   expect_true("descripcion_completa" %in% names(resultado))
   expect_equal(ncol(resultado), 11)
 })
@@ -270,7 +270,7 @@ test_that("cie_lookup_single retorna vacio para codigo invalido", {
   })
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single maneja NA", {
@@ -281,7 +281,7 @@ test_that("cie_lookup_single maneja NA", {
   resultado <- cie_lookup_single(NA_character_)
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single maneja cadena vacia", {
@@ -292,7 +292,7 @@ test_that("cie_lookup_single maneja cadena vacia", {
   resultado <- cie_lookup_single("")
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single rechaza caracteres invalidos", {
@@ -306,7 +306,7 @@ test_that("cie_lookup_single rechaza caracteres invalidos", {
   })
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single expande con patron LIKE", {

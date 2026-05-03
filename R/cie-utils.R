@@ -28,7 +28,7 @@
 #'   si no se encuentra exacto (default TRUE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @param buscar_db `r lifecycle::badge("deprecated")` Use `search_db`.
-#' @return Character vector con codigos normalizados al formato con punto
+#' @returns Character vector con codigos normalizados al formato con punto
 #' @family validacion
 #' @seealso [cie_validate_vector()],
 #'   [cie_expand()], [cie_lookup()]
@@ -155,7 +155,7 @@ cie_norm <- function(codes,
 #'
 #' @param codigos Character vector de codigos
 #' @param buscar_db Logical, buscar codigo en DB (default TRUE)
-#' @return Character vector con codigos normalizados
+#' @returns Character vector con codigos normalizados
 #' @family validacion
 #' @keywords internal
 #' @export
@@ -198,7 +198,7 @@ cie_normalize <- function(codes, search_db = TRUE,
 #' @param codes Character vector codigos (ej. c("E11.0", "Z00.0"))
 #' @param strict Logical, validar existencia en DB (default FALSE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
-#' @return Logical vector de la misma longitud que `codes`. TRUE si el
+#' @returns Logical vector de la misma longitud que `codes`. TRUE si el
 #'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 #' @family validacion
 #' @seealso [cie_norm()], [cie_expand()]
@@ -261,7 +261,7 @@ cie_validate_vector <- function(codes,
 #'
 #' @param code String codigo padre (ej. "E11")
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
-#' @return Character vector con todos los codigos hijos del codigo padre.
+#' @returns Character vector con todos los codigos hijos del codigo padre.
 #'   Vector vacio si el codigo no existe en la base de datos.
 #' @family validacion
 #' @seealso [cie_norm()], [cie_lookup()]

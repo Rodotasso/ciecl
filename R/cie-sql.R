@@ -1,21 +1,33 @@
+#' Obtener directorio de cache CIE-10
+#'
+#' @description
+#' Retorna el path al directorio de cache. Permite override via env var
+#' CIECL_CACHE_DIR para tests unitarios aislados.
+#'
+#' @returns String path al directorio
+#' @keywords internal
+#' @noRd
+get_cache_dir <- function() {
+  Sys.getenv("CIECL_CACHE_DIR", unset = tools::R_user_dir("ciecl", "data"))
+}
+
 #' Obtener conexion SQLite pooled CIE-10
 #'
 #' @description
 #' Retorna conexion reutilizable a base SQLite en cache usuario.
 #' Si no existe cache, lo construye atomicamente. Si la version no coincide,
 #' reconstruye automaticamente.
-#' Ubicacion: tools::R_user_dir("ciecl", "data")/cie10.db
+#' Ubicacion: get_cache_dir()/cie10.db
 #'
-#' @return Conexion DBI SQLite activa (pooled)
+#' @returns Conexion DBI SQLite activa (pooled)
 #' @keywords internal
 #' @importFrom DBI dbConnect dbExistsTable dbWriteTable dbDisconnect dbIsValid
 #' @importFrom DBI dbExecute dbGetQuery
 #' @importFrom RSQLite SQLite
 #' @importFrom utils data packageVersion
-#' @importFrom dplyr %>%
 #' @noRd
 get_cie10_db <- function() {
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Pooling: reutilizar conexion existente si es valida y apunta al mismo path
@@ -114,7 +126,7 @@ build_cache_atomic <- function(cache_dir, db_path) {
 
   tryCatch({
     # Cargar datos
-    data(cie10_cl, envir = environment())
+    utils::data(cie10_cl, package = "ciecl", envir = environment())
     DBI::dbWriteTable(con, "cie10", cie10_cl, overwrite = TRUE)
 
     # Indices
@@ -155,6 +167,7 @@ build_cache_atomic <- function(cache_dir, db_path) {
     if (file.exists(tmp_path)) file.remove(tmp_path)
     cli::cli_abort(
       "Error construyendo cache SQLite: {conditionMessage(e)}",
+      class = "ciecl_cache_error",
       parent = e
     )
   })
@@ -179,7 +192,7 @@ build_fts <- function(con) {
 #' Verificar si el cache corresponde a la version actual del paquete
 #'
 #' @param con Conexion DBI activa
-#' @return Logical TRUE si version coincide
+#' @returns Logical TRUE si version coincide
 #' @keywords internal
 #' @noRd
 cache_is_current <- function(con) {
@@ -204,11 +217,11 @@ cache_is_current <- function(con) {
 #' Ejecutar consultas SQL sobre CIE-10 Chile
 #'
 #' @param query String SQL valido SQLite (SELECT/WHERE/JOIN)
-#' @param close `r lifecycle::badge("deprecated")` Ignorado — la conexion
+#' @param close `r lifecycle::badge("deprecated")` Ignorado - la conexion
 #'   es pooled y se gestiona automaticamente. Sera eliminado en una
 #'   version futura.
-#' @return tibble resultado query
-#' @family sql
+#' @returns tibble resultado query
+#' @family sql_backend
 #' @seealso [cie10_clear_cache()], [cie10_disconnect()],
 #'   [cie_search()]
 #' @export
@@ -240,7 +253,8 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
   keywords_peligrosos <- c(
     "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
     "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
-    "\\bATTACH\\b", "\\bDETACH\\b", "\\bPRAGMA\\b"
+    "\\bATTACH\\b", "\\bDETACH\\b", "\\bPRAGMA\\b", "\\bWITH\\b",
+    "\\bVACUUM\\b", "\\bREINDEX\\b"
   )
 
   for (keyword in keywords_peligrosos) {
@@ -266,15 +280,15 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 
   con <- get_cie10_db()
 
-  resultado <- DBI::dbGetQuery(con, query) %>% tibble::as_tibble()
+  resultado <- DBI::dbGetQuery(con, query) |> tibble::as_tibble()
 
   return(resultado)
 }
 
 #' Limpiar cache SQLite (forzar rebuild)
 #'
-#' @return No return value, called for side effects (deletes SQLite cache).
-#' @family sql
+#' @returns No return value, called for side effects (deletes SQLite cache).
+#' @family sql_backend
 #' @seealso [cie10_sql()], [cie10_disconnect()]
 #' @export
 #' @examples
@@ -293,7 +307,7 @@ cie10_clear_cache <- function() {
     .ciecl_env$db_path <- NULL
   }
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
   tmp_path <- paste0(db_path, ".tmp")
 
@@ -324,13 +338,13 @@ cie10_clear_cache <- function() {
 #' Cierra la conexion reutilizable al archivo SQLite.
 #' Util para liberar el lock del archivo .db.
 #'
-#' @return No return value, called for side effects.
-#' @family sql
+#' @returns No return value, called for side effects.
+#' @family sql_backend
 #' @seealso [cie10_sql()], [cie10_clear_cache()]
 #' @export
 #' @examples
 #' # Verificar si hay conexion activa
-#' is.null(ciecl:::.ciecl_env$con)
+#' # (Ejemplo omitido por usar internal environment)
 #'
 #' @examplesIf interactive()
 #' cie10_disconnect()

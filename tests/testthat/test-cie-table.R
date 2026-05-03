@@ -22,7 +22,7 @@ test_that("cie_table maneja codigo invalido", {
   skip_on_cran()
 
   # Codigo que no existe lanza error
-  expect_error(cie_table("XXXXX"), "no encontrado")
+  expect_snapshot(cie_table("XXXXX"), error = TRUE)
 })
 
 # ============================================================

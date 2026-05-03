@@ -10,6 +10,15 @@ if (identical(Sys.getenv("NOT_CRAN"), "")) {
   }
 }
 
+# Aislar cache SQLite en directorio temporal para no contaminar el del usuario
+# Esto tambien permite paralelizar tests en el futuro
+tmp_cache <- withr::local_tempdir(.local_envir = teardown_env())
+withr::local_envvar(CIECL_CACHE_DIR = tmp_cache, .local_envir = teardown_env())
+
+# Asegurar que la conexion pooled se cierre al finalizar la suite
+# para permitir la limpieza del directorio temporal en Windows
+withr::defer(ciecl::cie10_disconnect(), envir = teardown_env())
+
 # Buscar .Renviron en multiples ubicaciones posibles
 renviron_paths <- c(
   file.path(getwd(), ".Renviron"),

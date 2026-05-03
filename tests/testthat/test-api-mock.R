@@ -21,7 +21,7 @@ test_that("cie11_search maneja error de conexion gracefully", {
 
   # Debe retornar tibble vacio
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie11_search retorna tibble vacio en error", {
@@ -36,7 +36,7 @@ test_that("cie11_search retorna tibble vacio en error", {
   expect_true("codigo" %in% names(resultado))
   expect_true("titulo" %in% names(resultado))
   expect_true("capitulo" %in% names(resultado))
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 # ============================================================
@@ -260,7 +260,7 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
         list(destinationEntities = data.frame(
           theCode = "BA00",
           title = paste0(
-            "<em class='found'>Hipertensi\u00f3n</em> ",
+            "<em class='found'>Hipertensión</em> ",
             "<em class='found'>arterial</em> esencial"),
           chapter = "11",
           stringsAsFactors = FALSE
@@ -273,7 +273,7 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
   resultado <- cie11_search("hipertension", api_key = "id:secret")
 
   expect_equal(nrow(resultado), 1)
-  expect_equal(resultado$titulo[1], "Hipertensi\u00f3n arterial esencial")
+  expect_equal(resultado$titulo[1], "Hipertensión arterial esencial")
   expect_no_match(resultado$titulo[1], "<em", fixed = TRUE)
 })
 

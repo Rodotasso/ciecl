@@ -1,4 +1,4 @@
-#' @importFrom dplyr filter pull rowwise %>%
+#' @importFrom dplyr filter pull rowwise
 #' @importFrom stringr str_detect
 #' @importFrom tibble tibble as_tibble tribble
 NULL
@@ -10,8 +10,8 @@ NULL
 #' @param code String nombre columna con codigos CIE-10 (uno por fila)
 #' @param map Character, esquema comorbilidad ("charlson" o "elixhauser")
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
-#' @return data.frame ancho con scores comorbilidad por paciente
-#' @family comorbilidades
+#' @returns data.frame ancho con scores comorbilidad por paciente
+#' @family comorbidities
 #' @seealso [cie_map_comorbid()], [cie_norm()]
 #' @export
 #' @examples
@@ -33,7 +33,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 
   # Validar columnas existen
   if (!id %in% names(data) || !code %in% names(data)) {
-    cli::cli_abort("Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.")
+    cli::cli_abort("Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.", class = "ciecl_invalid_input")
   }
 
   # Advertir sobre NAs en columna de codigos
@@ -90,8 +90,8 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' 
 #' @param codes Character vector de codigos
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
-#' @return tibble con columnas: codigo, categoria
-#' @family comorbilidades
+#' @returns tibble con columnas: codigo, categoria
+#' @family comorbidities
 #' @seealso [cie_comorbid()], [cie_norm()]
 #' @export
 #' @examples

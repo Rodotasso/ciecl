@@ -179,7 +179,7 @@ test_that("get_cie10_db tabla tiene indices", {
 test_that("get_cie10_db usa directorio cache correcto", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   con <- get_cie10_db()
@@ -202,7 +202,7 @@ test_that("get_cie10_db tabla tiene columnas esperadas", {
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe
@@ -334,7 +334,7 @@ test_that("get_cie10_db crea directorio cache si no existe", {
   # Limpiar cache para forzar recreacion
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
 
   # Conectar - debe crear directorio si no existe
   get_cie10_db()
@@ -484,7 +484,7 @@ test_that("build_cache_atomic crea cache completo", {
   # Limpiar
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # No debe existir .tmp residual despues de build exitoso
@@ -581,7 +581,7 @@ test_that("get_cie10_db reconstruye si tabla cie10 falta", {
   skip_on_cran()
   ciecl::cie10_disconnect()
   con_direct <- DBI::dbConnect(RSQLite::SQLite(),
-    file.path(tools::R_user_dir("ciecl", "data"), "cie10.db"))
+    file.path(ciecl:::get_cache_dir(), "cie10.db"))
   on.exit(
     if (DBI::dbIsValid(con_direct)) suppressWarnings(DBI::dbDisconnect(con_direct)),
     add = TRUE
@@ -614,7 +614,7 @@ test_that("build_cache_atomic limpia .tmp residual", {
   skip_on_cran()
   withr::defer(ciecl::cie10_disconnect())
   ciecl::cie10_disconnect()
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   tmp_file <- file.path(cache_dir, "cie10.db.tmp")
   if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
   file.create(tmp_file)
