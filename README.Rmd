@@ -202,6 +202,10 @@ MIT + datos MINSAL de dominio público.
 Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública,
 Facultad de Medicina, Universidad de Chile.
 
+## Agradecimientos
+
+- Diseño del logotipo del paquete: [@fje1](https://github.com/fje1).
+
 ## Enlaces
 
 - Repositorio: <https://github.com/RodoTasso/ciecl>
@@ -230,6 +234,10 @@ MIT + MINSAL public-domain data.
 **Rodolfo Tasso Suazo** — <rtasso@uchile.cl>
 Data Science for Public Health Group, School of Public Health,
 Faculty of Medicine, University of Chile.
+
+## Acknowledgments
+
+- Package logo design: [@fje1](https://github.com/fje1).
 
 ## Links
 

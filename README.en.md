@@ -180,6 +180,10 @@ MIT + MINSAL public-domain data.
 Health Group, School of Public Health, Faculty of Medicine, University
 of Chile.
 
+## Acknowledgments
+
+- Package logo design: [@fje1](https://github.com/fje1).
+
 ## Links
 
 - Repository: <https://github.com/RodoTasso/ciecl>
