@@ -20,6 +20,8 @@ release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://githu
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
 [![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 [![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/765_status.svg)](https://github.com/ropensci/software-review/issues/765)
 <!-- badges: end -->
 
 **Clasificación Internacional de Enfermedades (CIE-10) oficial de Chile
@@ -81,21 +83,23 @@ library(ciecl)
 
 # Busqueda exacta por codigo
 cie_lookup("E11.0")
-#> # A tibble: 1 × 10
+#> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
 # Multiples codigos
 cie_lookup(c("E11.0", "I10", "Z00"))
-#> # A tibble: 3 × 10
+#> # A tibble: 3 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
 #> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <NA>      <NA>     
 #> 3 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
 # Descripcion directa (vectorizada) para usar en mutate()
 cie_describe(c("E11.0", "I10"))
