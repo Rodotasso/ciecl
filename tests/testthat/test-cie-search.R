@@ -104,6 +104,43 @@ test_that("cie_guide retorna data.frame", {
   expect_true("Tengo..." %in% names(resultado))
 })
 
+test_that("cie_guide retorna columnas esperadas", {
+  resultado <- cie_guide()
+  cols <- names(resultado)
+
+  # debe haber al menos columnas con escenario y funcion sugerida
+  expect_gte(length(cols), 2)
+  expect_true(any(grepl("[Tt]engo|[Bb]usco|[Ee]ntrada", cols)))
+  expect_true(any(grepl("[Uu]sar|[Ff]uncion|[Ss]alida", cols)))
+})
+
+test_that("cie_guide referencia funciones publicas reales del paquete", {
+  resultado <- cie_guide()
+
+  texto <- paste(unlist(resultado), collapse = " ")
+
+  # Al menos las 3 funciones core deben aparecer en la guia
+  expect_match(texto, "cie_lookup")
+  expect_match(texto, "cie_search")
+})
+
+test_that("cie_guia_busqueda emite warning de deprecacion", {
+  expect_warning(
+    cie_guia_busqueda(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+test_that("cie_guia_busqueda retorna mismo resultado que cie_guide", {
+  expect_warning(
+    legacy <- cie_guia_busqueda(),
+    class = "lifecycle_warning_deprecated"
+  )
+  actual <- cie_guide()
+
+  expect_equal(legacy, actual)
+})
+
 # ============================================================
 # PRUEBAS COBERTURA - mensaje "Sin coincidencias"
 # ============================================================
