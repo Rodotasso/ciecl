@@ -20,6 +20,7 @@ release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://githu
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
 [![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 [![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
+[![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/765_status.svg)](https://github.com/ropensci/software-review/issues/765)
 <!-- badges: end -->
 
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
