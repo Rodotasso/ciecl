@@ -1,10 +1,10 @@
 #' Parsear datos CIE-10 MINSAL/DEIS desde XLS
-#' 
+#'
 #' @description
 #' Funcion interna para procesar Lista-Tabular-CIE-10-1-1.xls oficial DEIS.
 #' Estructura columnas: codigo, descripcion, categoria, inclusion, exclusion.
 #' Detecta columnas automaticamente para mayor robustez.
-#' 
+#'
 #' @param xls_path Ruta al archivo XLS descargado DEIS
 #' @return tibble con 39,877 codigos CIE-10 Chile limpios
 parsear_cie10_minsal <- function(xls_path) {
@@ -60,7 +60,7 @@ parsear_cie10_minsal <- function(xls_path) {
     ) %>%
     dplyr::filter(!is.na(codigo), !is.na(descripcion), nchar(codigo) >= 3) %>%
     tibble::as_tibble()
-  
+
   return(cie10_limpio)
 }
 

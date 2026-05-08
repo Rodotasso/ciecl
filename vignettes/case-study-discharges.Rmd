@@ -73,9 +73,9 @@ discharges <- discharges |>
   )
 
 # Comparison between original and normalized formats
-discharges |> 
-  select(DIAG1, DIAG1_NORM) |> 
-  distinct() |> 
+discharges |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
   head(5)
 ```
 

@@ -75,9 +75,9 @@ egresos <- egresos |>
   )
 
 # Comparación entre formato original y normalizado
-egresos |> 
-  select(DIAG1, DIAG1_NORM) |> 
-  distinct() |> 
+egresos |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
   head(5)
 ```
 

@@ -40,7 +40,10 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
 
   # Validacion de inputs
   if (!rlang::is_string(text)) {
-    cli::cli_abort("{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.", class = "ciecl_invalid_input")
+    cli::cli_abort(
+      "{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.",
+      class = "ciecl_invalid_input"
+    )
   }
   if (nchar(trimws(text)) == 0) {
     cli::cli_abort("{.arg text} no puede estar vacio.", class = "ciecl_invalid_input")
@@ -51,12 +54,15 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
   }
   if (!is.character(release) || length(release) != 1 ||
       !grepl("^\\d{4}-\\d{2}$", release)) {
-    cli::cli_abort("{.arg release} debe ser formato {.val YYYY-MM} (ej. {.val 2024-01}).", class = "ciecl_invalid_input")
+    cli::cli_abort(
+      "{.arg release} debe ser formato {.val YYYY-MM} (ej. {.val 2024-01}).",
+      class = "ciecl_invalid_input"
+    )
   }
 
   # Verificar que httr2 este instalado
   rlang::check_installed("httr2", reason = "para consultar la API oficial de la OMS (CIE-11).")
-  
+
   # Obtener API key (env var o argumento)
   if (is.null(api_key)) {
     api_key <- Sys.getenv("ICD_API_KEY", unset = NA)
@@ -64,7 +70,7 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
       cli::cli_abort("API key OMS requerida. Ver: {.url https://icd.who.int/icdapi}", class = "ciecl_api_error")
     }
   }
-  
+
   # Separar client_id y client_secret
   credentials <- strsplit(api_key, ":")[[1]]
   if (length(credentials) != 2) {
@@ -72,7 +78,7 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
   }
   client_id <- credentials[1]
   client_secret <- credentials[2]
-  
+
   tryCatch({
     # Paso 1: Obtener token OAuth
     token_url <- "https://icdaccessmanagement.who.int/connect/token"
@@ -87,16 +93,16 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
         scope = "icdapi_access",
         grant_type = "client_credentials"
       )
-    
+
     token_resp <- httr2::req_perform(token_req)
     token_data <- httr2::resp_body_json(token_resp)
     access_token <- token_data$access_token
-    
+
     # Paso 2: Buscar en CIE-11 con el token
     search_url <- paste0(
       "https://id.who.int/icd/release/11/", release, "/mms/search"
     )
-    
+
     search_req <- httr2::request(search_url) |>
       httr2::req_user_agent("ciecl (https://github.com/Rodotasso/ciecl)") |>
       httr2::req_timeout(30) |>
@@ -112,10 +118,10 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
         `API-Version` = "v2",
         `Accept-Language` = lang
       )
-    
+
     search_resp <- httr2::req_perform(search_req)
     json <- httr2::resp_body_json(search_resp, simplifyVector = TRUE)
-    
+
     # Parsear resultados
     has_results <- "destinationEntities" %in% names(json) &&
       length(json$destinationEntities) > 0
@@ -123,24 +129,24 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
       # Limpiar HTML tags del titulo
       html_pattern <- "<em class='found'>|</em>"
       titulos_limpios <- gsub(html_pattern, "", json$destinationEntities$title)
-      
+
       resultados <- tibble::tibble(
         codigo = json$destinationEntities$theCode,
         titulo = titulos_limpios,
         capitulo = json$destinationEntities$chapter
       ) |>
         dplyr::slice_head(n = max_results)
-      
+
       return(resultados)
     } else {
       cli::cli_inform(c("i" = "Sin resultados CIE-11 para: {.val {text}}"))
       return(tibble::tibble(
-        codigo = character(), 
+        codigo = character(),
         titulo = character(),
         capitulo = character()
       ))
     }
-    
+
   }, error = function(e) {
     cli::cli_warn(c(
       "Error API CIE-11: {e$message}",
@@ -148,7 +154,7 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
       "i" = "Usa {.fn cie_search} para fallback local CIE-10."
     ))
     return(tibble::tibble(
-      codigo = character(), 
+      codigo = character(),
       titulo = character(),
       capitulo = character()
     ))

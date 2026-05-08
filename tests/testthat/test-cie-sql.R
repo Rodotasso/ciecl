@@ -122,7 +122,10 @@ test_that("cie10_sql permite subqueries y UNION", {
   expect_equal(nrow(r_sub), 1)
 
   # UNION de dos SELECT validos
-  r_union <- cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo = 'E11.0' UNION SELECT codigo, descripcion FROM cie10 WHERE codigo = 'I10'")
+  r_union <- cie10_sql(paste(
+    "SELECT codigo, descripcion FROM cie10 WHERE codigo = 'E11.0'",
+    "UNION SELECT codigo, descripcion FROM cie10 WHERE codigo = 'I10'"
+  ))
   expect_gte(nrow(r_union), 1)
 })
 

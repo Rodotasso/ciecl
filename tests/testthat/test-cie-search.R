@@ -3,7 +3,7 @@
 
 test_that("cie_search encuentra diabetes con fuzzy", {
   skip_on_cran()
-  
+
   # Buscar diabetes
   resultado <- cie_search("diabetes mellitus", threshold = 0.70)
   expect_gt(nrow(resultado), 0)
@@ -12,7 +12,7 @@ test_that("cie_search encuentra diabetes con fuzzy", {
 
 test_that("cie_lookup codigo exacto funciona", {
   skip_on_cran()
-  
+
   resultado <- cie_lookup("E11.0")
   expect_shape(resultado, nrow = 1)
   expect_equal(resultado$codigo, "E11.0")
@@ -20,18 +20,18 @@ test_that("cie_lookup codigo exacto funciona", {
 
 test_that("cie_lookup vectorizado elimina duplicados", {
   skip_on_cran()
-  
+
   # Vector con codigos duplicados
   codigos <- c("E11.0", "E11.0", "Z00")
   resultado <- cie_lookup(codigos)
-  
+
   # No debe haber duplicados en resultado
   expect_equal(nrow(resultado), length(unique(resultado$codigo)))
 })
 
 test_that("cie_lookup puede generar descripcion_completa", {
   skip_on_cran()
-  
+
   # Con descripcion_completa
   resultado_completo <- cie_lookup("E11.0", full_description = TRUE)
   expect_true("descripcion_completa" %in% names(resultado_completo))

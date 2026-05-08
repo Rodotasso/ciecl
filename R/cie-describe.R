@@ -59,7 +59,7 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
   } else {
     as.character(codes)
   }
-  
+
   resultado <- rep(default, length(codes))
 
   no_na <- !is.na(codes)

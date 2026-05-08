@@ -15,21 +15,21 @@ extract_cie_from_text <- function(text) {
   # letra + 2-3 digitos + punto opcional + 0-2 digitos
   # Solo extrae si esta rodeado de no-alfanumericos o en extremos
   patron <- "(?:^|[^A-Z0-9])([A-Z][0-9]{2}[0-9]?\\.?[0-9X]{0,2})(?:$|[^A-Z0-9])"
-  
+
   extraido <- stringr::str_extract(toupper(text), patron)
-  
+
   # Extraer grupo capturado (quitar prefijos/sufijos)
   if (!is.na(extraido) && extraido != "") {
     extraido <- gsub("^[^A-Z]+|[^A-Z0-9]+$", "", extraido)
   }
-  
+
   # Si se extrajo algo, usarlo; si no, devolver original
   resultado <- ifelse(
     !is.na(extraido) & extraido != "",
     extraido,
     text
   )
-  
+
   return(resultado)
 }
 
@@ -135,12 +135,12 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
   codigo_input <- stringr::str_trim(toupper(codigo_sin_na))
   # Fix #1: Normalizar espacios en codigos
   codigo_input <- gsub("\\s+", "", codigo_input)
-  
+
   # Extraer codigo de texto con ruido (prefijos/sufijos)
   if (extract) {
     codigo_input <- extract_cie_from_text(codigo_input)
   }
-  
+
   # Buscar siglas medicas
   if (check_siglas) {
     codigo_input <- vapply(codigo_input, function(x) {
@@ -151,7 +151,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
       return(x)
     }, character(1), USE.NAMES = FALSE)
   }
-  
+
   # Normalizar formato si se solicita
   # (elimina sufijo X DEIS, agrega punto, etc.)
   # Preservar rangos (guion entre codigos) antes de normalizar,
@@ -169,7 +169,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
   } else {
     codigo_norm <- codigo_input
   }
-  
+
   # Si es vector de multiples codigos, procesar con query vectorizada
   if (length(codigo_norm) > 1) {
     # Optimizacion: usar unique() y query batch
@@ -239,7 +239,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
     # Codigo unico - usar funcion interna
     resultado <- cie_lookup_single(codigo_norm, expandir = expandir)
   }
-  
+
   # Agregar columna descripcion_completa si se solicita
   if (descripcion_completa) {
     if (nrow(resultado) > 0) {
@@ -255,7 +255,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
         tibble::add_column(descripcion_completa = character(0))
     }
   }
-  
+
   return(resultado)
 }
 

@@ -37,7 +37,7 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
 
   # Reemplazar NA/vacio por em dash (U+2014) en columnas de texto.
   em_dash <- intToUtf8(0x2014)
-  
+
   # Identificar si columnas de notas estan vacias antes del reemplazo
   notas_vacias <- sapply(c("inclusion", "exclusion"), function(col) {
     all(is.na(datos[[col]]) | datos[[col]] == "")

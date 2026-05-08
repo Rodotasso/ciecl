@@ -24,7 +24,7 @@ NULL
 #'   diag = c("E11.0", "I21.0", "C50.9", "E10.9")
 #' )
 #' cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
-cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
+cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
                          assign0 = TRUE) {
   # Verificar que comorbidity este instalado
   rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")
@@ -33,7 +33,10 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 
   # Validar columnas existen
   if (!id %in% names(data) || !code %in% names(data)) {
-    cli::cli_abort("Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.", class = "ciecl_invalid_input")
+    cli::cli_abort(
+      "Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.",
+      class = "ciecl_invalid_input"
+    )
   }
 
   # Advertir sobre NAs en columna de codigos
@@ -58,7 +61,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     "charlson" = "charlson_icd10_quan",
     "elixhauser" = "elixhauser_icd10_quan"
   )
-  
+
   # Mapeo Charlson adaptado Chile (usa comorbidity::comorbidity)
   # Nota: version mas reciente de comorbidity no requiere argumento 'icd'
   resultado <- comorbidity::comorbidity(
@@ -69,7 +72,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     assign0 = assign0,
     labelled = FALSE
   )
-  
+
   # Score total Charlson (si aplica)
   if (map == "charlson") {
     resultado$score_charlson <- comorbidity::score(
@@ -78,7 +81,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
       assign0 = assign0
     )
   }
-  
+
   return(tibble::as_tibble(resultado))
 }
 
@@ -87,7 +90,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' @description
 #' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
-#' 
+#'
 #' @param codes Character vector de codigos
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @returns tibble con columnas: codigo, categoria
