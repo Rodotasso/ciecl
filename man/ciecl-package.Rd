@@ -22,5 +22,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Francisca Jofre (Package logo design) [contributor]
+}
+
 }
 \keyword{internal}

@@ -1,11 +1,14 @@
 Package: ciecl
 Title: International Classification of Diseases 'ICD-10'/'ICD-11' for Chile
 Version: 0.9.8
-Authors@R:
+Authors@R: c(
     person("Rodolfo", "Tasso Suazo",
            email = "rtasso@uchile.cl",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-1264-4933"))
+           comment = c(ORCID = "0000-0002-1264-4933")),
+    person("Francisca", "Jofre",
+           role = "ctb",
+           comment = "Package logo design"))
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes
     optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms
