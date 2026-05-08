@@ -1,0 +1,26 @@
+# Workflow para pkgcheck de rOpenSci.
+# Corre los chequeos estadisticos/comunitarios que rOpenSci aplica
+# durante la revision Software Peer Review.
+# Documentacion: https://github.com/ropensci-review-tools/pkgcheck-action
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+name: pkgcheck.yaml
+
+permissions: read-all
+
+jobs:
+  pkgcheck:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ropensci-review-tools/pkgcheck-action@main
+        with:
+          # No fallar el job al primer issue: queremos ver el reporte completo
+          # y solo flaggear regresiones, no bloquear PRs por checks de comunidad.
+          fail-on-error: false
