@@ -21,3 +21,7 @@ Useful links:
 
 **Maintainer**: Rodolfo Tasso Suazo <rtasso@uchile.cl>
 ([ORCID](https://orcid.org/0000-0002-1264-4933))
+
+Other contributors:
+
+- Francisca Jofre (Package logo design) \[contributor\]
