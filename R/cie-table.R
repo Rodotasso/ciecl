@@ -39,9 +39,9 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
   em_dash <- intToUtf8(0x2014)
 
   # Identificar si columnas de notas estan vacias antes del reemplazo
-  notas_vacias <- sapply(c("inclusion", "exclusion"), function(col) {
+  notas_vacias <- vapply(c("inclusion", "exclusion"), function(col) {
     all(is.na(datos[[col]]) | datos[[col]] == "")
-  })
+  }, logical(1))
 
   datos <- datos |>
     dplyr::mutate(
