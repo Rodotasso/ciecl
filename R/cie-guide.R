@@ -7,8 +7,7 @@ NULL
 #'
 #' @returns tibble con guia comparativa de funciones de busqueda
 #' @family search
-#' @seealso [cie_search()],
-#'   [cie_lookup()], [cie_short()]
+#' @seealso [cie_search()], [cie_lookup()], [cie_short()]
 #' @export
 #' @examples
 #' cie_guide()
@@ -62,7 +61,6 @@ cie_guide <- function() {
 #' @examples
 #' # Deprecated: usar cie_guide()
 #' cie_guia_busqueda()
-
 cie_guia_busqueda <- function() {
   lifecycle::deprecate_warn(
     "0.9.8",
