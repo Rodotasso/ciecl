@@ -106,12 +106,15 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     )
     only_fuzzy <- solo_fuzzy
   }
-  
+
   field <- rlang::arg_match(field)
 
   # Validacion de parametros
   if (!rlang::is_string(text)) {
-    cli::cli_abort("{.arg text} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {text}}.", class = "ciecl_invalid_input")
+    cli::cli_abort(
+      "{.arg text} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {text}}.",
+      class = "ciecl_invalid_input"
+    )
   }
   if (threshold < 0 || threshold > 1) {
     cli::cli_abort("{.arg threshold} debe estar entre 0 y 1.", class = "ciecl_invalid_input")
@@ -132,10 +135,13 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
   texto_busqueda <- if (!is.null(sigla_expandida)) {
     if (verbose) {
       cli::cli_inform(c(
-        "i" = "Sigla detectada: {.val {toupper(texto_limpio)}} -> {.val {sigla_expandida}}"
+        "i" = "Sigla detectada: {.val {toupper(texto_limpio)}} -> {.val {sigla_expandida$termino}}"
       ))
+      if (isTRUE(sigla_expandida$ambiguo) && !is.null(sigla_expandida$aviso)) {
+        cli::cli_warn(c("!" = sigla_expandida$aviso))
+      }
     }
-    sigla_expandida
+    sigla_expandida$termino
   } else {
     texto_limpio
   }

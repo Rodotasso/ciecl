@@ -8,10 +8,30 @@ Versión de cumplimiento editorial y técnico tras la revisión de Maëlle Salmo
 Esta versión unifica la interfaz del paquete bajo estándares internacionales de R,
 manteniendo la documentación pedagógica en español para el contexto local.
 
+### Correcciones funcionales
+
+* **Sigla `IRA` desambiguada** (`cie_search()`): la sigla `IRA` es ambigua en
+  contexto clínico chileno (puede ser **infección respiratoria aguda** o
+  **insuficiencia renal aguda**). Ahora `cie_search("IRA")` mantiene el default
+  respiratorio (uso más frecuente en pediatría y atención primaria) pero emite
+  una advertencia explícita orientando al usuario hacia los nuevos alias
+  inequívocos `IRA_RESP` (respiratoria) e `IRA_RENAL` (renal). Cierra bug
+  detectado durante auditoría de seguridad post-split.
+
+### Infraestructura de calidad de código
+
+* **Workflow de `lintr`** agregado en `.github/workflows/lint.yaml` (template
+  oficial r-lib). Reporta lints sin bloquear el CI.
+* **`.lintr` modernizado** a sintaxis lintr 3.x (`linters_with_defaults`),
+  removiendo el deprecado `with_defaults` y el linter inexistente
+  `cyclocomp_linter`.
+* **Cleanup de espacios en blanco al final de línea** en 18 archivos
+  (R/, tests/, vignettes/, NEWS, README, data-raw, tools).
+
 ### Remediación r-lib y Calidad Técnica
 
 * **Migración total a `cli`**: Todos los errores, advertencias y mensajes informativos usan ahora `cli::cli_abort()`, `cli_warn()` y `cli_inform()` con clases de error personalizadas (`ciecl_invalid_input`, `ciecl_api_error`, etc.) para captura programática.
-* **Modernización de Roxygen**: 
+* **Modernización de Roxygen**:
   - Migración masiva de `@return` a `@returns`.
   - Uso de sintaxis markdown para enlaces internos y externos (`[fun()]`).
   - Normalización de etiquetas `@family` a snake_case sin tildes.
@@ -27,7 +47,7 @@ manteniendo la documentación pedagógica en español para el contexto local.
   públicas han sido migrados al inglés para consistencia con el ecosistema
   tidyverse (dplyr, httr2). Los argumentos antiguos en español emiten
   `lifecycle::deprecate_warn()` y serán eliminados en la versión 1.0.0.
-  
+
   - `cie_lookup()`: `codigo` -> `code`, `expandir` -> `expand`, `normalizar` -> `normalize`.
   - `cie_search()`: `texto` -> `text`, `campo` -> `field`, `solo_fuzzy` -> `only_fuzzy`.
   - `cie_short()`: Reemplaza a `cie_siglas()`. Argumento `category`.
@@ -76,7 +96,7 @@ manteniendo la documentación pedagógica en español para el contexto local.
 
 ### rOpenSci Review Response
 
-Comprehensive update focused on API consistency and technical compliance 
+Comprehensive update focused on API consistency and technical compliance
 following rOpenSci peer review.
 
 * **Breaking Changes (Deprecations)**: Full API migration to English arguments
@@ -87,11 +107,11 @@ following rOpenSci peer review.
 * **New Function**: Added `cie_describe()` for direct, vectorized description
   lookup within `mutate()` calls.
 * **Technical Compliance**:
-  - `cie11_search()` now uses `httr2` with User-Agent, retry, and throttle 
+  - `cie11_search()` now uses `httr2` with User-Agent, retry, and throttle
     policies.
   - `httr2` promoted to **Imports**.
   - Test suite cleaned of deprecation noise and updated to use `withr`.
-* **Documentation**: Mirror versions of user guides provided in both 
+* **Documentation**: Mirror versions of user guides provided in both
   English and Spanish. `pkgdown` site navigation localized to Spanish.
 
 ---

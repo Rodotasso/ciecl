@@ -96,6 +96,16 @@ get_siglas_medicas <- function() {
     ),
     "ira" = list(
       termino = "infeccion respiratoria aguda",
+      categoria = "respiratoria",
+      ambiguo = TRUE,
+      aviso = paste(
+        "{.val IRA} es ambigua en contexto clinico chileno:",
+        "respiratoria (default) o renal. Use {.val IRA_RESP} o",
+        "{.val IRA_RENAL} para evitar ambiguedad."
+      )
+    ),
+    "ira_resp" = list(
+      termino = "infeccion respiratoria aguda",
       categoria = "respiratoria"
     ),
     "sdra" = list(
@@ -396,18 +406,24 @@ get_siglas_medicas <- function() {
 #' Expandir siglas medicas a terminos de busqueda
 #'
 #' @param texto Texto que puede contener siglas
-#' @returns Texto con siglas expandidas o NULL si no es sigla
+#' @returns Lista con `termino`, `ambiguo` (logical) y `aviso` (character o NULL),
+#'   o NULL si `texto` no es sigla.
 #' @keywords internal
 #' @noRd
 expandir_sigla <- function(texto) {
   siglas <- get_siglas_medicas()
   texto_lower <- tolower(stringr::str_trim(texto))
 
-  if (texto_lower %in% names(siglas)) {
-    return(siglas[[texto_lower]]$termino)
+  if (!(texto_lower %in% names(siglas))) {
+    return(NULL)
   }
 
-  return(NULL)
+  entry <- siglas[[texto_lower]]
+  list(
+    termino = entry$termino,
+    ambiguo = isTRUE(entry$ambiguo),
+    aviso = entry$aviso
+  )
 }
 
 #' Obtener codigo CIE-10 desde sigla medica

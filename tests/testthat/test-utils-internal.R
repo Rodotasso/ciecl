@@ -107,11 +107,26 @@ test_that("expandir_sigla expande siglas conocidas", {
   expandir_sigla <- expandir_sigla
 
   # Siglas comunes
-  expect_equal(expandir_sigla("iam"), "infarto agudo miocardio")
-  expect_equal(expandir_sigla("IAM"), "infarto agudo miocardio")
-  expect_equal(expandir_sigla("dm"), "diabetes mellitus")
-  expect_equal(expandir_sigla("hta"), "hipertension arterial")
-  expect_equal(expandir_sigla("epoc"), "enfermedad pulmonar obstructiva cronica")
+  expect_equal(expandir_sigla("iam")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla("IAM")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla("dm")$termino, "diabetes mellitus")
+  expect_equal(expandir_sigla("hta")$termino, "hipertension arterial")
+  expect_equal(expandir_sigla("epoc")$termino, "enfermedad pulmonar obstructiva cronica")
+
+  # Siglas comunes no son ambiguas
+  expect_false(expandir_sigla("iam")$ambiguo)
+
+  # IRA es ambigua y trae aviso
+  ira <- expandir_sigla("ira")
+  expect_equal(ira$termino, "infeccion respiratoria aguda")
+  expect_true(ira$ambiguo)
+  expect_type(ira$aviso, "character")
+
+  # Aliases explicitos no son ambiguos
+  expect_false(expandir_sigla("ira_resp")$ambiguo)
+  expect_false(expandir_sigla("ira_renal")$ambiguo)
+  expect_equal(expandir_sigla("ira_resp")$termino, "infeccion respiratoria aguda")
+  expect_equal(expandir_sigla("ira_renal")$termino, "insuficiencia renal aguda")
 })
 
 test_that("expandir_sigla retorna NULL para no-siglas", {
@@ -125,8 +140,8 @@ test_that("expandir_sigla retorna NULL para no-siglas", {
 test_that("expandir_sigla maneja espacios", {
   expandir_sigla <- expandir_sigla
 
-  expect_equal(expandir_sigla("  iam  "), "infarto agudo miocardio")
-  expect_equal(expandir_sigla(" DM "), "diabetes mellitus")
+  expect_equal(expandir_sigla("  iam  ")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla(" DM ")$termino, "diabetes mellitus")
 })
 
 # ============================================================
