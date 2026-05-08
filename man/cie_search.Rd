@@ -75,8 +75,7 @@ cie_search("bacteriana", field = "inclusion")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=cie_lookup]{cie_lookup()}},
-\code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
+\code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
 
 Other search: 
 \code{\link{cie_describe}()},

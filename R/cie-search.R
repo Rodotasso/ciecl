@@ -54,11 +54,8 @@ normalizar_tildes <- function(texto) {
 #'   Si el text corresponde a una sigla medica, se expande
 #'   automaticamente antes de buscar.
 #' @family search
-#' @seealso [cie_lookup()],
-#'   [cie_short()], [cie10_sql()]
+#' @seealso [cie_lookup()], [cie_short()], [cie10_sql()]
 #' @export
-#' @importFrom stringdist stringsim
-#' @importFrom dplyr mutate filter arrange desc slice_head select everything
 #' @examples
 #' # Busqueda basica
 #' cie_search("diabetes")
