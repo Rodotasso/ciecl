@@ -1,23 +1,26 @@
 # ============================================================
 # COBERTURA: ciclo de vida del cache SQLite en cie-sql.R
 # Cubre build_cache_atomic (creacion de cache_dir, cleanup
-# de .tmp residual, error handling) + build_fts (failsafe)
-# + cache_is_current (sin metadata, version mismatch).
-# Usa patrones r-lib: withr::local_tempdir, local_envvar,
-# local_mocked_bindings, defer.
+# de .tmp residual) + build_fts (failsafe) + cache_is_current
+# (sin metadata, version mismatch) + reconstruccion automatica
+# en get_cie10_db por version mismatch.
+#
+# Patrones r-lib usados:
+# - withr::local_tempdir(): cache_dir aislado por test
+# - withr::local_envvar(): R_USER_CACHE_DIR aislado
+# - withr::local_db_connection(): cleanup automatico de DBI
+#   (en lugar de defer manual de dbDisconnect)
+# - llamada directa a helpers internos (build_fts, cache_is_current,
+#   build_cache_atomic) — devtools::test() carga el namespace via
+#   pkgload::load_all(), asi que getFromNamespace() es innecesario.
 # ============================================================
-
-# Helper: crear conexion in-memory aislada para tests de helpers internos
-make_test_con <- function() {
-  con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  withr::defer(DBI::dbDisconnect(con), envir = parent.frame())
-  con
-}
 
 # --- build_fts: failsafe FTS5 missing -------------------------------------
 
 test_that("build_fts crea tabla FTS5 sobre conexion existente", {
-  con <- make_test_con()
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
 
   # Crear tabla cie10 minima (build_fts requiere que exista)
   DBI::dbExecute(con, "CREATE TABLE cie10 (codigo TEXT, descripcion TEXT,
@@ -25,32 +28,33 @@ test_that("build_fts crea tabla FTS5 sobre conexion existente", {
   DBI::dbExecute(con, "INSERT INTO cie10 VALUES
                        ('E11.0', 'diabetes con coma', NULL, NULL)")
 
-  build_fts <- getFromNamespace("build_fts", "ciecl")
   expect_silent(build_fts(con))
-
   expect_true(DBI::dbExistsTable(con, "cie10_fts"))
 })
 
 # --- cache_is_current ------------------------------------------------------
 
 test_that("cache_is_current retorna FALSE si no existe tabla cie10_meta", {
-  con <- make_test_con()
-
-  cache_is_current <- getFromNamespace("cache_is_current", "ciecl")
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
   expect_false(cache_is_current(con))
 })
 
 test_that("cache_is_current retorna FALSE si tabla cie10_meta esta vacia", {
-  con <- make_test_con()
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
   DBI::dbExecute(con, "CREATE TABLE cie10_meta (key TEXT PRIMARY KEY,
                                                   value TEXT)")
 
-  cache_is_current <- getFromNamespace("cache_is_current", "ciecl")
   expect_false(cache_is_current(con))
 })
 
 test_that("cache_is_current retorna FALSE si version no coincide", {
-  con <- make_test_con()
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
   DBI::dbExecute(con, "CREATE TABLE cie10_meta (key TEXT PRIMARY KEY,
                                                   value TEXT)")
   DBI::dbExecute(
@@ -58,12 +62,13 @@ test_that("cache_is_current retorna FALSE si version no coincide", {
     "INSERT INTO cie10_meta (key, value) VALUES ('cache_version', '0.0.0')"
   )
 
-  cache_is_current <- getFromNamespace("cache_is_current", "ciecl")
   expect_false(cache_is_current(con))
 })
 
 test_that("cache_is_current retorna TRUE cuando version coincide", {
-  con <- make_test_con()
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
   DBI::dbExecute(con, "CREATE TABLE cie10_meta (key TEXT PRIMARY KEY,
                                                   value TEXT)")
   pkg_v <- as.character(utils::packageVersion("ciecl"))
@@ -73,7 +78,6 @@ test_that("cache_is_current retorna TRUE cuando version coincide", {
              VALUES ('cache_version', '%s')", pkg_v)
   )
 
-  cache_is_current <- getFromNamespace("cache_is_current", "ciecl")
   expect_true(cache_is_current(con))
 })
 
@@ -83,14 +87,14 @@ test_that("build_cache_atomic crea cache_dir y construye DB completa", {
   cache_dir <- withr::local_tempdir()
   db_path <- file.path(cache_dir, "test.db")
 
-  build_cache_atomic <- getFromNamespace("build_cache_atomic", "ciecl")
   build_cache_atomic(cache_dir, db_path)
 
   expect_true(file.exists(db_path))
 
   # Verificar contenido
-  con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
-  withr::defer(DBI::dbDisconnect(con))
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), db_path)
+  )
 
   expect_true(DBI::dbExistsTable(con, "cie10"))
   expect_true(DBI::dbExistsTable(con, "cie10_fts"))
@@ -111,7 +115,6 @@ test_that("build_cache_atomic crea cache_dir cuando no existe", {
 
   expect_false(dir.exists(cache_dir))
 
-  build_cache_atomic <- getFromNamespace("build_cache_atomic", "ciecl")
   build_cache_atomic(cache_dir, db_path)
 
   expect_true(dir.exists(cache_dir))
@@ -127,7 +130,6 @@ test_that("build_cache_atomic limpia .tmp residual antes de empezar", {
   writeLines("residuo", tmp_path)
   expect_true(file.exists(tmp_path))
 
-  build_cache_atomic <- getFromNamespace("build_cache_atomic", "ciecl")
   build_cache_atomic(cache_dir, db_path)
 
   expect_true(file.exists(db_path))
