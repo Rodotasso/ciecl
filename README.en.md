@@ -18,7 +18,7 @@ status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/
 release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
 [![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
-[![Coverage](https://img.shields.io/badge/coverage-96%25-brightgreen)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Rodotasso/ciecl/main/badges/coverage.json)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
 [![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
 [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/765_status.svg)](https://github.com/ropensci/software-review/issues/765)
 <!-- badges: end -->
