@@ -24,7 +24,8 @@ jobs:
 
       - uses: ropensci-review-tools/pkgcheck-action@main
         with:
-          # Postear el reporte al summary del workflow (no a un Issue).
-          # Esto evita necesitar permisos issues:write y mantiene el reporte
-          # visible directamente desde la pestana Actions.
+          # Desactivar post a Issues (requiere issues:write que no tenemos).
+          # `summary-only: true` solo agrega al summary pero NO inhibe el POST,
+          # asi que necesitamos `post-to-issue: false` explicito.
+          post-to-issue: false
           summary-only: true
