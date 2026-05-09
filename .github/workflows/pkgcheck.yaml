@@ -2,6 +2,9 @@
 # Corre los chequeos estadisticos/comunitarios que rOpenSci aplica
 # durante la revision Software Peer Review.
 # Documentacion: https://github.com/ropensci-review-tools/pkgcheck-action
+#
+# Inputs validos del action (verificado 2026-05-08):
+#   ref, post-to-issue, issue-title, summary-only, append-to-issue
 on:
   push:
     branches: [main, dev]
@@ -21,6 +24,7 @@ jobs:
 
       - uses: ropensci-review-tools/pkgcheck-action@main
         with:
-          # No fallar el job al primer issue: queremos ver el reporte completo
-          # y solo flaggear regresiones, no bloquear PRs por checks de comunidad.
-          fail-on-error: false
+          # Postear el reporte al summary del workflow (no a un Issue).
+          # Esto evita necesitar permisos issues:write y mantiene el reporte
+          # visible directamente desde la pestana Actions.
+          summary-only: true
