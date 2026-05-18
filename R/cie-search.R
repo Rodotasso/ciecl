@@ -13,7 +13,9 @@ NULL
 #' @noRd
 normalizar_tildes <- function(texto) {
   # Manejar vector vacio o NA
-  if (length(texto) == 0) return(character(0))
+  if (length(texto) == 0) {
+    return(character(0))
+  }
 
   # Usar chartr() que es mas rapido para sustituciones multiples
   # Caracteres con tilde -> sin tilde
@@ -104,6 +106,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     only_fuzzy <- solo_fuzzy
   }
 
+  rlang::check_required(text)
   field <- rlang::arg_match(field)
 
   # Validacion de parametros
@@ -189,7 +192,8 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
         field_quoted <- DBI::dbQuoteIdentifier(con, field)
         query_sql <- sprintf(
           "SELECT codigo, descripcion, categoria, %s FROM cie10",
-          field_quoted)
+          field_quoted
+        )
       }
     }
   } else {
@@ -200,7 +204,8 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
       field_quoted <- DBI::dbQuoteIdentifier(con, field)
       query_sql <- sprintf(
         "SELECT codigo, descripcion, categoria, %s FROM cie10",
-        field_quoted)
+        field_quoted
+      )
     }
   }
 
@@ -215,7 +220,8 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
       field_quoted <- DBI::dbQuoteIdentifier(con, field)
       query_sql <- sprintf(
         "SELECT codigo, descripcion, categoria, %s FROM cie10",
-        field_quoted)
+        field_quoted
+      )
     }
     base <- DBI::dbGetQuery(con, query_sql) |>
       tibble::as_tibble()
@@ -229,8 +235,10 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
   # ESTRATEGIA 1: Busqueda exacta por subcadena (mas rapida y precisa)
   if (!only_fuzzy) {
     # Buscar coincidencias exactas (subcadena)
-    matches_exactos <- stringr::str_detect(base_texto_sin_tildes,
-                                           stringr::fixed(texto_sin_tildes))
+    matches_exactos <- stringr::str_detect(
+      base_texto_sin_tildes,
+      stringr::fixed(texto_sin_tildes)
+    )
 
     if (any(matches_exactos)) {
       resultado_exacto <- base[matches_exactos, ] |>
@@ -279,11 +287,15 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     palabras_base <- unlist(stringr::str_split(texto_base, "\\s+"))
     palabras_base <- palabras_base[nchar(palabras_base) >= 3]
 
-    if (length(palabras_base) == 0) return(0)
+    if (length(palabras_base) == 0) {
+      return(0)
+    }
 
     # Para cada palabra del texto buscar la mejor coincidencia en la descripcion
     best_scores <- vapply(palabras_fuzzy, function(p) {
-      if (length(palabras_base) == 0) return(0)
+      if (length(palabras_base) == 0) {
+        return(0)
+      }
       max(stringdist::stringsim(p, palabras_base, method = "jw"))
     }, numeric(1))
 

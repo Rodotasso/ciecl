@@ -26,6 +26,10 @@ NULL
 #' cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
 cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
                          assign0 = TRUE) {
+  rlang::check_required(data)
+  rlang::check_required(id)
+  rlang::check_required(code)
+
   # Verificar que comorbidity este instalado
   rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")
 
@@ -108,6 +112,8 @@ cie_map_comorbid <- function(codes, codigos = lifecycle::deprecated()) {
     )
     codes <- codigos
   }
+
+  rlang::check_required(codes)
 
   # Manejar vector vacio
   if (length(codes) == 0) {
