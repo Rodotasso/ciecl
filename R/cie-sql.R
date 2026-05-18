@@ -33,10 +33,9 @@ get_cie10_db <- function() {
   # Pooling: reutilizar conexion existente si es valida y apunta al mismo path
 
   if (!is.null(.ciecl_env$con) &&
-      inherits(.ciecl_env$con, "SQLiteConnection") &&
-      DBI::dbIsValid(.ciecl_env$con) &&
-      identical(.ciecl_env$db_path, db_path)) {
-
+    inherits(.ciecl_env$con, "SQLiteConnection") &&
+    DBI::dbIsValid(.ciecl_env$con) &&
+    identical(.ciecl_env$db_path, db_path)) {
     # Failsafe: verificar que FTS5 existe (fix cache parcial)
     if (!DBI::dbExistsTable(.ciecl_env$con, "cie10_fts")) {
       build_fts(.ciecl_env$con)
@@ -120,57 +119,101 @@ build_cache_atomic <- function(cache_dir, db_path) {
   }
 
   con <- DBI::dbConnect(RSQLite::SQLite(), tmp_path)
-  on.exit({
-    if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
-  }, add = TRUE)
+  on.exit(
+    {
+      if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
+    },
+    add = TRUE
+  )
 
-  tryCatch({
-    # Cargar datos
-    utils::data(cie10_cl, package = "ciecl", envir = environment())
-    DBI::dbWriteTable(con, "cie10", cie10_cl, overwrite = TRUE)
+  # Progress steps solo en sesion interactiva para no contaminar tests/CI.
+  # Usamos un id propio para gestionar el ciclo de vida manualmente y poder
+  # cerrar el progreso en caso de error.
+  show_progress <- interactive()
+  progress_id <- NULL
 
-    # Indices
-    DBI::dbExecute(con, "CREATE INDEX idx_codigo ON cie10(codigo)")
-    DBI::dbExecute(con, "CREATE INDEX idx_desc ON cie10(descripcion)")
+  tryCatch(
+    {
+      # Etapa 1: Cargar dataset cie10_cl
+      if (show_progress) {
+        progress_id <- cli::cli_progress_step(
+          "Cargando dataset {.field cie10_cl}",
+          msg_done = "Dataset {.field cie10_cl} cargado"
+        )
+      }
+      utils::data(cie10_cl, package = "ciecl", envir = environment())
 
-    # FTS5
-    build_fts(con)
+      # Etapa 2: Escribir tabla cie10
+      if (show_progress) {
+        cli::cli_progress_step(
+          "Escribiendo tabla {.field cie10}",
+          msg_done = "Tabla {.field cie10} escrita"
+        )
+      }
+      DBI::dbWriteTable(con, "cie10", cie10_cl, overwrite = TRUE)
 
-    # Metadata con version
-    DBI::dbExecute(con, "
+      # Etapa 3: Construir indices
+      if (show_progress) {
+        cli::cli_progress_step(
+          "Construyendo indices",
+          msg_done = "Indices construidos"
+        )
+      }
+      DBI::dbExecute(con, "CREATE INDEX idx_codigo ON cie10(codigo)")
+      DBI::dbExecute(con, "CREATE INDEX idx_desc ON cie10(descripcion)")
+
+      # Etapa 4: Crear FTS5
+      if (show_progress) {
+        cli::cli_progress_step(
+          "Creando tabla {.field FTS5}",
+          msg_done = "Tabla {.field FTS5} creada"
+        )
+      }
+      build_fts(con, .progress = FALSE)
+
+      # Metadata con version (sin step propio, parte del cierre)
+      DBI::dbExecute(con, "
       CREATE TABLE IF NOT EXISTS cie10_meta (
         key TEXT PRIMARY KEY,
         value TEXT
       )
     ")
-    pkg_version <- as.character(utils::packageVersion("ciecl"))
-    DBI::dbExecute(
-      con,
-      "INSERT OR REPLACE INTO cie10_meta
+      pkg_version <- as.character(utils::packageVersion("ciecl"))
+      DBI::dbExecute(
+        con,
+        "INSERT OR REPLACE INTO cie10_meta
        (key, value) VALUES ('cache_version', ?)",
-      params = list(pkg_version)
-    )
+        params = list(pkg_version)
+      )
 
-    # Cerrar antes de renombrar
-    DBI::dbDisconnect(con)
+      # Cerrar antes de renombrar
+      DBI::dbDisconnect(con)
 
-    # Atomico: renombrar .tmp -> .db
-    if (file.exists(db_path)) {
-      file.remove(db_path)
+      # Atomico: renombrar .tmp -> .db
+      if (file.exists(db_path)) {
+        file.remove(db_path)
+      }
+      file.rename(tmp_path, db_path)
+
+      if (show_progress) {
+        cli::cli_progress_done(id = progress_id)
+        cli::cli_inform(c("v" = "Cache SQLite creado: {.path {db_path}}"))
+      }
+    },
+    error = function(e) {
+      # Cleanup en caso de error
+      if (show_progress && !is.null(progress_id)) {
+        cli::cli_progress_done(id = progress_id, result = "failed")
+      }
+      if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
+      if (file.exists(tmp_path)) file.remove(tmp_path)
+      cli::cli_abort(
+        "Error construyendo cache SQLite: {conditionMessage(e)}",
+        class = "ciecl_cache_error",
+        parent = e
+      )
     }
-    file.rename(tmp_path, db_path)
-
-    if (interactive()) cli::cli_inform(c("v" = "Cache SQLite creado: {.path {db_path}}"))
-  }, error = function(e) {
-    # Cleanup en caso de error
-    if (DBI::dbIsValid(con)) DBI::dbDisconnect(con)
-    if (file.exists(tmp_path)) file.remove(tmp_path)
-    cli::cli_abort(
-      "Error construyendo cache SQLite: {conditionMessage(e)}",
-      class = "ciecl_cache_error",
-      parent = e
-    )
-  })
+  )
 }
 
 #' Construir tabla FTS5 sobre conexion existente
@@ -178,7 +221,18 @@ build_cache_atomic <- function(cache_dir, db_path) {
 #' @param con Conexion DBI activa
 #' @keywords internal
 #' @noRd
-build_fts <- function(con) {
+build_fts <- function(con, .progress = TRUE) {
+  # Progress step solo en sesion interactiva. En tests/CI (no interactivo)
+  # debe permanecer en silencio: hay tests con expect_silent(build_fts(con)).
+  # `.progress = FALSE` permite que el caller (build_cache_atomic) gestione
+  # el progreso global y evita anidar cli_progress_step.
+  show_progress <- isTRUE(.progress) && interactive()
+  if (show_progress) {
+    cli::cli_progress_step(
+      "Creando tabla FTS5",
+      msg_done = "Tabla FTS5 creada/reconstruida"
+    )
+  }
   DBI::dbExecute(con, "
     CREATE VIRTUAL TABLE IF NOT EXISTS cie10_fts USING fts5(
       codigo, descripcion, inclusion, exclusion,
@@ -186,7 +240,7 @@ build_fts <- function(con) {
     )
   ")
   DBI::dbExecute(con, "INSERT INTO cie10_fts(cie10_fts) VALUES('rebuild')")
-  if (interactive()) cli::cli_inform(c("v" = "Tabla FTS5 creada/reconstruida"))
+  if (show_progress) cli::cli_progress_done()
 }
 
 #' Verificar si el cache corresponde a la version actual del paquete
@@ -200,18 +254,23 @@ cache_is_current <- function(con) {
     return(FALSE)
   }
 
-  tryCatch({
-    cached_version <- DBI::dbGetQuery(
-      con,
-      "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
-    )
-    if (nrow(cached_version) == 0) return(FALSE)
+  tryCatch(
+    {
+      cached_version <- DBI::dbGetQuery(
+        con,
+        "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
+      )
+      if (nrow(cached_version) == 0) {
+        return(FALSE)
+      }
 
-    pkg_version <- as.character(utils::packageVersion("ciecl"))
-    return(identical(cached_version$value[1], pkg_version))
-  }, error = function(e) {
-    return(FALSE)
-  })
+      pkg_version <- as.character(utils::packageVersion("ciecl"))
+      return(identical(cached_version$value[1], pkg_version))
+    },
+    error = function(e) {
+      return(FALSE)
+    }
+  )
 }
 
 #' Ejecutar consultas SQL sobre CIE-10 Chile
@@ -232,7 +291,6 @@ cache_is_current <- function(con) {
 #' @examplesIf interactive()
 #' # Contar por capitulo
 #' cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
-
 cie10_sql <- function(query, close = lifecycle::deprecated()) {
   if (lifecycle::is_present(close)) {
     lifecycle::deprecate_warn(
@@ -249,7 +307,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     cli::cli_abort("Solo queries {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
 
- # Bloquear keywords peligrosos (case-insensitive)
+  # Bloquear keywords peligrosos (case-insensitive)
   keywords_peligrosos <- c(
     "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
     "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
@@ -296,7 +354,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 #' tools::R_user_dir("ciecl", "data")
 #'
 #' @examplesIf interactive()
-#' cie10_clear_cache()  # Elimina cie10.db local
+#' cie10_clear_cache() # Elimina cie10.db local
 cie10_clear_cache <- function() {
   # Cerrar conexion pooled antes de borrar
   if (!is.null(.ciecl_env$con)) {

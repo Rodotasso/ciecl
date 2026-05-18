@@ -17,7 +17,7 @@ Limpiar cache SQLite (forzar rebuild)
 tools::R_user_dir("ciecl", "data")
 
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-cie10_clear_cache()  # Elimina cie10.db local
+cie10_clear_cache() # Elimina cie10.db local
 \dontshow{\}) # examplesIf}
 }
 \seealso{
