@@ -342,7 +342,7 @@ test_that("cie_validate_vector con vector muy grande", {
 
   resultado <- cie_validate_vector(codigos)
   expect_length(resultado, 300)
-  expect_equal(sum(resultado), 200)  # 100 E11.0 + 100 Z00
+  expect_equal(sum(resultado), 200) # 100 E11.0 + 100 Z00
 })
 
 # ============================================================
@@ -445,12 +445,14 @@ test_that("cie10_clear_cache retorna invisible NULL", {
 # ============================================================
 
 test_that("cie10_sql bloquea DROP TABLE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
   expect_snapshot(cie10_sql("DROP TABLE cie10"), error = TRUE)
 })
 
 test_that("cie10_sql bloquea DELETE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
   expect_snapshot(
@@ -460,6 +462,7 @@ test_that("cie10_sql bloquea DELETE", {
 })
 
 test_that("cie10_sql bloquea UPDATE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
   expect_snapshot(
@@ -469,6 +472,7 @@ test_that("cie10_sql bloquea UPDATE", {
 })
 
 test_that("cie10_sql bloquea INSERT", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
   expect_snapshot(

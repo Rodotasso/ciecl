@@ -71,6 +71,7 @@ test_that("cie_short no tiene duplicados", {
 })
 
 test_that("cie_short filtra por categoria", {
+  testthat::local_reproducible_output()
   # Filtrar cardiovasculares
   cardio <- cie_short("cardiovascular")
   expect_gt(nrow(cardio), 5)
@@ -86,6 +87,7 @@ test_that("cie_short filtra por categoria", {
 # ============================================================
 
 test_that("cie_search valida inputs", {
+  testthat::local_reproducible_output()
   expect_snapshot(cie_search(123), error = TRUE)
   expect_snapshot(cie_search("a"), error = TRUE)
   expect_snapshot(cie_search("diabetes", threshold = 1.1), error = TRUE)
