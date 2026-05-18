@@ -59,20 +59,23 @@ test_that("cie11_search rechaza API key sin separador", {
   )
 })
 
-test_that("cie11_search acepta API key con formato correcto",
-{
+test_that("cie11_search acepta API key con formato correcto", {
   skip_if_not_installed("httr2")
 
   # Formato correcto (fallara en autenticacion, no en formato)
   # El error no debe mencionar "client_id:client_secret"
-  error_msg <- tryCatch({
-    suppressWarnings(cie11_search("diabetes", api_key = "id:secret"))
-    "no_error"
-  }, error = function(e) {
-    e$message
-  }, warning = function(w) {
-    "warning"
-  })
+  error_msg <- tryCatch(
+    {
+      suppressWarnings(cie11_search("diabetes", api_key = "id:secret"))
+      "no_error"
+    },
+    error = function(e) {
+      e$message
+    },
+    warning = function(w) {
+      "warning"
+    }
+  )
 
   # Siempre hay assertion: si no hubo error, el test pasa trivialmente;
   # si hubo error, el mensaje no debe ser de validacion de formato.
@@ -124,8 +127,10 @@ test_that("cie11_search prefiere argumento sobre environment", {
 test_that("cie11_search informa sobre httr2 faltante", {
   # Este test solo funciona si httr2 NO esta instalado
   # Lo saltamos si httr2 esta disponible
-  skip_if(requireNamespace("httr2", quietly = TRUE),
-          "httr2 esta instalado")
+  skip_if(
+    requireNamespace("httr2", quietly = TRUE),
+    "httr2 esta instalado"
+  )
 
   expect_error(
     cie11_search("diabetes", api_key = "test:test"),
@@ -146,25 +151,22 @@ test_that("cie11_search retorna resultados con mock HTTP exitoso", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        # Token response
-        list(access_token = "mock_token_abc123")
-      } else {
-        # Search response con resultados
-        list(destinationEntities = data.frame(
-          theCode = c("5A00", "5A01", "5A02"),
-          title = c(
-            "<em class='found'>Diabetes</em> mellitus tipo 1",
-            "<em class='found'>Diabetes</em> mellitus tipo 2",
-            "Otra <em class='found'>diabetes</em> mellitus"
-          ),
-          chapter = c("05", "05", "05"),
-          stringsAsFactors = FALSE
-        ))
-      }
+      # Con req_oauth_client_credentials(), la mock de req_perform reemplaza
+      # el flow completo (OAuth + search), por lo que solo se recibe la
+      # llamada de busqueda. Devolvemos la search response directamente.
+      list(destinationEntities = data.frame(
+        theCode = c("5A00", "5A01", "5A02"),
+        title = c(
+          "<em class='found'>Diabetes</em> mellitus tipo 1",
+          "<em class='found'>Diabetes</em> mellitus tipo 2",
+          "Otra <em class='found'>diabetes</em> mellitus"
+        ),
+        chapter = c("05", "05", "05"),
+        stringsAsFactors = FALSE
+      ))
     },
     .package = "httr2"
   )
@@ -189,19 +191,15 @@ test_that("cie11_search respeta max_results con mock", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        list(access_token = "mock_token")
-      } else {
-        list(destinationEntities = data.frame(
-          theCode = c("5A00", "5A01", "5A02", "5A03", "5A04"),
-          title = paste("Resultado", 1:5),
-          chapter = rep("05", 5),
-          stringsAsFactors = FALSE
-        ))
-      }
+      list(destinationEntities = data.frame(
+        theCode = c("5A00", "5A01", "5A02", "5A03", "5A04"),
+        title = paste("Resultado", 1:5),
+        chapter = rep("05", 5),
+        stringsAsFactors = FALSE
+      ))
     },
     .package = "httr2"
   )
@@ -220,15 +218,11 @@ test_that("cie11_search retorna tibble vacio sin destinationEntities", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        list(access_token = "mock_token")
-      } else {
-        # Sin destinationEntities
-        list(error = FALSE, errorMessage = "")
-      }
+      # Sin destinationEntities
+      list(error = FALSE, errorMessage = "")
     },
     .package = "httr2"
   )
@@ -251,21 +245,18 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        list(access_token = "mock_token")
-      } else {
-        list(destinationEntities = data.frame(
-          theCode = "BA00",
-          title = paste0(
-            "<em class='found'>Hipertensión</em> ",
-            "<em class='found'>arterial</em> esencial"),
-          chapter = "11",
-          stringsAsFactors = FALSE
-        ))
-      }
+      list(destinationEntities = data.frame(
+        theCode = "BA00",
+        title = paste0(
+          "<em class='found'>Hipertensión</em> ",
+          "<em class='found'>arterial</em> esencial"
+        ),
+        chapter = "11",
+        stringsAsFactors = FALSE
+      ))
     },
     .package = "httr2"
   )
@@ -285,15 +276,11 @@ test_that("cie11_search maneja JSON inesperado sin entities", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        list(access_token = "mock_token")
-      } else {
-        # JSON sin destinationEntities ni error — estructura inesperada
-        list(status = "ok", data = list())
-      }
+      # JSON sin destinationEntities ni error — estructura inesperada
+      list(status = "ok", data = list())
     },
     .package = "httr2"
   )
@@ -315,15 +302,11 @@ test_that("cie11_search retorna tibble vacio con destinationEntities vacio", {
   local_mocked_bindings(
     req_perform = function(req, ...) {
       call_count <<- call_count + 1L
-      structure(list(call_id = call_count), class = "httr2_response")
+      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
     },
     resp_body_json = function(resp, ...) {
-      if (resp$call_id == 1L) {
-        list(access_token = "mock_token")
-      } else {
-        # destinationEntities presente pero vacio
-        list(destinationEntities = list())
-      }
+      # destinationEntities presente pero vacio
+      list(destinationEntities = list())
     },
     .package = "httr2"
   )
