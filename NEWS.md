@@ -1,6 +1,61 @@
-# ciecl 0.9.8 (2026-04-25)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-05-17)
 
 *English summary below*
+
+## Modernización r-lib — Bloque A (2026-05-17)
+
+Iteración técnica sobre patrones r-lib identificados en auditoría
+post-revisión. Sin cambios de API pública.
+
+* **OAuth en `cie11_search()` simplificado** (`R/cie-api.R`):
+  - Migración del flujo OAuth manual (POST al token endpoint, parseo JSON,
+    header `Authorization` armado a mano) a `httr2::oauth_client()` +
+    `httr2::req_oauth_client_credentials()`. `httr2` ahora gestiona la
+    obtención, cacheo y refresh del token de acceso de forma transparente.
+  - Errores HTTP de la OMS se tipifican vía `httr2::resp_check_status()` y
+    `httr2::req_error(body = ...)`, exponiendo `error_description` / `error`
+    / `message` del cuerpo de respuesta cuando viene en JSON.
+* **Indicadores de progreso en construcción de cache** (`R/cie-sql.R`):
+  - `build_cache_atomic()` muestra ahora cuatro pasos vía
+    `cli::cli_progress_step()` (cargar dataset, escribir tabla, construir
+    índices, crear FTS5) durante la primera invocación (~16 s). En sesiones
+    no interactivas se mantiene completamente silencioso.
+* **Argumentos requeridos uniformados** (`cie-api.R`, `cie-search.R`,
+  `cie-comorbid.R`): `rlang::check_required()` estandariza el mensaje cuando
+  faltan args obligatorios (`text`, `data`, `id`, `code`, `codes`).
+* **Tests reproducibles**: `testthat::local_reproducible_output()` en cada
+  `test_that()` que usa `expect_snapshot`, aislando ancho de terminal, color
+  y locale para evitar falsos positivos cross-platform.
+
+## Sprint cobertura y tooling rOpenSci (2026-05-08 / 2026-05-09)
+
+* **Cobertura de tests subida de 86,45 % a 96,61 %** mediante:
+  - Tests nuevos para `cie_describe()`, `cie_guide()` y `cie_guia_busqueda()`
+    (+42 tests).
+  - Tests para rutas de deprecación, cache SQLite y manejo de errores
+    (+107 tests). Total acumulado: **1049 tests**, 0 fails, 0 warnings.
+  - Refactor a helpers canónicos r-lib:
+    `lifecycle::expect_deprecated()` en lugar de `expect_warning(class = ...)`,
+    `withr::local_db_connection()` en lugar de helpers custom, llamadas
+    directas a internos en lugar de `getFromNamespace()`.
+* **Workflows rOpenSci/CRAN agregados**:
+  - `.github/workflows/pkgcheck.yaml` (`ropensci-review-tools/pkgcheck-action`)
+    con `post-to-issue: false` para evitar 403 en creación de issue.
+  - `.github/workflows/urlchecker.yaml` con scheduled run mensual.
+  - `.github/workflows/codemeta.yaml` regenera `codemeta.json` cuando cambia
+    `DESCRIPTION`.
+* **Badge de cobertura dinámico**: README y README.en consultan endpoint JSON
+  del workflow `test-coverage.yaml` en lugar de un porcentaje hardcoded.
+* **Bug fix `cie_search()`**: sigla `IRA` desambiguada (ver detalle más
+  abajo). Aliases `IRA_RESP` e `IRA_RENAL` agregados.
+* **Limpieza técnica menor**:
+  - `@importFrom` duplicado eliminado en `cie-search.R`.
+  - `sapply()` reemplazado por `vapply(..., logical(1))` en `cie_table()`.
+  - Fix de asociación roxygen rota en `cie_guia_busqueda()` (línea en blanco
+    entre bloque roxygen y firma).
+  - Badge rOpenSci Software Peer Review (#765) agregado a los README.
+
+---
 
 ## Respuesta a Revisión rOpenSci (rev-ropensci)
 
