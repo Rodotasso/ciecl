@@ -139,45 +139,54 @@ test_that("cie11_search informa sobre httr2 faltante", {
 })
 
 # ============================================================
-# PRUEBAS CON HTTP MOCKING (local_mocked_bindings)
-# Cubren lineas 41-95 de cie-api.R: OAuth token + search + parsing
+# HELPER de mock canonico httr2 (local_mocked_responses)
+# Distingue por URL el endpoint OAuth de token del endpoint de
+# busqueda OMS para que el flow real de httr2 corra hasta el
+# final (incluido el callback req_error(body = who_error_body)).
+# ============================================================
+
+mock_who_api <- function(search_body = list(destinationEntities = list()),
+                         search_status = 200L) {
+  function(req) {
+    if (grepl("/connect/token", req$url, fixed = TRUE)) {
+      httr2::response_json(body = list(
+        access_token = "fake_token",
+        token_type = "Bearer",
+        expires_in = 3600L
+      ))
+    } else {
+      httr2::response_json(status_code = search_status, body = search_body)
+    }
+  }
+}
+
+# ============================================================
+# PRUEBAS CON HTTP MOCKING (httr2::local_mocked_responses)
+# El flow real de httr2 corre hasta el final: OAuth token +
+# search + parsing JSON + handle_resp.
 # ============================================================
 
 test_that("cie11_search retorna resultados con mock HTTP exitoso", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      # Con req_oauth_client_credentials(), la mock de req_perform reemplaza
-      # el flow completo (OAuth + search), por lo que solo se recibe la
-      # llamada de busqueda. Devolvemos la search response directamente.
-      list(destinationEntities = data.frame(
-        theCode = c("5A00", "5A01", "5A02"),
-        title = c(
-          "<em class='found'>Diabetes</em> mellitus tipo 1",
-          "<em class='found'>Diabetes</em> mellitus tipo 2",
-          "Otra <em class='found'>diabetes</em> mellitus"
-        ),
-        chapter = c("05", "05", "05"),
-        stringsAsFactors = FALSE
-      ))
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = data.frame(
+      theCode = c("5A00", "5A01", "5A02"),
+      title = c(
+        "<em class='found'>Diabetes</em> mellitus tipo 1",
+        "<em class='found'>Diabetes</em> mellitus tipo 2",
+        "Otra <em class='found'>diabetes</em> mellitus"
+      ),
+      chapter = c("05", "05", "05"),
+      stringsAsFactors = FALSE
+    ))
+  ))
 
   resultado <- cie11_search("diabetes", api_key = "test_id:test_secret")
 
   expect_s3_class(resultado, "tbl_df")
   expect_equal(nrow(resultado), 3)
   expect_equal(resultado$codigo, c("5A00", "5A01", "5A02"))
-  # Verificar que HTML tags fueron limpiados
-
   expect_no_match(resultado$titulo[1], "<em", fixed = TRUE)
   expect_match(resultado$titulo[1], "Diabetes mellitus tipo 1")
   expect_equal(resultado$capitulo, c("05", "05", "05"))
@@ -186,23 +195,14 @@ test_that("cie11_search retorna resultados con mock HTTP exitoso", {
 test_that("cie11_search respeta max_results con mock", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      list(destinationEntities = data.frame(
-        theCode = c("5A00", "5A01", "5A02", "5A03", "5A04"),
-        title = paste("Resultado", 1:5),
-        chapter = rep("05", 5),
-        stringsAsFactors = FALSE
-      ))
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = data.frame(
+      theCode = c("5A00", "5A01", "5A02", "5A03", "5A04"),
+      title = paste("Resultado", 1:5),
+      chapter = rep("05", 5),
+      stringsAsFactors = FALSE
+    ))
+  ))
 
   resultado <- cie11_search("diabetes", api_key = "id:secret", max_results = 2)
 
@@ -213,19 +213,9 @@ test_that("cie11_search respeta max_results con mock", {
 test_that("cie11_search retorna tibble vacio sin destinationEntities", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      # Sin destinationEntities
-      list(error = FALSE, errorMessage = "")
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(error = FALSE, errorMessage = "")
+  ))
 
   expect_message(
     resultado <- cie11_search("xyznonexistent", api_key = "id:secret"),
@@ -240,26 +230,17 @@ test_that("cie11_search retorna tibble vacio sin destinationEntities", {
 test_that("cie11_search limpia HTML tags correctamente con mock", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      list(destinationEntities = data.frame(
-        theCode = "BA00",
-        title = paste0(
-          "<em class='found'>Hipertensión</em> ",
-          "<em class='found'>arterial</em> esencial"
-        ),
-        chapter = "11",
-        stringsAsFactors = FALSE
-      ))
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = data.frame(
+      theCode = "BA00",
+      title = paste0(
+        "<em class='found'>Hipertensión</em> ",
+        "<em class='found'>arterial</em> esencial"
+      ),
+      chapter = "11",
+      stringsAsFactors = FALSE
+    ))
+  ))
 
   resultado <- cie11_search("hipertension", api_key = "id:secret")
 
@@ -271,19 +252,9 @@ test_that("cie11_search limpia HTML tags correctamente con mock", {
 test_that("cie11_search maneja JSON inesperado sin entities", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      # JSON sin destinationEntities ni error — estructura inesperada
-      list(status = "ok", data = list())
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(status = "ok", data = list())
+  ))
 
   expect_message(
     resultado <- cie11_search("unexpected", api_key = "id:secret"),
@@ -297,23 +268,107 @@ test_that("cie11_search maneja JSON inesperado sin entities", {
 test_that("cie11_search retorna tibble vacio con destinationEntities vacio", {
   skip_if_not_installed("httr2")
 
-  call_count <- 0L
-
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1L
-      structure(list(call_id = call_count, status_code = 200L), class = "httr2_response")
-    },
-    resp_body_json = function(resp, ...) {
-      # destinationEntities presente pero vacio
-      list(destinationEntities = list())
-    },
-    .package = "httr2"
-  )
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = list())
+  ))
 
   expect_message(
     resultado <- cie11_search("nada", api_key = "id:secret"),
     "Sin resultados"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 0)
+})
+
+# ============================================================
+# PRUEBAS UNITARIAS DEL EXTRACTOR who_error_body
+# Construimos respuestas reales con httr2::response_json() /
+# httr2::response() para no acoplarnos a la estructura interna
+# del objeto httr2_response.
+# ============================================================
+
+test_that("who_error_body prefiere error_description sobre error y message", {
+  skip_if_not_installed("httr2")
+
+  resp <- httr2::response_json(body = list(
+    error = "invalid_client",
+    error_description = "Bad credentials",
+    message = "Should not win"
+  ))
+
+  expect_equal(who_error_body(resp), "Bad credentials")
+})
+
+test_that("who_error_body cae a error cuando no hay error_description", {
+  skip_if_not_installed("httr2")
+
+  resp <- httr2::response_json(body = list(error = "invalid_client"))
+
+  expect_equal(who_error_body(resp), "invalid_client")
+})
+
+test_that("who_error_body cae a message como ultimo recurso", {
+  skip_if_not_installed("httr2")
+
+  resp <- httr2::response_json(body = list(message = "Rate limit exceeded"))
+
+  expect_equal(who_error_body(resp), "Rate limit exceeded")
+})
+
+test_that("who_error_body retorna NULL si body no es JSON parseable", {
+  skip_if_not_installed("httr2")
+
+  # response() con body crudo no parseable como JSON
+  resp <- httr2::response(body = charToRaw("not valid json {{{"))
+
+  expect_null(who_error_body(resp))
+})
+
+test_that("who_error_body retorna NULL si body no tiene fields relevantes", {
+  skip_if_not_installed("httr2")
+
+  resp <- httr2::response_json(body = list(status = "ok", data = list()))
+
+  expect_null(who_error_body(resp))
+})
+
+test_that("who_error_body ignora fields vacios (nzchar = FALSE)", {
+  skip_if_not_installed("httr2")
+
+  resp <- httr2::response_json(body = list(
+    error_description = "",
+    error = "",
+    message = "Fallback usable"
+  ))
+
+  expect_equal(who_error_body(resp), "Fallback usable")
+})
+
+# ============================================================
+# PRUEBA END-TO-END DEL PATH 4xx
+# local_mocked_responses devuelve un response_json(401, ...);
+# el flow real de httr2 dispara handle_resp -> resp_failure_cnd
+# -> error_body(req, resp) -> who_error_body (via req_error).
+# Eso enriquece la condicion httr2_http_401 con "Bad credentials"
+# antes de que el tryCatch externo de cie11_search la transforme
+# en warning amigable.
+# ============================================================
+
+test_that("cie11_search propaga detalle de error 4xx via who_error_body", {
+  skip_if_not_installed("httr2")
+
+  httr2::local_mocked_responses(mock_who_api(
+    search_status = 401L,
+    search_body = list(
+      error = "invalid_client",
+      error_description = "Bad credentials"
+    )
+  ))
+
+  expect_warning(
+    resultado <- cie11_search("diabetes", api_key = "id:secret"),
+    "Bad credentials"
   )
 
   expect_s3_class(resultado, "tbl_df")

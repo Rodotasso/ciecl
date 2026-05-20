@@ -88,25 +88,6 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
     name = "ciecl"
   )
 
-  # Extractor de detalle desde body de error OMS (para condiciones tipadas
-  # httr2_http_* con mensaje legible cuando el body trae JSON con `error`).
-  who_error_body <- function(resp) {
-    body <- tryCatch(
-      httr2::resp_body_json(resp),
-      error = function(e) NULL
-    )
-    if (is.null(body)) {
-      return(NULL)
-    }
-    for (field in c("error_description", "error", "message")) {
-      val <- body[[field]]
-      if (!is.null(val) && nzchar(as.character(val))) {
-        return(val)
-      }
-    }
-    NULL
-  }
-
   tryCatch(
     {
       # Buscar en CIE-11; req_oauth_client_credentials() obtiene y cachea
@@ -168,7 +149,7 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
     },
     error = function(e) {
       cli::cli_warn(c(
-        "Error API CIE-11: {e$message}",
+        "Error API CIE-11: {conditionMessage(e)}",
         "i" = "Retornando resultado vacio.",
         "i" = "Usa {.fn cie_search} para fallback local CIE-10."
       ))
@@ -179,4 +160,31 @@ cie11_search <- function(text, api_key = NULL, lang = c("es", "en"),
       ))
     }
   )
+}
+
+#' Extraer detalle de error desde body de respuesta OMS
+#'
+#' Pasado a `httr2::req_error(body = ...)` para enriquecer condiciones
+#' tipadas `httr2_http_*` con el mensaje legible que la API OMS emite
+#' en el body JSON (`error_description`, `error` o `message`).
+#'
+#' @param resp Objeto httr2_response.
+#' @returns String con el detalle, o `NULL` si no se puede extraer.
+#' @keywords internal
+#' @noRd
+who_error_body <- function(resp) {
+  body <- tryCatch(
+    httr2::resp_body_json(resp),
+    error = function(e) NULL
+  )
+  if (is.null(body)) {
+    return(NULL)
+  }
+  for (field in c("error_description", "error", "message")) {
+    val <- body[[field]]
+    if (!is.null(val) && nzchar(as.character(val))) {
+      return(val)
+    }
+  }
+  NULL
 }
