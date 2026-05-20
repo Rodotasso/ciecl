@@ -1,6 +1,36 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-05-17)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-05-20)
 
 *English summary below*
+
+## Sprint F1 — Cobertura post-Bloque A (2026-05-20)
+
+Recuperación de cobertura sobre los paths agregados en Bloque A y refactor
+de mocks de API CIE-11 al patrón canónico de `httr2`. Sin cambios de API
+pública.
+
+* **Cobertura total: 94,20 % → 97,31 %** (`R/cie-sql.R`: 81,07 → 96,60;
+  `R/cie-api.R`: 90,76 → 100,00). Suite: 1069 tests (+20), 0 fails.
+* **`R/cie-sql.R`**: `interactive()` → `rlang::is_interactive()` (2 sitios)
+  para que `rlang::local_interactive(TRUE)` pueda activar el path
+  `cli_progress` en tests sin TTY real.
+* **`R/cie-api.R`**:
+  - `who_error_body()` extraído del cuerpo de `cie11_search()` como helper
+    interno `@noRd` testeable directamente. Misma lógica de extracción
+    (`error_description` → `error` → `message`).
+  - El warning del `tryCatch` externo pasa de `{e$message}` a
+    `{conditionMessage(e)}`, propagando al usuario el detalle del body OMS
+    cuando la API responde 4xx (antes se mostraba solo `"HTTP 401 ..."`).
+* **`tests/testthat/test-api-mock.R`** migrado al patrón canónico:
+  - `local_mocked_bindings(req_perform, .package = "httr2")` →
+    `httr2::local_mocked_responses(mock_who_api(...))`. El flow real de
+    `httr2` corre hasta `handle_resp()` → `resp_failure_cnd()`, lo que
+    permite verificar end-to-end el callback
+    `req_error(body = who_error_body)`.
+  - Respuestas fake construidas con `httr2::response_json()` /
+    `httr2::response()` en lugar de `structure(list(), class =
+    "httr2_response")` (resistente a cambios internos de `httr2`).
+  - Nuevo helper `mock_who_api()` que distingue por URL el endpoint OAuth
+    de token del endpoint de búsqueda OMS.
 
 ## Modernización r-lib — Bloque A (2026-05-17)
 
