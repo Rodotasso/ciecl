@@ -169,3 +169,89 @@ test_that("get_cie10_db reconstruye cache cuando version no coincide", {
   )$value[1]
   expect_equal(v, as.character(utils::packageVersion("ciecl")))
 })
+
+# ============================================================
+# COBERTURA: cli_progress en sesion interactiva
+# rlang::local_interactive(TRUE) fuerza is_interactive() = TRUE
+# scoped al test (helper canonico r-lib, ver gargle/httr2).
+# Cubre las ramas show_progress = TRUE en build_cache_atomic y
+# build_fts sin requerir una TTY real.
+# ============================================================
+
+test_that("build_fts emite cli_progress en sesion interactiva", {
+  rlang::local_interactive(TRUE)
+
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
+  DBI::dbExecute(
+    con,
+    "CREATE TABLE cie10 (codigo TEXT, descripcion TEXT,
+                          inclusion TEXT, exclusion TEXT)"
+  )
+  DBI::dbExecute(
+    con,
+    "INSERT INTO cie10 VALUES ('E11.0', 'diabetes', NULL, NULL)"
+  )
+
+  # Capturar mensajes cli; el step debe nombrar FTS5.
+  msgs <- capture_messages(build_fts(con, .progress = TRUE))
+  expect_true(any(grepl("FTS5", msgs)))
+  expect_true(DBI::dbExistsTable(con, "cie10_fts"))
+})
+
+test_that("build_fts permanece silencioso con .progress = FALSE aunque interactivo", {
+  rlang::local_interactive(TRUE)
+
+  con <- withr::local_db_connection(
+    DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  )
+  DBI::dbExecute(
+    con,
+    "CREATE TABLE cie10 (codigo TEXT, descripcion TEXT,
+                          inclusion TEXT, exclusion TEXT)"
+  )
+
+  expect_silent(build_fts(con, .progress = FALSE))
+})
+
+test_that("build_cache_atomic emite los 4 cli_progress_step en sesion interactiva", {
+  rlang::local_interactive(TRUE)
+
+  cache_dir <- withr::local_tempdir()
+  db_path <- file.path(cache_dir, "test.db")
+
+  msgs <- capture_messages(build_cache_atomic(cache_dir, db_path))
+
+  # Los 4 pasos del pipeline (dataset, tabla, indices, FTS5)
+  texto <- paste(msgs, collapse = "\n")
+  expect_match(texto, "cie10_cl")
+  expect_match(texto, "cie10")
+  expect_match(texto, "[Ii]ndices")
+  expect_match(texto, "FTS5")
+  expect_true(file.exists(db_path))
+})
+
+test_that("build_cache_atomic recupera limpiamente si build_fts falla en sesion interactiva", {
+  rlang::local_interactive(TRUE)
+
+  cache_dir <- withr::local_tempdir()
+  db_path <- file.path(cache_dir, "test.db")
+  tmp_path <- paste0(db_path, ".tmp")
+
+  # Forzar fallo dentro del pipeline para ejercitar el handler
+  # de error que cierra el progress con result = "failed".
+  local_mocked_bindings(
+    dbWriteTable = function(...) stop("fallo simulado en escritura"),
+    .package = "DBI"
+  )
+
+  expect_error(
+    suppressMessages(build_cache_atomic(cache_dir, db_path)),
+    "Error construyendo cache SQLite"
+  )
+
+  # El .tmp debe haberse limpiado y el .db nunca debe existir
+  expect_false(file.exists(tmp_path))
+  expect_false(file.exists(db_path))
+})

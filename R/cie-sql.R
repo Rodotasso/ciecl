@@ -129,7 +129,7 @@ build_cache_atomic <- function(cache_dir, db_path) {
   # Progress steps solo en sesion interactiva para no contaminar tests/CI.
   # Usamos un id propio para gestionar el ciclo de vida manualmente y poder
   # cerrar el progreso en caso de error.
-  show_progress <- interactive()
+  show_progress <- rlang::is_interactive()
   progress_id <- NULL
 
   tryCatch(
@@ -226,7 +226,7 @@ build_fts <- function(con, .progress = TRUE) {
   # debe permanecer en silencio: hay tests con expect_silent(build_fts(con)).
   # `.progress = FALSE` permite que el caller (build_cache_atomic) gestione
   # el progreso global y evita anidar cli_progress_step.
-  show_progress <- isTRUE(.progress) && interactive()
+  show_progress <- isTRUE(.progress) && rlang::is_interactive()
   if (show_progress) {
     cli::cli_progress_step(
       "Creando tabla FTS5",
