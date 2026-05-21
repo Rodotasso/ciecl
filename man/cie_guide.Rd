@@ -18,10 +18,10 @@ cie_guide()
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_short]{cie_short()}}
 
-Other search: 
-\code{\link{cie_describe}()},
-\code{\link{cie_guia_busqueda}()},
-\code{\link{cie_lookup}()},
-\code{\link{cie_search}()}
+Other search:
+\code{\link[=cie_describe]{cie_describe()}},
+\code{\link[=cie_guia_busqueda]{cie_guia_busqueda()}},
+\code{\link[=cie_lookup]{cie_lookup()}},
+\code{\link[=cie_search]{cie_search()}}
 }
 \concept{search}

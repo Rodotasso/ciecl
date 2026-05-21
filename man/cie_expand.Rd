@@ -24,9 +24,9 @@ cie_expand("E11")
 \seealso{
 \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 
-Other validacion: 
-\code{\link{cie_norm}()},
-\code{\link{cie_normalizar}()},
-\code{\link{cie_validate_vector}()}
+Other validacion:
+\code{\link[=cie_norm]{cie_norm()}},
+\code{\link[=cie_normalizar]{cie_normalizar()}},
+\code{\link[=cie_validate_vector]{cie_validate_vector()}}
 }
 \concept{validacion}

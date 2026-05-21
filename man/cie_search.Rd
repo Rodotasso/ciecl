@@ -72,7 +72,7 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 # Busqueda basica
 cie_search("diabetes")
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cie_search("neumonia")
 
 # Busqueda por siglas medicas
@@ -93,10 +93,10 @@ cie_search("diabetes", include_uso_cl = TRUE)
 \seealso{
 \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
 
-Other search: 
-\code{\link{cie_describe}()},
-\code{\link{cie_guia_busqueda}()},
-\code{\link{cie_guide}()},
-\code{\link{cie_lookup}()}
+Other search:
+\code{\link[=cie_describe]{cie_describe()}},
+\code{\link[=cie_guia_busqueda]{cie_guia_busqueda()}},
+\code{\link[=cie_guide]{cie_guide()}},
+\code{\link[=cie_lookup]{cie_lookup()}}
 }
 \concept{search}

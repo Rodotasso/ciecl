@@ -16,8 +16,8 @@ tibble con columnas: sigla, termino_busqueda, categoria
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{\link[=cie_short]{cie_short()}}.
 }
 \seealso{
-Other busqueda: 
-\code{\link{cie_short}()}
+Other busqueda:
+\code{\link[=cie_short]{cie_short()}}
 }
 \concept{busqueda}
 \keyword{internal}

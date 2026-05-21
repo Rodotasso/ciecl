@@ -24,7 +24,7 @@ cie_map_comorbid(c("E11.0", "I50.9", "C50.9"))
 \seealso{
 \code{\link[=cie_comorbid]{cie_comorbid()}}, \code{\link[=cie_norm]{cie_norm()}}
 
-Other comorbidities: 
-\code{\link{cie_comorbid}()}
+Other comorbidities:
+\code{\link[=cie_comorbid]{cie_comorbid()}}
 }
 \concept{comorbidities}

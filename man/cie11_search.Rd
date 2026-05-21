@@ -38,7 +38,7 @@ Buscar codigos CIE-11 via API OMS
 # Ver parametros disponibles
 args(cie11_search)
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
 withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
   cie11_search("depresion mayor")

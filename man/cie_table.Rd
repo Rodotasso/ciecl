@@ -23,7 +23,7 @@ de 3 digitos). Para evitar confusion visual, los \code{NA} se reemplazan
 por un guion largo (em dash).
 }
 \examples{
-\dontshow{if (rlang::is_installed("gt")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("gt")) withAutoprint(\{ # examplesIf}
 cie_table("E11")  # Diabetes mellitus tipo 2 completo
 \dontshow{\}) # examplesIf}
 }

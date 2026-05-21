@@ -17,11 +17,11 @@ tibble con guia comparativa
 cie_guia_busqueda()
 }
 \seealso{
-Other search: 
-\code{\link{cie_describe}()},
-\code{\link{cie_guide}()},
-\code{\link{cie_lookup}()},
-\code{\link{cie_search}()}
+Other search:
+\code{\link[=cie_describe]{cie_describe()}},
+\code{\link[=cie_guide]{cie_guide()}},
+\code{\link[=cie_lookup]{cie_lookup()}},
+\code{\link[=cie_search]{cie_search()}}
 }
 \concept{search}
 \keyword{internal}

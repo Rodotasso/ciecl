@@ -26,9 +26,9 @@ cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))
 \seealso{
 \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_expand]{cie_expand()}}
 
-Other validacion: 
-\code{\link{cie_expand}()},
-\code{\link{cie_norm}()},
-\code{\link{cie_normalizar}()}
+Other validacion:
+\code{\link[=cie_expand]{cie_expand()}},
+\code{\link[=cie_norm]{cie_norm()}},
+\code{\link[=cie_normalizar]{cie_normalizar()}}
 }
 \concept{validacion}

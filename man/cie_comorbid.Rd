@@ -27,7 +27,7 @@ Calcular comorbilidades Charlson/Elixhauser para Chile
 # Ver documentacion de parametros
 args(cie_comorbid)
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 df <- data.frame(
   id_pac = c(1, 1, 2, 2),
   diag = c("E11.0", "I21.0", "C50.9", "E10.9")
@@ -38,7 +38,7 @@ cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
 \seealso{
 \code{\link[=cie_map_comorbid]{cie_map_comorbid()}}, \code{\link[=cie_norm]{cie_norm()}}
 
-Other comorbidities: 
-\code{\link{cie_map_comorbid}()}
+Other comorbidities:
+\code{\link[=cie_map_comorbid]{cie_map_comorbid()}}
 }
 \concept{comorbidities}

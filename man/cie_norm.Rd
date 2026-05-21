@@ -69,9 +69,9 @@ cie_norm(c("E110", "I10X", "Z00"))  # Vectorizado
 \code{\link[=cie_validate_vector]{cie_validate_vector()}},
 \code{\link[=cie_expand]{cie_expand()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 
-Other validacion: 
-\code{\link{cie_expand}()},
-\code{\link{cie_normalizar}()},
-\code{\link{cie_validate_vector}()}
+Other validacion:
+\code{\link[=cie_expand]{cie_expand()}},
+\code{\link[=cie_normalizar]{cie_normalizar()}},
+\code{\link[=cie_validate_vector]{cie_validate_vector()}}
 }
 \concept{validacion}

@@ -22,6 +22,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID})
 
+Authors:
+\itemize{
+  \item Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Grupo de Ciencia de Datos para Salud Pública (Escuela de Salud Pública, U. de Chile) [contributor]

@@ -72,7 +72,7 @@ Busqueda exacta por codigo CIE-10
 # Busqueda directa por codigo
 cie_lookup("E11.0")
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cie_lookup("E110") # Sin punto
 cie_lookup("E11") # Solo categoria
 cie_lookup("E11", expand = TRUE) # Todos E11.x
@@ -95,10 +95,10 @@ cie_lookup("E11.0", include_uso_cl = FALSE)
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_expand]{cie_expand()}}
 
-Other search: 
-\code{\link{cie_describe}()},
-\code{\link{cie_guia_busqueda}()},
-\code{\link{cie_guide}()},
-\code{\link{cie_search}()}
+Other search:
+\code{\link[=cie_describe]{cie_describe()}},
+\code{\link[=cie_guia_busqueda]{cie_guia_busqueda()}},
+\code{\link[=cie_guide]{cie_guide()}},
+\code{\link[=cie_search]{cie_search()}}
 }
 \concept{search}
