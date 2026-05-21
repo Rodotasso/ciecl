@@ -153,8 +153,10 @@ cie_norm <- function(codes,
 #' Alias en espanol de [cie_norm()]. Se mantiene por compatibilidad
 #' con codigo existente en CRAN. Usar [cie_norm()] en codigo nuevo.
 #'
-#' @param codigos Character vector de codigos
-#' @param buscar_db Logical, buscar codigo en DB (default TRUE)
+#' @param codigos `r lifecycle::badge("deprecated")` Character vector de codigos.
+#'   Use [cie_norm()] con `codes` en codigo nuevo.
+#' @param buscar_db `r lifecycle::badge("deprecated")` Logical, buscar codigo en DB
+#'   (default TRUE). Use [cie_norm()] con `search_db` en codigo nuevo.
 #' @returns Character vector con codigos normalizados
 #' @family validacion
 #' @keywords internal
@@ -163,13 +165,16 @@ cie_norm <- function(codes,
 #' # Deprecated: usar cie_norm()
 #' cie_normalizar("E110")
 
-cie_normalizar <- function(codigos, buscar_db = TRUE) {
+cie_normalizar <- function(codigos = lifecycle::deprecated(),
+                           buscar_db = lifecycle::deprecated()) {
   lifecycle::deprecate_warn(
     "0.9.8",
     "cie_normalizar()",
     "cie_norm()"
   )
-  cie_norm(codes = codigos, search_db = buscar_db)
+  rlang::check_required(codigos)
+  search_db <- if (lifecycle::is_present(buscar_db)) buscar_db else TRUE
+  cie_norm(codes = codigos, search_db = search_db)
 }
 
 #' @rdname cie_norm

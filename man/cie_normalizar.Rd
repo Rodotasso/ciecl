@@ -4,12 +4,17 @@
 \alias{cie_normalizar}
 \title{Normalizar codigos CIE-10 (deprecated)}
 \usage{
-cie_normalizar(codigos, buscar_db = TRUE)
+cie_normalizar(
+  codigos = lifecycle::deprecated(),
+  buscar_db = lifecycle::deprecated()
+)
 }
 \arguments{
-\item{codigos}{Character vector de codigos}
+\item{codigos}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Character vector de codigos.
+Use \code{\link[=cie_norm]{cie_norm()}} con \code{codes} en codigo nuevo.}
 
-\item{buscar_db}{Logical, buscar codigo en DB (default TRUE)}
+\item{buscar_db}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical, buscar codigo en DB
+(default TRUE). Use \code{\link[=cie_norm]{cie_norm()}} con \code{search_db} en codigo nuevo.}
 }
 \value{
 Character vector con codigos normalizados
@@ -26,10 +31,10 @@ con codigo existente en CRAN. Usar \code{\link[=cie_norm]{cie_norm()}} en codigo
 cie_normalizar("E110")
 }
 \seealso{
-Other validacion: 
-\code{\link{cie_expand}()},
-\code{\link{cie_norm}()},
-\code{\link{cie_validate_vector}()}
+Other validacion:
+\code{\link[=cie_expand]{cie_expand()}},
+\code{\link[=cie_norm]{cie_norm()}},
+\code{\link[=cie_validate_vector]{cie_validate_vector()}}
 }
 \concept{validacion}
 \keyword{internal}
