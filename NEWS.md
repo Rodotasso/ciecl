@@ -2,6 +2,32 @@
 
 *English summary below*
 
+## Sprint F2 — Flags `include_uso_cl` / `only_uso_cl` (2026-05-20)
+
+Expone la columna `uso_cl` del dataset CIE-10 MINSAL/DEIS v2018 como
+filtro y como salida opcional en las dos funciones de busqueda principales.
+
+* **`cie_lookup(include_uso_cl = TRUE, only_uso_cl = FALSE)`**:
+  - `include_uso_cl = TRUE` (default) preserva el contrato historico: la
+    columna `uso_cl` sigue apareciendo en el output.
+  - `only_uso_cl = TRUE` filtra a codigos vigentes en Chile excluyendo
+    `uso_cl == "legado"`.
+* **`cie_search(include_uso_cl = FALSE, only_uso_cl = FALSE)`**:
+  - `include_uso_cl = FALSE` (default) preserva el contrato historico (no
+    incluye `uso_cl` en el output). Pasarlo a `TRUE` agrega la columna.
+  - `only_uso_cl = TRUE` filtra el resultado a codigos vigentes (excluye
+    `legado`) en cualquier `field` (`descripcion` o `inclusion`).
+* **Semantica de `uso_cl`** (textual, no booleano): `principal` (8.898),
+  `legado` (27.335), `causa_externa` (3.295), `etiologico` (330),
+  `causa_externa | principal` (19). `only_uso_cl = TRUE` conserva todo lo
+  que NO es `legado` (12.542 codigos vigentes).
+* **Asimetria documentada**: los defaults difieren entre `cie_lookup`
+  (TRUE) y `cie_search` (FALSE) para no romper backward compat. El
+  roxygen de ambas funciones lo menciona explicitamente.
+* Tests: `tests/testthat/test-uso-cl-flags.R` cubre los 4 paths (default,
+  include solo, only solo, ambos) en ambas funciones. +18 tests, sin
+  regresion sobre los 1069 existentes.
+
 ## Sprint F1 — Cobertura post-Bloque A (2026-05-20)
 
 Recuperación de cobertura sobre los paths agregados en Bloque A y refactor
