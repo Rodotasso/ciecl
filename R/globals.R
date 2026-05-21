@@ -1,5 +1,5 @@
 # Declarar variables NSE para evitar NOTEs en R CMD check
-#' @importFrom rlang is_string arg_match check_installed is_installed
+#' @importFrom rlang is_string arg_match check_installed is_installed .data
 #' @importFrom lifecycle is_present deprecated
 #' @importFrom cli cli_abort cli_warn cli_inform
 utils::globalVariables(c(
@@ -16,7 +16,6 @@ utils::globalVariables(c(
 #' @keywords internal
 #' @noRd
 cie10_empty_tibble <- function(add_descripcion_completa = FALSE) {
-
   resultado <- tibble::tibble(
     codigo = character(0),
     descripcion = character(0),

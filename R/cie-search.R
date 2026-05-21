@@ -49,6 +49,14 @@ normalizar_tildes <- function(texto) {
 #'   sin busqueda exacta (default FALSE)
 #' @param verbose Logical, mostrar mensajes informativos
 #'   (default TRUE). Usar FALSE en scripts.
+#' @param include_uso_cl Logical, incluir columna `uso_cl` en el output
+#'   (default FALSE). El default difiere de [cie_lookup()] (TRUE) para
+#'   preservar el contrato historico de cada funcion. Valores posibles:
+#'   `"principal"`, `"legado"`, `"causa_externa"`, `"etiologico"`,
+#'   `"causa_externa | principal"`.
+#' @param only_uso_cl Logical, filtrar a codigos vigentes de uso clinico
+#'   en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+#'   `uso_cl == "legado"`.
 #' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @param campo `r lifecycle::badge("deprecated")` Use `field`.
 #' @param solo_fuzzy `r lifecycle::badge("deprecated")` Use `only_fuzzy`.
@@ -74,9 +82,14 @@ normalizar_tildes <- function(texto) {
 #'
 #' # Buscar en inclusiones
 #' cie_search("bacteriana", field = "inclusion")
+#' # Filtrar a codigos vigentes Chile (excluye 'legado')
+#' cie_search("diabetes", only_uso_cl = TRUE)
+#' # Mostrar la columna uso_cl en el output
+#' cie_search("diabetes", include_uso_cl = TRUE)
 cie_search <- function(text, threshold = 0.70, max_results = 50,
                        field = c("descripcion", "inclusion"),
                        only_fuzzy = FALSE, verbose = TRUE,
+                       include_uso_cl = FALSE, only_uso_cl = FALSE,
                        texto = lifecycle::deprecated(),
                        campo = lifecycle::deprecated(),
                        solo_fuzzy = lifecycle::deprecated()) {
@@ -172,14 +185,14 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
       if (field == "descripcion") {
         query_sql <- "
-          SELECT c.codigo, c.descripcion, c.categoria
+          SELECT c.codigo, c.descripcion, c.categoria, c.uso_cl
           FROM cie10 c
           WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH ?)
         "
       } else {
         field_quoted <- DBI::dbQuoteIdentifier(con, field)
         query_sql <- sprintf("
-          SELECT c.codigo, c.descripcion, c.categoria, c.%s
+          SELECT c.codigo, c.descripcion, c.categoria, c.uso_cl, c.%s
           FROM cie10 c
           WHERE c.rowid IN (SELECT rowid FROM cie10_fts WHERE cie10_fts MATCH ?)
         ", field_quoted)
@@ -187,11 +200,11 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     } else {
       # Sin palabras validas tras sanitizar, cargar todo
       if (field == "descripcion") {
-        query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+        query_sql <- "SELECT codigo, descripcion, categoria, uso_cl FROM cie10"
       } else {
         field_quoted <- DBI::dbQuoteIdentifier(con, field)
         query_sql <- sprintf(
-          "SELECT codigo, descripcion, categoria, %s FROM cie10",
+          "SELECT codigo, descripcion, categoria, uso_cl, %s FROM cie10",
           field_quoted
         )
       }
@@ -207,6 +220,20 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
         field_quoted
       )
     }
+  }
+
+  # Helper local: aplicar flags uso_cl al output final
+  apply_uso_cl_flags <- function(df) {
+    if (nrow(df) == 0) {
+      return(df)
+    }
+    if (only_uso_cl && "uso_cl" %in% names(df)) {
+      df <- dplyr::filter(df, .data$uso_cl != "legado")
+    }
+    if (!include_uso_cl) {
+      df <- dplyr::select(df, -dplyr::any_of("uso_cl"))
+    }
+    df
   }
 
   base <- DBI::dbGetQuery(con, query_sql, params = query_params) |>
@@ -246,7 +273,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
         dplyr::slice_head(n = max_results) |>
         dplyr::select(codigo, descripcion, score, dplyr::everything())
 
-      return(resultado_exacto)
+      return(apply_uso_cl_flags(resultado_exacto))
     }
   }
 
@@ -275,7 +302,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
         dplyr::select(codigo, descripcion, score, dplyr::everything())
 
       if (nrow(resultado) > 0) {
-        return(resultado)
+        return(apply_uso_cl_flags(resultado))
       }
     }
   }
@@ -314,5 +341,5 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     cli::cli_inform(c("x" = "Sin coincidencias >= threshold {.val {threshold}}"))
   }
 
-  return(resultado)
+  return(apply_uso_cl_flags(resultado))
 }

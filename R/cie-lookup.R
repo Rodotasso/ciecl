@@ -52,6 +52,15 @@ extract_cie_from_text <- function(text) {
 #'   Para vectores multiples usar extract=FALSE (default).
 #' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
+#' @param include_uso_cl Logical, incluir columna `uso_cl` en el output
+#'   (default TRUE). El default difiere de [cie_search()] (FALSE) para
+#'   preservar el contrato historico de cada funcion. Valores posibles:
+#'   `"principal"`, `"legado"`, `"causa_externa"`, `"etiologico"`,
+#'   `"causa_externa | principal"`.
+#' @param only_uso_cl Logical, filtrar a codigos vigentes de uso clinico
+#'   en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+#'   `uso_cl == "legado"` (es decir, conserva `principal`,
+#'   `causa_externa`, `etiologico` y sus combinaciones).
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
 #' @param expandir `r lifecycle::badge("deprecated")` Use `expand`.
 #' @param normalizar `r lifecycle::badge("deprecated")` Use `normalize`.
@@ -65,9 +74,9 @@ extract_cie_from_text <- function(text) {
 #' cie_lookup("E11.0")
 #'
 #' @examplesIf interactive()
-#' cie_lookup("E110")        # Sin punto
-#' cie_lookup("E11")         # Solo categoria
-#' cie_lookup("E11", expand = TRUE)  # Todos E11.x
+#' cie_lookup("E110") # Sin punto
+#' cie_lookup("E11") # Solo categoria
+#' cie_lookup("E11", expand = TRUE) # Todos E11.x
 #' # Vectorizado - multiples codigos y formatos
 #' cie_lookup(c("E11.0", "Z00", "I10"))
 #' # Con descripcion completa
@@ -78,10 +87,14 @@ extract_cie_from_text <- function(text) {
 #' # Buscar por siglas medicas
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
-
+#' # Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')
+#' cie_lookup("E11", expand = TRUE, only_uso_cl = TRUE)
+#' # Omitir columna uso_cl en el output
+#' cie_lookup("E11.0", include_uso_cl = FALSE)
 cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
                        full_description = FALSE, extract = FALSE,
                        check_siglas = FALSE,
+                       include_uso_cl = TRUE, only_uso_cl = FALSE,
                        codigo = lifecycle::deprecated(),
                        expandir = lifecycle::deprecated(),
                        normalizar = lifecycle::deprecated(),
@@ -206,18 +219,21 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
           )
           params <- paste0(codigos_safe, "%")
           resultado <- DBI::dbGetQuery(
-            con, query, params = as.list(params)
+            con, query,
+            params = as.list(params)
           ) |> tibble::as_tibble()
         } else {
           # Exacto: IN clause parametrizada
           placeholders <- paste(rep("?", length(codigos_safe)),
-                                collapse = ",")
+            collapse = ","
+          )
           query <- sprintf(
             "SELECT * FROM cie10 WHERE codigo IN (%s)",
             placeholders
           )
           resultado <- DBI::dbGetQuery(
-            con, query, params = as.list(codigos_safe)
+            con, query,
+            params = as.list(codigos_safe)
           ) |> tibble::as_tibble()
         }
       }
@@ -238,6 +254,16 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
   } else {
     # Codigo unico - usar funcion interna
     resultado <- cie_lookup_single(codigo_norm, expandir = expandir)
+  }
+
+  # Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')
+  if (only_uso_cl && "uso_cl" %in% names(resultado) && nrow(resultado) > 0) {
+    resultado <- dplyr::filter(resultado, .data$uso_cl != "legado")
+  }
+
+  # Omitir columna uso_cl del output si include_uso_cl = FALSE
+  if (!include_uso_cl) {
+    resultado <- dplyr::select(resultado, -dplyr::any_of("uso_cl"))
   }
 
   # Agregar columna descripcion_completa si se solicita
