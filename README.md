@@ -83,21 +83,23 @@ library(ciecl)
 
 # Busqueda exacta por codigo
 cie_lookup("E11.0")
-#> # A tibble: 1 × 10
+#> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
 # Multiples codigos
 cie_lookup(c("E11.0", "I10", "Z00"))
-#> # A tibble: 3 × 10
+#> # A tibble: 3 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
 #> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <NA>      <NA>     
 #> 3 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
 # Descripcion directa (vectorizada) para usar en mutate()
 cie_describe(c("E11.0", "I10"))
@@ -170,6 +172,11 @@ Catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
 - Dominio público según [Decreto
   356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
 
+## Desarrollo
+
+Este paquete fue desarrollado con asistencia de Claude (Anthropic), con
+verificación y validación humana de todo el código y la documentación.
+
 ## Contribuir
 
 - Reportar bugs: <https://github.com/RodoTasso/ciecl/issues>
@@ -185,8 +192,19 @@ MIT + datos MINSAL de dominio público.
 para Salud Pública, Escuela de Salud Pública, Facultad de Medicina,
 Universidad de Chile.
 
+## Agradecimientos
+
+- Diseño del logotipo del paquete: [@fje1](https://github.com/fje1).
+
 ## Enlaces
 
 - Repositorio: <https://github.com/RodoTasso/ciecl>
 - DEIS MINSAL: <https://deis.minsal.cl>
 - API CIE-11: <https://icd.who.int/icdapi>
+
+------------------------------------------------------------------------
+
+<img src="man/figures/logo-CDSP_color.png" height="60" alt="Grupo de Ciencia de Datos para Salud Pública">
+
+**Grupo de Ciencia de Datos para Salud Pública**<br> Escuela de Salud
+Pública, Facultad de Medicina<br> Universidad de Chile

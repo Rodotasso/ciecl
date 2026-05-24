@@ -16,11 +16,12 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 status](https://www.r-pkg.org/badges/version/ciecl)](https://CRAN.R-project.org/package=ciecl)
 [![GitHub
 release](https://img.shields.io/github/v/release/RodoTasso/ciecl)](https://github.com/RodoTasso/ciecl/releases)
-[![R-CMD-check](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg)](https://github.com/RodoTasso/ciecl/actions/workflows/r.yml)
+[![R-CMD-check](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/ciecl)](https://cran.r-project.org/package=ciecl)
-[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Rodotasso/ciecl/main/badges/coverage.json)](https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Rodotasso/ciecl/main/badges/coverage.json)](https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml)
 [![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue)](https://rodotasso.github.io/ciecl/)
-[![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/765_status.svg)](https://github.com/ropensci/software-review/issues/765)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/765_status.svg)](https://github.com/ropensci/software-review/issues/765)
 <!-- badges: end -->
 
 **Official Chilean ICD-10 Classification (CIE-10) for R**.
@@ -81,25 +82,30 @@ library(ciecl)
 
 # Busqueda exacta por codigo
 cie_lookup("E11.0")
-#> # A tibble: 1 × 10
+#> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
 # Multiples codigos
 cie_lookup(c("E11.0", "I10", "Z00"))
-#> # A tibble: 3 × 10
+#> # A tibble: 3 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
 #>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
 #> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <NA>      <NA>     
 #> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <NA>      <NA>     
 #> 3 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <NA>      <NA>     
-#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 
-# Descripcion directa para usar en mutate()
+# Descripcion directa (vectorizada) para usar en mutate()
 cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
+
+# Ejemplo en flujo dplyr
+# egresos |> mutate(desc = cie_describe(codigo))
 
 # Busqueda fuzzy tolerante a errores
 cie_search("diabetis mellitus")
@@ -120,7 +126,7 @@ cie_search("diabetis mellitus")
 
 # Siglas medicas chilenas
 cie_search("IAM")
-#> i Sigla detectada: IAM -> infarto agudo miocardio
+#> ℹ Sigla detectada: "IAM" -> "infarto agudo miocardio"
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
@@ -165,6 +171,11 @@ Official **CIE-10 MINSAL/DEIS v2018** catalogue:
 - Public domain under [Decree
   356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
 
+## Development
+
+This package was developed with assistance from Claude (Anthropic), with
+human verification and validation of all code and documentation.
+
 ## Contributing
 
 - Report bugs: <https://github.com/RodoTasso/ciecl/issues>
@@ -180,8 +191,19 @@ MIT + MINSAL public-domain data.
 Health Group, School of Public Health, Faculty of Medicine, University
 of Chile.
 
+## Acknowledgements
+
+- Package logo design: [@fje1](https://github.com/fje1).
+
 ## Links
 
 - Repository: <https://github.com/RodoTasso/ciecl>
 - DEIS MINSAL: <https://deis.minsal.cl>
 - ICD-11 API: <https://icd.who.int/icdapi>
+
+------------------------------------------------------------------------
+
+<img src="man/figures/logo-CDSP_color.png" height="60" alt="Data Science for Public Health Group">
+
+**Data Science for Public Health Group**<br> School of Public Health,
+Faculty of Medicine<br> University of Chile
