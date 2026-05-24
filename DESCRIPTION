@@ -5,13 +5,11 @@ Authors@R:
     c(person("Rodolfo", "Tasso Suazo",
              email = "rtasso@uchile.cl",
              role = c("aut", "cre"),
-             comment = c(ORCID = "0000-0002-1264-4933")),
-      person("Grupo de Ciencia de Datos para Salud Pública",
+             comment = c(ORCID = "0000-0002-1264-4933",
+                         "Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública, U. de Chile")),
+      person("Francisca", "Jofre",
              role = "ctb",
-             comment = "Escuela de Salud Pública, U. de Chile"),
-      person("Centro FIC",
-             role = "ctb",
-             comment = "DEIS / MINSAL Chile"))
+             comment = "Package logo design"))
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes
     optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms
