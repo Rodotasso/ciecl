@@ -5,7 +5,8 @@ Authors@R: c(
     person("Rodolfo", "Tasso Suazo",
            email = "rtasso@uchile.cl",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-1264-4933")),
+           comment = c(ORCID = "0000-0002-1264-4933",
+                       "Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública, U. de Chile")),
     person("Francisca", "Jofre",
            role = "ctb",
            comment = "Package logo design"))
@@ -19,7 +20,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.1.0)
 Imports:
@@ -52,3 +52,4 @@ BugReports: https://github.com/RodoTasso/ciecl/issues
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown
 Language: en, es
+RoxygenNote: 7.3.2

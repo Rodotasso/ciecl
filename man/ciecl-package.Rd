@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID})
+\strong{Maintainer}: Rodolfo Tasso Suazo \email{rtasso@uchile.cl} (\href{https://orcid.org/0000-0002-1264-4933}{ORCID}) (Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública, U. de Chile)
 
 Other contributors:
 \itemize{
