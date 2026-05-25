@@ -203,7 +203,7 @@ of Chile.
 
 ------------------------------------------------------------------------
 
-<img src="man/figures/logo-CDSP_color.png" height="60" alt="Data Science for Public Health Group">
+<img src="man/figures/logo-CDSP_color.png" height="120" alt="Data Science for Public Health Group">
 
 **Data Science for Public Health Group**<br> School of Public Health,
 Faculty of Medicine<br> University of Chile

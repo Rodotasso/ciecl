@@ -218,7 +218,7 @@ Facultad de Medicina, Universidad de Chile.
 
 ---
 
-<img src=\"man/figures/logo-CDSP_color.png\" height=\"60\" alt=\"Grupo de Ciencia de Datos para Salud Pública\">
+<img src=\"man/figures/logo-CDSP_color.png\" height=\"120\" alt=\"Grupo de Ciencia de Datos para Salud Pública\">
 
 **Grupo de Ciencia de Datos para Salud Pública**<br>
 Escuela de Salud Pública, Facultad de Medicina<br>
@@ -263,7 +263,7 @@ Faculty of Medicine, University of Chile.
 
 ---
 
-<img src=\"man/figures/logo-CDSP_color.png\" height=\"60\" alt=\"Data Science for Public Health Group\">
+<img src=\"man/figures/logo-CDSP_color.png\" height=\"120\" alt=\"Data Science for Public Health Group\">
 
 **Data Science for Public Health Group**<br>
 School of Public Health, Faculty of Medicine<br>

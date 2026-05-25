@@ -204,7 +204,7 @@ Universidad de Chile.
 
 ------------------------------------------------------------------------
 
-<img src="man/figures/logo-CDSP_color.png" height="60" alt="Grupo de Ciencia de Datos para Salud Pública">
+<img src="man/figures/logo-CDSP_color.png" height="120" alt="Grupo de Ciencia de Datos para Salud Pública">
 
 **Grupo de Ciencia de Datos para Salud Pública**<br> Escuela de Salud
 Pública, Facultad de Medicina<br> Universidad de Chile
