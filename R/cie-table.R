@@ -47,7 +47,7 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
     dplyr::mutate(
       dplyr::across(
         dplyr::any_of(c("inclusion", "exclusion", "descripcion")),
-        function(x) ifelse(is.na(x) | x == "", em_dash, x)
+        \(x) ifelse(is.na(x) | x == "", em_dash, x)
       )
     )
 

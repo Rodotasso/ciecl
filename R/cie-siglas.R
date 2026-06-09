@@ -405,14 +405,14 @@ get_siglas_medicas <- function() {
 
 #' Expandir siglas medicas a terminos de busqueda
 #'
-#' @param texto Texto que puede contener siglas
+#' @param text Texto que puede contener siglas
 #' @returns Lista con `termino`, `ambiguo` (logical) y `aviso` (character o NULL),
-#'   o NULL si `texto` no es sigla.
+#'   o NULL si `text` no es sigla.
 #' @keywords internal
 #' @noRd
-expandir_sigla <- function(texto) {
+expandir_sigla <- function(text) {
   siglas <- get_siglas_medicas()
-  texto_lower <- tolower(stringr::str_trim(texto))
+  texto_lower <- tolower(stringr::str_trim(text))
 
   if (!(texto_lower %in% names(siglas))) {
     return(NULL)
@@ -492,8 +492,8 @@ cie_short <- function(category = NULL,
 
   resultado <- tibble::tibble(
     sigla = names(siglas),
-    termino_busqueda = vapply(siglas, function(x) x$termino, character(1)),
-    categoria = vapply(siglas, function(x) x$categoria, character(1))
+    termino_busqueda = vapply(siglas, \(x) x$termino, character(1)),
+    categoria = vapply(siglas, \(x) x$categoria, character(1))
   )
 
   if (!is.null(category)) {

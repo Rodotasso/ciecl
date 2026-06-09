@@ -7,13 +7,13 @@ NULL
 
 #' Normalizar texto removiendo tildes y caracteres especiales
 #'
-#' @param texto Character vector a normalizar
+#' @param text Character vector a normalizar
 #' @returns Character vector sin tildes ni caracteres especiales
 #' @keywords internal
 #' @noRd
-normalizar_tildes <- function(texto) {
+normalizar_tildes <- function(text) {
   # Manejar vector vacio o NA
-  if (length(texto) == 0) {
+  if (length(text) == 0) {
     return(character(0))
   }
 
@@ -25,7 +25,7 @@ normalizar_tildes <- function(texto) {
       "\u00c1\u00c9\u00cd\u00d3\u00da\u00dc\u00d1"
     ),
     "aeiouunAEIOUUN",
-    texto
+    text
   )
 }
 

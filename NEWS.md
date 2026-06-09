@@ -1,6 +1,18 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-05-20)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-09)
 
 *English summary below*
+
+## Sprint F4 — Documentación, limpieza interna y estilo (2026-06-09)
+
+Sin cambios en la API pública.
+
+* **`cie10_cl`**: documentación roxygen completada — columna `uso_cl` documentada,
+  descripción de dominio para las 11 columnas, tildes corregidas, `@family datasets`,
+  `@seealso [cie_lookup()], [cie_search()], [cie10_sql()]` y ejemplos adicionales.
+* **Interno**: argumentos `texto` renombrados a `text` en las funciones internas
+  `normalizar_tildes()` y `expandir_sigla()` (no exportadas, sin impacto en API).
+* **Estilo**: lambdas de una línea migradas a sintaxis `\(x)` en `cie-siglas.R`
+  y `cie-table.R`.
 
 ## Sprint F2 — Flags `include_uso_cl` / `only_uso_cl` (2026-05-20)
 
