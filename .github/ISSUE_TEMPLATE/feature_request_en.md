@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
+name: "✨ Suggest a feature (English)"
+about: Suggest an idea or improvement for ciecl
+title: '[FEATURE] '
+labels: 'enhancement'
 assignees: ''
 
 ---
