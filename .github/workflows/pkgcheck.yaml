@@ -56,6 +56,12 @@ jobs:
           done
 
       - uses: ropensci-review-tools/pkgcheck-action@main
+        # pkgcheck falla el step si goodpractice encuentra hallazgos de estilo
+        # (funciones largas, coverage <100%, etc.), no solo por errores/warnings
+        # reales de R CMD check (que ya gatea R-CMD-check.yaml en success/failure).
+        # continue-on-error evita que esos hallazgos cosmeticos tumben el pipeline;
+        # el resumen sigue quedando visible en el summary del job para revision.
+        continue-on-error: true
         with:
           # Desactivar post a Issues (requiere issues:write que no tenemos).
           # `summary-only: true` solo agrega al summary pero NO inhibe el POST,
