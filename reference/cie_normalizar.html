@@ -45,7 +45,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Normalizar codigos CIE-10 (deprecated)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/cie-utils.R" class="external-link"><code>R/cie-utils.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/R/cie-utils.R" class="external-link"><code>R/cie-utils.R</code></a></small>
       <div class="d-none name"><code>cie_normalizar.Rd</code></div>
     </div>
 
@@ -64,7 +64,10 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cie_normalizar</span><span class="op">(</span><span class="va">codigos</span>, buscar_db <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cie_normalizar</span><span class="op">(</span></span>
+<span>  codigos <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  buscar_db <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,11 +75,13 @@
 
 
 <dl><dt id="arg-codigos">codigos<a class="anchor" aria-label="anchor" href="#arg-codigos"></a></dt>
-<dd><p>Character vector de codigos</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Character vector de codigos.
+Use <code><a href="cie_norm.html">cie_norm()</a></code> con <code>codes</code> en codigo nuevo.</p></dd>
 
 
 <dt id="arg-buscar-db">buscar_db<a class="anchor" aria-label="anchor" href="#arg-buscar-db"></a></dt>
-<dd><p>Logical, buscar codigo en DB (default TRUE)</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Logical, buscar codigo en DB
+(default TRUE). Use <code><a href="cie_norm.html">cie_norm()</a></code> con <code>search_db</code> en codigo nuevo.</p></dd>
 
 </dl></div>
     <div class="section level2">

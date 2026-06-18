@@ -45,7 +45,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>ciecl </h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/README.en.md" class="external-link"><code>README.en.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/README.en.md" class="external-link"><code>README.en.md</code></a></small>
     </div>
 
 
@@ -66,7 +66,7 @@
 
 <p><strong>Data Science for Public Health Group</strong> | University of Chile</p>
 <!-- badges: start -->
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a> <a href="https://CRAN.R-project.org/package=ciecl" class="external-link"><img src="https://www.r-pkg.org/badges/version/ciecl" alt="CRAN status"></a> <a href="https://github.com/RodoTasso/ciecl/releases" class="external-link"><img src="https://img.shields.io/github/v/release/RodoTasso/ciecl" alt="GitHub release"></a> <a href="https://github.com/RodoTasso/ciecl/actions/workflows/r.yml" class="external-link"><img src="https://github.com/RodoTasso/ciecl/actions/workflows/r.yml/badge.svg" alt="R-CMD-check"></a> <a href="https://cran.r-project.org/package=ciecl" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/ciecl" alt="Downloads"></a> <a href="https://github.com/RodoTasso/ciecl/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://img.shields.io/badge/coverage-96%25-brightgreen" alt="Coverage"></a> <a href="https://rodotasso.github.io/ciecl/"><img src="https://img.shields.io/badge/docs-pkgdown-blue" alt="pkgdown"></a> <a href="https://github.com/ropensci/software-review/issues/765" class="external-link"><img src="https://badges.ropensci.org/765_status.svg" alt="Status at rOpenSci Software Peer Review"></a> <!-- badges: end --></p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a> <a href="https://CRAN.R-project.org/package=ciecl" class="external-link"><img src="https://www.r-pkg.org/badges/version/ciecl" alt="CRAN status"></a> <a href="https://github.com/RodoTasso/ciecl/releases" class="external-link"><img src="https://img.shields.io/github/v/release/RodoTasso/ciecl" alt="GitHub release"></a> <a href="https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://cran.r-project.org/package=ciecl" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/ciecl" alt="Downloads"></a> <a href="https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Rodotasso/ciecl/main/badges/coverage.json" alt="Coverage"></a> <a href="https://rodotasso.github.io/ciecl/"><img src="https://img.shields.io/badge/docs-pkgdown-blue" alt="pkgdown"></a> <a href="https://github.com/ropensci/software-review/issues/765" class="external-link"><img src="https://badges.ropensci.org/765_status.svg" alt="Status at rOpenSci Software Peer Review"></a> <!-- badges: end --></p>
 <p><strong>Official Chilean ICD-10 Classification (CIE-10) for R</strong>.</p>
 <p>Specialized package for searching, validating, and analyzing ICD-10 codes in the Chilean context. Includes the official MINSAL/DEIS v2018 catalogue with optimized search, comorbidity computation, and WHO ICD-11 API access.</p>
 <div class="section level2">
@@ -141,19 +141,46 @@
 <span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span>
 <span></span>
 <span><span class="co"># Ejemplo en flujo dplyr</span></span>
-<span><span class="co"># egresos %&gt;% mutate(desc = cie_describe(codigo))</span></span></code></pre></div>
+<span><span class="co"># egresos |&gt; mutate(desc = cie_describe(codigo))</span></span>
+<span></span>
+<span><span class="co"># Busqueda fuzzy tolerante a errores</span></span>
+<span><span class="fu"><a href="reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis mellitus"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 50 × 4</span></span>
+<span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;                                                  &lt;dbl&gt; &lt;chr&gt;    </span></span>
+<span><span class="co">#&gt;  1 E10    Diabetes mellitus insulinodependiente                    0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  2 E10.0  Diabetes mellitus tipo 1 con coma                        0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  3 E10.1  Diabetes mellitus tipo 1 con cetoacidosis                0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  4 E10.2  Diabetes mellitus tipo 1 con complicaciones renales      0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  5 E10.3  Diabetes mellitus tipo 1 con complicaciones oftálmicas   0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  6 E10.4  Diabetes mellitus tipo 1 con complicaciones neurológi…   0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  7 E10.5  Diabetes mellitus tipo 1 con complicaciones  circulat…   0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  8 E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp…   0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt;  9 E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples    0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt; 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi…   0.5 E10 DIAB…</span></span>
+<span><span class="co">#&gt; # ℹ 40 more rows</span></span>
+<span></span>
+<span><span class="co"># Siglas medicas chilenas</span></span>
+<span><span class="fu"><a href="reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"IAM"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ Sigla detectada: "IAM" -&gt; "infarto agudo miocardio"</span></span>
+<span><span class="co">#&gt; # A tibble: 50 × 4</span></span>
+<span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;                                                  &lt;dbl&gt; &lt;chr&gt;    </span></span>
+<span><span class="co">#&gt;  1 I21    Infarto agudo del miocardio                                1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  2 I21.0  Infarto transmural agudo del miocardio de la pared an…     1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  3 I21.1  Infarto transmural agudo del miocardio de la pared in…     1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  4 I21.2  Infarto agudo transmural del miocardio de otros sitios     1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  5 I21.3  Infarto transmural agudo del miocardio, de sitio no e…     1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  6 I21.4  Infarto subendocárdico agudo del miocardio                 1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  7 I21.9  Infarto agudo del miocardio, sin otra especificación       1 I21 INFA…</span></span>
+<span><span class="co">#&gt;  8 I23    Ciertas complicaciones presentes posteriores al infar…     1 I23 CIER…</span></span>
+<span><span class="co">#&gt;  9 I23.0  Hemopericardio como complicación presente posterior a…     1 I23 CIER…</span></span>
+<span><span class="co">#&gt; 10 I23.3  Ruptura de la pared cardíaca sin hemopericardio como …     1 I23 CIER…</span></span>
+<span><span class="co">#&gt; # ℹ 40 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Comorbilidades (requiere: install.packages("comorbidity"))</span></span>
+<span><span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"paciente"</span>, code <span class="op">=</span> <span class="st">"diagnostico"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level1">
-<h1 id="busqueda-fuzzy-tolerante-a-errores">Busqueda fuzzy tolerante a errores<a class="anchor" aria-label="anchor" href="#busqueda-fuzzy-tolerante-a-errores"></a></h1>
-<p>cie_search(“diabetis mellitus”)</p>
-</div>
-<div class="section level1">
-<h1 id="siglas-medicas-chilenas">Siglas medicas chilenas<a class="anchor" aria-label="anchor" href="#siglas-medicas-chilenas"></a></h1>
-<p>cie_search(“IAM”)</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="st">```</span><span class="at"> r</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="at"># Comorbilidades (requiere: install.packages("comorbidity"))</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">df |&gt; cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="icd-11-api-optional">ICD-11 API (optional)<a class="anchor" aria-label="anchor" href="#icd-11-api-optional"></a></h2>
 <p>To use <code><a href="reference/cie11_search.html">cie11_search()</a></code> you need free WHO credentials (<a href="https://icd.who.int/icdapi" class="external-link uri">https://icd.who.int/icdapi</a>). We recommend storing them with the <code>keyring</code> package:</p>
@@ -191,7 +218,7 @@
 <p><strong>Rodolfo Tasso Suazo</strong> — <a href="mailto:rtasso@uchile.cl" class="email">rtasso@uchile.cl</a> Data Science for Public Health Group, School of Public Health, Faculty of Medicine, University of Chile.</p>
 </div>
 <div class="section level2">
-<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a></h2>
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a></h2>
 <ul><li>Package logo design: <a href="https://github.com/fje1" class="external-link">@fje1</a>.</li>
 </ul></div>
 <div class="section level2">

@@ -47,7 +47,7 @@ Util para liberar el lock del archivo .db."><meta property="og:image" content="h
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -56,7 +56,7 @@ Util para liberar el lock del archivo .db."><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Cerrar conexion pooled SQLite</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/cie-sql.R" class="external-link"><code>R/cie-sql.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/R/cie-sql.R" class="external-link"><code>R/cie-sql.R</code></a></small>
       <div class="d-none name"><code>cie10_disconnect.Rd</code></div>
     </div>
 
@@ -77,7 +77,7 @@ Util para liberar el lock del archivo .db.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="cie10_sql.html">cie10_sql()</a></code>, <code><a href="cie10_clear_cache.html">cie10_clear_cache()</a></code></p>
-<p>Other sql:
+<p>Other sql_backend:
 <code><a href="cie10_clear_cache.html">cie10_clear_cache()</a></code>,
 <code><a href="cie10_sql.html">cie10_sql()</a></code></p></div>
     </div>
@@ -85,8 +85,7 @@ Util para liberar el lock del archivo .db.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Verificar si hay conexion activa</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="fu">ciecl</span><span class="fu">:::</span><span class="va">.ciecl_env</span><span class="op">$</span><span class="va">con</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="co"># (Ejemplo omitido por usar internal environment)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="fu">cie10_disconnect</span><span class="op">(</span><span class="op">)</span></span></span>

@@ -169,7 +169,8 @@ cie_short(category = "cardiovascular")
 
 # Usar la sigla directamente en búsqueda
 cie_search("IAM")   # Infarto Agudo del Miocardio
-#> i Sigla detectada: IAM -> infarto agudo miocardio
+#> ℹ Sigla detectada: "IAM" -> "infarto agudo
+#> miocardio"
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
@@ -185,7 +186,8 @@ cie_search("IAM")   # Infarto Agudo del Miocardio
 #> 10 I23.3  Ruptura de la pared cardíaca sin hemopericardio como …     1 I23 CIER…
 #> # ℹ 40 more rows
 cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Crónica
-#> i Sigla detectada: EPOC -> enfermedad pulmonar obstructiva cronica
+#> ℹ Sigla detectada: "EPOC" -> "enfermedad pulmonar
+#> obstructiva cronica"
 #> # A tibble: 3 × 4
 #>   codigo descripcion                                             score categoria
 #>   <chr>  <chr>                                                   <dbl> <chr>    
@@ -193,7 +195,8 @@ cie_search("EPOC")  # Enfermedad Pulmonar Obstructiva Crónica
 #> 2 J44.1  Enfermedad pulmonar obstructiva crónica con exacerbaci…     1 J44 OTRA…
 #> 3 J44.9  Enfermedad pulmonar obstructiva crónica, no especifica…     1 J44 OTRA…
 cie_search("DM2")   # Diabetes Mellitus tipo 2
-#> i Sigla detectada: DM2 -> diabetes mellitus tipo 2
+#> ℹ Sigla detectada: "DM2" -> "diabetes mellitus tipo
+#> 2"
 #> # A tibble: 11 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
@@ -227,22 +230,21 @@ aproximado. Los números pueden variar entre versiones del paquete.
 ## API CIE-11 multilingüe
 
 [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-consulta la API oficial de la OMS y sí acepta idioma, porque el endpoint
-de la OMS está traducido a varios. En `ciecl` se expone el parámetro
-`lang = "es"` (por defecto) o `lang = "en"`.
+consulta la API oficial de la OMS y permite especificar el idioma, ya
+que el servidor de la OMS ofrece traducciones oficiales. En `ciecl` se
+expone el parámetro `lang = "es"` (por defecto) o `lang = "en"`.
 
 ``` r
 
 # Búsqueda en español (por defecto)
+# Requiere API Key OMS
 cie11_search("diabetes mellitus", lang = "es")
-
-# Búsqueda en inglés
-cie11_search("diabetes mellitus", lang = "en")
 ```
 
-> Nota: esta sección requiere credenciales de la API OMS. Ver la
-> vignette “Configuración de la API CIE-11” para cómo guardarlas con
-> `keyring`.
+> Nota: esta sección requiere credenciales de la API OMS. Consulta la
+> vignette [Guía de Instalación y
+> Configuración](https://rodotasso.github.io/ciecl/articles/instalacion.md)
+> para aprender a guardarlas de forma segura utilizando `keyring`.
 
 ## Encoding y caracteres especiales
 

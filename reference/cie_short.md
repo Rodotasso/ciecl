@@ -36,11 +36,6 @@ tibble con columnas: sigla, termino_busqueda, categoria
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 
 Other busqueda:
-[`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
-[`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
-[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md),
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
 [`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
 
 ## Examples
@@ -48,7 +43,7 @@ Other busqueda:
 ``` r
 # Ver todas las siglas
 cie_short()
-#> # A tibble: 89 × 3
+#> # A tibble: 90 × 3
 #>    sigla   termino_busqueda         categoria     
 #>    <chr>   <chr>                    <chr>         
 #>  1 iam     infarto agudo miocardio  cardiovascular
@@ -61,7 +56,7 @@ cie_short()
 #>  8 ic      insuficiencia cardiaca   cardiovascular
 #>  9 fa      fibrilacion auricular    cardiovascular
 #> 10 tep     embolia pulmonar         cardiovascular
-#> # ℹ 79 more rows
+#> # ℹ 80 more rows
 
 # Filtrar por categoria
 cie_short("cardiovascular")

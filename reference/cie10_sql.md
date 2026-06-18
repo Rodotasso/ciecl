@@ -16,7 +16,7 @@ cie10_sql(query, close = lifecycle::deprecated())
 
 - close:
 
-  **\[deprecated\]** Ignorado — la conexion es pooled y se gestiona
+  **\[deprecated\]** Ignorado - la conexion es pooled y se gestiona
   automaticamente. Sera eliminado en una version futura.
 
 ## Value
@@ -29,7 +29,7 @@ tibble resultado query
 [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md),
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
 
-Other sql:
+Other sql_backend:
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
 [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
 

@@ -45,7 +45,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Busqueda exacta por codigo CIE-10</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/cie-search.R" class="external-link"><code>R/cie-search.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/R/cie-lookup.R" class="external-link"><code>R/cie-lookup.R</code></a></small>
       <div class="d-none name"><code>cie_lookup.Rd</code></div>
     </div>
 
@@ -71,6 +71,8 @@
 <span>  full_description <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  extract <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check_siglas <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  include_uso_cl <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  only_uso_cl <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  codigo <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  expandir <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  normalizar <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -117,6 +119,21 @@ Para vectores multiples usar extract=FALSE (default).</p></dd>
 Ejemplo: "IAM" -&gt; I21.0 (Infarto agudo miocardio)</p></dd>
 
 
+<dt id="arg-include-uso-cl">include_uso_cl<a class="anchor" aria-label="anchor" href="#arg-include-uso-cl"></a></dt>
+<dd><p>Logical, incluir columna <code>uso_cl</code> en el output
+(default TRUE). El default difiere de <code><a href="cie_search.html">cie_search()</a></code> (FALSE) para
+preservar el contrato historico de cada funcion. Valores posibles:
+<code>"principal"</code>, <code>"legado"</code>, <code>"causa_externa"</code>, <code>"etiologico"</code>,
+<code>"causa_externa | principal"</code>.</p></dd>
+
+
+<dt id="arg-only-uso-cl">only_uso_cl<a class="anchor" aria-label="anchor" href="#arg-only-uso-cl"></a></dt>
+<dd><p>Logical, filtrar a codigos vigentes de uso clinico
+en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+<code>uso_cl == "legado"</code> (es decir, conserva <code>principal</code>,
+<code>causa_externa</code>, <code>etiologico</code> y sus combinaciones).</p></dd>
+
+
 <dt id="arg-codigo">codigo<a class="anchor" aria-label="anchor" href="#arg-codigo"></a></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>code</code>.</p></dd>
 
@@ -140,13 +157,11 @@ Ejemplo: "IAM" -&gt; I21.0 (Infarto agudo miocardio)</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="cie_search.html">cie_search()</a></code>, <code><a href="cie_norm.html">cie_norm()</a></code>, <code><a href="cie_expand.html">cie_expand()</a></code></p>
-<p>Other busqueda:
+<p>Other search:
 <code><a href="cie_describe.html">cie_describe()</a></code>,
 <code><a href="cie_guia_busqueda.html">cie_guia_busqueda()</a></code>,
 <code><a href="cie_guide.html">cie_guide()</a></code>,
-<code><a href="cie_search.html">cie_search()</a></code>,
-<code><a href="cie_short.html">cie_short()</a></code>,
-<code><a href="cie_siglas.html">cie_siglas()</a></code></p></div>
+<code><a href="cie_search.html">cie_search()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -161,9 +176,9 @@ Ejemplo: "IAM" -&gt; I21.0 (Infarto agudo miocardio)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
-<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E110"</span><span class="op">)</span>        <span class="co"># Sin punto</span></span></span>
-<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span>         <span class="co"># Solo categoria</span></span></span>
-<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Todos E11.x</span></span></span>
+<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E110"</span><span class="op">)</span> <span class="co"># Sin punto</span></span></span>
+<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span> <span class="co"># Solo categoria</span></span></span>
+<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># Todos E11.x</span></span></span>
 <span class="r-in"><span><span class="co"># Vectorizado - multiples codigos y formatos</span></span></span>
 <span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"Z00"</span>, <span class="st">"I10"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Con descripcion completa</span></span></span>
@@ -174,6 +189,10 @@ Ejemplo: "IAM" -&gt; I21.0 (Infarto agudo miocardio)</p></dd>
 <span class="r-in"><span><span class="co"># Buscar por siglas medicas</span></span></span>
 <span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"IAM"</span>, check_siglas <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"DM2"</span>, check_siglas <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')</span></span></span>
+<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span>, only_uso_cl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Omitir columna uso_cl en el output</span></span></span>
+<span class="r-in"><span><span class="fu">cie_lookup</span><span class="op">(</span><span class="st">"E11.0"</span>, include_uso_cl <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

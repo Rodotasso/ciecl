@@ -24,7 +24,7 @@ cie_describe(
 
 - normalize:
 
-  Logical, ¿intentar normalizar los codigos antes de buscar la
+  Logical, intentar normalizar los codigos antes de buscar la
   descripcion? (default FALSE). Usar TRUE para limpiar formatos (ej.
   "E110" -\> "E11.0"); usar FALSE para auditar la calidad original del
   registro.
@@ -50,13 +50,11 @@ para resultado como tibble con todas las columnas;
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
 para normalizacion.
 
-Other busqueda:
+Other search:
 [`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
 [`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md),
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
-[`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
 
 ## Examples
 

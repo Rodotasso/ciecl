@@ -8,7 +8,7 @@ Buscar codigos CIE-11 via API OMS
 cie11_search(
   text,
   api_key = NULL,
-  lang = "es",
+  lang = c("es", "en"),
   max_results = 10,
   release = "2024-01",
   texto = lifecycle::deprecated()
@@ -57,13 +57,14 @@ tibble con codigos CIE-11 + titulos o vacio si error
 ``` r
 # Ver parametros disponibles
 args(cie11_search)
-#> function (text, api_key = NULL, lang = "es", max_results = 10, 
+#> function (text, api_key = NULL, lang = c("es", "en"), max_results = 10, 
 #>     release = "2024-01", texto = lifecycle::deprecated()) 
 #> NULL
 
 if (FALSE) { # interactive()
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-cie11_search("depresion mayor")
+withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
+  cie11_search("depresion mayor")
+})
 }
 ```

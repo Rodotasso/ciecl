@@ -28,7 +28,7 @@ tibble con columnas: codigo, categoria
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md),
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
 
-Other comorbilidades:
+Other comorbidities:
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
 
 ## Examples

@@ -18,7 +18,7 @@ No return value, called for side effects.
 [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md),
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md)
 
-Other sql:
+Other sql_backend:
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
 [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
 
@@ -26,8 +26,7 @@ Other sql:
 
 ``` r
 # Verificar si hay conexion activa
-is.null(ciecl:::.ciecl_env$con)
-#> [1] TRUE
+# (Ejemplo omitido por usar internal environment)
 
 if (FALSE) { # interactive()
 cie10_disconnect()

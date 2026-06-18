@@ -24,11 +24,12 @@ El paquete está disponible en CRAN. Para instalar la versión estable:
 install.packages("ciecl")
 ```
 
-Para la versión de desarrollo con las últimas correcciones:
+Para la versión de desarrollo, que incluye las funcionalidades más
+recientes antes de su paso a CRAN:
 
 ``` r
 
-# Requiere el paquete pak
+# Requiere el paquete pak para una gestión eficiente de dependencias
 pak::pak("RodoTasso/ciecl")
 ```
 
@@ -36,10 +37,10 @@ pak::pak("RodoTasso/ciecl")
 
 La función
 [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
-expone el catálogo completo a través de SQLite, lo que permite filtrar
-con toda la expresividad de SQL. Esto es útil cuando se conoce la lógica
-del código pero no el texto exacto, por ejemplo para recuperar todos los
-subcódigos de una categoría.
+permite interactuar directamente con la base de datos SQLite interna.
+Esto otorga una gran flexibilidad para realizar filtros complejos que no
+están cubiertos por las funciones predefinidas, utilizando toda la
+potencia del lenguaje SQL.
 
 El siguiente ejemplo extrae los primeros cinco códigos de diabetes tipo
 2 (categoría E11):
@@ -57,22 +58,23 @@ cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 
 #> 5 E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas
 ```
 
-La función solo acepta consultas `SELECT` para proteger la integridad
-del catálogo. Esto garantiza que la base de datos local permanezca como
-una referencia de solo lectura y confiable para el análisis.
+Por razones de seguridad y para preservar la integridad del estándar, la
+función solo permite consultas de tipo `SELECT`. Esto asegura que el
+catálogo permanezca como una fuente de verdad inmutable durante el
+análisis.
 
 ## Búsqueda por código conocido
 
-Cuando el código ya está disponible en los datos —por ejemplo, al
-preparar un informe con diagnósticos de egreso hospitalario—
+Cuando el analista ya dispone de los códigos —como ocurre habitualmente
+en los registros de egreso hospitalario—,
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-recupera la descripción oficial a partir de uno o varios códigos. Esta
-función es el puente entre la codificación críptica de las bases de
-datos y la interpretación clínica humana.
+permite recuperar la descripción oficial de forma instantánea. Esta
+función actúa como el puente necesario entre la codificación técnica y
+la interpretación clínica.
 
 ``` r
 
-# Un solo código
+# Recuperar un código único
 cie_lookup("E11.0")
 #> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
@@ -82,13 +84,13 @@ cie_lookup("E11.0")
 #> #   uso_cl <chr>
 ```
 
-La función acepta vectores, lo que facilita su uso dentro de un pipeline
-`dplyr` o cualquier flujo de trabajo vectorizado, devolviendo un
-`tibble` con la información estructurada:
+La función es totalmente vectorizada, lo que facilita su integración en
+pipelines de procesamiento masivo. Devuelve un objeto `tibble` con una
+estructura consistente:
 
 ``` r
 
-# Múltiples códigos de distintos capítulos
+# Múltiples códigos de distintos capítulos en una sola llamada
 cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
 #> # A tibble: 4 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
@@ -101,10 +103,9 @@ cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
 #> #   uso_cl <chr>
 ```
 
-En análisis donde se trabaja a nivel de categoría (tres dígitos), puede
-ser necesario conocer todos los subcódigos que la componen para realizar
-agregaciones o filtros. El argumento `expand = TRUE` desciende la
-jerarquía y devuelve la categoría junto con todos sus hijos:
+En investigaciones que operan a nivel de categoría (los primeros tres
+dígitos), el argumento `expand = TRUE` resulta fundamental, ya que
+desglosa la jerarquía completa de una familia de códigos:
 
 ``` r
 
@@ -127,17 +128,14 @@ cie_lookup("E11", expand = TRUE)
 #> #   uso_cl <chr>
 ```
 
-## Obtener descripciones para usar en tablas
+## Obtener descripciones para reportes
 
-A veces solo se necesita el texto de la descripción, sin la estructura
-completa de
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md).
-Por ejemplo, al crear etiquetas para un eje de gráfico o una columna
-rápida en un reporte. La función
+Si el objetivo es simplemente enriquecer una tabla existente con glosas
+descriptivas (por ejemplo, para leyendas de gráficos o reportes
+rápidos),
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-devuelve un vector de caracteres con las descripciones en el mismo orden
-que los códigos recibidos, lista para usar en
-[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html):
+es la opción más eficiente. Retorna un vector de caracteres que mantiene
+el orden original de la entrada.
 
 ``` r
 
@@ -145,9 +143,8 @@ cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 ```
 
-Este enfoque es particularmente potente cuando se combina con `dplyr`
-para enriquecer bases de datos masivas sin necesidad de realizar cruces
-complejos (`left_join`):
+Este enfoque optimiza el uso de memoria al evitar joins complejos,
+permitiendo operaciones fluidas dentro de un flujo `dplyr`:
 
 ``` r
 
@@ -166,7 +163,7 @@ egresos <- data.frame(
   codigo_diag = c("E11.0", "I10", "J44.0", "E11.0")
 )
 
-egresos %>%
+egresos |>
   mutate(descripcion = cie_describe(codigo_diag))
 #>   id codigo_diag
 #> 1  1       E11.0
@@ -182,21 +179,21 @@ egresos %>%
 
 ## Búsqueda por texto con tolerancia a errores
 
-En los datos clínicos es común encontrar diagnósticos escritos en texto
-libre, con errores ortográficos o abreviaciones no estandarizadas que
-dificultan la codificación automática.
+Los datos clínicos de texto libre suelen presentar variaciones
+ortográficas, omisión de tildes o abreviaturas que dificultan la unión
+exacta.
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-implementa búsqueda fuzzy mediante similitud Jaro-Winkler, permitiendo
-rescatar información de registros imperfectos.
+utiliza el algoritmo Jaro-Winkler para encontrar la correspondencia más
+cercana en el catálogo oficial.
 
-El parámetro `threshold` controla qué tan estricta es la coincidencia:
-valores cercanos a 1.0 exigen precisión casi absoluta, mientras que
-valores más bajos toleran mayores variaciones. El rango útil habitual
-para diagnósticos en español está entre 0.70 y 0.85:
+El parámetro `threshold` (umbral) permite ajustar la sensibilidad de la
+búsqueda. Un valor de `0.75` suele ser un buen compromiso para el idioma
+español, permitiendo capturar errores comunes sin introducir demasiado
+ruido:
 
 ``` r
 
-# "diabetis" en lugar de "diabetes" — el error no impide encontrar el código correcto
+# Búsqueda tolerante: "diabetis" en lugar de "diabetes"
 cie_search("diabetis con coma", threshold = 0.75)
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
@@ -214,64 +211,82 @@ cie_search("diabetis con coma", threshold = 0.75)
 #> # ℹ 40 more rows
 ```
 
-Observe que el resultado está ordenado por un puntaje (`score`),
-permitiendo al analista seleccionar la mejor coincidencia de forma
-estadística.
+El resultado incluye un `score` de similitud, lo que permite al analista
+evaluar la confiabilidad de la coincidencia de forma cuantitativa.
 
 ## Comorbilidades de Charlson y Elixhauser
 
-La capacidad de estratificar pacientes según su carga de enfermedad es
-vital en investigación epidemiológica. Los índices de comorbilidad
-—Charlson y Elixhauser— se utilizan para predecir mortalidad y uso de
-recursos.
+Para la investigación epidemiológica, la estratificación del riesgo es
+un paso crítico.
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
-automatiza este cálculo a partir de un flujo de datos tipo “egresos”:
+simplifica el cálculo de los índices de Charlson y Elixhauser, mapeando
+automáticamente los códigos CIE-10 a sus respectivas categorías
+clínicas.
 
 ``` r
 
-# Requiere: install.packages("comorbidity")
+# Requiere el paquete externo 'comorbidity'
 df_pacientes <- data.frame(
   id_pac     = c(1, 1, 2, 2, 3),
   diagnostico = c("E11.0", "I50.9", "C50.9", "N18.5", "J44.0")
 )
 
 cie_comorbid(df_pacientes, id = "id_pac", code = "diagnostico", map = "charlson")
+#> # A tibble: 3 × 19
+#>   id_pac    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab diabwc
+#>    <dbl> <int> <int> <int> <int>    <int> <int>  <int> <int> <int> <int>  <int>
+#> 1      1     0     1     0     0        0     0      0     0     0     1      0
+#> 2      2     0     0     0     0        0     0      0     0     0     0      0
+#> 3      3     0     0     0     0        0     1      0     0     0     0      0
+#> # ℹ 7 more variables: hp <int>, rend <int>, canc <int>, msld <int>,
+#> #   metacanc <int>, aids <int>, score_charlson <dbl>
 ```
 
-El resultado es un data frame procesado donde cada fila representa un
-paciente único con sus respectivas banderas de patología y puntuación
-total ponderada, listo para modelos de regresión o tablas descriptivas.
+El objeto resultante es una matriz de indicadores lista para ser
+incorporada en modelos de regresión o análisis de supervivencia.
 
-## Tablas formateadas con gt
+## Tablas formateadas para publicación
 
-Para presentaciones e informes finales, la estética de los datos es
-fundamental.
+Finalmente, para la comunicación de resultados,
 [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md)
-genera una tabla HTML enriquecida, aplicando formato condicional y
-ocultando automáticamente columnas vacías para una visualización limpia.
-Requiere tener `gt` instalado:
+genera tablas en formato HTML con un diseño profesional utilizando el
+motor de `gt`. La función ajusta el contenido dinámicamente según la
+información disponible en el catálogo (como notas de inclusión o
+exclusión).
 
 ``` r
 
-# Requiere: install.packages("gt")
+# Requiere el paquete 'gt' instalado
 cie_table("E11")
 ```
 
-Esta función detecta si campos como “Incluye” o “Excluye” vienen
-poblados desde la fuente oficial y ajusta el diseño de la tabla
-dinámicamente.
+| CIE-10 Chile: E11 |  |
+|----|----|
+| Fuente: MINSAL/DEIS v2018 |  |
+| Codigo | Diagnostico |
+| E11 | Diabetes mellitus no insulinodependiente |
+| E11.0 | Diabetes mellitus tipo 2 con coma |
+| E11.1 | Diabetes mellitus tipo 2 con cetoacidosis |
+| E11.2 | Diabetes mellitus tipo 2 con complicaciones renales |
+| E11.3 | Diabetes mellitus tipo 2 con complicaciones oftálmicas |
+| E11.4 | Diabetes mellitus tipo 2 con complicaciones neurológicas |
+| E11.5 | Diabetes mellitus tipo 2 con complicaciones circulatorias periféricas |
+| E11.6 | Diabetes mellitus tipo 2 con otras complicaciones especificadas |
+| E11.7 | Diabetes mellitus tipo 2 con complicaciones múltiples |
+| E11.8 | Diabetes mellitus tipo 2 con complicaciones no especificadas |
+| E11.9 | Diabetes mellitus tipo 2 sin complicaciones |
 
-## Fuente de datos
+## Fuente de datos oficial
 
-Los datos incluidos en `ciecl` provienen del catálogo oficial CIE-10
-publicado por el Ministerio de Salud de Chile a través del Departamento
-de Estadísticas e Información de Salud (DEIS):
+Los datos de `ciecl` son un fiel reflejo del catálogo CIE-10 para Chile,
+mantenido por el Departamento de Estadísticas e Información de Salud
+(DEIS) del Ministerio de Salud:
 
 - Centro FIC Chile: <https://deis.minsal.cl/centrofic/>
-- Repositorio DEIS: <https://deis.minsal.cl>
+- Repositorio de Datos DEIS: <https://deis.minsal.cl>
 
-## Más información
+## Colaboración y Soporte
 
-- Reportar problemas o sugerencias:
+- Reporte de errores o sugerencias:
   <https://github.com/RodoTasso/ciecl/issues>
-- Repositorio del paquete: <https://github.com/RodoTasso/ciecl>
+- Código fuente y documentación: <https://github.com/RodoTasso/ciecl>

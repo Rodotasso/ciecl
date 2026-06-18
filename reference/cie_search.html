@@ -55,7 +55,7 @@ Busqueda fuzzy con Jaro-Winkler (tolera typos)
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -64,7 +64,7 @@ Busqueda fuzzy con Jaro-Winkler (tolera typos)
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Busqueda difusa (fuzzy) de terminos medicos CIE-10</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/R/cie-search.R" class="external-link"><code>R/cie-search.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/R/cie-search.R" class="external-link"><code>R/cie-search.R</code></a></small>
       <div class="d-none name"><code>cie_search.Rd</code></div>
     </div>
 
@@ -83,6 +83,8 @@ Busqueda fuzzy con Jaro-Winkler (tolera typos)
 <span>  field <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"descripcion"</span>, <span class="st">"inclusion"</span><span class="op">)</span>,</span>
 <span>  only_fuzzy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_uso_cl <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  only_uso_cl <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  texto <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  campo <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  solo_fuzzy <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -121,6 +123,20 @@ sin busqueda exacta (default FALSE)</p></dd>
 (default TRUE). Usar FALSE en scripts.</p></dd>
 
 
+<dt id="arg-include-uso-cl">include_uso_cl<a class="anchor" aria-label="anchor" href="#arg-include-uso-cl"></a></dt>
+<dd><p>Logical, incluir columna <code>uso_cl</code> en el output
+(default FALSE). El default difiere de <code><a href="cie_lookup.html">cie_lookup()</a></code> (TRUE) para
+preservar el contrato historico de cada funcion. Valores posibles:
+<code>"principal"</code>, <code>"legado"</code>, <code>"causa_externa"</code>, <code>"etiologico"</code>,
+<code>"causa_externa | principal"</code>.</p></dd>
+
+
+<dt id="arg-only-uso-cl">only_uso_cl<a class="anchor" aria-label="anchor" href="#arg-only-uso-cl"></a></dt>
+<dd><p>Logical, filtrar a codigos vigentes de uso clinico
+en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+<code>uso_cl == "legado"</code>.</p></dd>
+
+
 <dt id="arg-texto">texto<a class="anchor" aria-label="anchor" href="#arg-texto"></a></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>text</code>.</p></dd>
 
@@ -146,15 +162,12 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="cie_lookup.html">cie_lookup()</a></code>,
-<code><a href="cie_short.html">cie_short()</a></code>, <code><a href="cie10_sql.html">cie10_sql()</a></code></p>
-<p>Other busqueda:
+    <div class="dont-index"><p><code><a href="cie_lookup.html">cie_lookup()</a></code>, <code><a href="cie_short.html">cie_short()</a></code>, <code><a href="cie10_sql.html">cie10_sql()</a></code></p>
+<p>Other search:
 <code><a href="cie_describe.html">cie_describe()</a></code>,
 <code><a href="cie_guia_busqueda.html">cie_guia_busqueda()</a></code>,
 <code><a href="cie_guide.html">cie_guide()</a></code>,
-<code><a href="cie_lookup.html">cie_lookup()</a></code>,
-<code><a href="cie_short.html">cie_short()</a></code>,
-<code><a href="cie_siglas.html">cie_siglas()</a></code></p></div>
+<code><a href="cie_lookup.html">cie_lookup()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -188,6 +201,10 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Buscar en inclusiones</span></span></span>
 <span class="r-in"><span><span class="fu">cie_search</span><span class="op">(</span><span class="st">"bacteriana"</span>, field <span class="op">=</span> <span class="st">"inclusion"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Filtrar a codigos vigentes Chile (excluye 'legado')</span></span></span>
+<span class="r-in"><span><span class="fu">cie_search</span><span class="op">(</span><span class="st">"diabetes"</span>, only_uso_cl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Mostrar la columna uso_cl en el output</span></span></span>
+<span class="r-in"><span><span class="fu">cie_search</span><span class="op">(</span><span class="st">"diabetes"</span>, include_uso_cl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

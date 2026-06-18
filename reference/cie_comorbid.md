@@ -39,7 +39,7 @@ data.frame ancho con scores comorbilidad por paciente
 [`cie_map_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_map_comorbid.md),
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
 
-Other comorbilidades:
+Other comorbidities:
 [`cie_map_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_map_comorbid.md)
 
 ## Examples

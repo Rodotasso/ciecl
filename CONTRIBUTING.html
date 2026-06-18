@@ -45,7 +45,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="logo.png" class="logo" alt=""><h1>Contributing to ciecl</h1>
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 
@@ -140,18 +140,23 @@
 <h2 id="estilo-de-codigo">Estilo de codigo<a class="anchor" aria-label="anchor" href="#estilo-de-codigo"></a></h2>
 <ul><li>Seguir la <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>
 </li>
-<li>Usar <code>%&gt;%</code> de dplyr para pipes</li>
-<li>Documentar funciones con roxygen2</li>
-<li>Encoding UTF-8, sin tildes en codigo fuente (usar <code>\uXXXX</code>)</li>
-<li>Variables NSE declarar en <code>R/globals.R</code>
-</li>
+<li>Usar el pipe nativo <code>|&gt;</code> (requiere R &gt;= 4.1.0).</li>
+<li>
+<strong>Politica de Idioma</strong>:
+<ul><li>Funciones exportadas y argumentos: <strong>Ingles</strong>.</li>
+<li>Documentacion (roxygen2) y Guias de usuario: <strong>Espanol</strong> (primario) e <strong>Ingles</strong>.</li>
+<li>Mensajes de error e informativos: <strong>Espanol</strong>.</li>
+</ul></li>
+<li>Documentar funciones con roxygen2 usando sintaxis markdown.</li>
+<li>Codificacion: <strong>UTF-8 literal</strong>. Prohibido usar escapes unicode (ej. ) en strings del codigo fuente.</li>
+<li>Variables NSE declarar en <code>R/globals.R</code>.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="tests-1">Tests<a class="anchor" aria-label="anchor" href="#tests-1"></a></h2>
-<ul><li>Todos los tests deben pasar antes de enviar un PR</li>
-<li>Agregar tests para funcionalidad nueva en <code>tests/testthat/</code>
-</li>
-<li>Framework: testthat &gt;= 3.1.5</li>
+<ul><li>Todos los tests deben pasar antes de enviar un PR.</li>
+<li>Usar <code>testthat</code> edicion 3.</li>
+<li>Usar <code>withr</code> para gestionar efectos secundarios (archivos, variables de entorno).</li>
+<li>Usar <code>expect_snapshot()</code> para fijar los mensajes de error generados por <code>cli</code>.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="codigo-de-conducta">Codigo de conducta<a class="anchor" aria-label="anchor" href="#codigo-de-conducta"></a></h2>

@@ -158,7 +158,7 @@ discharges <- data.frame(
   diag_code   = c("E11.0", "I10", "J44.0", "E11.0")
 )
 
-discharges %>%
+discharges |>
   mutate(description = cie_describe(diag_code))
 #>   id diag_code
 #> 1  1     E11.0
@@ -223,6 +223,14 @@ patient_df <- data.frame(
 )
 
 cie_comorbid(patient_df, id = "patient_id", code = "diagnosis", map = "charlson")
+#> # A tibble: 3 × 19
+#>   patient_id    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab
+#>        <dbl> <int> <int> <int> <int>    <int> <int>  <int> <int> <int> <int>
+#> 1          1     0     1     0     0        0     0      0     0     0     1
+#> 2          2     0     0     0     0        0     0      0     0     0     0
+#> 3          3     0     0     0     0        0     1      0     0     0     0
+#> # ℹ 8 more variables: diabwc <int>, hp <int>, rend <int>, canc <int>,
+#> #   msld <int>, metacanc <int>, aids <int>, score_charlson <dbl>
 ```
 
 The result is a data frame with one row per patient and columns for each
@@ -240,6 +248,22 @@ the `gt` package. Requires `gt` to be installed:
 # Requires: install.packages("gt")
 cie_table("E11")
 ```
+
+| CIE-10 Chile: E11 |  |
+|----|----|
+| Fuente: MINSAL/DEIS v2018 |  |
+| Codigo | Diagnostico |
+| E11 | Diabetes mellitus no insulinodependiente |
+| E11.0 | Diabetes mellitus tipo 2 con coma |
+| E11.1 | Diabetes mellitus tipo 2 con cetoacidosis |
+| E11.2 | Diabetes mellitus tipo 2 con complicaciones renales |
+| E11.3 | Diabetes mellitus tipo 2 con complicaciones oftálmicas |
+| E11.4 | Diabetes mellitus tipo 2 con complicaciones neurológicas |
+| E11.5 | Diabetes mellitus tipo 2 con complicaciones circulatorias periféricas |
+| E11.6 | Diabetes mellitus tipo 2 con otras complicaciones especificadas |
+| E11.7 | Diabetes mellitus tipo 2 con complicaciones múltiples |
+| E11.8 | Diabetes mellitus tipo 2 con complicaciones no especificadas |
+| E11.9 | Diabetes mellitus tipo 2 sin complicaciones |
 
 ## Data source
 

@@ -45,7 +45,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -54,15 +54,153 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-2026-04-25">ciecl 0.9.8 (2026-04-25)<a class="anchor" aria-label="anchor" href="#ciecl-098-2026-04-25"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-06-09">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-09)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-06-09"></a></h2>
 <p><em>English summary below</em></p>
+<div class="section level3">
+<h3 id="sprint-f4--documentación-limpieza-interna-y-estilo-0-9-8">Sprint F4 — Documentación, limpieza interna y estilo (2026-06-09)<a class="anchor" aria-label="anchor" href="#sprint-f4--documentaci%C3%B3n-limpieza-interna-y-estilo-0-9-8"></a></h3>
+<p>Sin cambios en la API pública.</p>
+<ul><li>
+<strong><code>cie10_cl</code></strong>: documentación roxygen completada — columna <code>uso_cl</code> documentada, descripción de dominio para las 11 columnas, tildes corregidas, <code>@family datasets</code>, <code>@seealso [cie_lookup()], [cie_search()], [cie10_sql()]</code> y ejemplos adicionales.</li>
+<li>
+<strong>Interno</strong>: argumentos <code>texto</code> renombrados a <code>text</code> en las funciones internas <code>normalizar_tildes()</code> y <code>expandir_sigla()</code> (no exportadas, sin impacto en API).</li>
+<li>
+<strong>Estilo</strong>: lambdas de una línea migradas a sintaxis <code>\(x)</code> en <code>cie-siglas.R</code> y <code>cie-table.R</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="sprint-f2--flags-include_uso_cl--only_uso_cl-0-9-8">Sprint F2 — Flags <code>include_uso_cl</code> / <code>only_uso_cl</code> (2026-05-20)<a class="anchor" aria-label="anchor" href="#sprint-f2--flags-include_uso_cl--only_uso_cl-0-9-8"></a></h3>
+<p>Expone la columna <code>uso_cl</code> del dataset CIE-10 MINSAL/DEIS v2018 como filtro y como salida opcional en las dos funciones de busqueda principales.</p>
+<ul><li>
+<strong><code>cie_lookup(include_uso_cl = TRUE, only_uso_cl = FALSE)</code></strong>:
+<ul><li>
+<code>include_uso_cl = TRUE</code> (default) preserva el contrato historico: la columna <code>uso_cl</code> sigue apareciendo en el output.</li>
+<li>
+<code>only_uso_cl = TRUE</code> filtra a codigos vigentes en Chile excluyendo <code>uso_cl == "legado"</code>.</li>
+</ul></li>
+<li>
+<strong><code>cie_search(include_uso_cl = FALSE, only_uso_cl = FALSE)</code></strong>:
+<ul><li>
+<code>include_uso_cl = FALSE</code> (default) preserva el contrato historico (no incluye <code>uso_cl</code> en el output). Pasarlo a <code>TRUE</code> agrega la columna.</li>
+<li>
+<code>only_uso_cl = TRUE</code> filtra el resultado a codigos vigentes (excluye <code>legado</code>) en cualquier <code>field</code> (<code>descripcion</code> o <code>inclusion</code>).</li>
+</ul></li>
+<li>
+<strong>Semantica de <code>uso_cl</code></strong> (textual, no booleano): <code>principal</code> (8.898), <code>legado</code> (27.335), <code>causa_externa</code> (3.295), <code>etiologico</code> (330), <code>causa_externa | principal</code> (19). <code>only_uso_cl = TRUE</code> conserva todo lo que NO es <code>legado</code> (12.542 codigos vigentes).</li>
+<li>
+<strong>Asimetria documentada</strong>: los defaults difieren entre <code>cie_lookup</code> (TRUE) y <code>cie_search</code> (FALSE) para no romper backward compat. El roxygen de ambas funciones lo menciona explicitamente.</li>
+<li>Tests: <code>tests/testthat/test-uso-cl-flags.R</code> cubre los 4 paths (default, include solo, only solo, ambos) en ambas funciones. +18 tests, sin regresion sobre los 1069 existentes.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="sprint-f1--cobertura-post-bloque-a-0-9-8">Sprint F1 — Cobertura post-Bloque A (2026-05-20)<a class="anchor" aria-label="anchor" href="#sprint-f1--cobertura-post-bloque-a-0-9-8"></a></h3>
+<p>Recuperación de cobertura sobre los paths agregados en Bloque A y refactor de mocks de API CIE-11 al patrón canónico de <code>httr2</code>. Sin cambios de API pública.</p>
+<ul><li>
+<strong>Cobertura total: 94,20 % → 97,31 %</strong> (<code>R/cie-sql.R</code>: 81,07 → 96,60; <code>R/cie-api.R</code>: 90,76 → 100,00). Suite: 1069 tests (+20), 0 fails.</li>
+<li>
+<strong><code>R/cie-sql.R</code></strong>: <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> → <code><a href="https://rlang.r-lib.org/reference/is_interactive.html" class="external-link">rlang::is_interactive()</a></code> (2 sitios) para que <code>rlang::local_interactive(TRUE)</code> pueda activar el path <code>cli_progress</code> en tests sin TTY real.</li>
+<li>
+<strong><code>R/cie-api.R</code></strong>:
+<ul><li>
+<code>who_error_body()</code> extraído del cuerpo de <code><a href="../reference/cie11_search.html">cie11_search()</a></code> como helper interno <code>@noRd</code> testeable directamente. Misma lógica de extracción (<code>error_description</code> → <code>error</code> → <code>message</code>).</li>
+<li>El warning del <code>tryCatch</code> externo pasa de <code>{e$message}</code> a <code>{conditionMessage(e)}</code>, propagando al usuario el detalle del body OMS cuando la API responde 4xx (antes se mostraba solo <code>"HTTP 401 ..."</code>).</li>
+</ul></li>
+<li>
+<strong><code>tests/testthat/test-api-mock.R</code></strong> migrado al patrón canónico:
+<ul><li>
+<code>local_mocked_bindings(req_perform, .package = "httr2")</code> → <code>httr2::local_mocked_responses(mock_who_api(...))</code>. El flow real de <code>httr2</code> corre hasta <code>handle_resp()</code> → <code>resp_failure_cnd()</code>, lo que permite verificar end-to-end el callback <code>req_error(body = who_error_body)</code>.</li>
+<li>Respuestas fake construidas con <code><a href="https://httr2.r-lib.org/reference/response.html" class="external-link">httr2::response_json()</a></code> / <code><a href="https://httr2.r-lib.org/reference/response.html" class="external-link">httr2::response()</a></code> en lugar de <code>structure(list(), class = "httr2_response")</code> (resistente a cambios internos de <code>httr2</code>).</li>
+<li>Nuevo helper <code>mock_who_api()</code> que distingue por URL el endpoint OAuth de token del endpoint de búsqueda OMS.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="modernización-r-lib--bloque-a-0-9-8">Modernización r-lib — Bloque A (2026-05-17)<a class="anchor" aria-label="anchor" href="#modernizaci%C3%B3n-r-lib--bloque-a-0-9-8"></a></h3>
+<p>Iteración técnica sobre patrones r-lib identificados en auditoría post-revisión. Sin cambios de API pública.</p>
+<ul><li>
+<strong>OAuth en <code><a href="../reference/cie11_search.html">cie11_search()</a></code> simplificado</strong> (<code>R/cie-api.R</code>):
+<ul><li>Migración del flujo OAuth manual (POST al token endpoint, parseo JSON, header <code>Authorization</code> armado a mano) a <code><a href="https://httr2.r-lib.org/reference/oauth_client.html" class="external-link">httr2::oauth_client()</a></code> + <code><a href="https://httr2.r-lib.org/reference/req_oauth_client_credentials.html" class="external-link">httr2::req_oauth_client_credentials()</a></code>. <code>httr2</code> ahora gestiona la obtención, cacheo y refresh del token de acceso de forma transparente.</li>
+<li>Errores HTTP de la OMS se tipifican vía <code><a href="https://httr2.r-lib.org/reference/resp_status.html" class="external-link">httr2::resp_check_status()</a></code> y <code>httr2::req_error(body = ...)</code>, exponiendo <code>error_description</code> / <code>error</code> / <code>message</code> del cuerpo de respuesta cuando viene en JSON.</li>
+</ul></li>
+<li>
+<strong>Indicadores de progreso en construcción de cache</strong> (<code>R/cie-sql.R</code>):
+<ul><li>
+<code>build_cache_atomic()</code> muestra ahora cuatro pasos vía <code><a href="https://cli.r-lib.org/reference/cli_progress_step.html" class="external-link">cli::cli_progress_step()</a></code> (cargar dataset, escribir tabla, construir índices, crear FTS5) durante la primera invocación (~16 s). En sesiones no interactivas se mantiene completamente silencioso.</li>
+</ul></li>
+<li>
+<strong>Argumentos requeridos uniformados</strong> (<code>cie-api.R</code>, <code>cie-search.R</code>, <code>cie-comorbid.R</code>): <code><a href="https://rlang.r-lib.org/reference/check_required.html" class="external-link">rlang::check_required()</a></code> estandariza el mensaje cuando faltan args obligatorios (<code>text</code>, <code>data</code>, <code>id</code>, <code>code</code>, <code>codes</code>).</li>
+<li>
+<strong>Tests reproducibles</strong>: <code><a href="https://testthat.r-lib.org/reference/local_test_context.html" class="external-link">testthat::local_reproducible_output()</a></code> en cada <code>test_that()</code> que usa <code>expect_snapshot</code>, aislando ancho de terminal, color y locale para evitar falsos positivos cross-platform.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="sprint-cobertura-y-tooling-ropensci--0-9-8">Sprint cobertura y tooling rOpenSci (2026-05-08 / 2026-05-09)<a class="anchor" aria-label="anchor" href="#sprint-cobertura-y-tooling-ropensci--0-9-8"></a></h3>
+<ul><li>
+<strong>Cobertura de tests subida de 86,45 % a 96,61 %</strong> mediante:
+<ul><li>Tests nuevos para <code><a href="../reference/cie_describe.html">cie_describe()</a></code>, <code><a href="../reference/cie_guide.html">cie_guide()</a></code> y <code><a href="../reference/cie_guia_busqueda.html">cie_guia_busqueda()</a></code> (+42 tests).</li>
+<li>Tests para rutas de deprecación, cache SQLite y manejo de errores (+107 tests). Total acumulado: <strong>1049 tests</strong>, 0 fails, 0 warnings.</li>
+<li>Refactor a helpers canónicos r-lib: <code><a href="https://lifecycle.r-lib.org/reference/expect_deprecated.html" class="external-link">lifecycle::expect_deprecated()</a></code> en lugar de <code>expect_warning(class = ...)</code>, <code><a href="https://withr.r-lib.org/reference/with_db_connection.html" class="external-link">withr::local_db_connection()</a></code> en lugar de helpers custom, llamadas directas a internos en lugar de <code><a href="https://rdrr.io/r/utils/getFromNamespace.html" class="external-link">getFromNamespace()</a></code>.</li>
+</ul></li>
+<li>
+<strong>Workflows rOpenSci/CRAN agregados</strong>:
+<ul><li>
+<code>.github/workflows/pkgcheck.yaml</code> (<code>ropensci-review-tools/pkgcheck-action</code>) con <code>post-to-issue: false</code> para evitar 403 en creación de issue.</li>
+<li>
+<code>.github/workflows/urlchecker.yaml</code> con scheduled run mensual.</li>
+<li>
+<code>.github/workflows/codemeta.yaml</code> regenera <code>codemeta.json</code> cuando cambia <code>DESCRIPTION</code>.</li>
+</ul></li>
+<li>
+<strong>Badge de cobertura dinámico</strong>: README y README.en consultan endpoint JSON del workflow <code>test-coverage.yaml</code> en lugar de un porcentaje hardcoded.</li>
+<li>
+<strong>Bug fix <code><a href="../reference/cie_search.html">cie_search()</a></code></strong>: sigla <code>IRA</code> desambiguada (ver detalle más abajo). Aliases <code>IRA_RESP</code> e <code>IRA_RENAL</code> agregados.</li>
+<li>
+<strong>Limpieza técnica menor</strong>:
+<ul><li>
+<code>@importFrom</code> duplicado eliminado en <code>cie-search.R</code>.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> reemplazado por <code>vapply(..., logical(1))</code> en <code><a href="../reference/cie_table.html">cie_table()</a></code>.</li>
+<li>Fix de asociación roxygen rota en <code><a href="../reference/cie_guia_busqueda.html">cie_guia_busqueda()</a></code> (línea en blanco entre bloque roxygen y firma).</li>
+<li>Badge rOpenSci Software Peer Review (<a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>) agregado a los README.</li>
+</ul></li>
+</ul><hr></div>
 <div class="section level3">
 <h3 id="respuesta-a-revisión-ropensci-rev-ropensci-0-9-8">Respuesta a Revisión rOpenSci (rev-ropensci)<a class="anchor" aria-label="anchor" href="#respuesta-a-revisi%C3%B3n-ropensci-rev-ropensci-0-9-8"></a></h3>
 <p>Versión de cumplimiento editorial y técnico tras la revisión de Maëlle Salmon. Esta versión unifica la interfaz del paquete bajo estándares internacionales de R, manteniendo la documentación pedagógica en español para el contexto local.</p>
+<div class="section level4">
+<h4 id="correcciones-funcionales-0-9-8">Correcciones funcionales<a class="anchor" aria-label="anchor" href="#correcciones-funcionales-0-9-8"></a></h4>
+<ul><li>
+<strong>Sigla <code>IRA</code> desambiguada</strong> (<code><a href="../reference/cie_search.html">cie_search()</a></code>): la sigla <code>IRA</code> es ambigua en contexto clínico chileno (puede ser <strong>infección respiratoria aguda</strong> o <strong>insuficiencia renal aguda</strong>). Ahora <code>cie_search("IRA")</code> mantiene el default respiratorio (uso más frecuente en pediatría y atención primaria) pero emite una advertencia explícita orientando al usuario hacia los nuevos alias inequívocos <code>IRA_RESP</code> (respiratoria) e <code>IRA_RENAL</code> (renal). Cierra bug detectado durante auditoría de seguridad post-split.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="infraestructura-de-calidad-de-código-0-9-8">Infraestructura de calidad de código<a class="anchor" aria-label="anchor" href="#infraestructura-de-calidad-de-c%C3%B3digo-0-9-8"></a></h4>
+<ul><li>
+<strong>Workflow de <code>lintr</code></strong> agregado en <code>.github/workflows/lint.yaml</code> (template oficial r-lib). Reporta lints sin bloquear el CI.</li>
+<li>
+<strong><code>.lintr</code> modernizado</strong> a sintaxis lintr 3.x (<code>linters_with_defaults</code>), removiendo el deprecado <code>with_defaults</code> y el linter inexistente <code>cyclocomp_linter</code>.</li>
+<li>
+<strong>Cleanup de espacios en blanco al final de línea</strong> en 18 archivos (R/, tests/, vignettes/, NEWS, README, data-raw, tools).</li>
+</ul></div>
+<div class="section level4">
+<h4 id="remediación-r-lib-y-calidad-técnica-0-9-8">Remediación r-lib y Calidad Técnica<a class="anchor" aria-label="anchor" href="#remediaci%C3%B3n-r-lib-y-calidad-t%C3%A9cnica-0-9-8"></a></h4>
+<ul><li>
+<strong>Migración total a <code>cli</code></strong>: Todos los errores, advertencias y mensajes informativos usan ahora <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort()</a></code>, <code>cli_warn()</code> y <code>cli_inform()</code> con clases de error personalizadas (<code>ciecl_invalid_input</code>, <code>ciecl_api_error</code>, etc.) para captura programática.</li>
+<li>
+<strong>Modernización de Roxygen</strong>:
+<ul><li>Migración masiva de <code>@return</code> a <code>@returns</code>.</li>
+<li>Uso de sintaxis markdown para enlaces internos y externos (<code>[fun()]</code>).</li>
+<li>Normalización de etiquetas <code>@family</code> a snake_case sin tildes.</li>
+</ul></li>
+<li>
+<strong>Refactor de Estructura</strong>: El archivo <code>cie-search.R</code> se ha dividido en 4 módulos (<code>cie-search.R</code>, <code>cie-siglas.R</code>, <code>cie-lookup.R</code>, <code>cie-guide.R</code>) para mejorar la mantenibilidad.</li>
+<li>
+<strong>Pipe Nativo</strong>: Migración de <code>%&gt;%</code> al pipe nativo de R <code>|&gt;</code> en todo el paquete (código, vignettes y tests).</li>
+<li>
+<strong>Aislamiento de Tests</strong>: Implementación de <code>withr</code> para garantizar que las pruebas no contaminen el cache del usuario, utilizando directorios temporales aislados.</li>
+<li>
+<strong>Snapshots de Mensajes</strong>: Uso de <code><a href="https://testthat.r-lib.org/reference/expect_snapshot.html" class="external-link">testthat::expect_snapshot()</a></code> para asegurar la consistencia de los mensajes en español generados por el paquete.</li>
+<li>
+<strong>Limpieza de Suggests</strong>: Removidos <code>usethis</code> y <code>litedown</code> de <code>Suggests:</code> por no ser referenciados en código, tests ni vignettes del paquete.</li>
+</ul></div>
 <div class="section level4">
 <h4 id="cambios-que-rompen-compatibilidad-deprecaciones-0-9-8">Cambios que rompen compatibilidad (Deprecaciones)<a class="anchor" aria-label="anchor" href="#cambios-que-rompen-compatibilidad-deprecaciones-0-9-8"></a></h4>
 <ul><li>

@@ -18,6 +18,8 @@ cie_search(
   field = c("descripcion", "inclusion"),
   only_fuzzy = FALSE,
   verbose = TRUE,
+  include_uso_cl = FALSE,
+  only_uso_cl = FALSE,
   texto = lifecycle::deprecated(),
   campo = lifecycle::deprecated(),
   solo_fuzzy = lifecycle::deprecated()
@@ -52,6 +54,20 @@ cie_search(
   Logical, mostrar mensajes informativos (default TRUE). Usar FALSE en
   scripts.
 
+- include_uso_cl:
+
+  Logical, incluir columna `uso_cl` en el output (default FALSE). El
+  default difiere de
+  [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+  (TRUE) para preservar el contrato historico de cada funcion. Valores
+  posibles: `"principal"`, `"legado"`, `"causa_externa"`,
+  `"etiologico"`, `"causa_externa | principal"`.
+
+- only_uso_cl:
+
+  Logical, filtrar a codigos vigentes de uso clinico en Chile (default
+  FALSE). Cuando es TRUE, excluye los codigos con `uso_cl == "legado"`.
+
 - texto:
 
   **\[deprecated\]** Use `text`.
@@ -81,13 +97,11 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 [`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
 [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
 
-Other busqueda:
+Other search:
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
 [`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
 [`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md),
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
-[`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 
 ## Examples
 
@@ -121,5 +135,9 @@ cie_search("diabetis")
 
 # Buscar en inclusiones
 cie_search("bacteriana", field = "inclusion")
+# Filtrar a codigos vigentes Chile (excluye 'legado')
+cie_search("diabetes", only_uso_cl = TRUE)
+# Mostrar la columna uso_cl en el output
+cie_search("diabetes", include_uso_cl = TRUE)
 }
 ```

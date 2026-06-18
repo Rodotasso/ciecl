@@ -18,13 +18,11 @@ tibble con guia comparativa de funciones de busqueda
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
 [`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md)
 
-Other busqueda:
+Other search:
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
 [`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
-[`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
 
 ## Examples
 

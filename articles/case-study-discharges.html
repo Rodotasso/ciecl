@@ -74,7 +74,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul>
 </li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -91,9 +91,9 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-05-25</h4>
+            <h4 data-toc-skip class="date">2026-06-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/case-study-discharges.Rmd" class="external-link"><code>vignettes/case-study-discharges.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/case-study-discharges.Rmd" class="external-link"><code>vignettes/case-study-discharges.Rmd</code></a></small>
       <div class="d-none name"><code>case-study-discharges.Rmd</code></div>
     </div>
 
@@ -180,15 +180,15 @@ non-printable characters.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cleaning and standardization of diagnoses</span></span>
-<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    DIAG1_NORM <span class="op">=</span> <span class="fu"><a href="../reference/cie_norm.html">cie_norm</a></span><span class="op">(</span>codes <span class="op">=</span> <span class="va">DIAG1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Comparison between original and normalized formats</span></span>
-<span><span class="va">discharges</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">discharges</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   DIAG1 DIAG1_NORM</span></span>
 <span><span class="co">#&gt; 1  J189      J18.9</span></span>
@@ -211,12 +211,12 @@ avoiding the creation of additional join columns and keeping the code
 cleaner.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Direct integration of descriptions into the main dataframe</span></span>
-<span><span class="va">discharges_full</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">discharges_full</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    description <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">discharges_full</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">DISCHARGE_ID</span>, <span class="va">DIAG1</span>, <span class="va">description</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">discharges_full</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">DISCHARGE_ID</span>, <span class="va">DIAG1</span>, <span class="va">description</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   DISCHARGE_ID DIAG1</span></span>
 <span><span class="co">#&gt; 1            1  J189</span></span>
 <span><span class="co">#&gt; 2            2  E119</span></span>
@@ -241,7 +241,7 @@ join:</p>
 <span>  full_description <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">discharges_metadata</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">discharges_metadata</span> <span class="op">&lt;-</span> <span class="va">discharges</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">metadata</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIAG1_NORM"</span> <span class="op">=</span> <span class="st">"codigo"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

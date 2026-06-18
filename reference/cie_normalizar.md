@@ -5,18 +5,25 @@
 ## Usage
 
 ``` r
-cie_normalizar(codigos, buscar_db = TRUE)
+cie_normalizar(
+  codigos = lifecycle::deprecated(),
+  buscar_db = lifecycle::deprecated()
+)
 ```
 
 ## Arguments
 
 - codigos:
 
-  Character vector de codigos
+  **\[deprecated\]** Character vector de codigos. Use
+  [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
+  con `codes` en codigo nuevo.
 
 - buscar_db:
 
-  Logical, buscar codigo en DB (default TRUE)
+  **\[deprecated\]** Logical, buscar codigo en DB (default TRUE). Use
+  [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
+  con `search_db` en codigo nuevo.
 
 ## Value
 

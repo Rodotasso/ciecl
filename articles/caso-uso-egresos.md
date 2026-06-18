@@ -20,7 +20,10 @@ variaciones más comunes en el contexto chileno son:
 
 Estas variaciones dificultan la interoperabilidad y el cruce con
 estándares internacionales. El paquete `ciecl` automatiza la corrección
-de estas inconsistencias de forma vectorizada y eficiente.
+de estas inconsistencias de forma vectorizada y eficiente. Para una
+introducción general a las funciones del paquete, consulte la vignette
+[Introducción a
+ciecl](https://rodotasso.github.io/ciecl/articles/ciecl-es.md).
 
 ## 1. Estructura de los datos originales
 
@@ -66,26 +69,31 @@ head(egresos)
 La normalización es el primer paso crítico para garantizar la integridad
 del análisis. La función
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-procesa los códigos aplicando las reglas de codificación oficial MINSAL:
+procesa los códigos aplicando las reglas de codificación oficial del
+Ministerio de Salud (MINSAL). Esta etapa es fundamental antes de
+realizar cualquier cruce de datos o cálculo de indicadores.
 
-- **Remoción de sufijos**: Identifica y elimina la `X` de relleno.
+Las operaciones automáticas incluyen:
+
+- **Remoción de sufijos**: Identifica y elimina la `X` de relleno (común
+  en categorías de 3 dígitos).
 - **Formateo de puntuación**: Inserta el punto decimal en la posición
   estándar según la jerarquía CIE-10.
-- **Limpieza de strings**: Elimina espacios en blanco y caracteres no
-  imprimibles.
+- **Limpieza de caracteres**: Elimina espacios, guiones y símbolos
+  especiales (como † o \*).
 
 ``` r
 
-# Limpieza y estandarización de diagnósticos
-egresos <- egresos %>%
+# Limpieza y estandarización de diagnósticos en el flujo de trabajo
+egresos <- egresos |>
   mutate(
     DIAG1_NORM = cie_norm(codes = DIAG1)
   )
 
 # Comparación entre formato original y normalizado
-egresos %>% 
-  select(DIAG1, DIAG1_NORM) %>% 
-  distinct() %>% 
+egresos |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
   head(5)
 #>   DIAG1 DIAG1_NORM
 #> 1  J189      J18.9
@@ -106,18 +114,19 @@ eficiente.
 
 A diferencia de un `left_join` tradicional,
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-devuelve directamente un vector de caracteres, evitando la creación de
-columnas de unión adicionales y manteniendo el código más limpio.
+devuelve directamente un vector de caracteres, lo que mantiene el
+pipeline más legible y evita la gestión manual de columnas de unión
+temporales.
 
 ``` r
 
 # Integración directa de descripciones al dataframe principal
-egresos_full <- egresos %>%
+egresos_full <- egresos |>
   mutate(
     descripcion = cie_describe(DIAG1_NORM)
   )
 
-head(egresos_full %>% select(ID_EGRESO, DIAG1, descripcion))
+head(egresos_full |> select(ID_EGRESO, DIAG1, descripcion))
 #>   ID_EGRESO DIAG1
 #> 1         1  J189
 #> 2         2  E119
@@ -134,10 +143,10 @@ head(egresos_full %>% select(ID_EGRESO, DIAG1, descripcion))
 #> 6                 Tumor maligno de la mama, parte no especificada
 ```
 
-Para casos donde se requiera la metadata completa (capítulo, categoría,
-grupo), se puede seguir utilizando
+Si además de la glosa se requiere la metadata completa (como el capítulo
+o el grupo), se recomienda utilizar
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-junto con un cruce de tablas:
+para obtener un `tibble` estructurado:
 
 ``` r
 
@@ -147,22 +156,23 @@ metadata <- cie_lookup(
   full_description = TRUE
 )
 
-egresos_metadata <- egresos %>%
+egresos_metadata <- egresos |>
   left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
 ```
 
 ## 4. Exploración del catálogo con `cie_search()`
 
-En fases exploratorias, donde no se conoce el código exacto o se
-sospecha de errores de transcripción en las glosas originales,
+En fases exploratorias, donde se desconoce el código exacto o se trabaja
+con registros de texto libre,
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-permite realizar búsquedas de texto mediante similitud de strings (fuzzy
-matching).
+permite realizar búsquedas por aproximación (fuzzy matching). Esto es
+útil para validar si un término clínico tiene una correspondencia
+directa en el catálogo.
 
 ``` r
 
 # Ejemplo de búsqueda con error ortográfico intencional ("diabetis")
-# La función retorna las coincidencias más probables ordenadas por score
+# El resultado permite identificar el código correcto a pesar del error
 cie_search(text = "diabetis", threshold = 0.7)
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
@@ -182,16 +192,17 @@ cie_search(text = "diabetis", threshold = 0.7)
 
 ## 5. Cálculo de índices de comorbilidad con `cie_comorbid()`
 
-Una aplicación avanzada de `ciecl` es la estratificación de riesgo
-poblacional mediante índices de comorbilidad. La función
+Finalmente, `ciecl` permite escalar el análisis hacia la estratificación
+de riesgo poblacional. La función
 [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
-mapea los diagnósticos normalizados hacia categorías de Charlson o
-Elixhauser, adaptadas a la realidad de los datos chilenos.
+automatiza el mapeo de diagnósticos hacia los índices de Charlson o
+Elixhauser, permitiendo que un set de datos de egresos se transforme
+rápidamente en una matriz de comorbilidades por paciente.
 
 ``` r
 
 # Requiere el paquete 'comorbidity' instalado
-# Cálculo del Índice de Charlson por identificador de paciente
+# Cálculo del Índice de Charlson consolidado por paciente
 comorbilidades <- cie_comorbid(
   data = egresos,
   id = "PACIENTE_ID",
@@ -199,27 +210,27 @@ comorbilidades <- cie_comorbid(
   map = "charlson"
 )
 
-# El resultado permite el uso inmediato en modelos estadísticos
+# El resultado está listo para su uso en modelos estadísticos avanzados
 head(comorbilidades, 10)
 ```
 
-## Resumen del proceso
+## Resumen del proceso analítico
 
-El flujo de trabajo con `ciecl` permite una transición reproducible
-desde datos administrativos crudos hacia un dataset analítico en cuatro
-etapas:
+El flujo de trabajo propuesto con `ciecl` garantiza una transición
+reproducible desde datos administrativos crudos hacia un dataset
+analítico de alta calidad:
 
-1.  **Estandarización**: Corrección de formatos mediante
+1.  **Estandarización**: Corrección de formatos técnicos con
     [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md).
-2.  **Contextualización**: Asignación de glosas oficiales con
+2.  **Contextualización**: Asignación de glosas oficiales mediante
     [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md).
-3.  **Validación**: Descubrimiento y chequeo de términos con
+3.  **Validación**: Chequeo de términos clínicos con
     [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md).
-4.  **Agregación**: Generación de indicadores clínicos complejos con
+4.  **Agregación**: Generación de indicadores de comorbilidad con
     [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md).
 
 ------------------------------------------------------------------------
 
-**Fuente de datos:** Esta herramienta utiliza el catálogo CIE-10
-estandarizado por el Centro FIC del DEIS, Ministerio de Salud de Chile.
-Para más información, visite [deis.minsal.cl](https://deis.minsal.cl).
+**Fuente de datos:** Esta herramienta utiliza el catálogo CIE-10 oficial
+para Chile, gestionado por el DEIS del Ministerio de Salud. Más detalles
+en [deis.minsal.cl](https://deis.minsal.cl).

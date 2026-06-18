@@ -75,15 +75,15 @@ function processes codes by applying official MINSAL coding rules:
 ``` r
 
 # Cleaning and standardization of diagnoses
-discharges <- discharges %>%
+discharges <- discharges |>
   mutate(
     DIAG1_NORM = cie_norm(codes = DIAG1)
   )
 
 # Comparison between original and normalized formats
-discharges %>% 
-  select(DIAG1, DIAG1_NORM) %>% 
-  distinct() %>% 
+discharges |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
   head(5)
 #>   DIAG1 DIAG1_NORM
 #> 1  J189      J18.9
@@ -110,12 +110,12 @@ join columns and keeping the code cleaner.
 ``` r
 
 # Direct integration of descriptions into the main dataframe
-discharges_full <- discharges %>%
+discharges_full <- discharges |>
   mutate(
     description = cie_describe(DIAG1_NORM)
   )
 
-head(discharges_full %>% select(DISCHARGE_ID, DIAG1, description))
+head(discharges_full |> select(DISCHARGE_ID, DIAG1, description))
 #>   DISCHARGE_ID DIAG1
 #> 1            1  J189
 #> 2            2  E119
@@ -144,7 +144,7 @@ metadata <- cie_lookup(
   full_description = TRUE
 )
 
-discharges_metadata <- discharges %>%
+discharges_metadata <- discharges |>
   left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
 ```
 

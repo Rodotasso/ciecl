@@ -15,13 +15,11 @@ tibble con guia comparativa
 
 ## See also
 
-Other busqueda:
+Other search:
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
 [`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md),
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md),
-[`cie_siglas()`](https://rodotasso.github.io/ciecl/reference/cie_siglas.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
 
 ## Examples
 

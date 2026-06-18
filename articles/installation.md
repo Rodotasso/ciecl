@@ -122,7 +122,7 @@ Sys.setenv(ICD_API_KEY = keyring::key_get("ciecl_icd11"))
 **Option B: Using `.Renviron` File**
 
 Add the following line to your `~/.Renviron` file (you can use
-[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html)):
+`usethis::edit_r_environ()`):
 
     ICD_API_KEY=your_client_id:your_client_secret
 

@@ -13,10 +13,10 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/RodoTasso/ciecl/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/Rodotasso/ciecl/blob/main/inst/CITATION)
 
 Tasso Suazo R, Jofre F (2026). *ciecl: Clasificacion Internacional de
-Enfermedades CIE-10/11 para Chile*. R package version 0.9.3. Grupo de
+Enfermedades CIE-10/11 para Chile*. R package version 0.9.8. Grupo de
 Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de
 Chile. Datos: MINSAL/DEIS v2018, <https://github.com/Rodotasso/ciecl>.
 
@@ -24,6 +24,6 @@ Chile. Datos: MINSAL/DEIS v2018, <https://github.com/Rodotasso/ciecl>.
       title = {ciecl: Clasificacion Internacional de Enfermedades CIE-10/11 para Chile},
       author = {Rodolfo {Tasso Suazo} and Francisca Jofre},
       year = {2026},
-      note = {R package version 0.9.3. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018},
+      note = {R package version 0.9.8. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018},
       url = {https://github.com/Rodotasso/ciecl},
     }

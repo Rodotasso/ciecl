@@ -74,7 +74,7 @@
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul>
 </li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/RodoTasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Rodotasso/ciecl/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -91,9 +91,9 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-05-25</h4>
+            <h4 data-toc-skip class="date">2026-06-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/RodoTasso/ciecl/blob/main/vignettes/caso-uso-egresos.Rmd" class="external-link"><code>vignettes/caso-uso-egresos.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/caso-uso-egresos.Rmd" class="external-link"><code>vignettes/caso-uso-egresos.Rmd</code></a></small>
       <div class="d-none name"><code>caso-uso-egresos.Rmd</code></div>
     </div>
 
@@ -121,8 +121,9 @@ para completar la longitud del campo en categorías de 3 dígitos (ej:
 </ol>
 <p>Estas variaciones dificultan la interoperabilidad y el cruce con
 estándares internacionales. El paquete <code>ciecl</code> automatiza la
-corrección de estas inconsistencias de forma vectorizada y
-eficiente.</p>
+corrección de estas inconsistencias de forma vectorizada y eficiente.
+Para una introducción general a las funciones del paquete, consulte la
+vignette <a href="ciecl-es.html">Introducción a ciecl</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="estructura-de-los-datos-originales">1. Estructura de los datos originales<a class="anchor" aria-label="anchor" href="#estructura-de-los-datos-originales"></a>
@@ -166,29 +167,32 @@ diagnóstico principal con los formatos informales mencionados.</p>
 </h2>
 <p>La normalización es el primer paso crítico para garantizar la
 integridad del análisis. La función <code><a href="../reference/cie_norm.html">cie_norm()</a></code> procesa los
-códigos aplicando las reglas de codificación oficial MINSAL:</p>
+códigos aplicando las reglas de codificación oficial del Ministerio de
+Salud (MINSAL). Esta etapa es fundamental antes de realizar cualquier
+cruce de datos o cálculo de indicadores.</p>
+<p>Las operaciones automáticas incluyen:</p>
 <ul>
 <li>
 <strong>Remoción de sufijos</strong>: Identifica y elimina la
-<code>X</code> de relleno.</li>
+<code>X</code> de relleno (común en categorías de 3 dígitos).</li>
 <li>
 <strong>Formateo de puntuación</strong>: Inserta el punto decimal en
 la posición estándar según la jerarquía CIE-10.</li>
 <li>
-<strong>Limpieza de strings</strong>: Elimina espacios en blanco y
-caracteres no imprimibles.</li>
+<strong>Limpieza de caracteres</strong>: Elimina espacios, guiones y
+símbolos especiales (como † o *).</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Limpieza y estandarización de diagnósticos</span></span>
-<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="co"># Limpieza y estandarización de diagnósticos en el flujo de trabajo</span></span>
+<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    DIAG1_NORM <span class="op">=</span> <span class="fu"><a href="../reference/cie_norm.html">cie_norm</a></span><span class="op">(</span>codes <span class="op">=</span> <span class="va">DIAG1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Comparación entre formato original y normalizado</span></span>
-<span><span class="va">egresos</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">egresos</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">distinct</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   DIAG1 DIAG1_NORM</span></span>
 <span><span class="co">#&gt; 1  J189      J18.9</span></span>
@@ -207,16 +211,16 @@ El paquete <code>ciecl</code> ofrece la función vectorizada
 flujos de <code>dplyr</code> de forma eficiente.</p>
 <p>A diferencia de un <code>left_join</code> tradicional,
 <code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve directamente un vector de
-caracteres, evitando la creación de columnas de unión adicionales y
-manteniendo el código más limpio.</p>
+caracteres, lo que mantiene el pipeline más legible y evita la gestión
+manual de columnas de unión temporales.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Integración directa de descripciones al dataframe principal</span></span>
-<span><span class="va">egresos_full</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">egresos_full</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    descripcion <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos_full</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">ID_EGRESO</span>, <span class="va">DIAG1</span>, <span class="va">descripcion</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos_full</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span><span class="va">ID_EGRESO</span>, <span class="va">DIAG1</span>, <span class="va">descripcion</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   ID_EGRESO DIAG1</span></span>
 <span><span class="co">#&gt; 1         1  J189</span></span>
 <span><span class="co">#&gt; 2         2  E119</span></span>
@@ -231,9 +235,9 @@ manteniendo el código más limpio.</p>
 <span><span class="co">#&gt; 4              Infección de vías urinarias, sitio no especificado</span></span>
 <span><span class="co">#&gt; 5                                Hipertensión esencial (primaria)</span></span>
 <span><span class="co">#&gt; 6                 Tumor maligno de la mama, parte no especificada</span></span></code></pre></div>
-<p>Para casos donde se requiera la metadata completa (capítulo,
-categoría, grupo), se puede seguir utilizando <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>
-junto con un cruce de tablas:</p>
+<p>Si además de la glosa se requiere la metadata completa (como el
+capítulo o el grupo), se recomienda utilizar <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>
+para obtener un <code>tibble</code> estructurado:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Obtención de metadata completa vía lookup + join</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span></span>
@@ -241,19 +245,20 @@ junto con un cruce de tablas:</p>
 <span>  full_description <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">egresos_metadata</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">egresos_metadata</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">metadata</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIAG1_NORM"</span> <span class="op">=</span> <span class="st">"codigo"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="exploración-del-catálogo-con-cie_search">4. Exploración del catálogo con <code>cie_search()</code><a class="anchor" aria-label="anchor" href="#exploraci%C3%B3n-del-cat%C3%A1logo-con-cie_search"></a>
 </h2>
-<p>En fases exploratorias, donde no se conoce el código exacto o se
-sospecha de errores de transcripción en las glosas originales,
-<code><a href="../reference/cie_search.html">cie_search()</a></code> permite realizar búsquedas de texto mediante
-similitud de strings (fuzzy matching).</p>
+<p>En fases exploratorias, donde se desconoce el código exacto o se
+trabaja con registros de texto libre, <code><a href="../reference/cie_search.html">cie_search()</a></code> permite
+realizar búsquedas por aproximación (fuzzy matching). Esto es útil para
+validar si un término clínico tiene una correspondencia directa en el
+catálogo.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ejemplo de búsqueda con error ortográfico intencional ("diabetis")</span></span>
-<span><span class="co"># La función retorna las coincidencias más probables ordenadas por score</span></span>
+<span><span class="co"># El resultado permite identificar el código correcto a pesar del error</span></span>
 <span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"diabetis"</span>, threshold <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
@@ -274,14 +279,15 @@ similitud de strings (fuzzy matching).</p>
 <h2 id="cálculo-de-índices-de-comorbilidad-con-cie_comorbid">5. Cálculo de índices de comorbilidad con
 <code>cie_comorbid()</code><a class="anchor" aria-label="anchor" href="#c%C3%A1lculo-de-%C3%ADndices-de-comorbilidad-con-cie_comorbid"></a>
 </h2>
-<p>Una aplicación avanzada de <code>ciecl</code> es la estratificación
-de riesgo poblacional mediante índices de comorbilidad. La función
-<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> mapea los diagnósticos normalizados hacia
-categorías de Charlson o Elixhauser, adaptadas a la realidad de los
-datos chilenos.</p>
+<p>Finalmente, <code>ciecl</code> permite escalar el análisis hacia la
+estratificación de riesgo poblacional. La función
+<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> automatiza el mapeo de diagnósticos hacia
+los índices de Charlson o Elixhauser, permitiendo que un set de datos de
+egresos se transforme rápidamente en una matriz de comorbilidades por
+paciente.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Requiere el paquete 'comorbidity' instalado</span></span>
-<span><span class="co"># Cálculo del Índice de Charlson por identificador de paciente</span></span>
+<span><span class="co"># Cálculo del Índice de Charlson consolidado por paciente</span></span>
 <span><span class="va">comorbilidades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">egresos</span>,</span>
 <span>  id <span class="op">=</span> <span class="st">"PACIENTE_ID"</span>,</span>
@@ -289,33 +295,33 @@ datos chilenos.</p>
 <span>  map <span class="op">=</span> <span class="st">"charlson"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># El resultado permite el uso inmediato en modelos estadísticos</span></span>
+<span><span class="co"># El resultado está listo para su uso en modelos estadísticos avanzados</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">comorbilidades</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="resumen-del-proceso">Resumen del proceso<a class="anchor" aria-label="anchor" href="#resumen-del-proceso"></a>
+<h2 id="resumen-del-proceso-analítico">Resumen del proceso analítico<a class="anchor" aria-label="anchor" href="#resumen-del-proceso-anal%C3%ADtico"></a>
 </h2>
-<p>El flujo de trabajo con <code>ciecl</code> permite una transición
-reproducible desde datos administrativos crudos hacia un dataset
-analítico en cuatro etapas:</p>
+<p>El flujo de trabajo propuesto con <code>ciecl</code> garantiza una
+transición reproducible desde datos administrativos crudos hacia un
+dataset analítico de alta calidad:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Estandarización</strong>: Corrección de formatos mediante
-<code><a href="../reference/cie_norm.html">cie_norm()</a></code>.</li>
+<strong>Estandarización</strong>: Corrección de formatos técnicos
+con <code><a href="../reference/cie_norm.html">cie_norm()</a></code>.</li>
 <li>
 <strong>Contextualización</strong>: Asignación de glosas oficiales
-con <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>.</li>
+mediante <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>.</li>
 <li>
-<strong>Validación</strong>: Descubrimiento y chequeo de términos
-con <code><a href="../reference/cie_search.html">cie_search()</a></code>.</li>
+<strong>Validación</strong>: Chequeo de términos clínicos con
+<code><a href="../reference/cie_search.html">cie_search()</a></code>.</li>
 <li>
-<strong>Agregación</strong>: Generación de indicadores clínicos
-complejos con <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>.</li>
+<strong>Agregación</strong>: Generación de indicadores de
+comorbilidad con <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>.</li>
 </ol>
 <hr>
 <p><strong>Fuente de datos:</strong> Esta herramienta utiliza el
-catálogo CIE-10 estandarizado por el Centro FIC del DEIS, Ministerio de
-Salud de Chile. Para más información, visite <a href="https://deis.minsal.cl" class="external-link">deis.minsal.cl</a>.</p>
+catálogo CIE-10 oficial para Chile, gestionado por el DEIS del
+Ministerio de Salud. Más detalles en <a href="https://deis.minsal.cl" class="external-link">deis.minsal.cl</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
