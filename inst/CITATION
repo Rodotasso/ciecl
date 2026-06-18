@@ -4,7 +4,10 @@ bibentry(
   author = c(person("Rodolfo", "Tasso Suazo",
                     email = "rtasso@uchile.cl",
                     role = c("aut", "cre"),
-                    comment = c(ORCID = "0000-0002-1264-4933"))),
+                    comment = c(ORCID = "0000-0002-1264-4933")),
+             person("Francisca", "Jofre",
+                    role = "ctb",
+                    comment = "Package logo design")),
   year = 2026,
   note = "R package version 0.9.8. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018",
   url = "https://github.com/Rodotasso/ciecl"
