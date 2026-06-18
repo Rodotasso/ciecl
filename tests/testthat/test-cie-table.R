@@ -1,7 +1,6 @@
 # Tests para cie_table (tablas gt)
 
-test_that("cie_table requiere gt instalado",
-{
+test_that("cie_table requiere gt instalado", {
   skip_if_not_installed("gt")
 
   # Test basico con codigo valido
@@ -18,11 +17,12 @@ test_that("cie_table funciona con multiples codigos", {
 })
 
 test_that("cie_table maneja codigo invalido", {
+  testthat::local_reproducible_output()
   skip_if_not_installed("gt")
   skip_on_cran()
 
   # Codigo que no existe lanza error
-  expect_error(cie_table("XXXXX"), "no encontrado")
+  expect_snapshot(cie_table("XXXXX"), error = TRUE)
 })
 
 # ============================================================
@@ -96,8 +96,10 @@ test_that("cie_table tiene columnas esperadas", {
 
 test_that("cie_table error sin gt instalado", {
   # Este test solo funciona si gt NO esta instalado
-  skip_if(requireNamespace("gt", quietly = TRUE),
-          "gt esta instalado")
+  skip_if(
+    requireNamespace("gt", quietly = TRUE),
+    "gt esta instalado"
+  )
 
   expect_error(
     cie_table("E11"),

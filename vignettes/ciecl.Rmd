@@ -94,7 +94,7 @@ discharges <- data.frame(
   diag_code   = c("E11.0", "I10", "J44.0", "E11.0")
 )
 
-discharges %>%
+discharges |>
   mutate(description = cie_describe(diag_code))
 ```
 
@@ -115,7 +115,7 @@ The Charlson and Elixhauser indices are widely used in clinical research and ris
 
 This function requires the `comorbidity` package. Install it with `install.packages("comorbidity")` if needed:
 
-```{r eval=FALSE}
+```{r eval=rlang::is_installed("comorbidity")}
 # Requires: install.packages("comorbidity")
 patient_df <- data.frame(
   patient_id  = c(1, 1, 2, 2, 3),
@@ -131,7 +131,7 @@ The result is a data frame with one row per patient and columns for each conditi
 
 For reports and presentations, `cie_table()` generates an enriched HTML table of all codes within a category using the `gt` package. Requires `gt` to be installed:
 
-```{r eval=FALSE}
+```{r eval=rlang::is_installed("gt")}
 # Requires: install.packages("gt")
 cie_table("E11")
 ```

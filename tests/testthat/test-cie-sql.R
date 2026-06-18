@@ -19,7 +19,7 @@ test_that("cie10_sql bloquea queries peligrosas", {
 
   expect_error(
     cie10_sql("DROP TABLE cie10"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -42,7 +42,7 @@ test_that("cie10_sql ejecuta queries SQL con clausulas WHERE/LIKE/GROUP/ORDER", 
   # WHERE retorna codigo exacto con contenido correcto
   r_where <- cie10_sql("SELECT * FROM cie10 WHERE codigo = 'E11.0'")
   expect_equal(nrow(r_where), 1)
-  expect_true(grepl("iabetes", r_where$descripcion, ignore.case = TRUE))
+  expect_match(r_where$descripcion, "iabetes", ignore.case = TRUE)
 
   # LIKE filtra por prefijo
   r_like <- cie10_sql("SELECT * FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 10")
@@ -122,7 +122,10 @@ test_that("cie10_sql permite subqueries y UNION", {
   expect_equal(nrow(r_sub), 1)
 
   # UNION de dos SELECT validos
-  r_union <- cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo = 'E11.0' UNION SELECT codigo, descripcion FROM cie10 WHERE codigo = 'I10'")
+  r_union <- cie10_sql(paste(
+    "SELECT codigo, descripcion FROM cie10 WHERE codigo = 'E11.0'",
+    "UNION SELECT codigo, descripcion FROM cie10 WHERE codigo = 'I10'"
+  ))
   expect_gte(nrow(r_union), 1)
 })
 
@@ -179,7 +182,7 @@ test_that("get_cie10_db tabla tiene indices", {
 test_that("get_cie10_db usa directorio cache correcto", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   con <- get_cie10_db()
@@ -202,7 +205,7 @@ test_that("get_cie10_db tabla tiene columnas esperadas", {
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe
@@ -284,7 +287,7 @@ test_that("cie10_sql bloquea INSERT", {
 
   expect_error(
     cie10_sql("INSERT INTO cie10 VALUES ('X99', 'Test')"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -293,7 +296,7 @@ test_that("cie10_sql bloquea UPDATE", {
 
   expect_error(
     cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -302,7 +305,7 @@ test_that("cie10_sql bloquea DELETE", {
 
   expect_error(
     cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -311,7 +314,7 @@ test_that("cie10_sql bloquea DETACH", {
 
   expect_error(
     cie10_sql("DETACH DATABASE main"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -320,7 +323,7 @@ test_that("cie10_sql bloquea EXEC", {
 
   expect_error(
     cie10_sql("EXEC sp_help"),
-    "Solo queries SELECT"
+    class = "ciecl_unsafe_query"
   )
 })
 
@@ -334,7 +337,7 @@ test_that("get_cie10_db crea directorio cache si no existe", {
   # Limpiar cache para forzar recreacion
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
 
   # Conectar - debe crear directorio si no existe
   get_cie10_db()
@@ -484,7 +487,7 @@ test_that("build_cache_atomic crea cache completo", {
   # Limpiar
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # No debe existir .tmp residual despues de build exitoso
@@ -581,7 +584,7 @@ test_that("get_cie10_db reconstruye si tabla cie10 falta", {
   skip_on_cran()
   ciecl::cie10_disconnect()
   con_direct <- DBI::dbConnect(RSQLite::SQLite(),
-    file.path(tools::R_user_dir("ciecl", "data"), "cie10.db"))
+    file.path(ciecl:::get_cache_dir(), "cie10.db"))
   on.exit(
     if (DBI::dbIsValid(con_direct)) suppressWarnings(DBI::dbDisconnect(con_direct)),
     add = TRUE
@@ -601,12 +604,10 @@ test_that("cie10_sql maneja error de ejecucion SQL", {
 test_that("cache_is_current retorna FALSE cuando query falla", {
   skip_on_cran()
   tmp_db <- tempfile(fileext = ".db")
-  on.exit(unlink(tmp_db), add = TRUE)
+  withr::defer(unlink(tmp_db))
   con <- DBI::dbConnect(RSQLite::SQLite(), tmp_db)
-  on.exit(
-    if (DBI::dbIsValid(con)) suppressWarnings(DBI::dbDisconnect(con)),
-    add = TRUE
-  )
+  withr::defer(if (DBI::dbIsValid(con)) suppressWarnings(DBI::dbDisconnect(con)))
+
   # Crear tabla cie10_meta con schema incorrecto para que el SELECT falle
   DBI::dbExecute(con, "CREATE TABLE cie10_meta (x INTEGER)")
   expect_false(cache_is_current(con))
@@ -614,9 +615,9 @@ test_that("cache_is_current retorna FALSE cuando query falla", {
 
 test_that("build_cache_atomic limpia .tmp residual", {
   skip_on_cran()
-  on.exit(ciecl::cie10_disconnect(), add = TRUE)
+  withr::defer(ciecl::cie10_disconnect())
   ciecl::cie10_disconnect()
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   tmp_file <- file.path(cache_dir, "cie10.db.tmp")
   if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
   file.create(tmp_file)

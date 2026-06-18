@@ -11,6 +11,8 @@ cie_search(
   field = c("descripcion", "inclusion"),
   only_fuzzy = FALSE,
   verbose = TRUE,
+  include_uso_cl = FALSE,
+  only_uso_cl = FALSE,
   texto = lifecycle::deprecated(),
   campo = lifecycle::deprecated(),
   solo_fuzzy = lifecycle::deprecated()
@@ -32,6 +34,16 @@ sin busqueda exacta (default FALSE)}
 
 \item{verbose}{Logical, mostrar mensajes informativos
 (default TRUE). Usar FALSE en scripts.}
+
+\item{include_uso_cl}{Logical, incluir columna \code{uso_cl} en el output
+(default FALSE). El default difiere de \code{\link[=cie_lookup]{cie_lookup()}} (TRUE) para
+preservar el contrato historico de cada funcion. Valores posibles:
+\code{"principal"}, \code{"legado"}, \code{"causa_externa"}, \code{"etiologico"},
+\code{"causa_externa | principal"}.}
+
+\item{only_uso_cl}{Logical, filtrar a codigos vigentes de uso clinico
+en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+\code{uso_cl == "legado"}.}
 
 \item{texto}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{text}.}
 
@@ -60,7 +72,7 @@ Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
 # Busqueda basica
 cie_search("diabetes")
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cie_search("neumonia")
 
 # Busqueda por siglas medicas
@@ -72,18 +84,19 @@ cie_search("diabetis")
 
 # Buscar en inclusiones
 cie_search("bacteriana", field = "inclusion")
+# Filtrar a codigos vigentes Chile (excluye 'legado')
+cie_search("diabetes", only_uso_cl = TRUE)
+# Mostrar la columna uso_cl en el output
+cie_search("diabetes", include_uso_cl = TRUE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=cie_lookup]{cie_lookup()}},
-\code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
+\code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_short]{cie_short()}}, \code{\link[=cie10_sql]{cie10_sql()}}
 
-Other busqueda: 
-\code{\link{cie_describe}()},
-\code{\link{cie_guia_busqueda}()},
-\code{\link{cie_guide}()},
-\code{\link{cie_lookup}()},
-\code{\link{cie_short}()},
-\code{\link{cie_siglas}()}
+Other search:
+\code{\link[=cie_describe]{cie_describe()}},
+\code{\link[=cie_guia_busqueda]{cie_guia_busqueda()}},
+\code{\link[=cie_guide]{cie_guide()}},
+\code{\link[=cie_lookup]{cie_lookup()}}
 }
-\concept{busqueda}
+\concept{search}

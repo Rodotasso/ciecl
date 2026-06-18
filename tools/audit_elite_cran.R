@@ -27,11 +27,11 @@ cat("Archivos encontrados:", length(synth_files), "\n\n")
 for (f in synth_files) {
   fname <- basename(f)
   cat("  Testing:", fname, "... ")
-  
+
   tryCatch({
     # Leer muestra (primeras 1000 filas)
     df <- read.csv(f, nrows = 1000, stringsAsFactors = FALSE)
-    
+
     # Detectar columna de códigos
     code_col <- NULL
     for (col in names(df)) {
@@ -40,14 +40,14 @@ for (f in synth_files) {
         break
       }
     }
-    
+
     if (is.null(code_col)) code_col <- names(df)[1]
-    
+
     codes <- df[[code_col]]
-    
+
     # Test cie_normalizar
     norm_result <- suppressWarnings(cie_normalizar(codes[1:min(100, length(codes))]))
-    
+
     # Test cie_lookup (solo códigos válidos)
     valid_codes <- norm_result[grepl("^[A-Z]\\d", norm_result)]
     if (length(valid_codes) > 0) {
@@ -55,12 +55,12 @@ for (f in synth_files) {
         cie_lookup(valid_codes[1:min(10, length(valid_codes))])
       ))
     }
-    
+
     # Test cie_validate_vector
     valid_result <- cie_validate_vector(codes[1:min(100, length(codes))])
-    
+
     cat("OK\n")
-    
+
   }, error = function(e) {
     cat("ERROR:", conditionMessage(e), "\n")
     errors[[fname]] <<- conditionMessage(e)

@@ -15,7 +15,7 @@ cie_describe(
 \item{codes}{Character vector de codigos CIE-10 (ej. "E11.0",
 c("E11.0", "I10")).}
 
-\item{normalize}{Logical, ¿intentar normalizar los codigos antes
+\item{normalize}{Logical, intentar normalizar los codigos antes
 de buscar la descripcion? (default FALSE). Usar TRUE para
 limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
 auditar la calidad original del registro.}
@@ -42,7 +42,7 @@ cie_describe("E110", normalize = FALSE)
 # Rescate: normalizar antes de buscar
 cie_describe("E110", normalize = TRUE)
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Uso tipico en auditoria VIU (contar fallos de origen)
 diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 descripciones <- cie_describe(diags, normalize = FALSE)
@@ -53,12 +53,10 @@ sum(is.na(descripciones)) # Detecta 3 errores de registro
 \code{\link[=cie_lookup]{cie_lookup()}} para resultado como tibble con todas
 las columnas; \code{\link[=cie_norm]{cie_norm()}} para normalizacion.
 
-Other busqueda: 
-\code{\link{cie_guia_busqueda}()},
-\code{\link{cie_guide}()},
-\code{\link{cie_lookup}()},
-\code{\link{cie_search}()},
-\code{\link{cie_short}()},
-\code{\link{cie_siglas}()}
+Other search:
+\code{\link[=cie_guia_busqueda]{cie_guia_busqueda()}},
+\code{\link[=cie_guide]{cie_guide()}},
+\code{\link[=cie_lookup]{cie_lookup()}},
+\code{\link[=cie_search]{cie_search()}}
 }
-\concept{busqueda}
+\concept{search}

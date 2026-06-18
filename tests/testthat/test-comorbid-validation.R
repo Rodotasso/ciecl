@@ -25,7 +25,7 @@ test_that("cie_comorbid calcula Charlson con datos sinteticos", {
 
   expect_s3_class(resultado, "tbl_df")
   expect_true("score_charlson" %in% names(resultado))
-  expect_equal(nrow(resultado), 3, info = "Debe haber 3 pacientes")
+  expect_length(resultado$id_paciente, 3)
 
   # Verificar que scores sean >= 0
   expect_true(all(resultado$score_charlson >= 0))
@@ -44,7 +44,7 @@ test_that("cie_comorbid calcula Elixhauser", {
   resultado <- cie_comorbid(df_elix, id = "id", code = "dx", map = "elixhauser")
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 2)
+  expect_length(resultado$id, 2)
 
   # Elixhauser no tiene score_charlson
   expect_false("score_charlson" %in% names(resultado))
@@ -82,7 +82,7 @@ test_that("cie_comorbid maneja codigos vacios", {
   # Debe emitir warning por vacios
   expect_warning(
     resultado <- cie_comorbid(df_empty, id = "id", code = "dx", map = "charlson"),
-    "vacios"
+    "vac.os"
   )
 
   expect_s3_class(resultado, "tbl_df")
@@ -127,7 +127,7 @@ test_that("cie_map_comorbid categoriza diabetes correctamente", {
   # Solo E10 y E11 estan en el mapeo de cie_map_comorbid
   resultado <- cie_map_comorbid(c("E10.0", "E11.0"))
 
-  expect_equal(nrow(resultado), 2)
+  expect_length(resultado$codigo, 2)
   expect_true(all(resultado$categoria == "Diabetes"))
 })
 
@@ -135,7 +135,7 @@ test_that("cie_map_comorbid categoriza cardiovascular", {
   codigos <- c("I50.0", "I50.9", "I21.0", "I22.1")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 4)
+  expect_length(resultado$codigo, 4)
   # I50 = ICC, I21/I22 = IAM
   expect_true(resultado$categoria[1] == "Insuficiencia cardiaca")
   expect_true(resultado$categoria[3] == "Infarto miocardio")
@@ -145,7 +145,7 @@ test_that("cie_map_comorbid categoriza neoplasias", {
   codigos <- c("C50.0", "C61", "C34.0", "C18.0")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 4)
+  expect_length(resultado$codigo, 4)
   expect_true(all(resultado$categoria == "Neoplasia maligna"))
 })
 
@@ -153,7 +153,7 @@ test_that("cie_map_comorbid categoriza respiratorio", {
   codigos <- c("J40", "J44.0", "J44.1")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 3)
+  expect_length(resultado$codigo, 3)
   expect_true(all(resultado$categoria == "EPOC"))
 })
 
@@ -161,7 +161,7 @@ test_that("cie_map_comorbid categoriza ERC", {
   codigos <- c("N18.1", "N18.3", "N18.5", "N18.9")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 4)
+  expect_length(resultado$codigo, 4)
   expect_true(all(resultado$categoria == "Enfermedad renal cronica"))
 })
 
@@ -169,7 +169,7 @@ test_that("cie_map_comorbid categoriza trastornos mentales", {
   codigos <- c("F32.0", "F41.0", "F20.0")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 3)
+  expect_length(resultado$codigo, 3)
   expect_true(all(resultado$categoria == "Trastornos mentales"))
 })
 
@@ -177,7 +177,7 @@ test_that("cie_map_comorbid retorna 'Otra' para codigos no mapeados", {
   codigos <- c("Z00.0", "R10.0", "S62.0")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 3)
+  expect_length(resultado$codigo, 3)
   expect_true(all(resultado$categoria == "Otra"))
 })
 
@@ -185,7 +185,7 @@ test_that("cie_map_comorbid maneja NA", {
   codigos <- c("E11.0", NA, "I50.9")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 3)
+  expect_length(resultado$codigo, 3)
   expect_equal(resultado$categoria[2], "Otra")
 })
 
@@ -193,7 +193,7 @@ test_that("cie_map_comorbid maneja vector vacio", {
   resultado <- cie_map_comorbid(character(0))
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
   expect_equal(names(resultado), c("codigo", "categoria"))
 })
 
@@ -201,7 +201,7 @@ test_that("cie_map_comorbid maneja codigos mixtos", {
   codigos <- c("E11.0", "I50.9", "C50.9", "J44.0", "N18.3", "Z00.0")
   resultado <- cie_map_comorbid(codigos)
 
-  expect_equal(nrow(resultado), 6)
+  expect_length(resultado$codigo, 6)
 
   # Verificar cada categoria
   expect_equal(resultado$categoria[resultado$codigo == "E11.0"], "Diabetes")
@@ -249,7 +249,7 @@ test_that("cie_comorbid distingue pacientes correctamente", {
 
   resultado <- cie_comorbid(df_multi, id = "id", code = "dx", map = "charlson")
 
-  expect_equal(nrow(resultado), 3)
+  expect_length(resultado$id, 3)
 
   # Pac 3 deberia tener score bajo o 0
   score_pac3 <- resultado$score_charlson[resultado$id == 3]

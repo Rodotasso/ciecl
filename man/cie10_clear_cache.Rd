@@ -16,15 +16,15 @@ Limpiar cache SQLite (forzar rebuild)
 # Ver ubicacion del cache
 tools::R_user_dir("ciecl", "data")
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-cie10_clear_cache()  # Elimina cie10.db local
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+cie10_clear_cache() # Elimina cie10.db local
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=cie10_sql]{cie10_sql()}}, \code{\link[=cie10_disconnect]{cie10_disconnect()}}
 
-Other sql: 
-\code{\link{cie10_disconnect}()},
-\code{\link{cie10_sql}()}
+Other sql_backend:
+\code{\link[=cie10_disconnect]{cie10_disconnect()}},
+\code{\link[=cie10_sql]{cie10_sql()}}
 }
-\concept{sql}
+\concept{sql_backend}

@@ -67,15 +67,15 @@ Normalization is the critical first step to ensure analysis integrity. The `cie_
 
 ```{r normalizacion}
 # Cleaning and standardization of diagnoses
-discharges <- discharges %>%
+discharges <- discharges |>
   mutate(
     DIAG1_NORM = cie_norm(codes = DIAG1)
   )
 
 # Comparison between original and normalized formats
-discharges %>% 
-  select(DIAG1, DIAG1_NORM) %>% 
-  distinct() %>% 
+discharges |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
   head(5)
 ```
 
@@ -87,12 +87,12 @@ Unlike a traditional `left_join`, `cie_describe()` directly returns a character 
 
 ```{r describe}
 # Direct integration of descriptions into the main dataframe
-discharges_full <- discharges %>%
+discharges_full <- discharges |>
   mutate(
     description = cie_describe(DIAG1_NORM)
   )
 
-head(discharges_full %>% select(DISCHARGE_ID, DIAG1, description))
+head(discharges_full |> select(DISCHARGE_ID, DIAG1, description))
 ```
 
 For cases where full metadata is required (chapter, category, group), `cie_lookup()` can still be used in conjunction with a table join:
@@ -104,7 +104,7 @@ metadata <- cie_lookup(
   full_description = TRUE
 )
 
-discharges_metadata <- discharges %>%
+discharges_metadata <- discharges |>
   left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
 ```
 

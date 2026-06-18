@@ -197,7 +197,7 @@ test_that("codigo invalido no afecta siguientes busquedas", {
   suppressMessages({
     resultado_invalido <- cie_lookup("XXXXXXXXX")
   })
-  expect_equal(nrow(resultado_invalido), 0)
+  expect_length(resultado_invalido$codigo, 0)
 
   # Buscar codigo valido despues
   resultado_valido <- cie_lookup("E11.0")
@@ -342,7 +342,7 @@ test_that("cie_validate_vector con vector muy grande", {
 
   resultado <- cie_validate_vector(codigos)
   expect_length(resultado, 300)
-  expect_equal(sum(resultado), 200)  # 100 E11.0 + 100 Z00
+  expect_equal(sum(resultado), 200) # 100 E11.0 + 100 Z00
 })
 
 # ============================================================
@@ -381,7 +381,7 @@ test_that("get_cie10_db tabla tiene indices", {
 test_that("get_cie10_db usa directorio cache correcto", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   get_cie10_db()
@@ -396,7 +396,7 @@ test_that("get_cie10_db usa directorio cache correcto", {
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
 
-  cache_dir <- tools::R_user_dir("ciecl", "data")
+  cache_dir <- ciecl:::get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe
@@ -445,38 +445,39 @@ test_that("cie10_clear_cache retorna invisible NULL", {
 # ============================================================
 
 test_that("cie10_sql bloquea DROP TABLE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
-  expect_error(
-    cie10_sql("DROP TABLE cie10"),
-    "Solo queries SELECT"
-  )
+  expect_snapshot(cie10_sql("DROP TABLE cie10"), error = TRUE)
 })
 
 test_that("cie10_sql bloquea DELETE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
-  expect_error(
+  expect_snapshot(
     cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    error = TRUE
   )
 })
 
 test_that("cie10_sql bloquea UPDATE", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
-  expect_error(
+  expect_snapshot(
     cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'"),
-    "Solo queries SELECT"
+    error = TRUE
   )
 })
 
 test_that("cie10_sql bloquea INSERT", {
+  testthat::local_reproducible_output()
   skip_on_cran()
 
-  expect_error(
+  expect_snapshot(
     cie10_sql("INSERT INTO cie10 VALUES ('X99', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0)"),
-    "Solo queries SELECT"
+    error = TRUE
   )
 })
 

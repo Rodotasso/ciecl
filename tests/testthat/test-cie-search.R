@@ -3,7 +3,7 @@
 
 test_that("cie_search encuentra diabetes con fuzzy", {
   skip_on_cran()
-  
+
   # Buscar diabetes
   resultado <- cie_search("diabetes mellitus", threshold = 0.70)
   expect_gt(nrow(resultado), 0)
@@ -12,7 +12,7 @@ test_that("cie_search encuentra diabetes con fuzzy", {
 
 test_that("cie_lookup codigo exacto funciona", {
   skip_on_cran()
-  
+
   resultado <- cie_lookup("E11.0")
   expect_shape(resultado, nrow = 1)
   expect_equal(resultado$codigo, "E11.0")
@@ -20,18 +20,18 @@ test_that("cie_lookup codigo exacto funciona", {
 
 test_that("cie_lookup vectorizado elimina duplicados", {
   skip_on_cran()
-  
+
   # Vector con codigos duplicados
   codigos <- c("E11.0", "E11.0", "Z00")
   resultado <- cie_lookup(codigos)
-  
+
   # No debe haber duplicados en resultado
   expect_equal(nrow(resultado), length(unique(resultado$codigo)))
 })
 
 test_that("cie_lookup puede generar descripcion_completa", {
   skip_on_cran()
-  
+
   # Con descripcion_completa
   resultado_completo <- cie_lookup("E11.0", full_description = TRUE)
   expect_true("descripcion_completa" %in% names(resultado_completo))
@@ -47,7 +47,7 @@ test_that("cie_lookup con descripcion_completa mantiene columna en dataframe vac
   })
 
   # El dataframe debe estar vacio
-  expect_equal(nrow(resultado_vacio), 0)
+  expect_length(resultado_vacio$codigo, 0)
   expect_true("descripcion_completa" %in% names(resultado_vacio))
 })
 
@@ -71,14 +71,27 @@ test_that("cie_short no tiene duplicados", {
 })
 
 test_that("cie_short filtra por categoria", {
+  testthat::local_reproducible_output()
   # Filtrar cardiovasculares
   cardio <- cie_short("cardiovascular")
   expect_gt(nrow(cardio), 5)
   expect_true(all(cardio$categoria == "cardiovascular"))
 
   # Categoria invalida debe dar warning y retornar vacio
-  expect_warning(invalida <- cie_short("inexistente"), "no encontrada")
-  expect_equal(nrow(invalida), 0)
+  expect_snapshot(invalida <- cie_short("inexistente"))
+  expect_length(invalida$sigla, 0)
+})
+
+# ============================================================
+# PRUEBAS PARA cie_search() (validaciones)
+# ============================================================
+
+test_that("cie_search valida inputs", {
+  testthat::local_reproducible_output()
+  expect_snapshot(cie_search(123), error = TRUE)
+  expect_snapshot(cie_search("a"), error = TRUE)
+  expect_snapshot(cie_search("diabetes", threshold = 1.1), error = TRUE)
+  expect_snapshot(cie_search("diabetes", max_results = 0), error = TRUE)
 })
 
 # ============================================================
@@ -93,6 +106,43 @@ test_that("cie_guide retorna data.frame", {
   expect_true("Tengo..." %in% names(resultado))
 })
 
+test_that("cie_guide retorna columnas esperadas", {
+  resultado <- cie_guide()
+  cols <- names(resultado)
+
+  # debe haber al menos columnas con escenario y funcion sugerida
+  expect_gte(length(cols), 2)
+  expect_true(any(grepl("[Tt]engo|[Bb]usco|[Ee]ntrada", cols)))
+  expect_true(any(grepl("[Uu]sar|[Ff]uncion|[Ss]alida", cols)))
+})
+
+test_that("cie_guide referencia funciones publicas reales del paquete", {
+  resultado <- cie_guide()
+
+  texto <- paste(unlist(resultado), collapse = " ")
+
+  # Al menos las 3 funciones core deben aparecer en la guia
+  expect_match(texto, "cie_lookup")
+  expect_match(texto, "cie_search")
+})
+
+test_that("cie_guia_busqueda emite warning de deprecacion", {
+  expect_warning(
+    cie_guia_busqueda(),
+    class = "lifecycle_warning_deprecated"
+  )
+})
+
+test_that("cie_guia_busqueda retorna mismo resultado que cie_guide", {
+  expect_warning(
+    legacy <- cie_guia_busqueda(),
+    class = "lifecycle_warning_deprecated"
+  )
+  actual <- cie_guide()
+
+  expect_equal(legacy, actual)
+})
+
 # ============================================================
 # PRUEBAS COBERTURA - mensaje "Sin coincidencias"
 # ============================================================
@@ -105,7 +155,7 @@ test_that("cie_search muestra mensaje Sin coincidencias con verbose=TRUE", {
     "Sin coincidencias"
   )
 
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup con normalizar procesa codigo sin punto", {

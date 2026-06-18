@@ -5,9 +5,19 @@ if (identical(Sys.getenv("NOT_CRAN"), "")) {
   # Verificar si es un check de CRAN real mirando otras variables
   if (identical(Sys.getenv("_R_CHECK_PACKAGE_NAME_"), "")) {
     # No es R CMD check, establecer NOT_CRAN=true para tests locales
-    Sys.setenv(NOT_CRAN = "true")
+    # Usamos withr para asegurar que se restaure al finalizar la suite
+    withr::local_envvar(NOT_CRAN = "true", .local_envir = teardown_env())
   }
 }
+
+# Aislar cache SQLite en directorio temporal para no contaminar el del usuario
+# Esto tambien permite paralelizar tests en el futuro
+tmp_cache <- withr::local_tempdir(.local_envir = teardown_env())
+withr::local_envvar(CIECL_CACHE_DIR = tmp_cache, .local_envir = teardown_env())
+
+# Asegurar que la conexion pooled se cierre al finalizar la suite
+# para permitir la limpieza del directorio temporal en Windows
+withr::defer(ciecl::cie10_disconnect(), envir = teardown_env())
 
 # Buscar .Renviron en multiples ubicaciones posibles
 renviron_paths <- c(

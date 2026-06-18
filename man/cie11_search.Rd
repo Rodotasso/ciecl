@@ -7,7 +7,7 @@
 cie11_search(
   text,
   api_key = NULL,
-  lang = "es",
+  lang = c("es", "en"),
   max_results = 10,
   release = "2024-01",
   texto = lifecycle::deprecated()
@@ -38,13 +38,14 @@ Buscar codigos CIE-11 via API OMS
 # Ver parametros disponibles
 args(cie11_search)
 
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-cie11_search("depresion mayor")
+withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
+  cie11_search("depresion mayor")
+})
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 }
-\concept{api}
+\concept{api_who}

@@ -28,7 +28,7 @@
 #'   si no se encuentra exacto (default TRUE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @param buscar_db `r lifecycle::badge("deprecated")` Use `search_db`.
-#' @return Character vector con codigos normalizados al formato con punto
+#' @returns Character vector con codigos normalizados al formato con punto
 #' @family validacion
 #' @seealso [cie_validate_vector()],
 #'   [cie_expand()], [cie_lookup()]
@@ -153,9 +153,11 @@ cie_norm <- function(codes,
 #' Alias en espanol de [cie_norm()]. Se mantiene por compatibilidad
 #' con codigo existente en CRAN. Usar [cie_norm()] en codigo nuevo.
 #'
-#' @param codigos Character vector de codigos
-#' @param buscar_db Logical, buscar codigo en DB (default TRUE)
-#' @return Character vector con codigos normalizados
+#' @param codigos `r lifecycle::badge("deprecated")` Character vector de codigos.
+#'   Use [cie_norm()] con `codes` en codigo nuevo.
+#' @param buscar_db `r lifecycle::badge("deprecated")` Logical, buscar codigo en DB
+#'   (default TRUE). Use [cie_norm()] con `search_db` en codigo nuevo.
+#' @returns Character vector con codigos normalizados
 #' @family validacion
 #' @keywords internal
 #' @export
@@ -163,13 +165,16 @@ cie_norm <- function(codes,
 #' # Deprecated: usar cie_norm()
 #' cie_normalizar("E110")
 
-cie_normalizar <- function(codigos, buscar_db = TRUE) {
+cie_normalizar <- function(codigos = lifecycle::deprecated(),
+                           buscar_db = lifecycle::deprecated()) {
   lifecycle::deprecate_warn(
     "0.9.8",
     "cie_normalizar()",
     "cie_norm()"
   )
-  cie_norm(codes = codigos, search_db = buscar_db)
+  rlang::check_required(codigos)
+  search_db <- if (lifecycle::is_present(buscar_db)) buscar_db else TRUE
+  cie_norm(codes = codigos, search_db = search_db)
 }
 
 #' @rdname cie_norm
@@ -198,7 +203,7 @@ cie_normalize <- function(codes, search_db = TRUE,
 #' @param codes Character vector codigos (ej. c("E11.0", "Z00.0"))
 #' @param strict Logical, validar existencia en DB (default FALSE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
-#' @return Logical vector de la misma longitud que `codes`. TRUE si el
+#' @returns Logical vector de la misma longitud que `codes`. TRUE si el
 #'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
 #' @family validacion
 #' @seealso [cie_norm()], [cie_expand()]
@@ -245,10 +250,10 @@ cie_validate_vector <- function(codes,
 
     invalidos <- codes[!resultado & !is.na(codes)]
     if (length(invalidos) > 0) {
-      warning(
-        "Codigos no encontrados en DB MINSAL: ",
-        paste(invalidos, collapse = ", ")
-      )
+      cli::cli_warn(c(
+        "Codigos no encontrados en DB MINSAL:",
+        "x" = "{.val {invalidos}}"
+      ))
     }
 
     return(resultado)
@@ -261,38 +266,7 @@ cie_validate_vector <- function(codes,
 #'
 #' @param code String codigo padre (ej. "E11")
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
-#' @return Character vector con todos los codigos hijos del codigo padre.
-#'   Vector vacio si el codigo no existe en la base de datos.
-#' @family validacion
-#' @seealso [cie_norm()], [cie_lookup()]
-#' @export
-#' @examples
-#' cie_expand("E11")
-cie_expand <- function(code, codigo = lifecycle::deprecated()) {
-  if (lifecycle::is_present(codigo)) {
-    lifecycle::deprecate_warn(
-      "0.9.8",
-      "cie_expand(codigo = )",
-      "cie_expand(code = )"
-    )
-    code <- codigo
-  }
-
-  # Manejar NA o cadena vacia
-  if (length(code) == 0 || is.na(code) ||
-      nchar(stringr::str_trim(code)) == 0) {
-    return(character(0))
-  }
-
-  hijos <- cie_lookup(code, expand = TRUE)$codigo
-  return(hijos)
-}
-
-#' Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
-#'
-#' @param code String codigo padre (ej. "E11")
-#' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
-#' @return Character vector con todos los codigos hijos del codigo padre.
+#' @returns Character vector con todos los codigos hijos del codigo padre.
 #'   Vector vacio si el codigo no existe en la base de datos.
 #' @family validacion
 #' @seealso [cie_norm()], [cie_lookup()]

@@ -10,19 +10,19 @@ test_that("normalizar_tildes remueve tildes correctamente", {
   normalizar_tildes <- normalizar_tildes
 
   # Vocales minusculas con tilde
-  expect_equal(normalizar_tildes("caf\u00e9"), "cafe")
-  expect_equal(normalizar_tildes("\u00e1rbol"), "arbol")
-  expect_equal(normalizar_tildes("ri\u00f1\u00f3n"), "rinon")
-  expect_equal(normalizar_tildes("ma\u00eds"), "mais")
-  expect_equal(normalizar_tildes("bah\u00eda"), "bahia")
+  expect_equal(normalizar_tildes("café"), "cafe")
+  expect_equal(normalizar_tildes("árbol"), "arbol")
+  expect_equal(normalizar_tildes("riñón"), "rinon")
+  expect_equal(normalizar_tildes("maís"), "mais")
+  expect_equal(normalizar_tildes("bahía"), "bahia")
 
   # Vocales mayusculas con tilde
-  expect_equal(normalizar_tildes("\u00c1RBOL"), "ARBOL")
-  expect_equal(normalizar_tildes("ESPA\u00d1A"), "ESPANA")
+  expect_equal(normalizar_tildes("ÁRBOL"), "ARBOL")
+  expect_equal(normalizar_tildes("ESPAÑA"), "ESPANA")
 
   # Dieresis
-  expect_equal(normalizar_tildes("ping\u00fcino"), "pinguino")
-  expect_equal(normalizar_tildes("PING\u00dcINO"), "PINGUINO")
+  expect_equal(normalizar_tildes("pingüino"), "pinguino")
+  expect_equal(normalizar_tildes("PINGÜINO"), "PINGUINO")
 })
 
 test_that("normalizar_tildes maneja vector vacio", {
@@ -44,7 +44,7 @@ test_that("normalizar_tildes maneja texto sin tildes", {
 test_that("normalizar_tildes es vectorizado", {
   normalizar_tildes <- normalizar_tildes
 
-  entrada <- c("caf\u00e9", "ri\u00f1\u00f3n", "normal")
+  entrada <- c("café", "riñón", "normal")
   esperado <- c("cafe", "rinon", "normal")
 
   expect_equal(normalizar_tildes(entrada), esperado)
@@ -107,11 +107,26 @@ test_that("expandir_sigla expande siglas conocidas", {
   expandir_sigla <- expandir_sigla
 
   # Siglas comunes
-  expect_equal(expandir_sigla("iam"), "infarto agudo miocardio")
-  expect_equal(expandir_sigla("IAM"), "infarto agudo miocardio")
-  expect_equal(expandir_sigla("dm"), "diabetes mellitus")
-  expect_equal(expandir_sigla("hta"), "hipertension arterial")
-  expect_equal(expandir_sigla("epoc"), "enfermedad pulmonar obstructiva cronica")
+  expect_equal(expandir_sigla("iam")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla("IAM")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla("dm")$termino, "diabetes mellitus")
+  expect_equal(expandir_sigla("hta")$termino, "hipertension arterial")
+  expect_equal(expandir_sigla("epoc")$termino, "enfermedad pulmonar obstructiva cronica")
+
+  # Siglas comunes no son ambiguas
+  expect_false(expandir_sigla("iam")$ambiguo)
+
+  # IRA es ambigua y trae aviso
+  ira <- expandir_sigla("ira")
+  expect_equal(ira$termino, "infeccion respiratoria aguda")
+  expect_true(ira$ambiguo)
+  expect_type(ira$aviso, "character")
+
+  # Aliases explicitos no son ambiguos
+  expect_false(expandir_sigla("ira_resp")$ambiguo)
+  expect_false(expandir_sigla("ira_renal")$ambiguo)
+  expect_equal(expandir_sigla("ira_resp")$termino, "infeccion respiratoria aguda")
+  expect_equal(expandir_sigla("ira_renal")$termino, "insuficiencia renal aguda")
 })
 
 test_that("expandir_sigla retorna NULL para no-siglas", {
@@ -125,8 +140,8 @@ test_that("expandir_sigla retorna NULL para no-siglas", {
 test_that("expandir_sigla maneja espacios", {
   expandir_sigla <- expandir_sigla
 
-  expect_equal(expandir_sigla("  iam  "), "infarto agudo miocardio")
-  expect_equal(expandir_sigla(" DM "), "diabetes mellitus")
+  expect_equal(expandir_sigla("  iam  ")$termino, "infarto agudo miocardio")
+  expect_equal(expandir_sigla(" DM ")$termino, "diabetes mellitus")
 })
 
 # ============================================================
@@ -186,7 +201,7 @@ test_that("cie10_empty_tibble retorna tibble vacio con estructura correcta", {
   resultado <- cie10_empty_tibble()
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 
   # Columnas esperadas
   columnas <- c("codigo", "descripcion", "categoria", "seccion",
@@ -202,7 +217,7 @@ test_that("cie10_empty_tibble con descripcion_completa agrega columna", {
   resultado <- cie10_empty_tibble(add_descripcion_completa = TRUE)
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
   expect_true("descripcion_completa" %in% names(resultado))
   expect_equal(ncol(resultado), 11)
 })
@@ -230,7 +245,7 @@ test_that("sigla_to_codigo convierte siglas a codigos CIE-10", {
   # IAM debe retornar codigo I21.x
   codigo_iam <- sigla_to_codigo("iam")
   if (!is.null(codigo_iam)) {
-    expect_true(grepl("^I2[0-5]", codigo_iam),
+    expect_match(codigo_iam, "^I2[0-5]",
                 info = paste("IAM deberia dar I2x, dio:", codigo_iam))
   }
 })
@@ -270,7 +285,7 @@ test_that("cie_lookup_single retorna vacio para codigo invalido", {
   })
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single maneja NA", {
@@ -281,7 +296,7 @@ test_that("cie_lookup_single maneja NA", {
   resultado <- cie_lookup_single(NA_character_)
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single maneja cadena vacia", {
@@ -292,7 +307,7 @@ test_that("cie_lookup_single maneja cadena vacia", {
   resultado <- cie_lookup_single("")
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single rechaza caracteres invalidos", {
@@ -306,7 +321,7 @@ test_that("cie_lookup_single rechaza caracteres invalidos", {
   })
 
   expect_s3_class(resultado, "tbl_df")
-  expect_equal(nrow(resultado), 0)
+  expect_length(resultado$codigo, 0)
 })
 
 test_that("cie_lookup_single expande con patron LIKE", {
@@ -333,7 +348,7 @@ test_that("cie_lookup_single maneja rangos", {
 })
 
 test_that("cie_lookup_single error con vector", {
-  cie_lookup_single <- cie_lookup_single
+  cie_lookup_single <- ciecl:::cie_lookup_single
 
   expect_error(cie_lookup_single(c("E11.0", "I10")),
                "solo acepta un codigo")

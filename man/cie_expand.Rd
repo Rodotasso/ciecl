@@ -5,8 +5,6 @@
 \title{Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)}
 \usage{
 cie_expand(code, codigo = lifecycle::deprecated())
-
-cie_expand(code, codigo = lifecycle::deprecated())
 }
 \arguments{
 \item{code}{String codigo padre (ej. "E11")}
@@ -16,32 +14,19 @@ cie_expand(code, codigo = lifecycle::deprecated())
 \value{
 Character vector con todos los codigos hijos del codigo padre.
 Vector vacio si el codigo no existe en la base de datos.
-
-Character vector con todos los codigos hijos del codigo padre.
-Vector vacio si el codigo no existe en la base de datos.
 }
 \description{
 Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
-
-Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
 }
 \examples{
-cie_expand("E11")
 cie_expand("E11")
 }
 \seealso{
 \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_lookup]{cie_lookup()}}
 
-\code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_lookup]{cie_lookup()}}
-
-Other validacion: 
-\code{\link{cie_norm}()},
-\code{\link{cie_normalizar}()},
-\code{\link{cie_validate_vector}()}
-
-Other validacion: 
-\code{\link{cie_norm}()},
-\code{\link{cie_normalizar}()},
-\code{\link{cie_validate_vector}()}
+Other validacion:
+\code{\link[=cie_norm]{cie_norm()}},
+\code{\link[=cie_normalizar]{cie_normalizar()}},
+\code{\link[=cie_validate_vector]{cie_validate_vector()}}
 }
 \concept{validacion}

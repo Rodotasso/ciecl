@@ -1,4 +1,4 @@
-#' @importFrom dplyr filter pull rowwise %>%
+#' @importFrom dplyr filter pull rowwise
 #' @importFrom stringr str_detect
 #' @importFrom tibble tibble as_tibble tribble
 NULL
@@ -10,8 +10,8 @@ NULL
 #' @param code String nombre columna con codigos CIE-10 (uno por fila)
 #' @param map Character, esquema comorbilidad ("charlson" o "elixhauser")
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
-#' @return data.frame ancho con scores comorbilidad por paciente
-#' @family comorbilidades
+#' @returns data.frame ancho con scores comorbilidad por paciente
+#' @family comorbidities
 #' @seealso [cie_map_comorbid()], [cie_norm()]
 #' @export
 #' @examples
@@ -24,32 +24,37 @@ NULL
 #'   diag = c("E11.0", "I21.0", "C50.9", "E10.9")
 #' )
 #' cie_comorbid(df, id = "id_pac", code = "diag", map = "charlson")
-cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"), 
+cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
                          assign0 = TRUE) {
+  rlang::check_required(data)
+  rlang::check_required(id)
+  rlang::check_required(code)
+
   # Verificar que comorbidity este instalado
   rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")
-  
-  map <- match.arg(map)
+
+  map <- rlang::arg_match(map)
 
   # Validar columnas existen
   if (!id %in% names(data) || !code %in% names(data)) {
-    stop("Columnas '", id, "' o '", code, "' no existen en data")
+    cli::cli_abort(
+      "Columnas {.field {id}} y/o {.field {code}} no existen en {.arg data}.",
+      class = "ciecl_invalid_input"
+    )
   }
 
   # Advertir sobre NAs en columna de codigos
   n_na <- sum(is.na(data[[code]]))
   if (n_na > 0) {
-    warning("Columna '", code, "' contiene ", n_na,
-            " valores NA que seran ignorados")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que seran ignorados.")
     data <- data[!is.na(data[[code]]), ]
   }
 
   # Advertir sobre codigos vacios
-  n_empty <- sum(nchar(trimws(data[[code]])) == 0)
+  n_empty <- sum(nchar(trimws(as.character(data[[code]]))) == 0, na.rm = TRUE)
   if (n_empty > 0) {
-    warning("Columna '", code, "' contiene ", n_empty,
-            " valores vacios que seran ignorados")
-    data <- data[nchar(trimws(data[[code]])) > 0, ]
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} codigos vacios que seran ignorados.")
+    data <- data[nchar(trimws(as.character(data[[code]]))) > 0, ]
   }
 
   # Normalizar codigos (elimina sufijo X DEIS, agrega punto, etc.)
@@ -60,7 +65,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     "charlson" = "charlson_icd10_quan",
     "elixhauser" = "elixhauser_icd10_quan"
   )
-  
+
   # Mapeo Charlson adaptado Chile (usa comorbidity::comorbidity)
   # Nota: version mas reciente de comorbidity no requiere argumento 'icd'
   resultado <- comorbidity::comorbidity(
@@ -71,7 +76,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
     assign0 = assign0,
     labelled = FALSE
   )
-  
+
   # Score total Charlson (si aplica)
   if (map == "charlson") {
     resultado$score_charlson <- comorbidity::score(
@@ -80,7 +85,7 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
       assign0 = assign0
     )
   }
-  
+
   return(tibble::as_tibble(resultado))
 }
 
@@ -89,11 +94,11 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 #' @description
 #' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
-#' 
+#'
 #' @param codes Character vector de codigos
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
-#' @return tibble con columnas: codigo, categoria
-#' @family comorbilidades
+#' @returns tibble con columnas: codigo, categoria
+#' @family comorbidities
 #' @seealso [cie_comorbid()], [cie_norm()]
 #' @export
 #' @examples
@@ -107,6 +112,8 @@ cie_map_comorbid <- function(codes, codigos = lifecycle::deprecated()) {
     )
     codes <- codigos
   }
+
+  rlang::check_required(codes)
 
   # Manejar vector vacio
   if (length(codes) == 0) {

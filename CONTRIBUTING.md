@@ -77,16 +77,21 @@ Si encuentras un bug, por favor abre un [issue en GitHub](https://github.com/Rod
 ## Estilo de codigo
 
 - Seguir la [tidyverse style guide](https://style.tidyverse.org/)
-- Usar `%>%` de dplyr para pipes
-- Documentar funciones con roxygen2
-- Encoding UTF-8, sin tildes en codigo fuente (usar `\uXXXX`)
-- Variables NSE declarar en `R/globals.R`
+- Usar el pipe nativo `|>` (requiere R >= 4.1.0).
+- **Politica de Idioma**:
+  - Funciones exportadas y argumentos: **Ingles**.
+  - Documentacion (roxygen2) y Guias de usuario: **Espanol** (primario) e **Ingles**.
+  - Mensajes de error e informativos: **Espanol**.
+- Documentar funciones con roxygen2 usando sintaxis markdown.
+- Codificacion: **UTF-8 literal**. Prohibido usar escapes unicode (ej. \uXXXX) en strings del codigo fuente.
+- Variables NSE declarar en `R/globals.R`.
 
 ## Tests
 
-- Todos los tests deben pasar antes de enviar un PR
-- Agregar tests para funcionalidad nueva en `tests/testthat/`
-- Framework: testthat >= 3.1.5
+- Todos los tests deben pasar antes de enviar un PR.
+- Usar `testthat` edicion 3.
+- Usar `withr` para gestionar efectos secundarios (archivos, variables de entorno).
+- Usar `expect_snapshot()` para fijar los mensajes de error generados por `cli`.
 
 ## Codigo de conducta
 

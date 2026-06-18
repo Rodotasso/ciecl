@@ -1,15 +1,15 @@
 Package: ciecl
 Title: International Classification of Diseases 'ICD-10'/'ICD-11' for Chile
 Version: 0.9.8
-Authors@R: c(
-    person("Rodolfo", "Tasso Suazo",
-           email = "rtasso@uchile.cl",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-1264-4933",
-                       "Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública, U. de Chile")),
-    person("Francisca", "Jofre",
-           role = "ctb",
-           comment = "Package logo design"))
+Authors@R:
+    c(person("Rodolfo", "Tasso Suazo",
+             email = "rtasso@uchile.cl",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0002-1264-4933",
+                         "Grupo de Ciencia de Datos para Salud Pública, Escuela de Salud Pública, U. de Chile")),
+      person("Francisca", "Jofre",
+             role = "ctb",
+             comment = "Package logo design"))
 Description: Tools for working with the International Classification of
     Diseases ('ICD-10' Chile official 'MINSAL'/'DEIS' v2018). Includes
     optimized 'SQL' search with 'SQLite', fuzzy matching of medical terms
@@ -33,23 +33,22 @@ Imports:
     utils,
     lifecycle,
     rlang,
-    httr2
+    httr2,
+    cli (>= 3.6.0)
 Suggests:
     comorbidity,
     gt,
     readxl,
-    usethis,
     withr,
     writexl,
     testthat (>= 3.1.5),
     knitr,
-    litedown (>= 0.9),
     rmarkdown
 VignetteBuilder: knitr
 URL: https://rodotasso.github.io/ciecl/,
-    https://github.com/RodoTasso/ciecl
-BugReports: https://github.com/RodoTasso/ciecl/issues
+    https://github.com/Rodotasso/ciecl
+BugReports: https://github.com/Rodotasso/ciecl/issues
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown
 Language: en, es
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0
