@@ -6,6 +6,10 @@ on:
 
 name: test-coverage
 
+concurrency:
+  group: ci-writers-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: write

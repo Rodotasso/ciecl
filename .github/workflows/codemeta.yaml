@@ -11,6 +11,10 @@ on:
 
 name: codemeta.yaml
 
+concurrency:
+  group: ci-writers-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
