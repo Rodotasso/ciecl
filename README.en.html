@@ -71,34 +71,26 @@
 <p>Specialized package for searching, validating, and analyzing ICD-10 codes in the Chilean context. Includes the official MINSAL/DEIS v2018 catalogue with optimized search, comorbidity computation, and WHO ICD-11 API access.</p>
 <div class="section level2">
 <h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a></h2>
-<p><code>ciecl</code> facilitates working with ICD-10 codes in Chilean health research and data analysis, avoiding manual Excel manipulation and providing specialized tools for:</p>
-<ul><li>Fast validation of diagnostic codes</li>
-<li>Typo-tolerant search (Jaro-Winkler fuzzy search)</li>
-<li>Automatic comorbidity indices (Charlson, Elixhauser)</li>
-<li>Optimized SQL queries over the complete catalogue</li>
-<li>Hierarchical expansion of categories (e.g., <code>E11</code> → <code>E11.0</code>, <code>E11.1</code>, …, <code>E11.9</code>)</li>
-<li>Access to the WHO ICD-11 API</li>
-</ul></div>
-<div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a></h2>
+<p><code>ciecl</code> facilitates working with ICD-10 codes in Chilean health research and data analysis, avoiding manual Excel manipulation. Chilean clinical records often contain codes with formatting inconsistencies (spaces, capitalization, missing dots); the package automates the <strong>correction of these inconsistencies in a vectorized and efficient manner</strong>, validates codes against the official catalogue, and enables the <strong>computation of comorbidity indices</strong> (Charlson, Elixhauser) directly from the diagnoses. It is aimed at epidemiologists, biostatisticians and data scientists working with Chilean clinical records.</p>
+<p>Main features:</p>
 <ul><li>
 <strong>Official Chilean CIE-10 catalogue</strong> (MINSAL/DEIS v2018) embedded as a dataset</li>
+<li>
+<strong>Vectorized validation and normalization</strong>: accepts <code>E110</code>, <code>E11.0</code>, <code>e 11 0</code>, <code>I10-0</code>, etc.</li>
 <li>
 <strong>Jaro-Winkler fuzzy search</strong> tolerant to typos</li>
 <li>
 <strong>Chilean medical abbreviations</strong> (IAM, EPOC, DM2, HTA, TBC, …)</li>
 <li>
-<strong>Direct SQL queries</strong> via SQLite + FTS5</li>
-<li>
-<strong>Charlson/Elixhauser comorbidities</strong> using <code>comorbidity</code>
+<strong>Charlson/Elixhauser comorbidity computation</strong> using <code>comorbidity</code>
 </li>
+<li>
+<strong>Direct SQL queries</strong> over the complete catalogue via SQLite + FTS5</li>
+<li>
+<strong>Hierarchical expansion of categories</strong> (e.g., <code>E11</code> → <code>E11.0</code>, <code>E11.1</code>, …, <code>E11.9</code>)</li>
 <li>
 <strong>WHO ICD-11 API</strong> via <code><a href="reference/cie11_search.html">cie11_search()</a></code>
 </li>
-<li>
-<strong>Robust normalization</strong>: accepts <code>E110</code>, <code>E11.0</code>, <code>e 11 0</code>, <code>I10-0</code>, etc.</li>
-<li>
-<strong>Minimal dependencies</strong> (8 core packages; the rest in Suggests)</li>
 </ul><p>The dataset is established by <a href="https://www.bcn.cl/leychile/navegar?i=1112064" class="external-link">Decree 356/2017</a> of Chile’s Ministry of Health as the official disease classification. It is not modifiable by the package; it can only be updated by MINSAL institutional decree.</p>
 </div>
 <div class="section level2">
@@ -116,7 +108,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rodotasso.github.io/ciecl/">ciecl</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Busqueda exacta por codigo</span></span>
+<span><span class="co"># Exact code lookup</span></span>
 <span><span class="fu"><a href="reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 11</span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
@@ -125,7 +117,7 @@
 <span><span class="co">#&gt; # ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span>
 <span><span class="co">#&gt; #   uso_cl &lt;chr&gt;</span></span>
 <span></span>
-<span><span class="co"># Multiples codigos</span></span>
+<span><span class="co"># Multiple codes</span></span>
 <span><span class="fu"><a href="reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 11</span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
@@ -136,14 +128,14 @@
 <span><span class="co">#&gt; # ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span>
 <span><span class="co">#&gt; #   uso_cl &lt;chr&gt;</span></span>
 <span></span>
-<span><span class="co"># Descripcion directa (vectorizada) para usar en mutate()</span></span>
+<span><span class="co"># Direct (vectorized) description for use in mutate()</span></span>
 <span><span class="fu"><a href="reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span>
 <span></span>
-<span><span class="co"># Ejemplo en flujo dplyr</span></span>
-<span><span class="co"># egresos |&gt; mutate(desc = cie_describe(codigo))</span></span>
+<span><span class="co"># Example in a dplyr pipeline</span></span>
+<span><span class="co"># egresos |&gt; dplyr::mutate(desc = cie_describe(codigo))</span></span>
 <span></span>
-<span><span class="co"># Busqueda fuzzy tolerante a errores</span></span>
+<span><span class="co"># Typo-tolerant fuzzy search</span></span>
 <span><span class="fu"><a href="reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis mellitus"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 50 × 4</span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
@@ -160,7 +152,7 @@
 <span><span class="co">#&gt; 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi…   0.5 E10 DIAB…</span></span>
 <span><span class="co">#&gt; # ℹ 40 more rows</span></span>
 <span></span>
-<span><span class="co"># Siglas medicas chilenas</span></span>
+<span><span class="co"># Chilean medical abbreviations</span></span>
 <span><span class="fu"><a href="reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"IAM"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Sigla detectada: "IAM" -&gt; "infarto agudo miocardio"</span></span>
 <span><span class="co">#&gt; # A tibble: 50 × 4</span></span>
@@ -206,7 +198,7 @@
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a></h2>
 <ul><li>Report bugs: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
 </li>
-<li>Contribute: see <code>CONTRIBUTING.md</code>
+<li>Contribute: see <a href="CONTRIBUTING.html">CONTRIBUTING.md</a>
 </li>
 </ul></div>
 <div class="section level2">

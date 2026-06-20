@@ -17,30 +17,30 @@ API CIE-11 de la OMS.
 
 `ciecl` facilita el trabajo con códigos CIE-10 en investigación y
 análisis de datos de salud en Chile, eliminando la necesidad de
-manipular archivos Excel manualmente y proporcionando herramientas
-especializadas para:
+manipular archivos Excel manualmente. Los registros clínicos chilenos
+suelen contener códigos con inconsistencias de formato (espacios,
+mayúsculas, puntos faltantes); el paquete automatiza la **corrección
+vectorizada de estas inconsistencias** de forma eficiente, valida los
+códigos contra el catálogo oficial y permite el **cálculo de índices de
+comorbilidad** (Charlson, Elixhauser) directamente sobre los
+diagnósticos. Está dirigido a epidemiólogos, bioestadísticos y
+científicos de datos que trabajan con registros clínicos chilenos.
 
-- Validación rápida de códigos diagnósticos
-- Búsqueda tolerante a errores tipográficos (fuzzy search Jaro-Winkler)
-- Cálculo automático de índices de comorbilidad (Charlson, Elixhauser)
-- Consultas SQL optimizadas sobre el catálogo completo
-- Expansión jerárquica de categorías (ej: `E11` → `E11.0`, `E11.1`, …,
-  `E11.9`)
-- Acceso a la API CIE-11 de la OMS
-
-## Características
+Características principales:
 
 - **Catálogo oficial CIE-10 Chile** (MINSAL/DEIS v2018) embebido como
   dataset
-- **Búsqueda fuzzy Jaro-Winkler** tolera errores tipográficos
+- **Validación y normalización vectorizada**: acepta `E110`, `E11.0`,
+  `e 11 0`, `I10-0`, etc.
+- **Búsqueda fuzzy Jaro-Winkler** tolerante a errores tipográficos
 - **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
-- **Consultas SQL directas** con SQLite + FTS5
-- **Comorbilidades Charlson/Elixhauser** con `comorbidity`
+- **Cálculo de comorbilidades Charlson/Elixhauser** con `comorbidity`
+- **Consultas SQL directas** sobre el catálogo completo con SQLite +
+  FTS5
+- **Expansión jerárquica de categorías** (ej: `E11` → `E11.0`, `E11.1`,
+  …, `E11.9`)
 - **API CIE-11 OMS** vía
   [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-- **Normalización robusta**: acepta `E110`, `E11.0`, `e 11 0`, `I10-0`,
-  etc.
-- **Dependencias mínimas** (8 paquetes core; el resto en Suggests)
 
 El dataset está establecido por el [Decreto
 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) del MINSAL como
@@ -90,7 +90,7 @@ cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 
 # Ejemplo en flujo dplyr
-# egresos |> mutate(desc = cie_describe(codigo))
+# egresos |> dplyr::mutate(desc = cie_describe(codigo))
 
 # Busqueda fuzzy tolerante a errores
 cie_search("diabetis mellitus")
@@ -168,7 +168,8 @@ verificación y validación humana de todo el código y la documentación.
 ## Contribuir
 
 - Reportar bugs: <https://github.com/RodoTasso/ciecl/issues>
-- Contribuir: ver `CONTRIBUTING.md`
+- Contribuir: ver
+  [CONTRIBUTING.md](https://rodotasso.github.io/ciecl/CONTRIBUTING.md)
 
 ## Licencia
 

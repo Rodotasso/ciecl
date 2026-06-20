@@ -102,38 +102,27 @@
 <div class="section level2">
 <h2 id="finalidad">Finalidad<a class="anchor" aria-label="anchor" href="#finalidad"></a>
 </h2>
-<p><code>ciecl</code> facilita el trabajo con códigos CIE-10 en investigación y análisis de datos de salud en Chile, eliminando la necesidad de manipular archivos Excel manualmente y proporcionando herramientas especializadas para:</p>
-<ul>
-<li>Validación rápida de códigos diagnósticos</li>
-<li>Búsqueda tolerante a errores tipográficos (fuzzy search Jaro-Winkler)</li>
-<li>Cálculo automático de índices de comorbilidad (Charlson, Elixhauser)</li>
-<li>Consultas SQL optimizadas sobre el catálogo completo</li>
-<li>Expansión jerárquica de categorías (ej: <code>E11</code> → <code>E11.0</code>, <code>E11.1</code>, …, <code>E11.9</code>)</li>
-<li>Acceso a la API CIE-11 de la OMS</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="características">Características<a class="anchor" aria-label="anchor" href="#caracter%C3%ADsticas"></a>
-</h2>
+<p><code>ciecl</code> facilita el trabajo con códigos CIE-10 en investigación y análisis de datos de salud en Chile, eliminando la necesidad de manipular archivos Excel manualmente. Los registros clínicos chilenos suelen contener códigos con inconsistencias de formato (espacios, mayúsculas, puntos faltantes); el paquete automatiza la <strong>corrección vectorizada de estas inconsistencias</strong> de forma eficiente, valida los códigos contra el catálogo oficial y permite el <strong>cálculo de índices de comorbilidad</strong> (Charlson, Elixhauser) directamente sobre los diagnósticos. Está dirigido a epidemiólogos, bioestadísticos y científicos de datos que trabajan con registros clínicos chilenos.</p>
+<p>Características principales:</p>
 <ul>
 <li>
 <strong>Catálogo oficial CIE-10 Chile</strong> (MINSAL/DEIS v2018) embebido como dataset</li>
 <li>
-<strong>Búsqueda fuzzy Jaro-Winkler</strong> tolera errores tipográficos</li>
+<strong>Validación y normalización vectorizada</strong>: acepta <code>E110</code>, <code>E11.0</code>, <code>e 11 0</code>, <code>I10-0</code>, etc.</li>
+<li>
+<strong>Búsqueda fuzzy Jaro-Winkler</strong> tolerante a errores tipográficos</li>
 <li>
 <strong>Siglas médicas chilenas</strong> (IAM, EPOC, DM2, HTA, TBC, …)</li>
 <li>
-<strong>Consultas SQL directas</strong> con SQLite + FTS5</li>
-<li>
-<strong>Comorbilidades Charlson/Elixhauser</strong> con <code>comorbidity</code>
+<strong>Cálculo de comorbilidades Charlson/Elixhauser</strong> con <code>comorbidity</code>
 </li>
+<li>
+<strong>Consultas SQL directas</strong> sobre el catálogo completo con SQLite + FTS5</li>
+<li>
+<strong>Expansión jerárquica de categorías</strong> (ej: <code>E11</code> → <code>E11.0</code>, <code>E11.1</code>, …, <code>E11.9</code>)</li>
 <li>
 <strong>API CIE-11 OMS</strong> vía <code><a href="reference/cie11_search.html">cie11_search()</a></code>
 </li>
-<li>
-<strong>Normalización robusta</strong>: acepta <code>E110</code>, <code>E11.0</code>, <code>e 11 0</code>, <code>I10-0</code>, etc.</li>
-<li>
-<strong>Dependencias mínimas</strong> (8 paquetes core; el resto en Suggests)</li>
 </ul>
 <p>El dataset está establecido por el <a href="https://www.bcn.cl/leychile/navegar?i=1112064" class="external-link">Decreto 356/2017</a> del MINSAL como clasificación oficial de enfermedades. No es modificable por el paquete; solo se actualiza por decreto institucional.</p>
 </div>
@@ -179,7 +168,7 @@
 <span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span>
 <span></span>
 <span><span class="co"># Ejemplo en flujo dplyr</span></span>
-<span><span class="co"># egresos |&gt; mutate(desc = cie_describe(codigo))</span></span>
+<span><span class="co"># egresos |&gt; dplyr::mutate(desc = cie_describe(codigo))</span></span>
 <span></span>
 <span><span class="co"># Busqueda fuzzy tolerante a errores</span></span>
 <span><span class="fu"><a href="reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis mellitus"</span><span class="op">)</span></span>
@@ -251,7 +240,7 @@
 <ul>
 <li>Reportar bugs: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
 </li>
-<li>Contribuir: ver <code>CONTRIBUTING.md</code>
+<li>Contribuir: ver <a href="CONTRIBUTING.html">CONTRIBUTING.md</a>
 </li>
 </ul>
 </div>

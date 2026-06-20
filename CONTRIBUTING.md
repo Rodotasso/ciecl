@@ -14,6 +14,20 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) with:
 - Output of [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html)
 - Your version of `ciecl` (`packageVersion("ciecl")`)
 
+## Types of issues
+
+When you open a new issue, GitHub will offer you three templates. Please
+choose the one that matches your situation:
+
+- **Bug report**: something is broken or behaves differently than
+  documented. Include a reprex and your session info.
+- **Feature request**: you would like a new capability or an improvement
+  to an existing one. Describe the problem it solves and the behaviour
+  you expect.
+- **Question**: you have a doubt about how to use the package. Use the
+  **Question** template, which applies the `question` label
+  automatically.
+
 ## Proposing changes
 
 1.  Fork the repository
@@ -38,9 +52,16 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) with:
 ## Code style
 
 - Follow the [tidyverse style guide](https://style.tidyverse.org/)
-- Use `%>%` from dplyr for pipes
-- Document functions with roxygen2
-- Encoding UTF-8, no accented characters in source code (use `\uXXXX`)
+- Use the native pipe `|>` for pipes (requires R \>= 4.1.0)
+- **Language policy**:
+  - Exported functions and arguments: **English**.
+  - Documentation (roxygen2) and user guides: **Spanish** (primary) and
+    English.
+  - Error and informative messages: **Spanish**.
+- Document functions with roxygen2 using markdown syntax
+- Encoding: keep R source code in ASCII, using `\uXXXX` escapes for
+  accented characters; write documents and prose in UTF-8 with correct
+  accents
 - Declare NSE variables in `R/globals.R`
 
 ## Tests
@@ -57,25 +78,40 @@ Conduct](https://rodotasso.github.io/ciecl/CODE_OF_CONDUCT.md).
 ## Questions
 
 For general questions, open an
-[issue](https://github.com/RodoTasso/ciecl/issues) with the “question”
-label.
+[issue](https://github.com/RodoTasso/ciecl/issues) using the
+**Question** template, which applies the `question` label automatically.
 
 ------------------------------------------------------------------------
 
 # Contribuir a ciecl
 
-Gracias por tu interes en contribuir a `ciecl`. Este documento describe
-como participar en el desarrollo del paquete.
+Gracias por tu interés en contribuir a `ciecl`. Este documento describe
+cómo participar en el desarrollo del paquete.
 
 ## Reportar bugs
 
 Si encuentras un bug, por favor abre un [issue en
 GitHub](https://github.com/RodoTasso/ciecl/issues) con:
 
-- Descripcion clara del problema
-- Codigo reproducible minimo ([reprex](https://reprex.tidyverse.org/))
-- Output de [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html)
-- Version de `ciecl` (`packageVersion("ciecl")`)
+- Descripción clara del problema
+- Código reproducible mínimo ([reprex](https://reprex.tidyverse.org/))
+- Salida de [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html)
+- Versión de `ciecl` (`packageVersion("ciecl")`)
+
+## Tipos de issue
+
+Al abrir un nuevo issue, GitHub te ofrecerá tres plantillas. Elige la
+que corresponda a tu caso:
+
+- **Reporte de error (Bug report)**: algo está roto o se comporta
+  distinto a lo documentado. Incluye un reprex y la información de tu
+  sesión.
+- **Sugerencia de mejora (Feature request)**: te gustaría una nueva
+  funcionalidad o una mejora a una existente. Describe el problema que
+  resuelve y el comportamiento que esperas.
+- **Consulta (Question)**: tienes una duda sobre cómo usar el paquete.
+  Usa la plantilla **Consulta**, que aplica la etiqueta `question`
+  automáticamente.
 
 ## Proponer cambios
 
@@ -98,19 +134,20 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) con:
 
 6.  Abre un Pull Request hacia la rama `dev`
 
-## Estilo de codigo
+## Estilo de código
 
 - Seguir la [tidyverse style guide](https://style.tidyverse.org/)
-- Usar el pipe nativo `|>` (requiere R \>= 4.1.0).
-- **Politica de Idioma**:
-  - Funciones exportadas y argumentos: **Ingles**.
-  - Documentacion (roxygen2) y Guias de usuario: **Espanol** (primario)
-    e **Ingles**.
-  - Mensajes de error e informativos: **Espanol**.
-- Documentar funciones con roxygen2 usando sintaxis markdown.
-- Codificacion: **UTF-8 literal**. Prohibido usar escapes unicode (ej. )
-  en strings del codigo fuente.
-- Variables NSE declarar en `R/globals.R`.
+- Usar el pipe nativo `|>` para encadenar (requiere R \>= 4.1.0)
+- **Política de idioma**:
+  - Funciones exportadas y argumentos: **inglés**.
+  - Documentación (roxygen2) y guías de usuario: **español** (primario)
+    e inglés.
+  - Mensajes de error e informativos: **español**.
+- Documentar funciones con roxygen2 usando sintaxis markdown
+- Encoding: el código fuente R se mantiene en ASCII, usando escapes
+  `\uXXXX` para caracteres acentuados; los documentos y la prosa van en
+  UTF-8 con acentos correctos
+- Variables NSE declarar en `R/globals.R`
 
 ## Tests
 
@@ -121,13 +158,13 @@ GitHub](https://github.com/RodoTasso/ciecl/issues) con:
 - Usar `expect_snapshot()` para fijar los mensajes de error generados
   por `cli`.
 
-## Codigo de conducta
+## Código de conducta
 
-Al participar en este proyecto, aceptas cumplir con el [Codigo de
+Al participar en este proyecto, aceptas cumplir con el [Código de
 Conducta](https://rodotasso.github.io/ciecl/CODE_OF_CONDUCT.md).
 
 ## Preguntas
 
 Para preguntas generales, abre un
-[issue](https://github.com/RodoTasso/ciecl/issues) con la etiqueta
-“question”.
+[issue](https://github.com/RodoTasso/ciecl/issues) usando la plantilla
+**Consulta**, que aplica la etiqueta `question` automáticamente.

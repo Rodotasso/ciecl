@@ -71,6 +71,16 @@
 <li>Your version of <code>ciecl</code> (<code>packageVersion("ciecl")</code>)</li>
 </ul></div>
 <div class="section level2">
+<h2 id="types-of-issues">Types of issues<a class="anchor" aria-label="anchor" href="#types-of-issues"></a></h2>
+<p>When you open a new issue, GitHub will offer you three templates. Please choose the one that matches your situation:</p>
+<ul><li>
+<strong>Bug report</strong>: something is broken or behaves differently than documented. Include a reprex and your session info.</li>
+<li>
+<strong>Feature request</strong>: you would like a new capability or an improvement to an existing one. Describe the problem it solves and the behaviour you expect.</li>
+<li>
+<strong>Question</strong>: you have a doubt about how to use the package. Use the <strong>Question</strong> template, which applies the <code>question</code> label automatically.</li>
+</ul></div>
+<div class="section level2">
 <h2 id="proposing-changes">Proposing changes<a class="anchor" aria-label="anchor" href="#proposing-changes"></a></h2>
 <ol style="list-style-type: decimal"><li><p>Fork the repository</p></li>
 <li><p>Create a branch from <code>dev</code>: <code>git checkout -b feat/my-feature dev</code></p></li>
@@ -88,9 +98,15 @@
 <h2 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
 <ul><li>Follow the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>
 </li>
-<li>Use <code>%&gt;%</code> from dplyr for pipes</li>
-<li>Document functions with roxygen2</li>
-<li>Encoding UTF-8, no accented characters in source code (use <code>\uXXXX</code>)</li>
+<li>Use the native pipe <code>|&gt;</code> for pipes (requires R &gt;= 4.1.0)</li>
+<li>
+<strong>Language policy</strong>:
+<ul><li>Exported functions and arguments: <strong>English</strong>.</li>
+<li>Documentation (roxygen2) and user guides: <strong>Spanish</strong> (primary) and English.</li>
+<li>Error and informative messages: <strong>Spanish</strong>.</li>
+</ul></li>
+<li>Document functions with roxygen2 using markdown syntax</li>
+<li>Encoding: keep R source code in ASCII, using <code>\uXXXX</code> escapes for accented characters; write documents and prose in UTF-8 with correct accents</li>
 <li>Declare NSE variables in <code>R/globals.R</code>
 </li>
 </ul></div>
@@ -107,20 +123,30 @@
 </div>
 <div class="section level2">
 <h2 id="questions">Questions<a class="anchor" aria-label="anchor" href="#questions"></a></h2>
-<p>For general questions, open an <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link">issue</a> with the “question” label.</p>
+<p>For general questions, open an <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link">issue</a> using the <strong>Question</strong> template, which applies the <code>question</code> label automatically.</p>
 <hr></div>
 </div>
 <div class="section level1">
 <h1 id="contribuir-a-ciecl">Contribuir a ciecl<a class="anchor" aria-label="anchor" href="#contribuir-a-ciecl"></a></h1>
-<p>Gracias por tu interes en contribuir a <code>ciecl</code>. Este documento describe como participar en el desarrollo del paquete.</p>
+<p>Gracias por tu interés en contribuir a <code>ciecl</code>. Este documento describe cómo participar en el desarrollo del paquete.</p>
 <div class="section level2">
 <h2 id="reportar-bugs">Reportar bugs<a class="anchor" aria-label="anchor" href="#reportar-bugs"></a></h2>
 <p>Si encuentras un bug, por favor abre un <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link">issue en GitHub</a> con:</p>
-<ul><li>Descripcion clara del problema</li>
-<li>Codigo reproducible minimo (<a href="https://reprex.tidyverse.org/" class="external-link">reprex</a>)</li>
-<li>Output de <code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo()</a></code>
+<ul><li>Descripción clara del problema</li>
+<li>Código reproducible mínimo (<a href="https://reprex.tidyverse.org/" class="external-link">reprex</a>)</li>
+<li>Salida de <code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo()</a></code>
 </li>
-<li>Version de <code>ciecl</code> (<code>packageVersion("ciecl")</code>)</li>
+<li>Versión de <code>ciecl</code> (<code>packageVersion("ciecl")</code>)</li>
+</ul></div>
+<div class="section level2">
+<h2 id="tipos-de-issue">Tipos de issue<a class="anchor" aria-label="anchor" href="#tipos-de-issue"></a></h2>
+<p>Al abrir un nuevo issue, GitHub te ofrecerá tres plantillas. Elige la que corresponda a tu caso:</p>
+<ul><li>
+<strong>Reporte de error (Bug report)</strong>: algo está roto o se comporta distinto a lo documentado. Incluye un reprex y la información de tu sesión.</li>
+<li>
+<strong>Sugerencia de mejora (Feature request)</strong>: te gustaría una nueva funcionalidad o una mejora a una existente. Describe el problema que resuelve y el comportamiento que esperas.</li>
+<li>
+<strong>Consulta (Question)</strong>: tienes una duda sobre cómo usar el paquete. Usa la plantilla <strong>Consulta</strong>, que aplica la etiqueta <code>question</code> automáticamente.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="proponer-cambios">Proponer cambios<a class="anchor" aria-label="anchor" href="#proponer-cambios"></a></h2>
@@ -137,19 +163,20 @@
 <li><p>Abre un Pull Request hacia la rama <code>dev</code></p></li>
 </ol></div>
 <div class="section level2">
-<h2 id="estilo-de-codigo">Estilo de codigo<a class="anchor" aria-label="anchor" href="#estilo-de-codigo"></a></h2>
+<h2 id="estilo-de-código">Estilo de código<a class="anchor" aria-label="anchor" href="#estilo-de-c%C3%B3digo"></a></h2>
 <ul><li>Seguir la <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>
 </li>
-<li>Usar el pipe nativo <code>|&gt;</code> (requiere R &gt;= 4.1.0).</li>
+<li>Usar el pipe nativo <code>|&gt;</code> para encadenar (requiere R &gt;= 4.1.0)</li>
 <li>
-<strong>Politica de Idioma</strong>:
-<ul><li>Funciones exportadas y argumentos: <strong>Ingles</strong>.</li>
-<li>Documentacion (roxygen2) y Guias de usuario: <strong>Espanol</strong> (primario) e <strong>Ingles</strong>.</li>
-<li>Mensajes de error e informativos: <strong>Espanol</strong>.</li>
+<strong>Política de idioma</strong>:
+<ul><li>Funciones exportadas y argumentos: <strong>inglés</strong>.</li>
+<li>Documentación (roxygen2) y guías de usuario: <strong>español</strong> (primario) e inglés.</li>
+<li>Mensajes de error e informativos: <strong>español</strong>.</li>
 </ul></li>
-<li>Documentar funciones con roxygen2 usando sintaxis markdown.</li>
-<li>Codificacion: <strong>UTF-8 literal</strong>. Prohibido usar escapes unicode (ej. ) en strings del codigo fuente.</li>
-<li>Variables NSE declarar en <code>R/globals.R</code>.</li>
+<li>Documentar funciones con roxygen2 usando sintaxis markdown</li>
+<li>Encoding: el código fuente R se mantiene en ASCII, usando escapes <code>\uXXXX</code> para caracteres acentuados; los documentos y la prosa van en UTF-8 con acentos correctos</li>
+<li>Variables NSE declarar en <code>R/globals.R</code>
+</li>
 </ul></div>
 <div class="section level2">
 <h2 id="tests-1">Tests<a class="anchor" aria-label="anchor" href="#tests-1"></a></h2>
@@ -159,12 +186,12 @@
 <li>Usar <code>expect_snapshot()</code> para fijar los mensajes de error generados por <code>cli</code>.</li>
 </ul></div>
 <div class="section level2">
-<h2 id="codigo-de-conducta">Codigo de conducta<a class="anchor" aria-label="anchor" href="#codigo-de-conducta"></a></h2>
-<p>Al participar en este proyecto, aceptas cumplir con el <a href="CODE_OF_CONDUCT.html">Codigo de Conducta</a>.</p>
+<h2 id="código-de-conducta">Código de conducta<a class="anchor" aria-label="anchor" href="#c%C3%B3digo-de-conducta"></a></h2>
+<p>Al participar en este proyecto, aceptas cumplir con el <a href="CODE_OF_CONDUCT.html">Código de Conducta</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="preguntas">Preguntas<a class="anchor" aria-label="anchor" href="#preguntas"></a></h2>
-<p>Para preguntas generales, abre un <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link">issue</a> con la etiqueta “question”.</p>
+<p>Para preguntas generales, abre un <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link">issue</a> usando la plantilla <strong>Consulta</strong>, que aplica la etiqueta <code>question</code> automáticamente.</p>
 </div>
 </div>
 
