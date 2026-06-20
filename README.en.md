@@ -34,29 +34,28 @@ API access.
 ## Purpose
 
 `ciecl` facilitates working with ICD-10 codes in Chilean health research
-and data analysis, avoiding manual Excel manipulation and providing
-specialized tools for:
+and data analysis, avoiding manual Excel manipulation. Chilean clinical
+records often contain codes with formatting inconsistencies (spaces,
+capitalization, missing dots); the package automates the **correction of
+these inconsistencies in a vectorized and efficient manner**, validates
+codes against the official catalogue, and enables the **computation of
+comorbidity indices** (Charlson, Elixhauser) directly from the
+diagnoses. It is aimed at epidemiologists, biostatisticians and data
+scientists working with Chilean clinical records.
 
-- Fast validation of diagnostic codes
-- Typo-tolerant search (Jaro-Winkler fuzzy search)
-- Automatic comorbidity indices (Charlson, Elixhauser)
-- Optimized SQL queries over the complete catalogue
-- Hierarchical expansion of categories (e.g., `E11` → `E11.0`, `E11.1`,
-  …, `E11.9`)
-- Access to the WHO ICD-11 API
-
-## Features
+Main features:
 
 - **Official Chilean CIE-10 catalogue** (MINSAL/DEIS v2018) embedded as
   a dataset
+- **Vectorized validation and normalization**: accepts `E110`, `E11.0`,
+  `e 11 0`, `I10-0`, etc.
 - **Jaro-Winkler fuzzy search** tolerant to typos
 - **Chilean medical abbreviations** (IAM, EPOC, DM2, HTA, TBC, …)
-- **Direct SQL queries** via SQLite + FTS5
-- **Charlson/Elixhauser comorbidities** using `comorbidity`
+- **Charlson/Elixhauser comorbidity computation** using `comorbidity`
+- **Direct SQL queries** over the complete catalogue via SQLite + FTS5
+- **Hierarchical expansion of categories** (e.g., `E11` → `E11.0`,
+  `E11.1`, …, `E11.9`)
 - **WHO ICD-11 API** via `cie11_search()`
-- **Robust normalization**: accepts `E110`, `E11.0`, `e 11 0`, `I10-0`,
-  etc.
-- **Minimal dependencies** (8 core packages; the rest in Suggests)
 
 The dataset is established by [Decree
 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) of Chile’s
@@ -80,7 +79,7 @@ pak::pak("RodoTasso/ciecl")
 ``` r
 library(ciecl)
 
-# Busqueda exacta por codigo
+# Exact code lookup
 cie_lookup("E11.0")
 #> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
@@ -89,7 +88,7 @@ cie_lookup("E11.0")
 #> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
 #> #   uso_cl <chr>
 
-# Multiples codigos
+# Multiple codes
 cie_lookup(c("E11.0", "I10", "Z00"))
 #> # A tibble: 3 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
@@ -100,14 +99,14 @@ cie_lookup(c("E11.0", "I10", "Z00"))
 #> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
 #> #   uso_cl <chr>
 
-# Descripcion directa (vectorizada) para usar en mutate()
+# Direct (vectorized) description for use in mutate()
 cie_describe(c("E11.0", "I10"))
 #> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
 
-# Ejemplo en flujo dplyr
-# egresos |> mutate(desc = cie_describe(codigo))
+# Example in a dplyr pipeline
+# egresos |> dplyr::mutate(desc = cie_describe(codigo))
 
-# Busqueda fuzzy tolerante a errores
+# Typo-tolerant fuzzy search
 cie_search("diabetis mellitus")
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
@@ -124,7 +123,7 @@ cie_search("diabetis mellitus")
 #> 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi…   0.5 E10 DIAB…
 #> # ℹ 40 more rows
 
-# Siglas medicas chilenas
+# Chilean medical abbreviations
 cie_search("IAM")
 #> ℹ Sigla detectada: "IAM" -> "infarto agudo miocardio"
 #> # A tibble: 50 × 4
@@ -179,7 +178,7 @@ human verification and validation of all code and documentation.
 ## Contributing
 
 - Report bugs: <https://github.com/RodoTasso/ciecl/issues>
-- Contribute: see `CONTRIBUTING.md`
+- Contribute: see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 

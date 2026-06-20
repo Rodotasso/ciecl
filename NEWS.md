@@ -1,6 +1,27 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-09)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-20)
 
 *English summary below*
+
+## Documentación — Correcciones revisión rOpenSci, comentarios de yabellini (2026-06-20)
+
+Trabajo preparado originalmente el 2026-05-29, comiteado recien el 2026-06-20:
+quedo guardado en `git stash` desde el 2026-06-09 hasta su recuperacion.
+Sin cambios en la API publica.
+
+* **README**: fusion de las secciones "Finalidad" y "Caracteristicas" para
+  eliminar redundancia entre ambas; se agrega mencion explicita de la
+  correccion vectorizada de inconsistencias de formato y del publico
+  objetivo (epidemiologos, bioestadisticos, cientificos de datos).
+* **README.en.md**: comentarios de los ejemplos de codigo traducidos al
+  ingles (estaban en espanol pese a ser la version en ingles).
+* **README**: agregado enlace markdown a `CONTRIBUTING.md` (antes se
+  mencionaba sin enlazar).
+* **CONTRIBUTING.md**: agregada seccion "Tipos de issue" (ES/EN) que
+  explica las plantillas disponibles (bug/feature/question) y corrige la
+  instruccion de usar la etiqueta `question`, que el usuario no puede
+  aplicar al crear un issue; ahora remite a la plantilla **Consulta**.
+  Tambien se sincronizo la politica de idioma y la regla de encoding
+  entre las secciones EN y ES, que estaban desactualizadas entre si.
 
 ## Sprint F4 — Documentación, limpieza interna y estilo (2026-06-09)
 
