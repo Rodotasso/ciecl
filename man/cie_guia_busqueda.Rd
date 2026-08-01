@@ -2,12 +2,12 @@
 % Please edit documentation in R/cie-guide.R
 \name{cie_guia_busqueda}
 \alias{cie_guia_busqueda}
-\title{Guia de funciones de busqueda (deprecated)}
+\title{Guía de funciones de búsqueda (deprecated)}
 \usage{
 cie_guia_busqueda()
 }
 \value{
-tibble con guia comparativa
+tibble con guía comparativa
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{\link[=cie_guide]{cie_guide()}}.

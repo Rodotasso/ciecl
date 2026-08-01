@@ -183,3 +183,8 @@ test_that("extract_cie_from_text extrae codigo de texto con ruido", {
   resultado3 <- extract_cie_from_text("E11.0")
   expect_equal(resultado3, "E11.0")
 })
+
+test_that("cie_search sin text da error en espanol", {
+  expect_error(cie_search(), class = "ciecl_invalid_input")
+  expect_error(cie_search(), "es obligatorio")
+})

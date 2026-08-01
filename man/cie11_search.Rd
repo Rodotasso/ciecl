@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-api.R
 \name{cie11_search}
 \alias{cie11_search}
-\title{Buscar codigos CIE-11 via API OMS}
+\title{Buscar códigos CIE-11 vía API OMS}
 \usage{
 cie11_search(
   text,
@@ -14,28 +14,28 @@ cie11_search(
 )
 }
 \arguments{
-\item{text}{String termino busqueda espanol/ingles}
+\item{text}{String término búsqueda español/inglés}
 
 \item{api_key}{String opcional, Client ID + Secret OMS separados ":"
 Obtener en: https://icd.who.int/icdapi}
 
 \item{lang}{Character, idioma respuesta ("es" o "en")}
 
-\item{max_results}{Integer, maximo resultados (default 10)}
+\item{max_results}{Integer, máximo resultados (default 10)}
 
-\item{release}{Character, version de release CIE-11 a consultar
+\item{release}{Character, versión de release CIE-11 a consultar
 (default "2024-01"). Ver releases disponibles en la API OMS.}
 
 \item{texto}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{text}.}
 }
 \value{
-tibble con codigos CIE-11 + titulos o vacio si error
+tibble con códigos CIE-11 + títulos o vacío si error
 }
 \description{
-Buscar codigos CIE-11 via API OMS
+Buscar códigos CIE-11 vía API OMS
 }
 \examples{
-# Ver parametros disponibles
+# Ver parámetros disponibles
 args(cie11_search)
 
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -46,6 +46,6 @@ withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
+\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_guide]{cie_guide()}}
 }
 \concept{api_who}

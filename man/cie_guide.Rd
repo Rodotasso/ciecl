@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-guide.R
 \name{cie_guide}
 \alias{cie_guide}
-\title{Guia de funciones de busqueda CIE-10}
+\title{Guía de funciones de búsqueda CIE-10}
 \usage{
 cie_guide()
 }
@@ -10,7 +10,7 @@ cie_guide()
 tibble con guia comparativa de funciones de busqueda
 }
 \description{
-Muestra tabla comparativa de cuando usar cada funcion de busqueda.
+Muestra tabla comparativa de cuándo usar cada función de búsqueda.
 }
 \examples{
 cie_guide()

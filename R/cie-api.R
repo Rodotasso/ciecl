@@ -1,21 +1,21 @@
-#' Buscar codigos CIE-11 via API OMS
+#' Buscar códigos CIE-11 vía API OMS
 #'
-#' @param text String termino busqueda espanol/ingles
+#' @param text String término búsqueda español/inglés
 #' @param api_key String opcional, Client ID + Secret OMS separados ":"
 #'   Obtener en: https://icd.who.int/icdapi
 #' @param lang Character, idioma respuesta ("es" o "en")
-#' @param max_results Integer, maximo resultados (default 10)
-#' @param release Character, version de release CIE-11 a consultar
+#' @param max_results Integer, máximo resultados (default 10)
+#' @param release Character, versión de release CIE-11 a consultar
 #'   (default "2024-01"). Ver releases disponibles en la API OMS.
 #' @param texto `r lifecycle::badge("deprecated")` Use `text`.
-#' @returns tibble con codigos CIE-11 + titulos o vacio si error
+#' @returns tibble con códigos CIE-11 + títulos o vacío si error
 #' @family api_who
-#' @seealso [cie_search()], [cie_lookup()]
+#' @seealso [cie_search()], [cie_lookup()], [cie_guide()]
 #' @export
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr slice_head select matches
 #' @examples
-#' # Ver parametros disponibles
+#' # Ver parámetros disponibles
 #' args(cie11_search)
 #'
 #' @examplesIf interactive()

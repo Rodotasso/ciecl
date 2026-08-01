@@ -573,25 +573,25 @@ test_that("cie10_sql bloquea keywords peligrosos", {
   # DROP (detectado como keyword peligroso)
   expect_error(
     cie10_sql("SELECT * FROM cie10; DROP TABLE cie10;--"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 
-  # Multiples statements sin keyword peligroso
+  # Multiples sentencias sin keyword peligroso
   expect_error(
     cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
-    "Multiples statements"
+    "sentencias SQL no permitidas"
   )
 
   # ATTACH (SQLite specific attack)
   expect_error(
     cie10_sql("SELECT * FROM cie10 WHERE 1=1 ATTACH DATABASE"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 
   # PRAGMA (SQLite metadata)
   expect_error(
     cie10_sql("SELECT * FROM cie10 WHERE 1=1 PRAGMA table_info"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 })
 

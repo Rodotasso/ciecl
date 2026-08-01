@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-lookup.R
 \name{cie_lookup}
 \alias{cie_lookup}
-\title{Busqueda exacta por codigo CIE-10}
+\title{Búsqueda exacta por código CIE-10}
 \usage{
 cie_lookup(
   code,
@@ -20,37 +20,37 @@ cie_lookup(
 )
 }
 \arguments{
-\item{code}{Character vector de codigos
+\item{code}{Character vector de códigos
 (ej. "E11", "E11.0", c("E11.0", "Z00"))
 o rango (ej. "E10-E14"). Acepta vectores.
 Soporta formatos: con punto (E11.0),
-sin punto (E110), o solo categoria (E11).}
+sin punto (E110), o solo categoría (E11).}
 
-\item{expand}{Logical, expandir jerarquia completa (default FALSE)}
+\item{expand}{Logical, expandir jerarquía completa (default FALSE)}
 
-\item{normalize}{Logical, normalizar formato de codigos
-automaticamente (default TRUE)}
+\item{normalize}{Logical, normalizar formato de códigos
+automáticamente (default TRUE)}
 
 \item{full_description}{Logical, agregar columna \code{descripcion_completa}
 con formato "CODIGO - DESCRIPCION" (default FALSE)}
 
-\item{extract}{Logical, extraer codigo CIE-10 de texto con
+\item{extract}{Logical, extraer código CIE-10 de texto con
 prefijos/sufijos (default FALSE).
-IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1).
+IMPORTANTE: Solo usar con código ESCALAR (longitud 1).
 Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0".
-Para vectores multiples usar extract=FALSE (default).}
+Para vectores múltiples usar extract=FALSE (default).}
 
-\item{check_siglas}{Logical, buscar siglas medicas comunes (default FALSE).
+\item{check_siglas}{Logical, buscar siglas médicas comunes (default FALSE).
 Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)}
 
 \item{include_uso_cl}{Logical, incluir columna \code{uso_cl} en el output
 (default TRUE). El default difiere de \code{\link[=cie_search]{cie_search()}} (FALSE) para
-preservar el contrato historico de cada funcion. Valores posibles:
+preservar el contrato histórico de cada función. Valores posibles:
 \code{"principal"}, \code{"legado"}, \code{"causa_externa"}, \code{"etiologico"},
 \code{"causa_externa | principal"}.}
 
-\item{only_uso_cl}{Logical, filtrar a codigos vigentes de uso clinico
-en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+\item{only_uso_cl}{Logical, filtrar a códigos vigentes de uso clínico
+en Chile (default FALSE). Cuando es TRUE, excluye los códigos con
 \code{uso_cl == "legado"} (es decir, conserva \code{principal},
 \code{causa_externa}, \code{etiologico} y sus combinaciones).}
 
@@ -66,34 +66,34 @@ en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
 tibble con codigo(s) matcheado(s)
 }
 \description{
-Busqueda exacta por codigo CIE-10
+Búsqueda exacta por código CIE-10
 }
 \examples{
-# Busqueda directa por codigo
+# Búsqueda directa por código
 cie_lookup("E11.0")
 
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cie_lookup("E110") # Sin punto
-cie_lookup("E11") # Solo categoria
+cie_lookup("E11") # Solo categoría
 cie_lookup("E11", expand = TRUE) # Todos E11.x
-# Vectorizado - multiples codigos y formatos
+# Vectorizado - múltiples códigos y formatos
 cie_lookup(c("E11.0", "Z00", "I10"))
-# Con descripcion completa
+# Con descripción completa
 cie_lookup("E110", full_description = TRUE)
-# Extraer codigo de texto con ruido (solo codigo escalar)
+# Extraer código de texto con ruido (solo código escalar)
 cie_lookup("CIE:E11.0", extract = TRUE)
 cie_lookup("E11.0-confirmado", extract = TRUE)
-# Buscar por siglas medicas
+# Buscar por siglas médicas
 cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
-# Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')
+# Filtrar a códigos vigentes de uso clínico Chile (excluye 'legado')
 cie_lookup("E11", expand = TRUE, only_uso_cl = TRUE)
 # Omitir columna uso_cl en el output
 cie_lookup("E11.0", include_uso_cl = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_expand]{cie_expand()}}
+\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_norm]{cie_norm()}}, \code{\link[=cie_expand]{cie_expand()}}, \code{\link[=cie_guide]{cie_guide()}}
 
 Other search:
 \code{\link[=cie_describe]{cie_describe()}},

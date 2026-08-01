@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-utils.R
 \name{cie_normalizar}
 \alias{cie_normalizar}
-\title{Normalizar codigos CIE-10 (deprecated)}
+\title{Normalizar códigos CIE-10 (deprecated)}
 \usage{
 cie_normalizar(
   codigos = lifecycle::deprecated(),
@@ -10,21 +10,21 @@ cie_normalizar(
 )
 }
 \arguments{
-\item{codigos}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Character vector de codigos.
-Use \code{\link[=cie_norm]{cie_norm()}} con \code{codes} en codigo nuevo.}
+\item{codigos}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Character vector de códigos.
+Use \code{\link[=cie_norm]{cie_norm()}} con \code{codes} en código nuevo.}
 
-\item{buscar_db}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical, buscar codigo en DB
-(default TRUE). Use \code{\link[=cie_norm]{cie_norm()}} con \code{search_db} en codigo nuevo.}
+\item{buscar_db}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical, buscar código en DB
+(default TRUE). Use \code{\link[=cie_norm]{cie_norm()}} con \code{search_db} en código nuevo.}
 }
 \value{
-Character vector con codigos normalizados
+Character vector con códigos normalizados
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }
 \details{
-Alias en espanol de \code{\link[=cie_norm]{cie_norm()}}. Se mantiene por compatibilidad
-con codigo existente en CRAN. Usar \code{\link[=cie_norm]{cie_norm()}} en codigo nuevo.
+Alias en español de \code{\link[=cie_norm]{cie_norm()}}. Se mantiene por compatibilidad
+con código existente en CRAN. Usar \code{\link[=cie_norm]{cie_norm()}} en código nuevo.
 }
 \examples{
 # Deprecated: usar cie_norm()

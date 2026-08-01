@@ -1,6 +1,65 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-20)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-23)
 
 *English summary below*
+
+## Revisión rOpenSci — comentarios de yabellini ybs08–ybs36 (2026-06-23)
+
+Tanda de correcciones a partir de la revisión formal de empaquetado de
+@yabellini en el issue rOpenSci #765. Sin cambios en la API pública: no se
+agregan ni eliminan funciones exportadas, no cambian firmas ni se rompe
+compatibilidad.
+
+* **Bug de documentación (`cie10_cl`)**: la columna `uso_cl` estaba
+  documentada como lógica, pero en realidad es `character` con las categorías
+  `"principal"`, `"legado"`, `"etiologico"`, `"causa_externa"` y
+  `"causa_externa | principal"`. Corregido el `@format` y el ejemplo roto
+  `subset(cie10_cl, uso_cl == TRUE)`, que devolvía un conjunto vacío (ybs08,
+  ybs09).
+* **`cie10_empty_tibble()`**: se agrega la columna `uso_cl` al esquema del
+  tibble vacío interno, evitando inconsistencias al concatenar resultados
+  (ybs36).
+* **Validación de parámetros obligatorios**: `cie_norm()`,
+  `cie_validate_vector()`, `cie_expand()`, `cie_table()`, `cie_lookup()`
+  y `cie_search()` ahora emiten un error en castellano vía
+  `cli::cli_abort()` cuando se las llama sin su argumento obligatorio,
+  en lugar del mensaje en inglés de `rlang`/R base (ybs19, ybs22, ybs24,
+  ybs27, ybs30).
+* **`cie10_sql()`**: validación explícita de `query` (tipo character,
+  longitud 1, no NA), captura de errores de `DBI::dbGetQuery()` con
+  `tryCatch()` relanzados como clase `ciecl_sql_error`, descripción y
+  documentación de `query` ampliadas (`FROM`, `ORDER BY`, `GROUP BY`,
+  `HAVING`) y `@seealso [cie10_cl]` (ybs12–ybs17). Terminología de los
+  mensajes homogeneizada al castellano (consulta/palabra clave/sentencias)
+  (ybs14).
+* **Ortografía de la ayuda**: se corrigen las tildes faltantes en la
+  documentación roxygen de `cie_norm()`, `cie_normalizar()`,
+  `cie_validate_vector()`, `cie_expand()`, `cie_search()`, `cie_lookup()`,
+  `cie_table()`, `cie_guide()`, `cie_describe()` y `cie11_search()`
+  (ybs18, ybs20, ybs21, ybs23, ybs29, ybs32, ybs33, ybs35). Las tildes
+  de `cie_siglas()` —deprecated pero exportada— corresponden a ybs25,
+  y las de `cie_short()` y `cie_search()` a ybs26.
+* **`cie10_clear_cache()` / `cie10_disconnect()`**: ayuda ampliada explicando
+  qué es la caché SQLite, cuándo conviene forzar la reconstrucción, qué es el
+  bloqueo del archivo `.db`, por qué ocurre y qué pasa si no se libera
+  (ybs10, ybs11).
+* **Mensajes en castellano consistente**: en `cie_short()` y
+  `cie_validate_vector()` el listado de valores usa el conector `" y "` en
+  lugar del `" and "` que `cli` aplica por defecto al colapsar vectores; el
+  mensaje de `cie_validate_vector()` reemplaza `"DB"` por
+  `"base de datos"` y agrega la tilde de `"Códigos"` mediante escape unicode,
+  según lo sugerido en la revisión (ybs14, ybs20, ybs27).
+* **`cie_map_comorbid()`**: ahora emite un `cli::cli_warn()` cuando alguna
+  entrada no tiene formato CIE-10 válido (p. ej. `"hola"` o `35`), indicando
+  cuántas se clasificaron como `"Otra"`. El comportamiento de clasificación
+  no cambia: los códigos CIE-10 válidos no mapeados siguen en `"Otra"`
+  (ybs34).
+* **`cie_guide()`**: se mantiene como función, se agrega un enlace cruzado
+  desde el README hacia ella y `@seealso` a ella desde las ayudas de las
+  funciones de búsqueda (ybs31).
+* **Tests**: nuevos casos de validación para `cie10_sql()` y refuerzo de las
+  aserciones de las dos ramas "sin palabras válidas" de `cie_search()`, que
+  ahora verifican que la consulta de respaldo devuelve datos reales, no solo
+  que no falla (ybs17, ybs28).
 
 ## Documentación — Correcciones revisión rOpenSci, comentarios de yabellini (2026-06-20)
 

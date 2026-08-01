@@ -1,41 +1,41 @@
-#' Normalizar codigos CIE-10 a formato con punto
+#' Normalizar códigos CIE-10 a formato con punto
 #'
 #' @description
-#' Convierte codigos CIE-10 de diferentes formatos al
-#' formato estandar (con punto).
-#' Maneja multiples variaciones de entrada comunes en datos clinicos.
+#' Convierte códigos CIE-10 de diferentes formatos al
+#' formato estándar (con punto).
+#' Maneja múltiples variaciones de entrada comunes en datos clínicos.
 #'
 #' @details
-#' La normalizacion incluye:
+#' La normalización incluye:
 #' \itemize{
-#'   \item Conversion a mayusculas
-#'   \item Eliminacion de espacios (inicio, fin e internos)
-#'   \item Eliminacion de simbolos daga y asterisco (codificacion dual)
-#'   \item Conversion de guiones a puntos (I10-0 -> I10.0)
-#'   \item Eliminacion de puntos iniciales (.I10 -> I10)
-#'   \item Correccion de puntos multiples (E..11 -> E.11)
-#'   \item Eliminacion de sufijo X en codigos cortos (I10X -> I10)
-#'   \item Preservacion de X en codigos largos (placeholder 7o caracter)
-#'   \item Agregado de punto en posicion correcta (E110 -> E11.0)
+#'   \item Conversión a mayúsculas
+#'   \item Eliminación de espacios (inicio, fin e internos)
+#'   \item Eliminación de símbolos daga y asterisco (codificación dual)
+#'   \item Conversión de guiones a puntos (I10-0 -> I10.0)
+#'   \item Eliminación de puntos iniciales (.I10 -> I10)
+#'   \item Corrección de puntos múltiples (E..11 -> E.11)
+#'   \item Eliminación de sufijo X en códigos cortos (I10X -> I10)
+#'   \item Preservación de X en códigos largos (placeholder 7o carácter)
+#'   \item Agregado de punto en posición correcta (E110 -> E11.0)
 #' }
 #'
-#' El sistema de daga/asterisco indica codificacion dual donde la daga
-#' marca la enfermedad subyacente y el asterisco la manifestacion.
-#' Ambos simbolos se eliminan para normalizacion.
+#' El sistema de daga/asterisco indica codificación dual donde la daga
+#' marca la enfermedad subyacente y el asterisco la manifestación.
+#' Ambos símbolos se eliminan para normalización.
 #'
-#' @param codes Character vector de codigos en cualquier formato
-#' @param search_db Logical, buscar codigo en base de datos
+#' @param codes Character vector de códigos en cualquier formato
+#' @param search_db Logical, buscar código en base de datos
 #'   si no se encuentra exacto (default TRUE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @param buscar_db `r lifecycle::badge("deprecated")` Use `search_db`.
-#' @returns Character vector con codigos normalizados al formato con punto
+#' @returns Character vector con códigos normalizados al formato con punto
 #' @family validacion
 #' @seealso [cie_validate_vector()],
-#'   [cie_expand()], [cie_lookup()]
+#'   [cie_expand()], [cie_lookup()], [cie_guide()]
 #' @export
 #' @examples
 #' cie_norm("E110")     # Retorna "E11.0"
-#' cie_norm("E11")      # Retorna "E11" (categoria)
+#' cie_norm("E11")      # Retorna "E11" (categoría)
 #' cie_norm("I10X")     # Retorna "I10" (elimina X)
 #' cie_norm("E 11 0")   # Retorna "E11.0" (espacios internos)
 #' cie_norm("I10-0")    # Retorna "I10.0" (guion a punto)
@@ -63,6 +63,8 @@ cie_norm <- function(codes,
     )
     search_db <- buscar_db
   }
+
+  check_required_es(missing(codes), "codes")
 
   # Manejar NULL y vectores vacios
   if (is.null(codes) || length(codes) == 0) {
@@ -146,18 +148,18 @@ cie_norm <- function(codes,
   }
 }
 
-#' Normalizar codigos CIE-10 (deprecated)
+#' Normalizar códigos CIE-10 (deprecated)
 #'
 #' `r lifecycle::badge("deprecated")`
 #'
-#' Alias en espanol de [cie_norm()]. Se mantiene por compatibilidad
-#' con codigo existente en CRAN. Usar [cie_norm()] en codigo nuevo.
+#' Alias en español de [cie_norm()]. Se mantiene por compatibilidad
+#' con código existente en CRAN. Usar [cie_norm()] en código nuevo.
 #'
-#' @param codigos `r lifecycle::badge("deprecated")` Character vector de codigos.
-#'   Use [cie_norm()] con `codes` en codigo nuevo.
-#' @param buscar_db `r lifecycle::badge("deprecated")` Logical, buscar codigo en DB
-#'   (default TRUE). Use [cie_norm()] con `search_db` en codigo nuevo.
-#' @returns Character vector con codigos normalizados
+#' @param codigos `r lifecycle::badge("deprecated")` Character vector de códigos.
+#'   Use [cie_norm()] con `codes` en código nuevo.
+#' @param buscar_db `r lifecycle::badge("deprecated")` Logical, buscar código en DB
+#'   (default TRUE). Use [cie_norm()] con `search_db` en código nuevo.
+#' @returns Character vector con códigos normalizados
 #' @family validacion
 #' @keywords internal
 #' @export
@@ -172,7 +174,7 @@ cie_normalizar <- function(codigos = lifecycle::deprecated(),
     "cie_normalizar()",
     "cie_norm()"
   )
-  rlang::check_required(codigos)
+  check_required_es(missing(codigos), "codigos")
   search_db <- if (lifecycle::is_present(buscar_db)) buscar_db else TRUE
   cie_norm(codes = codigos, search_db = search_db)
 }
@@ -198,13 +200,13 @@ cie_normalize <- function(codes, search_db = TRUE,
   cie_norm(codes = codes, search_db = search_db)
 }
 
-#' Validar vector de codigos CIE-10 formato
+#' Validar vector de códigos CIE-10 formato
 #'
-#' @param codes Character vector codigos (ej. c("E11.0", "Z00.0"))
+#' @param codes Character vector códigos (ej. c("E11.0", "Z00.0"))
 #' @param strict Logical, validar existencia en DB (default FALSE)
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @returns Logical vector de la misma longitud que `codes`. TRUE si el
-#'   codigo tiene formato CIE-10 valido (y existe en DB si `strict = TRUE`).
+#'   código tiene formato CIE-10 válido (y existe en DB si `strict = TRUE`).
 #' @family validacion
 #' @seealso [cie_norm()], [cie_expand()]
 #' @export
@@ -221,6 +223,8 @@ cie_validate_vector <- function(codes,
     )
     codes <- codigos
   }
+
+  check_required_es(missing(codes), "codes")
 
   # Regex CIE-10 Chile: acepta formato MINSAL (E110) y estandar (E11.0)
   # MINSAL: [A-Z]\d{2}\d? (3-4 chars: E11, E110)
@@ -250,9 +254,10 @@ cie_validate_vector <- function(codes,
 
     invalidos <- codes[!resultado & !is.na(codes)]
     if (length(invalidos) > 0) {
+      invalidos_vec <- cli::cli_vec(invalidos, style = list("vec-last" = " y "))
       cli::cli_warn(c(
-        "Codigos no encontrados en DB MINSAL:",
-        "x" = "{.val {invalidos}}"
+        "C\u00f3digos no encontrados en la base de datos MINSAL:",
+        "x" = "{.val {invalidos_vec}}"
       ))
     }
 
@@ -262,14 +267,14 @@ cie_validate_vector <- function(codes,
   }
 }
 
-#' Expandir codigo jerarquico (ej. E11 -> E11.0-E11.9)
+#' Expandir código jerárquico (ej. E11 -> E11.0-E11.9)
 #'
-#' @param code String codigo padre (ej. "E11")
+#' @param code String código padre (ej. "E11")
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
-#' @returns Character vector con todos los codigos hijos del codigo padre.
-#'   Vector vacio si el codigo no existe en la base de datos.
+#' @returns Character vector con todos los códigos hijos del código padre.
+#'   Vector vacío si el código no existe en la base de datos.
 #' @family validacion
-#' @seealso [cie_norm()], [cie_lookup()]
+#' @seealso [cie_norm()], [cie_lookup()], [cie_guide()]
 #' @export
 #' @examples
 #' cie_expand("E11")
@@ -282,6 +287,8 @@ cie_expand <- function(code, codigo = lifecycle::deprecated()) {
     )
     code <- codigo
   }
+
+  check_required_es(missing(code), "code")
 
   # Manejar NA o cadena vacia
   if (length(code) == 0 || is.na(code) ||

@@ -2,12 +2,12 @@
 % Please edit documentation in R/cie-siglas.R
 \name{cie_siglas}
 \alias{cie_siglas}
-\title{Listar siglas medicas (deprecated)}
+\title{Listar siglas médicas (deprecated)}
 \usage{
 cie_siglas(categoria = NULL)
 }
 \arguments{
-\item{categoria}{Character opcional, filtrar por categoria}
+\item{categoria}{Character opcional, filtrar por categoría}
 }
 \value{
 tibble con columnas: sigla, termino_busqueda, categoria

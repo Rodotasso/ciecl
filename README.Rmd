@@ -159,6 +159,14 @@ cie_search("diabetis mellitus")
 cie_search("IAM")
 ```
 
+```{r guide-note, results='asis', echo=FALSE}
+if (lang == "es") {
+  cat("¿No sabes cuál función usar? `cie_guide()` muestra una tabla comparativa con el escenario, la función recomendada y un ejemplo para cada caso.\n")
+} else {
+  cat("Not sure which function to use? `cie_guide()` prints a comparison table with the scenario, the recommended function, and an example for each case.\n")
+}
+```
+
 ```{r comorb-example, eval=FALSE}
 # Comorbilidades (requiere: install.packages("comorbidity"))
 df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")

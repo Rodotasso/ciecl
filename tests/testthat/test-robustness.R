@@ -484,7 +484,7 @@ test_that("cie10_sql bloquea INSERT", {
 test_that("cie10_sql bloquea multiples statements", {
   skip_on_cran()
 
-  # El error puede ser por keyword no permitido (DROP) o por multiples statements
+  # El error puede ser por palabra clave no permitida (DROP) o por multiples sentencias
   expect_error(
     cie10_sql("SELECT * FROM cie10; DROP TABLE cie10")
   )

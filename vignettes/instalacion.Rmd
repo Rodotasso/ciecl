@@ -108,7 +108,7 @@ de la OMS, necesitas credenciales gratuitas.
 
 **Opción A: `keyring` (recomendado)**
 
-El paquete [`keyring`](https://r-lib.github.io/keyring/) guarda secretos
+El paquete [`keyring`](https://keyring.r-lib.org/) guarda secretos
 en el keychain nativo del sistema operativo (macOS Keychain, Windows
 Credential Store, Linux Secret Service), evitando que el `Client ID` y
 `Client Secret` queden en texto plano en `.Renviron`. Este es el patrón

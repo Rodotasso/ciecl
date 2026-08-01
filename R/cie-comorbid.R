@@ -91,7 +91,6 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
 
 #' Mapeo manual grupos comorbilidad Chile-especifico
 #'
-#' @description
 #' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 #'
@@ -120,6 +119,20 @@ cie_map_comorbid <- function(codes, codigos = lifecycle::deprecated()) {
     return(tibble::tibble(
       codigo = character(0),
       categoria = character(0)
+    ))
+  }
+
+  # Advertir (sin cambiar el resultado) cuando una entrada no tiene
+  # formato CIE-10 valido: se clasifica como "Otra" igual que un codigo
+  # valido no mapeado, pero la primera es un problema de datos (ybs34).
+  # Los NA no cuentan en este warning.
+  formato_valido <- cie_validate_vector(codes)
+  invalidos <- codes[!is.na(codes) & !formato_valido]
+  if (length(invalidos) > 0) {
+    invalidos_vec <- cli::cli_vec(invalidos, style = list("vec-last" = " y "))
+    cli::cli_warn(c(
+      "{length(invalidos)} c\u00f3digo{?s} sin formato CIE-10 v\u00e1lido, clasificado{?s} como {.val Otra}.",
+      "i" = "Entradas: {.val {invalidos_vec}}"
     ))
   }
 

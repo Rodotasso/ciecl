@@ -144,6 +144,9 @@ cie_search("IAM")
 #> # ℹ 40 more rows
 ```
 
+¿No sabes cuál función usar? `cie_guide()` muestra una tabla comparativa
+con el escenario, la función recomendada y un ejemplo para cada caso.
+
 ``` r
 # Comorbilidades (requiere: install.packages("comorbidity"))
 df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")

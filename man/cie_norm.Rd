@@ -3,7 +3,7 @@
 \name{cie_norm}
 \alias{cie_norm}
 \alias{cie_normalize}
-\title{Normalizar codigos CIE-10 a formato con punto}
+\title{Normalizar códigos CIE-10 a formato con punto}
 \usage{
 cie_norm(
   codes,
@@ -20,9 +20,9 @@ cie_normalize(
 )
 }
 \arguments{
-\item{codes}{Character vector de codigos en cualquier formato}
+\item{codes}{Character vector de códigos en cualquier formato}
 
-\item{search_db}{Logical, buscar codigo en base de datos
+\item{search_db}{Logical, buscar código en base de datos
 si no se encuentra exacto (default TRUE)}
 
 \item{codigos}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{codes}.}
@@ -30,34 +30,34 @@ si no se encuentra exacto (default TRUE)}
 \item{buscar_db}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{search_db}.}
 }
 \value{
-Character vector con codigos normalizados al formato con punto
+Character vector con códigos normalizados al formato con punto
 }
 \description{
-Convierte codigos CIE-10 de diferentes formatos al
-formato estandar (con punto).
-Maneja multiples variaciones de entrada comunes en datos clinicos.
+Convierte códigos CIE-10 de diferentes formatos al
+formato estándar (con punto).
+Maneja múltiples variaciones de entrada comunes en datos clínicos.
 }
 \details{
-La normalizacion incluye:
+La normalización incluye:
 \itemize{
-\item Conversion a mayusculas
-\item Eliminacion de espacios (inicio, fin e internos)
-\item Eliminacion de simbolos daga y asterisco (codificacion dual)
-\item Conversion de guiones a puntos (I10-0 -> I10.0)
-\item Eliminacion de puntos iniciales (.I10 -> I10)
-\item Correccion de puntos multiples (E..11 -> E.11)
-\item Eliminacion de sufijo X en codigos cortos (I10X -> I10)
-\item Preservacion de X en codigos largos (placeholder 7o caracter)
-\item Agregado de punto en posicion correcta (E110 -> E11.0)
+\item Conversión a mayúsculas
+\item Eliminación de espacios (inicio, fin e internos)
+\item Eliminación de símbolos daga y asterisco (codificación dual)
+\item Conversión de guiones a puntos (I10-0 -> I10.0)
+\item Eliminación de puntos iniciales (.I10 -> I10)
+\item Corrección de puntos múltiples (E..11 -> E.11)
+\item Eliminación de sufijo X en códigos cortos (I10X -> I10)
+\item Preservación de X en códigos largos (placeholder 7o carácter)
+\item Agregado de punto en posición correcta (E110 -> E11.0)
 }
 
-El sistema de daga/asterisco indica codificacion dual donde la daga
-marca la enfermedad subyacente y el asterisco la manifestacion.
-Ambos simbolos se eliminan para normalizacion.
+El sistema de daga/asterisco indica codificación dual donde la daga
+marca la enfermedad subyacente y el asterisco la manifestación.
+Ambos símbolos se eliminan para normalización.
 }
 \examples{
 cie_norm("E110")     # Retorna "E11.0"
-cie_norm("E11")      # Retorna "E11" (categoria)
+cie_norm("E11")      # Retorna "E11" (categoría)
 cie_norm("I10X")     # Retorna "I10" (elimina X)
 cie_norm("E 11 0")   # Retorna "E11.0" (espacios internos)
 cie_norm("I10-0")    # Retorna "I10.0" (guion a punto)
@@ -67,7 +67,7 @@ cie_norm(c("E110", "I10X", "Z00"))  # Vectorizado
 }
 \seealso{
 \code{\link[=cie_validate_vector]{cie_validate_vector()}},
-\code{\link[=cie_expand]{cie_expand()}}, \code{\link[=cie_lookup]{cie_lookup()}}
+\code{\link[=cie_expand]{cie_expand()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_guide]{cie_guide()}}
 
 Other validacion:
 \code{\link[=cie_expand]{cie_expand()}},

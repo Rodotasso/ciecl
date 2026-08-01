@@ -206,7 +206,7 @@ test_that("cie10_empty_tibble retorna tibble vacio con estructura correcta", {
   # Columnas esperadas
   columnas <- c("codigo", "descripcion", "categoria", "seccion",
                 "capitulo_nombre", "inclusion", "exclusion", "capitulo",
-                "es_daga", "es_cruz")
+                "es_daga", "es_cruz", "uso_cl")
 
   expect_true(all(columnas %in% names(resultado)))
 })
@@ -219,7 +219,7 @@ test_that("cie10_empty_tibble con descripcion_completa agrega columna", {
   expect_s3_class(resultado, "tbl_df")
   expect_length(resultado$codigo, 0)
   expect_true("descripcion_completa" %in% names(resultado))
-  expect_equal(ncol(resultado), 11)
+  expect_equal(ncol(resultado), 12)
 })
 
 test_that("cie10_empty_tibble tiene tipos correctos", {

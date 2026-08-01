@@ -259,10 +259,10 @@ test_that("cie10_sql bloquea semicolon fuera de strings", {
 
   skip_on_cran()
 
-  # Multiples statements separados por semicolon (sin keywords peligrosos)
+  # Multiples sentencias separadas por semicolon (sin keywords peligrosos)
   expect_error(
     cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
-    "Multiples statements"
+    "sentencias SQL no permitidas"
   )
 })
 
@@ -599,6 +599,43 @@ test_that("get_cie10_db reconstruye si tabla cie10 falta", {
 test_that("cie10_sql maneja error de ejecucion SQL", {
   skip_on_cran()
   expect_error(ciecl::cie10_sql("SELECT * FROM tabla_inexistente"))
+})
+
+test_that("cie10_sql relanza errores SQL con clase ciecl_sql_error", {
+  skip_on_cran()
+  err <- tryCatch(
+    ciecl::cie10_sql("SELECT * FROM tabla_inexistente"),
+    error = function(e) e
+  )
+  expect_s3_class(err, "ciecl_sql_error")
+})
+
+test_that("cie10_sql valida que query no sea numerico", {
+  expect_error(
+    ciecl::cie10_sql(123),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no sea un vector de longitud > 1", {
+  expect_error(
+    ciecl::cie10_sql(c("SELECT 1", "SELECT 2")),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no sea NA", {
+  expect_error(
+    ciecl::cie10_sql(NA_character_),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no este ausente", {
+  expect_error(
+    ciecl::cie10_sql(),
+    class = "ciecl_invalid_input"
+  )
 })
 
 test_that("cache_is_current retorna FALSE cuando query falla", {
