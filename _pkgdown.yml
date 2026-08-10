@@ -101,5 +101,4 @@ footer:
     left: developed_by
     right: built_with
   components:
-    developed_by:
-      text: "Desarrollado por Rodolfo Tasso Suazo"
+    developed_by: "Desarrollado por Rodolfo Tasso Suazo"
