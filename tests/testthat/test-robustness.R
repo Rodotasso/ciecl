@@ -294,7 +294,7 @@ test_that("cie_map_comorbid retorna columnas esperadas", {
   resultado <- cie_map_comorbid(c("E11.0"))
 
   columnas_esperadas <- c("codigo", "categoria")
-  expect_equal(names(resultado), columnas_esperadas)
+  expect_named(resultado, columnas_esperadas)
 })
 
 # ============================================================
@@ -381,7 +381,7 @@ test_that("get_cie10_db tabla tiene indices", {
 test_that("get_cie10_db usa directorio cache correcto", {
   skip_on_cran()
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   get_cie10_db()
@@ -396,7 +396,7 @@ test_that("get_cie10_db usa directorio cache correcto", {
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe

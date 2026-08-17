@@ -21,7 +21,7 @@
       cie_search("a")
     Condition
       Error in `cie_search()`:
-      ! Texto minimo 2 caracteres.
+      ! Texto mínimo 2 caracteres.
 
 ---
 

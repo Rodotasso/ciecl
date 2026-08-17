@@ -671,7 +671,7 @@ test_that("cie_map_comorbid advierte con multiples codigos invalidos usando cone
 test_that("cie_map_comorbid output tiene columnas correctas", {
   resultado <- cie_map_comorbid(c("E11.0", "I50.9"))
 
-  expect_equal(names(resultado), c("codigo", "categoria"))
+  expect_named(resultado, c("codigo", "categoria"))
   expect_type(resultado$codigo, "character")
   expect_type(resultado$categoria, "character")
 })

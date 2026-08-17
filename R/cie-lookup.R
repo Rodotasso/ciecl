@@ -293,7 +293,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Asegurar que codigo_norm es un escalar (longitud 1)
   if (length(codigo_norm) != 1) {
-    cli::cli_abort("{.fn cie_lookup_single} solo acepta un codigo a la vez.", class = "ciecl_invalid_input")
+    cli::cli_abort("{.fn cie_lookup_single} solo acepta un c\u00f3digo a la vez.", class = "ciecl_invalid_input")
   }
 
   # Manejar NA
@@ -310,7 +310,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Solo permitir caracteres validos para codigos CIE-10:
   # letras, numeros, punto, guion
   if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
-    cli::cli_inform(c("x" = "Codigo con caracteres invalidos: {.val {codigo_norm}}"))
+    cli::cli_inform(c("x" = "C\u00f3digo con caracteres inv\u00e1lidos: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 
@@ -354,7 +354,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Fix #3: Validar estrictamente codigos invalidos
   # Solo codigos CIE-10 validos existen en la base
   if (nrow(resultado) == 0) {
-    cli::cli_inform(c("x" = "Codigo no encontrado: {.val {codigo_norm}}"))
+    cli::cli_inform(c("x" = "C\u00f3digo no encontrado: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 

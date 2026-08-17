@@ -6,7 +6,7 @@
 \usage{
 cie11_search(
   text,
-  api_key = NULL,
+  api_key = get_icd_api_key(),
   lang = c("es", "en"),
   max_results = 10,
   release = "2024-01",
@@ -16,8 +16,9 @@ cie11_search(
 \arguments{
 \item{text}{String término búsqueda español/inglés}
 
-\item{api_key}{String opcional, Client ID + Secret OMS separados ":"
-Obtener en: https://icd.who.int/icdapi}
+\item{api_key}{String opcional, Client ID + Secret OMS separados ":".
+Por defecto se lee desde la variable de entorno \code{ICD_API_KEY} vía
+\code{\link[=get_icd_api_key]{get_icd_api_key()}}. Obtener credenciales en: https://icd.who.int/icdapi}
 
 \item{lang}{Character, idioma respuesta ("es" o "en")}
 
@@ -34,18 +35,47 @@ tibble con códigos CIE-11 + títulos o vacío si error
 \description{
 Buscar códigos CIE-11 vía API OMS
 }
+\details{
+\subsection{Seguridad de la API key}{
+
+NUNCA escribas la llave literal en tus scripts (p. ej.
+\code{api_key = "tu_id:tu_secret"}): si compartes el código (repositorios,
+correos, capturas) expondrías tus credenciales de forma accidental.
+
+La vía recomendada es guardar la llave en la variable de entorno
+\code{ICD_API_KEY}, por ejemplo editando \verb{~/.Renviron} con
+\code{usethis::edit_r_environ()}; \code{\link[=get_icd_api_key]{get_icd_api_key()}} la lee
+automáticamente.
+
+El argumento \code{api_key} existe solo para circunstancias excepcionales
+(p. ej. manejar múltiples llaves, o entornos donde no es posible fijar
+una variable de entorno).
+}
+}
 \examples{
 # Ver parámetros disponibles
 args(cie11_search)
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{
+# El cassette grabado (inst/_vcr/) reproduce la respuesta de la API sin
+# conexión ni credenciales reales; la llave ficticia solo satisface el
+# parseo interno del argumento api_key y se restaura al final
+.key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
+if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
+vcr::insert_example_cassette("cie11_search", package = "ciecl",
+                             match_requests_on = c("method", "uri"))
+}
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-withr::with_envvar(c(ICD_API_KEY = "client_id:client_secret"), {
-  cie11_search("depresion mayor")
-})
-\dontshow{\}) # examplesIf}
+cie11_search("depresion mayor")
+\dontshow{
+vcr::eject_cassette()
+if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+}
 }
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_guide]{cie_guide()}}
+
+Other api_who:
+\code{\link[=get_icd_api_key]{get_icd_api_key()}}
 }
 \concept{api_who}

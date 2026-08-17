@@ -21,7 +21,7 @@ test_that("flujo: buscar termino -> obtener codigos -> validar", {
 
   # 4. Obtiene detalles de cada codigo
   detalles <- cie_lookup(codigos_encontrados)
-  expect_equal(nrow(detalles), length(unique(codigos_encontrados)))
+  expect_length(unique(codigos_encontrados), nrow(detalles))
 })
 
 test_that("flujo: buscar categoria -> expandir -> calcular comorbilidad", {
@@ -73,7 +73,7 @@ test_that("flujo: normalizar codigos -> buscar -> mapear comorbilidad", {
 
   # 4. Mapear a categorias de comorbilidad
   mapa <- cie_map_comorbid(codigos_norm)
-  expect_equal(nrow(mapa), length(codigos_norm))
+  expect_length(codigos_norm, nrow(mapa))
   expect_true("Diabetes" %in% mapa$categoria)
 })
 

@@ -3,8 +3,8 @@
     Code
       cie_table("XXXXX")
     Message
-      x Codigo no encontrado: "XXXX"
+      x Código no encontrado: "XXXX"
     Condition
       Error in `cie_table()`:
-      ! Codigo no encontrado: "XXXXX"
+      ! Código no encontrado: "XXXXX"
 

@@ -141,7 +141,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
   # Permitir siglas de 2 caracteres (DM, TB, FA, etc.)
   if (nchar(texto_limpio) < 2) {
-    cli::cli_abort("Texto minimo 2 caracteres.", class = "ciecl_invalid_input")
+    cli::cli_abort("Texto m\u00ednimo 2 caracteres.", class = "ciecl_invalid_input")
   }
 
   # Verificar si es una sigla medica y expandirla

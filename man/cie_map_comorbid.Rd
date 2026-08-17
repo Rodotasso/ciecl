@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-comorbid.R
 \name{cie_map_comorbid}
 \alias{cie_map_comorbid}
-\title{Mapeo manual grupos comorbilidad Chile-especifico}
+\title{Mapeo manual de grupos de comorbilidad específicos de Chile}
 \usage{
 cie_map_comorbid(codes, codigos = lifecycle::deprecated())
 }
@@ -15,7 +15,7 @@ cie_map_comorbid(codes, codigos = lifecycle::deprecated())
 tibble con columnas: codigo, categoria
 }
 \description{
-Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
+Agrupa códigos CIE-10 chilenos en categorías de comorbilidad MINSAL.
 Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 }
 \examples{

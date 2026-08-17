@@ -1,6 +1,37 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-23)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-17)
 
 *English summary below*
+
+## Revisión rOpenSci — comentarios de Maëlle Salmon ms01–ms20 (2026-08-17)
+
+Segunda tanda de correcciones de la revisión formal en el issue rOpenSci
+#765, a partir de los comentarios de @maelle. Cierra todos los ítems
+pendientes de la revisión.
+
+* **`cie11_search()`**: nuevo argumento `api_key = get_icd_api_key()` con la
+  nueva función exportada `get_icd_api_key()`, que centraliza la lectura de
+  las credenciales de la API OMS siguiendo el patrón de `httr2`. La ayuda
+  gana una subsección "Seguridad de la API key" y las viñetas de instalación
+  (ES/EN) agregan la nota correspondiente (ms17).
+* **Ejemplos offline con `vcr`**: los ejemplos de `cie11_search()` ahora
+  corren sin conexión usando cassettes de `vcr` (>= 2.0.0, agregado a
+  `Suggests`); cassette en `inst/_vcr/cie11_search.yml` y
+  `tests/testthat/setup-vcr.R` con `filter_sensitive_data` (ms19).
+* **Documentación bilingüe**: español primero en CONTRIBUTING y README;
+  enlaces y orden de bullets corregidos; tildes en el índice de referencia
+  del sitio pkgdown y en mensajes de `cli` (ms01–ms08).
+* **Viñetas**: instalación solo con `pak`; nueva guía de inicio con caso de
+  uso real que reemplaza a `caso-uso-egresos.Rmd`; nueva viñeta en inglés
+  `vignettes/ciecl-en.Rmd` (ms10–ms13).
+* **Sitio pkgdown**: footer de `_pkgdown.yml` corregido según el PR #15 de
+  la revisora (`developed_by` escalar) (ms09).
+* **CONTRIBUTING.md**: nueva sección "Declaración de asistencia con IA"
+  (español e inglés) (ms14).
+* **Mejoras de código interno**: uso de `anyNA()`, `nzchar()` y variables
+  explicativas en las funciones revisadas (ms15, ms16, ms18).
+* **Tests**: aserciones más específicas (`expect_named()`, `expect_length()`,
+  `expect_type()`, `expect_all_false()`) y eliminación de `:::` en la suite
+  de tests (ms20).
 
 ## Revisión rOpenSci — comentarios de yabellini ybs08–ybs36 (2026-06-23)
 

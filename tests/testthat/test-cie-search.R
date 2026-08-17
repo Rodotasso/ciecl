@@ -26,7 +26,7 @@ test_that("cie_lookup vectorizado elimina duplicados", {
   resultado <- cie_lookup(codigos)
 
   # No debe haber duplicados en resultado
-  expect_equal(nrow(resultado), length(unique(resultado$codigo)))
+  expect_length(unique(resultado$codigo), nrow(resultado))
 })
 
 test_that("cie_lookup puede generar descripcion_completa", {
@@ -67,7 +67,7 @@ test_that("cie_short no tiene duplicados", {
   resultado <- cie_short()
 
   # No debe haber siglas duplicadas
-  expect_equal(nrow(resultado), length(unique(resultado$sigla)))
+  expect_length(unique(resultado$sigla), nrow(resultado))
 })
 
 test_that("cie_short filtra por categoria", {

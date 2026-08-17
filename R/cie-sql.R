@@ -308,7 +308,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     lifecycle::deprecate_warn(
       "0.9.8",
       "cie10_sql(close = )",
-      details = "La conexion es pooled y se gestiona automaticamente."
+      details = "La conexi\u00f3n es pooled y se gestiona autom\u00e1ticamente."
     )
   }
 

@@ -34,7 +34,7 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
   datos <- cie_lookup(code, expand = TRUE)
 
   if (nrow(datos) == 0) {
-    cli::cli_abort("Codigo no encontrado: {.val {code}}", class = "ciecl_invalid_code")
+    cli::cli_abort("C\u00f3digo no encontrado: {.val {code}}", class = "ciecl_invalid_code")
   }
 
   # Reemplazar NA/vacio por em dash (U+2014) en columnas de texto.

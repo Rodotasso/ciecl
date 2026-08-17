@@ -46,14 +46,14 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   # Advertir sobre NAs en columna de codigos
   n_na <- sum(is.na(data[[code]]))
   if (n_na > 0) {
-    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que seran ignorados.")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que ser\u00e1n ignorados.")
     data <- data[!is.na(data[[code]]), ]
   }
 
   # Advertir sobre codigos vacios
   n_empty <- sum(nchar(trimws(as.character(data[[code]]))) == 0, na.rm = TRUE)
   if (n_empty > 0) {
-    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} codigos vacios que seran ignorados.")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} c\u00f3digos vac\u00edos que ser\u00e1n ignorados.")
     data <- data[nchar(trimws(as.character(data[[code]]))) > 0, ]
   }
 
@@ -89,9 +89,9 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   return(tibble::as_tibble(resultado))
 }
 
-#' Mapeo manual grupos comorbilidad Chile-especifico
+#' Mapeo manual de grupos de comorbilidad específicos de Chile
 #'
-#' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
+#' Agrupa códigos CIE-10 chilenos en categorías de comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 #'
 #' @param codes Character vector de codigos

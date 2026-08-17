@@ -49,3 +49,6 @@
 ^vignettes/ciecl-en\.html$
 ^data-raw$
 ^\.lintr$
+^benchmark$
+^\.superpowers$
+^_tmp_.*\.R$

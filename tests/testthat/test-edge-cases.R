@@ -30,9 +30,9 @@ test_that("cie_search maneja cadenas muy cortas", {
   expect_no_error(suppressMessages(cie_search("DM")))
 
   # Texto de 1 caracter o vacio debe dar error
-  expect_error(cie_search("a"), "minimo 2 caracteres")
-  expect_error(cie_search(""), "minimo 2 caracteres")
-  expect_error(cie_search(" "), "minimo 2 caracteres")
+  expect_error(cie_search("a"), "m\u00ednimo 2 caracteres")
+  expect_error(cie_search(""), "m\u00ednimo 2 caracteres")
+  expect_error(cie_search(" "), "m\u00ednimo 2 caracteres")
 })
 
 test_that("cie_search maneja threshold invalido", {
@@ -318,7 +318,7 @@ test_that("cie_validate_vector rechaza formatos invalidos", {
   )
 
   resultado <- cie_validate_vector(codigos_invalidos)
-  expect_true(all(!resultado))
+  expect_all_false(resultado)
 })
 
 test_that("cie_validate_vector normaliza antes de validar", {

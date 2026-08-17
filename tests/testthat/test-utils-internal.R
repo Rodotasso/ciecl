@@ -348,8 +348,8 @@ test_that("cie_lookup_single maneja rangos", {
 })
 
 test_that("cie_lookup_single error con vector", {
-  cie_lookup_single <- ciecl:::cie_lookup_single
+  cie_lookup_single <- cie_lookup_single
 
   expect_error(cie_lookup_single(c("E11.0", "I10")),
-               "solo acepta un codigo")
+               "solo acepta un c\u00f3digo")
 })
