@@ -40,6 +40,53 @@ Para instalar además todas las dependencias opcionales (comorbilidades, tablas 
 pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
+### Dependencias por funcionalidad
+
+El núcleo del paquete (búsqueda y consulta de códigos CIE-10) no requiere
+paquetes opcionales. Estas son las dependencias sugeridas según la tarea:
+
+| Funcionalidad | Paquete | Instalación |
+|---------------|---------|-------------|
+| Índices de comorbilidad Charlson/Elixhauser con `cie_comorbid()` | `comorbidity` | `install.packages("comorbidity")` |
+| Tablas HTML formateadas con `cie_table()` | `gt` | `install.packages("gt")` |
+| Leer archivos Excel del MINSAL | `readxl` | `install.packages("readxl")` |
+| Exportar resultados a Excel | `writexl` | `install.packages("writexl")` |
+
+## Requisitos del sistema
+
+### Windows
+
+No requiere dependencias adicionales: la instalación funciona directamente.
+
+### macOS
+
+Instala las Xcode Command Line Tools si compilas desde fuente:
+
+```bash
+xcode-select --install
+```
+
+### Linux (Ubuntu/Debian)
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  r-base-dev \
+  libcurl4-openssl-dev \
+  libssl-dev \
+  libxml2-dev
+```
+
+### Linux (Fedora/RHEL/CentOS)
+
+```bash
+sudo dnf install -y \
+  R-devel \
+  libcurl-devel \
+  openssl-devel \
+  libxml2-devel
+```
+
 ## Configuración de la API CIE-11 (opcional)
 
 Las funciones de CIE-10 (núcleo del paquete) funcionan sin credenciales. Solo para usar `cie11_search()`, que consulta la clasificación CIE-11 de la OMS, necesitas credenciales gratuitas.
@@ -92,9 +139,27 @@ Reinicia R para que tome efecto. No subas `.Renviron` a Git.
 Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
 ```
 
+### Paso 3: Verificar la configuración
+
+```{r eval=FALSE}
+# Verificar que la variable de entorno esta definida
+Sys.getenv("ICD_API_KEY")
+
+# Probar una busqueda CIE-11
+library(ciecl)
+cie11_search("diabetes")
+```
+
 ## Caché SQLite
 
-El paquete usa una base SQLite local para búsquedas eficientes. Se crea automáticamente en la primera consulta. Si necesitas forzar su reconstrucción (por ejemplo, tras actualizar el paquete):
+El paquete usa una base SQLite local para búsquedas eficientes. Se crea automáticamente en la primera consulta, en el directorio de datos del usuario:
+
+```{r eval=FALSE}
+# Ver la ubicacion del cache
+tools::R_user_dir("ciecl", "data")
+```
+
+Puedes cambiar esa ubicación definiendo la variable de entorno `CIECL_CACHE_DIR` antes de cargar el paquete. Si necesitas forzar la reconstrucción de la base (por ejemplo, tras actualizar el paquete):
 
 ```{r eval=FALSE}
 library(ciecl)
@@ -117,6 +182,35 @@ cie_lookup("E11.0")
 
 # Probar búsqueda fuzzy
 cie_search("diabetes")
+```
+
+## Problemas comunes
+
+### Error: "package 'ciecl' is not available"
+
+Verifica que el repositorio de CRAN esté configurado en tu sesión de R y luego instala normalmente:
+
+```{r eval=FALSE}
+install.packages("ciecl")
+```
+
+### Error de compilación en Linux
+
+Instala las dependencias del sistema indicadas en la sección
+"Requisitos del sistema" y vuelve a intentar la instalación.
+
+### La API CIE-11 no responde
+
+1. Verifica que la credencial esté configurada: `Sys.getenv("ICD_API_KEY")` no debe retornar una cadena vacía.
+2. Verifica tu conexión a internet.
+3. Comprueba el estado del servicio de la OMS en <https://icd.who.int/icdapi>: si está caído, las funciones de CIE-10 siguen operativas porque no dependen de la API.
+
+### Caché corrupto
+
+Limpia la caché y reinicia R:
+
+```{r eval=FALSE}
+ciecl::cie10_clear_cache()
 ```
 
 ## Soporte

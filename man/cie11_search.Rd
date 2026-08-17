@@ -59,17 +59,24 @@ args(cie11_search)
 \dontshow{
 # El cassette grabado (inst/_vcr/) reproduce la respuesta de la API sin
 # conexión ni credenciales reales; la llave ficticia solo satisface el
-# parseo interno del argumento api_key y se restaura al final
-.key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
-if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-vcr::insert_example_cassette("cie11_search", package = "ciecl",
-                             match_requests_on = c("method", "uri"))
+# parseo interno del argumento api_key y se restaura al final.
+# Guard: vcr está en Suggests; sin él se omite la llamada de ejemplo
+# (evita una request real a la API con llave ficticia)
+.has_vcr <- requireNamespace("vcr", quietly = TRUE)
+if (.has_vcr) {
+  .key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
+  if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
+  vcr::insert_example_cassette("cie11_search", package = "ciecl",
+                               match_requests_on = c("method", "uri"))
+}
 }
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-cie11_search("depresion mayor")
+if (.has_vcr) cie11_search("depresion mayor")
 \dontshow{
-vcr::eject_cassette()
-if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+if (.has_vcr) {
+  vcr::eject_cassette()
+  if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+}
 }
 }
 \seealso{

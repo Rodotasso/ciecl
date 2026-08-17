@@ -19,6 +19,8 @@ navbar:
       menu:
         - text: "Documentación en Español"
         - text: "--------"
+        - text: "Primeros pasos con ciecl"
+          href: articles/ciecl.html
         - text: "Introducción a ciecl"
           href: articles/ciecl-es.html
         - text: "Guía de Instalación"
@@ -28,12 +30,14 @@ navbar:
         - text: "--------"
         - text: "English Documentation"
         - text: "--------"
+        - text: "Getting Started with ciecl"
+          href: articles/case-study-discharges.html
         - text: "Introduction to ciecl"
           href: articles/ciecl-en.html
         - text: "Installation Guide"
           href: articles/installation.html
-        - text: "Case Study: Hospital Discharges"
-          href: articles/case-study-discharges.html
+        - text: "Languages and Normalization"
+          href: articles/languages.html
     news:
       text: "Novedades"
       href: news/index.html
@@ -49,13 +53,15 @@ navbar:
 articles:
   - title: "Documentación en Español"
     contents:
+      - ciecl
       - ciecl-es
       - idiomas
       - instalacion
   - title: "English Documentation"
     contents:
-      - ciecl-en
       - case-study-discharges
+      - ciecl-en
+      - languages
       - installation
 
 reference:

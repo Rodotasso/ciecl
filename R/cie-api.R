@@ -37,23 +37,30 @@
 #' \dontshow{
 #' # El cassette grabado (inst/_vcr/) reproduce la respuesta de la API sin
 #' # conexión ni credenciales reales; la llave ficticia solo satisface el
-#' # parseo interno del argumento api_key y se restaura al final
-#' .key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
-#' if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
-#' vcr::insert_example_cassette("cie11_search", package = "ciecl",
-#'                              match_requests_on = c("method", "uri"))
+#' # parseo interno del argumento api_key y se restaura al final.
+#' # Guard: vcr está en Suggests; sin él se omite la llamada de ejemplo
+#' # (evita una request real a la API con llave ficticia)
+#' .has_vcr <- requireNamespace("vcr", quietly = TRUE)
+#' if (.has_vcr) {
+#'   .key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
+#'   if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
+#'   vcr::insert_example_cassette("cie11_search", package = "ciecl",
+#'                                match_requests_on = c("method", "uri"))
+#' }
 #' }
 #' # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-#' cie11_search("depresion mayor")
+#' if (.has_vcr) cie11_search("depresion mayor")
 #' \dontshow{
-#' vcr::eject_cassette()
-#' if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+#' if (.has_vcr) {
+#'   vcr::eject_cassette()
+#'   if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+#' }
 #' }
 cie11_search <- function(text, api_key = get_icd_api_key(),
                          lang = c("es", "en"),
                          max_results = 10, release = "2024-01",
                          texto = lifecycle::deprecated()) {
-  # Deprecation: argumento en espanol -> ingles
+  # Deprecación: argumento en español -> inglés
   if (lifecycle::is_present(texto)) {
     lifecycle::deprecate_warn(
       "0.9.8",
@@ -66,7 +73,7 @@ cie11_search <- function(text, api_key = get_icd_api_key(),
   rlang::check_required(text)
   lang <- rlang::arg_match(lang)
 
-  # Validacion de inputs
+  # Validación de inputs
   if (!rlang::is_string(text)) {
     cli::cli_abort(
       "{.arg text} debe ser un string de largo 1, no {.obj_type_friendly {text}}.",
@@ -77,10 +84,10 @@ cie11_search <- function(text, api_key = get_icd_api_key(),
     cli::cli_abort("{.arg text} no puede estar vac\u00edo.", class = "ciecl_invalid_input")
   }
   # Variables explicativas para la condición compuesta (legibilidad)
-  es_escalar_numerico <- is.numeric(max_results) && length(max_results) == 1
-  es_entero_positivo <- es_escalar_numerico &&
+  is_numeric_scalar <- is.numeric(max_results) && length(max_results) == 1
+  is_positive_integer <- is_numeric_scalar &&
     max_results >= 1 && max_results == as.integer(max_results)
-  if (!es_entero_positivo) {
+  if (!is_positive_integer) {
     cli::cli_abort("{.arg max_results} debe ser un entero positivo.", class = "ciecl_invalid_input")
   }
   if (!is.character(release) || length(release) != 1 ||
@@ -91,7 +98,7 @@ cie11_search <- function(text, api_key = get_icd_api_key(),
     )
   }
 
-  # Verificar que httr2 este instalado
+  # Verificar que httr2 esté instalado
   rlang::check_installed("httr2", reason = "para consultar la API oficial de la OMS (CIE-11).")
 
   # Construir cliente OAuth (parsea "client_id:client_secret" del api_key)

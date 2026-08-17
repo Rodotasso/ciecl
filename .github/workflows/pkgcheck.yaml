@@ -57,8 +57,8 @@ jobs:
 
       # Workaround para error de libgit2 dentro del contenedor del action:
       # "repository path '/github/workspace/' is not owned by current user".
-      # Las docker actions montan el HOME del runner en /github/home, asi que
-      # el .gitconfig global escrito aqui es visible dentro del contenedor.
+      # Las docker actions montan el HOME del runner en /github/home, así que
+      # el .gitconfig global escrito aquí es visible dentro del contenedor.
       - name: Marcar workspace como safe.directory para libgit2
         run: git config --global --add safe.directory /github/workspace
 
