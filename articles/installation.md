@@ -1,76 +1,61 @@
 # Installation and Configuration Guide
 
-The `ciecl` package is designed to work with ICD-10 and ICD-11
-classifications in the Chilean clinical context. This guide covers the
-recommended installation, system requirements, and the configuration of
-external credentials.
+## Installation
 
-## Basic Installation
+The simplest way to install `ciecl` is with the
+[`pak`](https://pak.r-lib.org/) package, which automatically resolves R
+and system dependencies.
 
-The easiest way to install `ciecl` is using the `pak` package, which
-automatically manages system dependencies and R package requirements.
-
-### From CRAN (Stable Version)
+### From CRAN (stable version)
 
 ``` r
 
-# Install pak if you don't have it
-if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
-
-# Install ciecl
-pak::pkg_install("ciecl")
+install.packages("ciecl")
 ```
 
-### From GitHub (Development Version)
-
-To use the latest features from the `rev-ropensci` branch:
+### From GitHub (development version)
 
 ``` r
 
-pak::pkg_install("RodoTasso/ciecl@rev-ropensci")
+install.packages("pak")
+pak::pak("RodoTasso/ciecl")
 ```
 
-## Installation with Optional Dependencies
-
-The package has minimal dependencies for core functionality. To enable
-all features, including comorbidity indices and interactive tables:
+To also install all optional dependencies (comorbidities, GT tables,
+ICD-11 API):
 
 ``` r
 
-# Full installation with all optional packages
-pak::pkg_install("RodoTasso/ciecl", dependencies = TRUE)
+pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
-### Dependencies by Feature
+### Dependencies by feature
 
-| Feature | Required Package | Installation |
+The package core (ICD-10 code lookup and search) requires no optional
+packages. These are the suggested dependencies by task:
+
+| Feature | Package | Installation |
 |----|----|----|
-| Charlson/Elixhauser Comorbidities | `comorbidity` | `install.packages("comorbidity")` |
-| Interactive GT Tables | `gt` | `install.packages("gt")` |
-| WHO ICD-11 API | `httr2` | `install.packages("httr2")` |
-| Read MINSAL Excel Files | `readxl` | `install.packages("readxl")` |
+| Charlson/Elixhauser comorbidity indices with [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md) | `comorbidity` | `install.packages("comorbidity")` |
+| Formatted HTML tables with [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md) | `gt` | `install.packages("gt")` |
+| Read MINSAL Excel files | `readxl` | `install.packages("readxl")` |
+| Export results to Excel | `writexl` | `install.packages("writexl")` |
 
-## System Requirements
-
-The package uses a local SQLite database to ensure high performance in
-vectorized searches.
+## System requirements
 
 ### Windows
 
-No additional configuration needed. The installation works out of the
-box.
+No additional dependencies: the installation works out of the box.
 
 ### macOS
 
-Install the Xcode Command Line Tools if you plan to compile from source:
+Install the Xcode Command Line Tools if you compile from source:
 
 ``` bash
 xcode-select --install
 ```
 
 ### Linux (Ubuntu/Debian)
-
-Execute the following to install system requirements:
 
 ``` bash
 sudo apt-get update
@@ -91,57 +76,107 @@ sudo dnf install -y \
   libxml2-devel
 ```
 
-## ICD-11 API Configuration (Optional)
+## ICD-11 API Configuration (optional)
 
-To use
-[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-and access the WHO ICD-11 international classification, you need free
-credentials.
+The CIE-10 functions (the core of the package) work without credentials.
+You only need free WHO credentials to use
+[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md),
+which queries the WHO ICD-11 classification.
 
-1.  Register at [icd.who.int/icdapi](https://icd.who.int/icdapi).
-2.  Obtain your **Client ID** and **Client Secret**.
+> **Security:** never write the literal key in your scripts (not even
+> via `api_key = "..."`): sharing the code would expose your
+> credentials. The recommended way is the `ICD_API_KEY` environment
+> variable, set with `usethis::edit_r_environ()` (Option B) or via
+> `keyring` (Option A). The `api_key` argument of
+> [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
+> exists only for exceptional cases (e.g. multiple keys or environments
+> where env vars cannot be set).
 
-### Credential Management
+### Step 1: Get credentials
 
-**Option A: Using `keyring` (Recommended)**
+1.  Visit <https://icd.who.int/icdapi>
+2.  Register with your email (free)
+3.  You will receive a `Client ID` and a `Client Secret`
 
-The `keyring` package stores secrets in the OS native keychain (macOS
-Keychain, Windows Credential Store, Linux Secret Service), avoiding
-plain text secrets in your environment files.
+### Step 2: Store the credentials
+
+**Option A: `keyring` (recommended)**
+
+The [`keyring`](https://keyring.r-lib.org/) package stores secrets in
+the OS native keychain (macOS Keychain, Windows Credential Store, Linux
+Secret Service), avoiding plain-text secrets in `.Renviron`.
 
 ``` r
 
-# Store credentials once (it will prompt for them)
-# Format: "client_id:client_secret"
+# Once: store "client_id:client_secret" in the keychain
 keyring::key_set("ciecl_icd11")
 
-# Use them in your session
+# In each session where you use the API
 Sys.setenv(ICD_API_KEY = keyring::key_get("ciecl_icd11"))
 ```
 
-**Option B: Using `.Renviron` File**
+**Option B: `.Renviron` file**
 
-Add the following line to your `~/.Renviron` file (you can use
-`usethis::edit_r_environ()`):
+Create or edit `~/.Renviron` (for example with
+`usethis::edit_r_environ()` if you have `usethis` installed) and add:
 
     ICD_API_KEY=your_client_id:your_client_secret
 
-Restart R for the changes to take effect. Ensure `.Renviron` is not
-tracked by Git.
+Restart R for it to take effect. Do not commit `.Renviron` to Git.
 
-## Verify Installation
+**Option C: Current session only (temporary)**
+
+``` r
+
+Sys.setenv(ICD_API_KEY = "your_client_id:your_client_secret")
+```
+
+### Step 3: Verify the configuration
+
+``` r
+
+# Check that the environment variable is set
+Sys.getenv("ICD_API_KEY")
+
+# Test an ICD-11 search
+library(ciecl)
+cie11_search("diabetes")
+```
+
+## SQLite cache
+
+The package uses a local SQLite database for efficient searches. It is
+created automatically on first use, in the user data directory:
+
+``` r
+
+# Show the cache location
+tools::R_user_dir("ciecl", "data")
+```
+
+You can change that location by setting the `CIECL_CACHE_DIR`
+environment variable before loading the package. To force a rebuild of
+the database (for example, after updating the package):
+
+``` r
+
+library(ciecl)
+cie10_clear_cache()
+```
+
+## Verify the installation
 
 ``` r
 
 library(ciecl)
 
-# Check package version
+# Check that the package loads correctly
 packageVersion("ciecl")
 
-# Verify catalog access
-nrow(cie10_cl) # Should return ~39,873 records
+# Verify catalogue access
+nrow(cie10_cl)
 
-# Test basic lookup
+# Test a basic lookup
 cie_lookup("E11.0")
 
 # Test fuzzy search
@@ -150,24 +185,37 @@ cie_search("diabetes")
 
 ## Troubleshooting
 
-### Connection to Local Database
+### Error: “package ‘ciecl’ is not available”
 
-If you encounter errors related to the database connection or corrupt
-data, force a rebuild of the local cache:
+Check that a CRAN repository is configured in your R session, then
+install as usual:
+
+``` r
+
+install.packages("ciecl")
+```
+
+### Compilation error on Linux
+
+Install the system dependencies listed in the “System requirements”
+section and try the installation again.
+
+### The ICD-11 API does not respond
+
+1.  Check that the credential is set: `Sys.getenv("ICD_API_KEY")` must
+    not return an empty string.
+2.  Check your internet connection.
+3.  Check the WHO service status at <https://icd.who.int/icdapi>: if it
+    is down, the ICD-10 functions keep working because they do not
+    depend on the API.
+
+### Corrupt cache
+
+Clear the cache and restart R:
 
 ``` r
 
 ciecl::cie10_clear_cache()
-```
-
-### Manual Proxy Configuration
-
-If you are behind a corporate proxy, configure your R environment before
-using the WHO API:
-
-``` r
-
-Sys.setenv(https_proxy = "http://your-proxy-url:port")
 ```
 
 ## Support

@@ -69,9 +69,10 @@ Un tibble con 39,877 filas y 11 columnas:
 
 - uso_cl:
 
-  logical. `TRUE` si el código tiene uso clínico registrado en el
-  catálogo MINSAL/DEIS; `FALSE` en caso contrario. Permite filtrar
-  subcategorías con actividad diagnóstica real en Chile.
+  character. Categoría de uso clínico del código según el catálogo
+  MINSAL/DEIS: `"principal"`, `"legado"`, `"causa_externa"`,
+  `"etiologico"`, o la combinación `"causa_externa | principal"`. El
+  valor `"legado"` identifica códigos sin uso clínico vigente en Chile.
 
 ## Source
 
@@ -100,9 +101,9 @@ head(cie10_cl)
 #> # ℹ 4 more variables: capitulo <chr>, es_daga <lgl>, es_cruz <lgl>,
 #> #   uso_cl <chr>
 
-# Códigos con uso clínico registrado
-subset(cie10_cl, uso_cl == TRUE) |> nrow()
-#> [1] 0
+# Códigos vigentes de uso clínico en Chile (excluye categoría "legado")
+subset(cie10_cl, uso_cl != "legado") |> nrow()
+#> [1] 12542
 
 # Capítulos disponibles
 unique(cie10_cl$capitulo)

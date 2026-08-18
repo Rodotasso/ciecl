@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Introducción a ciecl: CIE-10 Chile en R • ciecl</title>
+<title>Introduction to ciecl: Chilean ICD-10 in R • ciecl</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Introducción a ciecl: CIE-10 Chile en R">
+<meta property="og:title" content="Introduction to ciecl: Chilean ICD-10 in R">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -89,57 +89,55 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Introducción a ciecl: CIE-10 Chile en R</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Introduction to ciecl: Chilean ICD-10 in R</h1>
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
             <h4 data-toc-skip class="date">2026-08-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/ciecl-es.Rmd" class="external-link"><code>vignettes/ciecl-es.Rmd</code></a></small>
-      <div class="d-none name"><code>ciecl-es.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/ciecl-en.Rmd" class="external-link"><code>vignettes/ciecl-en.Rmd</code></a></small>
+      <div class="d-none name"><code>ciecl-en.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><strong>Versión 0.9.8</strong>: Disponible en CRAN con optimizaciones
-SQLite, soporte XLSX y argumentos estandarizados en inglés.</p>
+<p><strong>Version 0.9.8</strong>: Available on CRAN with SQLite
+optimizations, XLSX support, and standardized English arguments.</p>
 </blockquote>
 <div class="section level2">
-<h2 id="el-problema-codificar-diagnósticos-en-chile">El problema: codificar diagnósticos en Chile<a class="anchor" aria-label="anchor" href="#el-problema-codificar-diagn%C3%B3sticos-en-chile"></a>
+<h2 id="the-problem-working-with-chilean-diagnostic-codes-in-r">The problem: working with Chilean diagnostic codes in R<a class="anchor" aria-label="anchor" href="#the-problem-working-with-chilean-diagnostic-codes-in-r"></a>
 </h2>
-<p>Los sistemas de información sanitaria chilenos —DEIS, GRD, REM—
-almacenan diagnósticos usando la clasificación CIE-10 en su versión
-oficial MINSAL/DEIS v2018. Trabajar con estos datos en R sin una
-referencia local obliga al analista a consultar PDFs, tablas Excel o
-sitios web, interrumpiendo el flujo de análisis.</p>
-<p><code>ciecl</code> resuelve este problema: incorpora los
-<strong>39.877 códigos CIE-10</strong> del catálogo oficial directamente
-en R, con funciones de búsqueda rápida, expansión jerárquica y cálculo
-de índices de comorbilidad.</p>
+<p>Chilean health information systems — DEIS, GRD, REM — store diagnoses
+using the ICD-10 classification in its official MINSAL/DEIS v2018
+version. Analysts working with these datasets in R typically have to
+cross-reference PDF catalogs, Excel tables, or ministry websites to look
+up codes, which breaks the analytical workflow.</p>
+<p><code>ciecl</code> solves this by embedding all <strong>39,877 ICD-10
+codes</strong> from the official catalog directly into R, with functions
+for fast lookup, hierarchical expansion, fuzzy search, and comorbidity
+scoring.</p>
 </div>
 <div class="section level2">
-<h2 id="instalación">Instalación<a class="anchor" aria-label="anchor" href="#instalaci%C3%B3n"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>El paquete está disponible en CRAN. Para instalar la versión
-estable:</p>
+<p>The package is available on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
-<p>Para la versión de desarrollo, que incluye las funcionalidades más
-recientes antes de su paso a CRAN:</p>
+<p>To install the development version with the latest fixes:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requiere el paquete pak para una gestión eficiente de dependencias</span></span>
+<code class="sourceCode R"><span><span class="co"># Requires the pak package</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="consultas-sql-directas-al-catálogo">Consultas SQL directas al catálogo<a class="anchor" aria-label="anchor" href="#consultas-sql-directas-al-cat%C3%A1logo"></a>
+<h2 id="direct-sql-queries-against-the-catalog">Direct SQL queries against the catalog<a class="anchor" aria-label="anchor" href="#direct-sql-queries-against-the-catalog"></a>
 </h2>
-<p>La función <code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> permite interactuar directamente
-con la base de datos SQLite interna. Esto otorga una gran flexibilidad
-para realizar filtros complejos que no están cubiertos por las funciones
-predefinidas, utilizando toda la potencia del lenguaje SQL.</p>
-<p>El siguiente ejemplo extrae los primeros cinco códigos de diabetes
-tipo 2 (categoría E11):</p>
+<p><code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> exposes the full catalog through a local
+SQLite database, allowing you to filter with the full expressiveness of
+SQL. This is useful when you know the code structure but not the exact
+label — for instance, to retrieve all subcodes within a category.</p>
+<p>The example below fetches the first five type 2 diabetes codes
+(category E11):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie10_sql.html">cie10_sql</a></span><span class="op">(</span><span class="st">"SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
@@ -150,21 +148,17 @@ tipo 2 (categoría E11):</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> E11.1  Diabetes mellitus tipo 2 con cetoacidosis             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> E11.2  Diabetes mellitus tipo 2 con complicaciones renales   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas</span></span></code></pre></div>
-<p>Por razones de seguridad y para preservar la integridad del estándar,
-la función solo permite consultas de tipo <code>SELECT</code>. Esto
-asegura que el catálogo permanezca como una fuente de verdad inmutable
-durante el análisis.</p>
+<p>Only <code>SELECT</code> queries are accepted, protecting catalog
+integrity.</p>
 </div>
 <div class="section level2">
-<h2 id="búsqueda-por-código-conocido">Búsqueda por código conocido<a class="anchor" aria-label="anchor" href="#b%C3%BAsqueda-por-c%C3%B3digo-conocido"></a>
+<h2 id="looking-up-known-codes">Looking up known codes<a class="anchor" aria-label="anchor" href="#looking-up-known-codes"></a>
 </h2>
-<p>Cuando el analista ya dispone de los códigos —como ocurre
-habitualmente en los registros de egreso hospitalario—,
-<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> permite recuperar la descripción oficial de
-forma instantánea. Esta función actúa como el puente necesario entre la
-codificación técnica y la interpretación clínica.</p>
+<p>When codes are already present in your data — such as hospital
+discharge diagnoses — <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> retrieves the official
+description for one or more codes at once.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Recuperar un código único</span></span>
+<code class="sourceCode R"><span><span class="co"># Single code</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 11</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
@@ -172,11 +166,10 @@ codificación técnica y la interpretación clínica.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
-<p>La función es totalmente vectorizada, lo que facilita su integración
-en pipelines de procesamiento masivo. Devuelve un objeto
-<code>tibble</code> con una estructura consistente:</p>
+<p>The function accepts vectors, making it straightforward to use inside
+a <code>dplyr</code> pipeline:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Múltiples códigos de distintos capítulos en una sola llamada</span></span>
+<code class="sourceCode R"><span><span class="co"># Multiple codes from different chapters</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span>, <span class="st">"J44.0"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 11</span></span></span>
 <span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
@@ -187,9 +180,10 @@ en pipelines de procesamiento masivo. Devuelve un objeto
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
-<p>En investigaciones que operan a nivel de categoría (los primeros tres
-dígitos), el argumento <code>expand = TRUE</code> resulta fundamental,
-ya que desglosa la jerarquía completa de una familia de códigos:</p>
+<p>When working at the category level (three-digit codes), you may need
+all subcodes within a category. The <code>expand = TRUE</code> argument
+traverses the hierarchy and returns the parent category together with
+all its children:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 11</span></span></span>
@@ -210,19 +204,17 @@ ya que desglosa la jerarquía completa de una familia de códigos:</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="obtener-descripciones-para-reportes">Obtener descripciones para reportes<a class="anchor" aria-label="anchor" href="#obtener-descripciones-para-reportes"></a>
+<h2 id="extracting-descriptions-for-use-in-tables-and-plots">Extracting descriptions for use in tables and plots<a class="anchor" aria-label="anchor" href="#extracting-descriptions-for-use-in-tables-and-plots"></a>
 </h2>
-<p>Si el objetivo es simplemente enriquecer una tabla existente con
-glosas descriptivas (por ejemplo, para leyendas de gráficos o reportes
-rápidos), <code><a href="../reference/cie_describe.html">cie_describe()</a></code> es la opción más eficiente.
-Retorna un vector de caracteres que mantiene el orden original de la
-entrada.</p>
+<p>When you only need the description text — without the full structure
+returned by <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> — <code><a href="../reference/cie_describe.html">cie_describe()</a></code>
+returns a character vector of descriptions in the same order as the
+input codes. This is designed for use inside <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> or as
+axis labels in plots:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span></code></pre></div>
-<p>Este enfoque optimiza el uso de memoria al evitar joins complejos,
-permitiendo operaciones fluidas dentro de un flujo
-<code>dplyr</code>:</p>
+<p>A typical use case with hospital discharge data:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -234,92 +226,88 @@ permitiendo operaciones fluidas dentro de un flujo
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span></span>
-<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
-<span>  codigo_diag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"J44.0"</span>, <span class="st">"E11.0"</span><span class="op">)</span></span>
+<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  id          <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  diag_code   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"J44.0"</span>, <span class="st">"E11.0"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">egresos</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>descripcion <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">codigo_diag</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id codigo_diag</span></span>
-<span><span class="co">#&gt; 1  1       E11.0</span></span>
-<span><span class="co">#&gt; 2  2         I10</span></span>
-<span><span class="co">#&gt; 3  3       J44.0</span></span>
-<span><span class="co">#&gt; 4  4       E11.0</span></span>
-<span><span class="co">#&gt;                                                                                        descripcion</span></span>
+<span><span class="va">discharges</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>description <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">diag_code</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id diag_code</span></span>
+<span><span class="co">#&gt; 1  1     E11.0</span></span>
+<span><span class="co">#&gt; 2  2       I10</span></span>
+<span><span class="co">#&gt; 3  3     J44.0</span></span>
+<span><span class="co">#&gt; 4  4     E11.0</span></span>
+<span><span class="co">#&gt;                                                                                        description</span></span>
 <span><span class="co">#&gt; 1                                                                Diabetes mellitus tipo 2 con coma</span></span>
 <span><span class="co">#&gt; 2                                                                 Hipertensión esencial (primaria)</span></span>
 <span><span class="co">#&gt; 3 Enfermedad pulmonar obstructiva crónica con infección aguda de las vías respiratorias inferiores</span></span>
 <span><span class="co">#&gt; 4                                                                Diabetes mellitus tipo 2 con coma</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="búsqueda-por-texto-con-tolerancia-a-errores">Búsqueda por texto con tolerancia a errores<a class="anchor" aria-label="anchor" href="#b%C3%BAsqueda-por-texto-con-tolerancia-a-errores"></a>
+<h2 id="fuzzy-search-with-tolerance-for-misspellings">Fuzzy search with tolerance for misspellings<a class="anchor" aria-label="anchor" href="#fuzzy-search-with-tolerance-for-misspellings"></a>
 </h2>
-<p>Los datos clínicos de texto libre suelen presentar variaciones
-ortográficas, omisión de tildes o abreviaturas que dificultan la unión
-exacta. <code><a href="../reference/cie_search.html">cie_search()</a></code> utiliza el algoritmo Jaro-Winkler para
-encontrar la correspondencia más cercana en el catálogo oficial.</p>
-<p>El parámetro <code>threshold</code> (umbral) permite ajustar la
-sensibilidad de la búsqueda. Un valor de <code>0.75</code> suele ser un
-buen compromiso para el idioma español, permitiendo capturar errores
-comunes sin introducir demasiado ruido:</p>
+<p>Clinical text data often contains spelling errors, abbreviations, or
+non-standard terms. <code><a href="../reference/cie_search.html">cie_search()</a></code> uses Jaro-Winkler string
+similarity to find matching codes even when the search term contains
+typos.</p>
+<p>The <code>threshold</code> parameter controls strictness: higher
+values require closer matches. A range of 0.70 to 0.85 works well in
+practice:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Búsqueda tolerante: "diabetis" en lugar de "diabetes"</span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis con coma"</span>, threshold <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
+<code class="sourceCode R"><span><span class="co"># "diabetis" instead of "diabetes" — the typo does not prevent finding the code</span></span>
+<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis with coma"</span>, threshold <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> B15.0  Hepatitis aguda tipo A, con coma hepático              0.667 B15 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> B16.0  Hepatitis aguda tipo B, con agente delta (coinfección… 0.667 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> B16.1  Hepatitis aguda tipo B, con agente delta (coinfección… 0.667 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> B16.2  Hepatitis aguda tipo B, sin agente delta, con coma he… 0.667 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> B19.0  Hepatitis viral no especificada, con coma hepático     0.667 B19 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> E10.0  Diabetes mellitus tipo 1 con coma                      0.667 E10 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> E11.0  Diabetes mellitus tipo 2 con coma                      0.667 E11 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> E12.0  Diabetes mellitus asociada con desnutrición, con coma  0.667 E12 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E13.0  Otras diabetes mellitus especificadas, con coma        0.667 E13 OTRA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E14.0  Diabetes mellitus, no especificada, con coma           0.667 E14 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
-<p>El resultado incluye un <code>score</code> de similitud, lo que
-permite al analista evaluar la confiabilidad de la coincidencia de forma
-cuantitativa.</p>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> B15.0  Hepatitis aguda tipo A, con coma hepático              0.333 B15 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> B15.9  Hepatitis aguda tipo A, sin coma hepático              0.333 B15 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> B16.0  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> B16.1  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> B16.2  Hepatitis aguda tipo B, sin agente delta, con coma he… 0.333 B16 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> B16.9  Hepatitis aguda tipo B, sin agente delta y sin coma h… 0.333 B16 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B19.0  Hepatitis viral no especificada, con coma hepático     0.333 B19 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B19.9  Hepatitis viral no especificada, sin  coma hepático    0.333 B19 HEPA…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E03.5  Coma mixedematoso                                      0.333 E03 OTRO…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E10.0  Diabetes mellitus tipo 1 con coma                      0.333 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 12 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="comorbilidades-de-charlson-y-elixhauser">Comorbilidades de Charlson y Elixhauser<a class="anchor" aria-label="anchor" href="#comorbilidades-de-charlson-y-elixhauser"></a>
+<h2 id="charlson-and-elixhauser-comorbidity-indices">Charlson and Elixhauser comorbidity indices<a class="anchor" aria-label="anchor" href="#charlson-and-elixhauser-comorbidity-indices"></a>
 </h2>
-<p>Para la investigación epidemiológica, la estratificación del riesgo
-es un paso crítico. <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> simplifica el cálculo de
-los índices de Charlson y Elixhauser, mapeando automáticamente los
-códigos CIE-10 a sus respectivas categorías clínicas.</p>
+<p>The Charlson and Elixhauser indices are widely used in clinical
+research and risk adjustment. <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> computes these
+indices from a data frame containing patient identifiers and their
+associated diagnostic codes.</p>
+<p>This function requires the <code>comorbidity</code> package. Install
+it with <code>install.packages("comorbidity")</code> if needed:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requiere el paquete externo 'comorbidity'</span></span>
-<span><span class="va">df_pacientes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id_pac     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  diagnostico <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I50.9"</span>, <span class="st">"C50.9"</span>, <span class="st">"N18.5"</span>, <span class="st">"J44.0"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Requires: install.packages("comorbidity")</span></span>
+<span><span class="va">patient_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  patient_id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  diagnosis   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I50.9"</span>, <span class="st">"C50.9"</span>, <span class="st">"N18.5"</span>, <span class="st">"J44.0"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span><span class="va">df_pacientes</span>, id <span class="op">=</span> <span class="st">"id_pac"</span>, code <span class="op">=</span> <span class="st">"diagnostico"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span><span class="va">patient_df</span>, id <span class="op">=</span> <span class="st">"patient_id"</span>, code <span class="op">=</span> <span class="st">"diagnosis"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 19</span></span></span>
-<span><span class="co">#&gt;   id_pac    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab diabwc</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      1     0     1     0     0        0     0      0     0     0     1      0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      2     0     0     0     0        0     0      0     0     0     0      0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>      3     0     0     0     0        0     1      0     0     0     0      0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: hp &lt;int&gt;, rend &lt;int&gt;, canc &lt;int&gt;, msld &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   metacanc &lt;int&gt;, aids &lt;int&gt;, score_charlson &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>El objeto resultante es una matriz de indicadores lista para ser
-incorporada en modelos de regresión o análisis de supervivencia.</p>
+<span><span class="co">#&gt;   patient_id    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab</span></span>
+<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>          1     0     1     0     0        0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>          2     0     0     0     0        0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>          3     0     0     0     0        0     1      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: diabwc &lt;int&gt;, hp &lt;int&gt;, rend &lt;int&gt;, canc &lt;int&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   msld &lt;int&gt;, metacanc &lt;int&gt;, aids &lt;int&gt;, score_charlson &lt;dbl&gt;</span></span></span></code></pre></div>
+<p>The result is a data frame with one row per patient and columns for
+each condition in the selected index, plus a weighted total score.</p>
 </div>
 <div class="section level2">
-<h2 id="tablas-formateadas-para-publicación">Tablas formateadas para publicación<a class="anchor" aria-label="anchor" href="#tablas-formateadas-para-publicaci%C3%B3n"></a>
+<h2 id="formatted-tables-with-gt">Formatted tables with gt<a class="anchor" aria-label="anchor" href="#formatted-tables-with-gt"></a>
 </h2>
-<p>Finalmente, para la comunicación de resultados,
-<code><a href="../reference/cie_table.html">cie_table()</a></code> genera tablas en formato HTML con un diseño
-profesional utilizando el motor de <code>gt</code>. La función ajusta el
-contenido dinámicamente según la información disponible en el catálogo
-(como notas de inclusión o exclusión).</p>
+<p>For reports and presentations, <code><a href="../reference/cie_table.html">cie_table()</a></code> generates an
+enriched HTML table of all codes within a category using the
+<code>gt</code> package. Requires <code>gt</code> to be installed:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requiere el paquete 'gt' instalado</span></span>
+<code class="sourceCode R"><span><span class="co"># Requires: install.packages("gt")</span></span>
 <span><span class="fu"><a href="../reference/cie_table.html">cie_table</a></span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -833,25 +821,25 @@ contenido dinámicamente según la información disponible en el catálogo
 </div>
 </div>
 <div class="section level2">
-<h2 id="fuente-de-datos-oficial">Fuente de datos oficial<a class="anchor" aria-label="anchor" href="#fuente-de-datos-oficial"></a>
+<h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a>
 </h2>
-<p>Los datos de <code>ciecl</code> son un fiel reflejo del catálogo
-CIE-10 para Chile, mantenido por el Departamento de Estadísticas e
-Información de Salud (DEIS) del Ministerio de Salud:</p>
+<p>The data included in <code>ciecl</code> comes from the official
+ICD-10 catalog published by the Chilean Ministry of Health through the
+Department of Health Statistics and Information (DEIS):</p>
 <ul>
-<li>Centro FIC Chile: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
+<li>FIC Chile Center: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
 </li>
-<li>Repositorio de Datos DEIS: <a href="https://deis.minsal.cl" class="external-link uri">https://deis.minsal.cl</a>
+<li>DEIS Repository: <a href="https://deis.minsal.cl" class="external-link uri">https://deis.minsal.cl</a>
 </li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="colaboración-y-soporte">Colaboración y Soporte<a class="anchor" aria-label="anchor" href="#colaboraci%C3%B3n-y-soporte"></a>
+<h2 id="further-information">Further information<a class="anchor" aria-label="anchor" href="#further-information"></a>
 </h2>
 <ul>
-<li>Reporte de errores o sugerencias: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
+<li>Report issues or suggestions: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
 </li>
-<li>Código fuente y documentación: <a href="https://github.com/RodoTasso/ciecl" class="external-link uri">https://github.com/RodoTasso/ciecl</a>
+<li>Package repository: <a href="https://github.com/RodoTasso/ciecl" class="external-link uri">https://github.com/RodoTasso/ciecl</a>
 </li>
 </ul>
 </div>

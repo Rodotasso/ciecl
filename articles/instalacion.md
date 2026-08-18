@@ -1,61 +1,57 @@
-# Guia de Instalacion y Configuracion
+# Guía de Instalación y Configuración
 
-## Instalacion Basica
+## Instalación
 
-### Desde CRAN (cuando este disponible)
+La forma más simple de instalar `ciecl` es con el paquete
+[`pak`](https://pak.r-lib.org/), que resuelve automáticamente las
+dependencias de R y del sistema operativo.
+
+### Desde CRAN (versión estable)
 
 ``` r
 
 install.packages("ciecl")
 ```
 
-### Desde GitHub (version desarrollo)
+### Desde GitHub (versión de desarrollo)
 
 ``` r
 
-# Opcion 1: pak (recomendado)
 install.packages("pak")
 pak::pak("RodoTasso/ciecl")
-
-# Opcion 2: devtools
-install.packages("devtools")
-devtools::install_github("RodoTasso/ciecl")
-
-# Opcion 3: remotes
-install.packages("remotes")
-remotes::install_github("RodoTasso/ciecl")
 ```
 
-## Instalacion con Dependencias Opcionales
-
-El paquete tiene dependencias minimas para funcionalidad core. Para
-habilitar todas las funcionalidades:
+Para instalar además todas las dependencias opcionales (comorbilidades,
+tablas GT, API CIE-11):
 
 ``` r
 
-# Instalacion completa con todos los paquetes opcionales
 pak::pak("RodoTasso/ciecl", dependencies = TRUE)
 ```
 
-### Dependencias por Funcionalidad
+### Dependencias por funcionalidad
 
-| Funcionalidad | Paquete Requerido | Instalacion |
+El núcleo del paquete (búsqueda y consulta de códigos CIE-10) no
+requiere paquetes opcionales. Estas son las dependencias sugeridas según
+la tarea:
+
+| Funcionalidad | Paquete | Instalación |
 |----|----|----|
-| Comorbilidades Charlson/Elixhauser | `comorbidity` | `install.packages("comorbidity")` |
-| Tablas interactivas GT | `gt` | `install.packages("gt")` |
-| API CIE-11 OMS | `httr2` | `install.packages("httr2")` |
-| Leer archivos Excel MINSAL | `readxl` | `install.packages("readxl")` |
+| Índices de comorbilidad Charlson/Elixhauser con [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md) | `comorbidity` | `install.packages("comorbidity")` |
+| Tablas HTML formateadas con [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md) | `gt` | `install.packages("gt")` |
+| Leer archivos Excel del MINSAL | `readxl` | `install.packages("readxl")` |
+| Exportar resultados a Excel | `writexl` | `install.packages("writexl")` |
 
-## Requisitos del Sistema
+## Requisitos del sistema
 
 ### Windows
 
-No requiere dependencias adicionales. La instalacion funciona
+No requiere dependencias adicionales: la instalación funciona
 directamente.
 
 ### macOS
 
-Instalar Xcode Command Line Tools:
+Instala las Xcode Command Line Tools si compilas desde fuente:
 
 ``` bash
 xcode-select --install
@@ -82,28 +78,37 @@ sudo dnf install -y \
   libxml2-devel
 ```
 
-## Configuracion de API CIE-11 (Opcional)
+## Configuración de la API CIE-11 (opcional)
 
-Para usar
-[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-y acceder a la clasificacion internacional CIE-11 de la OMS, necesitas
-credenciales gratuitas.
+Las funciones de CIE-10 (núcleo del paquete) funcionan sin credenciales.
+Solo para usar
+[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md),
+que consulta la clasificación CIE-11 de la OMS, necesitas credenciales
+gratuitas.
 
-### Paso 1: Obtener Credenciales
+> **Seguridad:** nunca escribas la llave literal en tus scripts (ni con
+> `api_key = "..."`): al compartir el código expondrías tus
+> credenciales. La vía recomendada es la variable de entorno
+> `ICD_API_KEY`, configurada con `usethis::edit_r_environ()` (Opción B)
+> o vía `keyring` (Opción A). El argumento `api_key` de
+> [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
+> existe solo para casos excepcionales (p. ej. múltiples llaves o
+> entornos sin variables de entorno).
+
+### Paso 1: Obtener credenciales
 
 1.  Visita <https://icd.who.int/icdapi>
-2.  Registrate con tu email (proceso gratuito)
-3.  Obtendras un `Client ID` y `Client Secret`
+2.  Regístrate con tu email (proceso gratuito)
+3.  Obtendrás un `Client ID` y un `Client Secret`
 
 ### Paso 2: Guardar las credenciales
 
 **Opción A: `keyring` (recomendado)**
 
-El paquete [`keyring`](https://r-lib.github.io/keyring/) guarda secretos
-en el keychain nativo del sistema operativo (macOS Keychain, Windows
+El paquete [`keyring`](https://keyring.r-lib.org/) guarda secretos en el
+keychain nativo del sistema operativo (macOS Keychain, Windows
 Credential Store, Linux Secret Service), evitando que el `Client ID` y
-`Client Secret` queden en texto plano en `.Renviron`. Este es el patrón
-recomendado por rOpenSci (ver por ejemplo `babeldown`).
+el `Client Secret` queden en texto plano en `.Renviron`.
 
 ``` r
 
@@ -130,32 +135,33 @@ Reinicia R para que tome efecto. No subas `.Renviron` a Git.
 Sys.setenv(ICD_API_KEY = "tu_client_id:tu_client_secret")
 ```
 
-### Paso 3: Verificar Configuracion
+### Paso 3: Verificar la configuración
 
 ``` r
 
-# Verificar que la API key esta configurada
+# Verificar que la variable de entorno esta definida
 Sys.getenv("ICD_API_KEY")
 
-# Probar busqueda CIE-11
+# Probar una busqueda CIE-11
 library(ciecl)
 cie11_search("diabetes")
 ```
 
-## Cache SQLite
+## Caché SQLite
 
-El paquete usa SQLite para almacenar y buscar codigos CIE-10 de forma
-eficiente. La base de datos se crea automaticamente en:
+El paquete usa una base SQLite local para búsquedas eficientes. Se crea
+automáticamente en la primera consulta, en el directorio de datos del
+usuario:
 
 ``` r
 
-# Ver ubicacion del cache
+# Ver la ubicacion del cache
 tools::R_user_dir("ciecl", "data")
 ```
 
-### Limpiar Cache
-
-Si necesitas forzar una reconstruccion de la base de datos:
+Puedes cambiar esa ubicación definiendo la variable de entorno
+`CIECL_CACHE_DIR` antes de cargar el paquete. Si necesitas forzar la
+reconstrucción de la base (por ejemplo, tras actualizar el paquete):
 
 ``` r
 
@@ -163,7 +169,7 @@ library(ciecl)
 cie10_clear_cache()
 ```
 
-## Verificar Instalacion
+## Verificar la instalación
 
 ``` r
 
@@ -172,17 +178,17 @@ library(ciecl)
 # Verificar que el paquete carga correctamente
 packageVersion("ciecl")
 
-# Verificar acceso al dataset
-nrow(cie10_cl)  # Debe retornar 39873
+# Verificar acceso al catálogo
+nrow(cie10_cl)
 
-# Probar busqueda basica
+# Probar búsqueda básica
 cie_lookup("E11.0")
 
-# Probar busqueda fuzzy
+# Probar búsqueda fuzzy
 cie_search("diabetes")
 ```
 
-## Problemas Comunes
+## Problemas comunes
 
 ### Error: “package ‘ciecl’ is not available”
 
@@ -194,20 +200,23 @@ luego instala normalmente:
 install.packages("ciecl")
 ```
 
-### Error de compilacion en Linux
+### Error de compilación en Linux
 
-Instala las dependencias del sistema mencionadas arriba.
+Instala las dependencias del sistema indicadas en la sección “Requisitos
+del sistema” y vuelve a intentar la instalación.
 
-### API CIE-11 no funciona
+### La API CIE-11 no responde
 
-1.  Verifica que `httr2` esta instalado: `install.packages("httr2")`
-2.  Verifica que la API key esta configurada:
-    `Sys.getenv("ICD_API_KEY")`
-3.  Verifica conexion a internet
+1.  Verifica que la credencial esté configurada:
+    `Sys.getenv("ICD_API_KEY")` no debe retornar una cadena vacía.
+2.  Verifica tu conexión a internet.
+3.  Comprueba el estado del servicio de la OMS en
+    <https://icd.who.int/icdapi>: si está caído, las funciones de CIE-10
+    siguen operativas porque no dependen de la API.
 
-### Cache corrupto
+### Caché corrupto
 
-Limpia el cache y reinicia R:
+Limpia la caché y reinicia R:
 
 ``` r
 
@@ -217,4 +226,4 @@ ciecl::cie10_clear_cache()
 ## Soporte
 
 - Reportar problemas: <https://github.com/RodoTasso/ciecl/issues>
-- Documentacion: <https://github.com/RodoTasso/ciecl>
+- Documentación: <https://rodotasso.github.io/ciecl/>

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Soporte de idiomas e internacionalización • ciecl</title>
+<title>Language support and internationalization • ciecl</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Soporte de idiomas e internacionalización">
+<meta property="og:title" content="Language support and internationalization">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -89,72 +89,73 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Soporte de idiomas e internacionalización</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Language support and internationalization</h1>
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
             <h4 data-toc-skip class="date">2026-08-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/idiomas.Rmd" class="external-link"><code>vignettes/idiomas.Rmd</code></a></small>
-      <div class="d-none name"><code>idiomas.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/languages.Rmd" class="external-link"><code>vignettes/languages.Rmd</code></a></small>
+      <div class="d-none name"><code>languages.Rmd</code></div>
     </div>
 
     
     
 <div class="section level2">
-<h2 id="idiomas-soportados">Idiomas soportados<a class="anchor" aria-label="anchor" href="#idiomas-soportados"></a>
+<h2 id="supported-languages">Supported languages<a class="anchor" aria-label="anchor" href="#supported-languages"></a>
 </h2>
-<p>El paquete <code>ciecl</code> trabaja principalmente en español de
-Chile, pero ofrece búsqueda multilingüe cuando la fuente de datos lo
-permite. La tabla resume el comportamiento por función.</p>
+<p>The <code>ciecl</code> package works primarily in Chilean Spanish,
+but offers multilingual search when the data source allows it. The table
+summarizes the behavior by function.</p>
 <table class="table">
 <colgroup>
 <col width="17%">
-<col width="22%">
+<col width="20%">
 <col width="18%">
-<col width="41%">
+<col width="42%">
 </colgroup>
 <thead><tr class="header">
-<th>Función</th>
-<th>Idioma dataset</th>
-<th>Idioma búsqueda</th>
-<th>Notas</th>
+<th>Function</th>
+<th>Dataset language</th>
+<th>Search language</th>
+<th>Notes</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code><a href="../reference/cie_lookup.html">cie_lookup()</a></code></td>
-<td>Español (Chile)</td>
+<td>Spanish (Chile)</td>
 <td>—</td>
-<td>Búsqueda por código; idioma no aplica</td>
+<td>Search by code; language not applicable</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/cie_search.html">cie_search()</a></code></td>
-<td>Español (Chile)</td>
-<td>Español</td>
-<td>Descripciones en español chileno</td>
+<td>Spanish (Chile)</td>
+<td>Spanish</td>
+<td>Descriptions in Chilean Spanish</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/cie11_search.html">cie11_search()</a></code></td>
-<td>Español / Inglés</td>
-<td>Español / Inglés</td>
-<td>Configurable vía parámetro <code>lang</code>
-</td>
+<td>Spanish / English</td>
+<td>Spanish / English</td>
+<td>Configurable via the <code>lang</code> parameter</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/cie10_sql.html">cie10_sql()</a></code></td>
-<td>Español (Chile)</td>
+<td>Spanish (Chile)</td>
 <td>SQL</td>
-<td>Columna <code>descripcion</code> en español</td>
+<td>
+<code>descripcion</code> column in Spanish</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="dataset-cie-10-chile">Dataset CIE-10 Chile<a class="anchor" aria-label="anchor" href="#dataset-cie-10-chile"></a>
+<h2 id="the-chilean-icd-10-dataset">The Chilean ICD-10 dataset<a class="anchor" aria-label="anchor" href="#the-chilean-icd-10-dataset"></a>
 </h2>
-<p>El dataset <code>cie10_cl</code> contiene los códigos vigentes con
-descripciones en español chileno según el catálogo oficial MINSAL/DEIS
-v2018. Ver <code><a href="../reference/cie10_cl.html">?cie10_cl</a></code> para el detalle de columnas.</p>
+<p>The <code>cie10_cl</code> dataset contains the codes currently in
+force with descriptions in Chilean Spanish according to the official
+MINSAL/DEIS catalog v2018. See <code><a href="../reference/cie10_cl.html">?cie10_cl</a></code> for column
+details.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rodotasso.github.io/ciecl/">ciecl</a></span><span class="op">)</span></span>
 <span></span>
@@ -168,35 +169,34 @@ v2018. Ver <code><a href="../reference/cie10_cl.html">?cie10_cl</a></code> para 
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> A00.9  Cólera, no especificado                              A00     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> A01    Fiebres tifoidea y paratifoidea                      A01     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> A01.0  Fiebre tifoidea                                      A01</span></span></code></pre></div>
-<p>La columna <code>descripcion</code> conserva tildes y eñes del
-catálogo original. Esto es importante porque muchas rutinas de limpieza
-despojan los acentos; en <code>ciecl</code> la normalización ocurre solo
-en la etapa de <em>búsqueda</em>, no en el dato almacenado.</p>
+<p>The <code>descripcion</code> column preserves the accents and ñ’s of
+the original catalog. This matters because many cleaning routines strip
+accents; in <code>ciecl</code> normalization happens only at the
+<em>search</em> stage, not in the stored data.</p>
 <div class="section level3">
-<h3 id="características-del-español-chileno">Características del español chileno<a class="anchor" aria-label="anchor" href="#caracter%C3%ADsticas-del-espa%C3%B1ol-chileno"></a>
+<h3 id="features-of-chilean-spanish">Features of Chilean Spanish<a class="anchor" aria-label="anchor" href="#features-of-chilean-spanish"></a>
 </h3>
 <ul>
 <li>
-<strong>Tildes preservadas en el dataset</strong>: “Neumonía”,
+<strong>Accents preserved in the dataset</strong>: “Neumonía”,
 “Riñón”, “Corazón”.</li>
 <li>
-<strong>Terminología local</strong>: Usa términos médicos comunes en
+<strong>Local terminology</strong>: uses medical terms common in
 Chile.</li>
 <li>
-<strong>Sin anglicismos</strong>: Traducciones oficiales del
-MINSAL.</li>
+<strong>No anglicisms</strong>: official MINSAL translations.</li>
 </ul>
 </div>
 </div>
 <div class="section level2">
-<h2 id="búsqueda-tolerante-a-tildes-y-eñes">Búsqueda tolerante a tildes y eñes<a class="anchor" aria-label="anchor" href="#b%C3%BAsqueda-tolerante-a-tildes-y-e%C3%B1es"></a>
+<h2 id="accent--and-ñ-tolerant-search">Accent- and ñ-tolerant search<a class="anchor" aria-label="anchor" href="#accent--and-%C3%B1-tolerant-search"></a>
 </h2>
-<p><code><a href="../reference/cie_search.html">cie_search()</a></code> normaliza internamente la consulta para que
-el usuario pueda escribir con o sin tildes. Esto es especialmente útil
-en datos clínicos mezclados, donde el mismo término aparece con y sin
-acento.</p>
+<p><code><a href="../reference/cie_search.html">cie_search()</a></code> internally normalizes the query so users
+can type with or without accents. This is especially useful in mixed
+clinical data, where the same term appears with and without an
+accent.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Con o sin tilde: mismo resultado</span></span>
+<code class="sourceCode R"><span><span class="co"># With or without accent: same result</span></span>
 <span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"neumonia"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
@@ -242,8 +242,8 @@ acento.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> J12.2  Neumonía debida a virus parainfluenza                      1 J12 NEUM…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> J12.3  Neumonía por metapneumovirus humano                        1 J12 NEUM…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
-<p>La misma lógica aplica a la eñe: buscar <code>"rinon"</code>
-encuentra “Riñón” en el catálogo.</p>
+<p>The same logic applies to the ñ: searching <code>"rinon"</code> finds
+“Riñón” in the catalog.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"rinon"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 49 × 4</span></span></span>
@@ -262,14 +262,14 @@ encuentra “Riñón” en el catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 39 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="siglas-médicas-chilenas">Siglas médicas chilenas<a class="anchor" aria-label="anchor" href="#siglas-m%C3%A9dicas-chilenas"></a>
+<h2 id="chilean-medical-abbreviations">Chilean medical abbreviations<a class="anchor" aria-label="anchor" href="#chilean-medical-abbreviations"></a>
 </h2>
-<p>El paquete incluye un diccionario de <strong>siglas médicas</strong>
-de uso clínico en Chile. Esto permite que un analista escriba
-<code>IAM</code> en vez del código completo y <code>ciecl</code>
-resuelva la sigla al término oficial del catálogo.</p>
+<p>The package includes a dictionary of <strong>medical
+abbreviations</strong> in clinical use in Chile. This allows an analyst
+to type <code>IAM</code> instead of the full term and <code>ciecl</code>
+resolves the abbreviation to the official catalog term.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Listar todas las siglas disponibles</span></span>
+<code class="sourceCode R"><span><span class="co"># List all available abbreviations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/cie_short.html">cie_short</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   sigla   termino_busqueda         categoria     </span></span>
@@ -281,7 +281,7 @@ resuelva la sigla al término oficial del catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> hta     hipertension arterial    cardiovascular</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> aha     hipertension arterial    cardiovascular</span></span>
 <span></span>
-<span><span class="co"># Filtrar por categoría</span></span>
+<span><span class="co"># Filter by category</span></span>
 <span><span class="fu"><a href="../reference/cie_short.html">cie_short</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"cardiovascular"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
 <span><span class="co">#&gt;    sigla   termino_busqueda              categoria     </span></span>
@@ -302,8 +302,8 @@ resuelva la sigla al término oficial del catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> ave     accidente vascular encefalico cardiovascular</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> ait     isquemico transitorio         cardiovascular</span></span>
 <span></span>
-<span><span class="co"># Usar la sigla directamente en búsqueda</span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"IAM"</span><span class="op">)</span>   <span class="co"># Infarto Agudo del Miocardio</span></span>
+<span><span class="co"># Use the abbreviation directly in a search</span></span>
+<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"IAM"</span><span class="op">)</span>   <span class="co"># Acute Myocardial Infarction</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sigla detectada: <span style="color: #0000BB;">"IAM"</span> -&gt; <span style="color: #0000BB;">"infarto agudo</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">#&gt; miocardio"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
@@ -320,7 +320,7 @@ resuelva la sigla al término oficial del catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> I23.0  Hemopericardio como complicación presente posterior a…     1 I23 CIER…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> I23.3  Ruptura de la pared cardíaca sin hemopericardio como …     1 I23 CIER…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"EPOC"</span><span class="op">)</span>  <span class="co"># Enfermedad Pulmonar Obstructiva Crónica</span></span>
+<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"EPOC"</span><span class="op">)</span>  <span class="co"># Chronic Obstructive Pulmonary Disease</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sigla detectada: <span style="color: #0000BB;">"EPOC"</span> -&gt; <span style="color: #0000BB;">"enfermedad pulmonar</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">#&gt; obstructiva cronica"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
@@ -329,7 +329,7 @@ resuelva la sigla al término oficial del catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> J44.0  Enfermedad pulmonar obstructiva crónica con infección …     1 J44 OTRA…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> J44.1  Enfermedad pulmonar obstructiva crónica con exacerbaci…     1 J44 OTRA…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> J44.9  Enfermedad pulmonar obstructiva crónica, no especifica…     1 J44 OTRA…</span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"DM2"</span><span class="op">)</span>   <span class="co"># Diabetes Mellitus tipo 2</span></span>
+<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"DM2"</span><span class="op">)</span>   <span class="co"># Type 2 Diabetes Mellitus</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sigla detectada: <span style="color: #0000BB;">"DM2"</span> -&gt; <span style="color: #0000BB;">"diabetes mellitus tipo</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">#&gt; 2"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 4</span></span></span>
@@ -346,12 +346,12 @@ resuelva la sigla al término oficial del catálogo.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E11.8  Diabetes mellitus tipo 2 con complicaciones no especi…     1 E11 DIAB…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E11.9  Diabetes mellitus tipo 2 sin complicaciones                1 E11 DIAB…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> O24.1  Diabetes mellitus tipo 2 preexistente                      1 O24 DIAB…</span></span></code></pre></div>
-<p>La tabla siguiente resume las categorías disponibles y su tamaño
-aproximado. Los números pueden variar entre versiones del paquete.</p>
+<p>The following table summarizes the available categories and their
+approximate size. Numbers may vary between package versions.</p>
 <table class="table">
 <thead><tr class="header">
-<th>Categoría</th>
-<th>Ejemplos</th>
+<th>Category</th>
+<th>Examples</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -359,11 +359,11 @@ aproximado. Los números pueden variar entre versiones del paquete.</p>
 <td>IAM, HTA, ACV, FA, ICC</td>
 </tr>
 <tr class="even">
-<td>Respiratoria</td>
+<td>Respiratory</td>
 <td>TBC, EPOC, NAC, SDRA</td>
 </tr>
 <tr class="odd">
-<td>Metabólica</td>
+<td>Metabolic</td>
 <td>DM, DM1, DM2, ERC, IRC</td>
 </tr>
 <tr class="even">
@@ -371,66 +371,64 @@ aproximado. Los números pueden variar entre versiones del paquete.</p>
 <td>HDA, HDB, RGE, DHC</td>
 </tr>
 <tr class="odd">
-<td>Infecciosa</td>
+<td>Infectious</td>
 <td>VIH, ITU, ITS, sepsis</td>
 </tr>
 <tr class="even">
-<td>Oncológica</td>
+<td>Oncological</td>
 <td>CA, LMA, LMC, LLA, LLC</td>
 </tr>
 <tr class="odd">
-<td>Neurológica</td>
+<td>Neurological</td>
 <td>TEC, EPI, EM, ELA</td>
 </tr>
 <tr class="even">
-<td>Psiquiátrica</td>
+<td>Psychiatric</td>
 <td>TDAH, TOC, TAG, TEPT</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="api-cie-11-multilingüe">API CIE-11 multilingüe<a class="anchor" aria-label="anchor" href="#api-cie-11-multiling%C3%BCe"></a>
+<h2 id="multilingual-icd-11-api">Multilingual ICD-11 API<a class="anchor" aria-label="anchor" href="#multilingual-icd-11-api"></a>
 </h2>
-<p><code><a href="../reference/cie11_search.html">cie11_search()</a></code> consulta la API oficial de la OMS y
-permite especificar el idioma, ya que el servidor de la OMS ofrece
-traducciones oficiales. En <code>ciecl</code> se expone el parámetro
-<code>lang = "es"</code> (por defecto) o <code>lang = "en"</code>.</p>
+<p><code><a href="../reference/cie11_search.html">cie11_search()</a></code> queries the official WHO API and allows
+specifying the language, since the WHO server provides official
+translations. <code>ciecl</code> exposes the parameter
+<code>lang = "es"</code> (default) or <code>lang = "en"</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Búsqueda en español (por defecto)</span></span>
-<span><span class="co"># Requiere API Key OMS</span></span>
+<code class="sourceCode R"><span><span class="co"># Search in Spanish (default)</span></span>
+<span><span class="co"># Requires a WHO API Key</span></span>
 <span><span class="fu"><a href="../reference/cie11_search.html">cie11_search</a></span><span class="op">(</span><span class="st">"diabetes mellitus"</span>, lang <span class="op">=</span> <span class="st">"es"</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
-<p>Nota: esta sección requiere credenciales de la API OMS. Consulta la
-vignette <a href="instalacion.html">Guía de Instalación y
-Configuración</a> para aprender a guardarlas de forma segura utilizando
-<code>keyring</code>.</p>
+<p>Note: this section requires WHO API credentials. See the vignette <a href="installation.html">Installation and Configuration Guide</a> to
+learn how to store them securely using <code>keyring</code>.</p>
 </blockquote>
 </div>
 <div class="section level2">
-<h2 id="encoding-y-caracteres-especiales">Encoding y caracteres especiales<a class="anchor" aria-label="anchor" href="#encoding-y-caracteres-especiales"></a>
+<h2 id="encoding-and-special-characters">Encoding and special characters<a class="anchor" aria-label="anchor" href="#encoding-and-special-characters"></a>
 </h2>
-<p>El paquete está codificado en <strong>UTF-8</strong> y el dataset
-preserva todos los caracteres del español (tildes, eñe, diéresis) y los
-símbolos de codificación dual (daga †, asterisco *) que aparecen en el
-catálogo MINSAL. Al buscar, <code><a href="../reference/cie_search.html">cie_search()</a></code> y
-<code><a href="../reference/cie_norm.html">cie_norm()</a></code> saben limpiarlos.</p>
+<p>The package is encoded in <strong>UTF-8</strong> and the dataset
+preserves all Spanish characters (accents, ñ, diaeresis) and the
+dual-coding symbols (dagger †, asterisk *) that appear in the MINSAL
+catalog. When searching, <code><a href="../reference/cie_search.html">cie_search()</a></code> and
+<code><a href="../reference/cie_norm.html">cie_norm()</a></code> know how to clean them.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Encoding.html" class="external-link">Encoding</a></span><span class="op">(</span><span class="va">cie10_cl</span><span class="op">$</span><span class="va">descripcion</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "UTF-8"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="referencias">Referencias<a class="anchor" aria-label="anchor" href="#referencias"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
 <li>
-<strong>CIE-10 Chile</strong>: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
+<strong>ICD-10 Chile</strong>: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
 </li>
 <li>
-<strong>CIE-11 OMS</strong>: <a href="https://icd.who.int/" class="external-link uri">https://icd.who.int/</a>
+<strong>WHO ICD-11</strong>: <a href="https://icd.who.int/" class="external-link uri">https://icd.who.int/</a>
 </li>
 <li>
-<strong>API CIE-11</strong>: <a href="https://icd.who.int/icdapi" class="external-link uri">https://icd.who.int/icdapi</a>
+<strong>ICD-11 API</strong>: <a href="https://icd.who.int/icdapi" class="external-link uri">https://icd.who.int/icdapi</a>
 </li>
 </ul>
 </div>

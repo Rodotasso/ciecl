@@ -38,32 +38,34 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/ciecl.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Referencia</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as">
 <li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="articles/instalacion.html">Guía de Inicio</a></li>
-    <li><a class="dropdown-item" href="articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="articles/ciecl.html">Primeros pasos con ciecl</a></li>
+    <li><a class="dropdown-item" href="articles/ciecl-es.html">Introducción a ciecl</a></li>
+    <li><a class="dropdown-item" href="articles/instalacion.html">Guía de Instalación</a></li>
     <li><a class="dropdown-item" href="articles/idiomas.html">Idiomas y Normalización</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="articles/installation.html">Getting Started</a></li>
-    <li><a class="dropdown-item" href="articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
-    <li><a class="dropdown-item" href="articles/ciecl.html">Internationalization</a></li>
+    <li><a class="dropdown-item" href="articles/case-study-discharges.html">Getting Started with ciecl</a></li>
+    <li><a class="dropdown-item" href="articles/ciecl-en.html">Introduction to ciecl</a></li>
+    <li><a class="dropdown-item" href="articles/installation.html">Installation Guide</a></li>
+    <li><a class="dropdown-item" href="articles/languages.html">Languages and Normalization</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Novedades</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma">
-<li><a class="dropdown-item" href="articles/ciecl-es.html">Español (Principal)</a></li>
-    <li><a class="dropdown-item" href="articles/ciecl.html">English (Documentation)</a></li>
+<li><a class="dropdown-item" href="index.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="README.en.html">English (README)</a></li>
   </ul>
 </li>
 <li class="nav-item"><form class="form-inline" role="search">
@@ -108,11 +110,13 @@
 <li>
 <strong>Catálogo oficial CIE-10 Chile</strong> (MINSAL/DEIS v2018) embebido como dataset</li>
 <li>
+<strong>Siglas médicas chilenas</strong> (IAM, EPOC, DM2, HTA, TBC, …)</li>
+<li>
+<strong>API CIE-11 OMS</strong> para búsqueda en la clasificación internacional vigente</li>
+<li>
 <strong>Validación y normalización vectorizada</strong>: acepta <code>E110</code>, <code>E11.0</code>, <code>e 11 0</code>, <code>I10-0</code>, etc.</li>
 <li>
 <strong>Búsqueda fuzzy Jaro-Winkler</strong> tolerante a errores tipográficos</li>
-<li>
-<strong>Siglas médicas chilenas</strong> (IAM, EPOC, DM2, HTA, TBC, …)</li>
 <li>
 <strong>Cálculo de comorbilidades Charlson/Elixhauser</strong> con <code>comorbidity</code>
 </li>
@@ -120,9 +124,6 @@
 <strong>Consultas SQL directas</strong> sobre el catálogo completo con SQLite + FTS5</li>
 <li>
 <strong>Expansión jerárquica de categorías</strong> (ej: <code>E11</code> → <code>E11.0</code>, <code>E11.1</code>, …, <code>E11.9</code>)</li>
-<li>
-<strong>API CIE-11 OMS</strong> vía <code><a href="reference/cie11_search.html">cie11_search()</a></code>
-</li>
 </ul>
 <p>El dataset está establecido por el <a href="https://www.bcn.cl/leychile/navegar?i=1112064" class="external-link">Decreto 356/2017</a> del MINSAL como clasificación oficial de enfermedades. No es modificable por el paquete; solo se actualiza por decreto institucional.</p>
 </div>
@@ -204,6 +205,7 @@
 <span><span class="co">#&gt;  9 I23.0  Hemopericardio como complicación presente posterior a…     1 I23 CIER…</span></span>
 <span><span class="co">#&gt; 10 I23.3  Ruptura de la pared cardíaca sin hemopericardio como …     1 I23 CIER…</span></span>
 <span><span class="co">#&gt; # ℹ 40 more rows</span></span></code></pre></div>
+<p>¿No sabes cuál función usar? <code><a href="reference/cie_guide.html">cie_guide()</a></code> muestra una tabla comparativa con el escenario, la función recomendada y un ejemplo para cada caso.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Comorbilidades (requiere: install.packages("comorbidity"))</span></span>
 <span><span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"paciente"</span>, code <span class="op">=</span> <span class="st">"diagnostico"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></code></pre></div>
@@ -228,11 +230,6 @@
 <li>Dominio público según <a href="https://www.bcn.cl/leychile/navegar?i=1112064" class="external-link">Decreto 356/2017</a>
 </li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="desarrollo">Desarrollo<a class="anchor" aria-label="anchor" href="#desarrollo"></a>
-</h2>
-<p>Este paquete fue desarrollado con asistencia de Claude (Anthropic), con verificación y validación humana de todo el código y la documentación.</p>
 </div>
 <div class="section level2">
 <h2 id="contribuir">Contribuir<a class="anchor" aria-label="anchor" href="#contribuir"></a>

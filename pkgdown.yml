@@ -3,13 +3,14 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   case-study-discharges: case-study-discharges.html
-  caso-uso-egresos: caso-uso-egresos.html
+  ciecl-en: ciecl-en.html
   ciecl-es: ciecl-es.html
   ciecl: ciecl.html
   idiomas: idiomas.html
   instalacion: instalacion.html
   installation: installation.html
-last_built: 2026-08-10T18:24Z
+  languages: languages.html
+last_built: 2026-08-18T18:14Z
 urls:
   reference: https://rodotasso.github.io/ciecl/reference
   article: https://rodotasso.github.io/ciecl/articles

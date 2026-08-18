@@ -2,20 +2,22 @@
 
 ### Documentación en Español
 
+- [Primeros pasos con ciecl: un reporte de egresos
+  hospitalarios](https://rodotasso.github.io/ciecl/articles/ciecl.md):
 - [Introducción a ciecl: CIE-10 Chile en
   R](https://rodotasso.github.io/ciecl/articles/ciecl-es.md):
-- [Caso de Uso: Análisis de Egresos Hospitalarios (DEIS
-  Chile)](https://rodotasso.github.io/ciecl/articles/caso-uso-egresos.md):
 - [Soporte de idiomas e
   internacionalización](https://rodotasso.github.io/ciecl/articles/idiomas.md):
-- [Guia de Instalacion y
-  Configuracion](https://rodotasso.github.io/ciecl/articles/instalacion.md):
+- [Guía de Instalación y
+  Configuración](https://rodotasso.github.io/ciecl/articles/instalacion.md):
 
 ### English Documentation
 
+- [Getting started with ciecl: a hospital discharge
+  report](https://rodotasso.github.io/ciecl/articles/case-study-discharges.md):
 - [Introduction to ciecl: Chilean ICD-10 in
-  R](https://rodotasso.github.io/ciecl/articles/ciecl.md):
-- [Case Study: Hospital Discharge Analysis (DEIS
-  Chile)](https://rodotasso.github.io/ciecl/articles/case-study-discharges.md):
+  R](https://rodotasso.github.io/ciecl/articles/ciecl-en.md):
+- [Language support and
+  internationalization](https://rodotasso.github.io/ciecl/articles/languages.md):
 - [Installation and Configuration
   Guide](https://rodotasso.github.io/ciecl/articles/installation.md):

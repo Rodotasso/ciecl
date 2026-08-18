@@ -1,6 +1,6 @@
-# Busqueda exacta por codigo CIE-10
+# Búsqueda exacta por código CIE-10
 
-Busqueda exacta por codigo CIE-10
+Búsqueda exacta por código CIE-10
 
 ## Usage
 
@@ -25,17 +25,17 @@ cie_lookup(
 
 - code:
 
-  Character vector de codigos (ej. "E11", "E11.0", c("E11.0", "Z00")) o
+  Character vector de códigos (ej. "E11", "E11.0", c("E11.0", "Z00")) o
   rango (ej. "E10-E14"). Acepta vectores. Soporta formatos: con punto
-  (E11.0), sin punto (E110), o solo categoria (E11).
+  (E11.0), sin punto (E110), o solo categoría (E11).
 
 - expand:
 
-  Logical, expandir jerarquia completa (default FALSE)
+  Logical, expandir jerarquía completa (default FALSE)
 
 - normalize:
 
-  Logical, normalizar formato de codigos automaticamente (default TRUE)
+  Logical, normalizar formato de códigos automáticamente (default TRUE)
 
 - full_description:
 
@@ -44,14 +44,14 @@ cie_lookup(
 
 - extract:
 
-  Logical, extraer codigo CIE-10 de texto con prefijos/sufijos (default
-  FALSE). IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1).
+  Logical, extraer código CIE-10 de texto con prefijos/sufijos (default
+  FALSE). IMPORTANTE: Solo usar con código ESCALAR (longitud 1).
   Ejemplo: "CIE:E11.0" -\> "E11.0", "E11.0-confirmado" -\> "E11.0". Para
-  vectores multiples usar extract=FALSE (default).
+  vectores múltiples usar extract=FALSE (default).
 
 - check_siglas:
 
-  Logical, buscar siglas medicas comunes (default FALSE). Ejemplo: "IAM"
+  Logical, buscar siglas médicas comunes (default FALSE). Ejemplo: "IAM"
   -\> I21.0 (Infarto agudo miocardio)
 
 - include_uso_cl:
@@ -59,14 +59,14 @@ cie_lookup(
   Logical, incluir columna `uso_cl` en el output (default TRUE). El
   default difiere de
   [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-  (FALSE) para preservar el contrato historico de cada funcion. Valores
+  (FALSE) para preservar el contrato histórico de cada función. Valores
   posibles: `"principal"`, `"legado"`, `"causa_externa"`,
   `"etiologico"`, `"causa_externa | principal"`.
 
 - only_uso_cl:
 
-  Logical, filtrar a codigos vigentes de uso clinico en Chile (default
-  FALSE). Cuando es TRUE, excluye los codigos con `uso_cl == "legado"`
+  Logical, filtrar a códigos vigentes de uso clínico en Chile (default
+  FALSE). Cuando es TRUE, excluye los códigos con `uso_cl == "legado"`
   (es decir, conserva `principal`, `causa_externa`, `etiologico` y sus
   combinaciones).
 
@@ -94,7 +94,8 @@ tibble con codigo(s) matcheado(s)
 
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md),
-[`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md)
+[`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
 
 Other search:
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md),
@@ -105,7 +106,7 @@ Other search:
 ## Examples
 
 ``` r
-# Busqueda directa por codigo
+# Búsqueda directa por código
 cie_lookup("E11.0")
 #> # A tibble: 1 × 11
 #>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
@@ -116,19 +117,19 @@ cie_lookup("E11.0")
 
 if (FALSE) { # interactive()
 cie_lookup("E110") # Sin punto
-cie_lookup("E11") # Solo categoria
+cie_lookup("E11") # Solo categoría
 cie_lookup("E11", expand = TRUE) # Todos E11.x
-# Vectorizado - multiples codigos y formatos
+# Vectorizado - múltiples códigos y formatos
 cie_lookup(c("E11.0", "Z00", "I10"))
-# Con descripcion completa
+# Con descripción completa
 cie_lookup("E110", full_description = TRUE)
-# Extraer codigo de texto con ruido (solo codigo escalar)
+# Extraer código de texto con ruido (solo código escalar)
 cie_lookup("CIE:E11.0", extract = TRUE)
 cie_lookup("E11.0-confirmado", extract = TRUE)
-# Buscar por siglas medicas
+# Buscar por siglas médicas
 cie_lookup("IAM", check_siglas = TRUE)
 cie_lookup("DM2", check_siglas = TRUE)
-# Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')
+# Filtrar a códigos vigentes de uso clínico Chile (excluye 'legado')
 cie_lookup("E11", expand = TRUE, only_uso_cl = TRUE)
 # Omitir columna uso_cl en el output
 cie_lookup("E11.0", include_uso_cl = FALSE)

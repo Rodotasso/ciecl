@@ -1,281 +1,314 @@
-# Introduction to ciecl: Chilean ICD-10 in R
+# Primeros pasos con ciecl: un reporte de egresos hospitalarios
 
-> **Version 0.9.8**: Available on CRAN with SQLite optimizations, XLSX
-> support, and standardized English arguments.
+## ¿Para quién es esta guía?
 
-## The problem: working with Chilean diagnostic codes in R
+Imagina que trabajas en la unidad de estadística de un hospital y cada
+mes eres la persona encargada de elaborar el **reporte de egresos por
+diabetes** para la dirección del servicio. Recibes la base de egresos
+hospitalarios, y tu objetivo es responder preguntas concretas: ¿cuántos
+egresos tuvieron como diagnóstico principal una diabetes?, ¿de qué
+tipo?, ¿qué tan complejos eran esos pacientes?
 
-Chilean health information systems — DEIS, GRD, REM — store diagnoses
-using the ICD-10 classification in its official MINSAL/DEIS v2018
-version. Analysts working with these datasets in R typically have to
-cross-reference PDF catalogs, Excel tables, or ministry websites to look
-up codes, which breaks the analytical workflow.
+El problema es que la base llega con códigos CIE-10 en formatos
+inconsistentes y sin descripciones: para interpretarlos tendrías que
+consultar a mano el catálogo oficial en PDF o Excel. `ciecl` elimina ese
+paso: incorpora el catálogo oficial CIE-10 de Chile (MINSAL/DEIS v2018)
+dentro de R y te permite normalizar, describir, buscar y analizar los
+códigos directamente sobre tu base.
 
-`ciecl` solves this by embedding all **39,877 ICD-10 codes** from the
-official catalog directly into R, with functions for fast lookup,
-hierarchical expansion, fuzzy search, and comorbidity scoring.
+Esta guía recorre ese flujo completo, de lo básico a lo avanzado. Solo
+necesitas conocimientos básicos de R; si además usas `dplyr`, los
+ejemplos encajan directo en tus pipelines.
 
-## Installation
+## Los datos: egresos hospitalarios del DEIS
 
-The package is available on CRAN:
+Las bases de **Egresos Hospitalarios** las publica el Departamento de
+Estadísticas e Información de Salud (DEIS) del Ministerio de Salud de
+Chile. Cada fila es un alta hospitalaria y la columna `DIAG1` contiene
+el diagnóstico principal codificado en CIE-10.
 
-``` r
+En la práctica, estos archivos llegan con dos variaciones de formato muy
+comunes:
 
-install.packages("ciecl")
-```
+1.  **Formatos compactos**: códigos sin punto decimal (ej: `J189` en
+    lugar de `J18.9`).
+2.  **Sufijos de relleno**: una letra `X` para completar la longitud del
+    campo en categorías de 3 dígitos (ej: `I10X` para hipertensión
+    esencial).
 
-To install the development version with the latest fixes:
-
-``` r
-
-# Requires the pak package
-pak::pak("RodoTasso/ciecl")
-```
-
-## Direct SQL queries against the catalog
-
-[`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
-exposes the full catalog through a local SQLite database, allowing you
-to filter with the full expressiveness of SQL. This is useful when you
-know the code structure but not the exact label — for instance, to
-retrieve all subcodes within a category.
-
-The example below fetches the first five type 2 diabetes codes (category
-E11):
+Generemos un conjunto de datos sintético que replica la estructura y las
+anomalías típicas de los archivos del DEIS:
 
 ``` r
 
-cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5")
-#> # A tibble: 5 × 2
-#>   codigo descripcion                                           
-#>   <chr>  <chr>                                                 
-#> 1 E11    Diabetes mellitus no insulinodependiente              
-#> 2 E11.0  Diabetes mellitus tipo 2 con coma                     
-#> 3 E11.1  Diabetes mellitus tipo 2 con cetoacidosis             
-#> 4 E11.2  Diabetes mellitus tipo 2 con complicaciones renales   
-#> 5 E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas
-```
+set.seed(42)
 
-Only `SELECT` queries are accepted, protecting catalog integrity.
-
-## Looking up known codes
-
-When codes are already present in your data — such as hospital discharge
-diagnoses —
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-retrieves the official description for one or more codes at once.
-
-``` r
-
-# Single code
-cie_lookup("E11.0")
-#> # A tibble: 1 × 11
-#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
-#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
-#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
-#> #   uso_cl <chr>
-```
-
-The function accepts vectors, making it straightforward to use inside a
-`dplyr` pipeline:
-
-``` r
-
-# Multiple codes from different chapters
-cie_lookup(c("E11.0", "I10", "Z00", "J44.0"))
-#> # A tibble: 4 × 11
-#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
-#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
-#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… NA        NA       
-#> 3 J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… NA        NA       
-#> 4 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… NA        NA       
-#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
-#> #   uso_cl <chr>
-```
-
-When working at the category level (three-digit codes), you may need all
-subcodes within a category. The `expand = TRUE` argument traverses the
-hierarchy and returns the parent category together with all its
-children:
-
-``` r
-
-cie_lookup("E11", expand = TRUE)
-#> # A tibble: 11 × 11
-#>    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion
-#>    <chr>  <chr>            <chr>     <chr>   <chr>           <chr>     <chr>    
-#>  1 E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  2 E11.0  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  3 E11.1  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  4 E11.2  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  5 E11.3  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  6 E11.4  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  7 E11.5  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  8 E11.6  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#>  9 E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> 10 E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> 11 E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
-#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
-#> #   uso_cl <chr>
-```
-
-## Extracting descriptions for use in tables and plots
-
-When you only need the description text — without the full structure
-returned by
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-—
-[`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-returns a character vector of descriptions in the same order as the
-input codes. This is designed for use inside
-[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) or as
-axis labels in plots:
-
-``` r
-
-cie_describe(c("E11.0", "I10"))
-#> [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"
-```
-
-A typical use case with hospital discharge data:
-
-``` r
-
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-
-discharges <- data.frame(
-  id          = 1:4,
-  diag_code   = c("E11.0", "I10", "J44.0", "E11.0")
+# Simulación de 200 registros con formatos típicos del DEIS Chile
+egresos <- data.frame(
+  ID_EGRESO = 1:200,
+  PACIENTE_ID = sample(1:50, 200, replace = TRUE),
+  ANO       = sample(2018:2022, 200, replace = TRUE),
+  DIAG1     = sample(
+    c(
+      "J189", "O800", "Z380", "K359", "N390",
+      "I10X", "J449", "E119", "O829", "J069",
+      "K922", "N185", "I509", "C509", "A099",
+      "N40X", "K800", "I259", "J180", "E149"
+    ),
+    size    = 200,
+    replace = TRUE
+  ),
+  stringsAsFactors = FALSE
 )
 
-discharges |>
-  mutate(description = cie_describe(diag_code))
-#>   id diag_code
-#> 1  1     E11.0
-#> 2  2       I10
-#> 3  3     J44.0
-#> 4  4     E11.0
-#>                                                                                        description
-#> 1                                                                Diabetes mellitus tipo 2 con coma
-#> 2                                                                 Hipertensión esencial (primaria)
-#> 3 Enfermedad pulmonar obstructiva crónica con infección aguda de las vías respiratorias inferiores
-#> 4                                                                Diabetes mellitus tipo 2 con coma
+head(egresos)
+#>   ID_EGRESO PACIENTE_ID  ANO DIAG1
+#> 1         1          49 2018  J189
+#> 2         2          37 2022  E119
+#> 3         3           1 2021  E149
+#> 4         4          25 2018  N390
+#> 5         5          10 2022  I10X
+#> 6         6          36 2021  C509
 ```
 
-## Fuzzy search with tolerance for misspellings
+## Paso 1: Normalizar los códigos con `cie_norm()`
 
-Clinical text data often contains spelling errors, abbreviations, or
-non-standard terms.
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-uses Jaro-Winkler string similarity to find matching codes even when the
-search term contains typos.
-
-The `threshold` parameter controls strictness: higher values require
-closer matches. A range of 0.70 to 0.85 works well in practice:
+Antes de cualquier análisis hay que estandarizar `DIAG1`.
+[`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
+aplica las reglas de codificación oficial del MINSAL de forma
+vectorizada: elimina la `X` de relleno, inserta el punto decimal en la
+posición correcta y limpia espacios, guiones y símbolos especiales (como
+† o \*).
 
 ``` r
 
-# "diabetis" instead of "diabetes" — the typo does not prevent finding the code
-cie_search("diabetis with coma", threshold = 0.75)
-#> # A tibble: 22 × 4
+# Limpieza y estandarización de diagnósticos en el flujo de trabajo
+egresos <- egresos |>
+  mutate(
+    DIAG1_NORM = cie_norm(codes = DIAG1)
+  )
+
+# Comparación entre formato original y normalizado
+egresos |>
+  select(DIAG1, DIAG1_NORM) |>
+  distinct() |>
+  head(5)
+#>   DIAG1 DIAG1_NORM
+#> 1  J189      J18.9
+#> 2  E119      E11.9
+#> 3  E149      E14.9
+#> 4  N390      N39.0
+#> 5  I10X        I10
+```
+
+Con esto, `I10X` quedó como `I10` y `J189` como `J18.9`: los códigos ya
+son comparables con el catálogo oficial.
+
+## Paso 2: Agregar las descripciones oficiales con `cie_describe()`
+
+Para el reporte necesitas las glosas clínicas, no solo los códigos.
+[`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
+devuelve directamente un vector de caracteres, por lo que se integra en
+un [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) sin
+joins temporales:
+
+``` r
+
+# Integración directa de descripciones al dataframe principal
+egresos_full <- egresos |>
+  mutate(
+    descripcion = cie_describe(DIAG1_NORM)
+  )
+
+head(egresos_full |> select(ID_EGRESO, DIAG1, descripcion))
+#>   ID_EGRESO DIAG1
+#> 1         1  J189
+#> 2         2  E119
+#> 3         3  E149
+#> 4         4  N390
+#> 5         5  I10X
+#> 6         6  C509
+#>                                                       descripcion
+#> 1                                       Neumonía, no especificada
+#> 2                     Diabetes mellitus tipo 2 sin complicaciones
+#> 3 Diabetes mellitus, no especificada, sin mención de complicación
+#> 4              Infección de vías urinarias, sitio no especificado
+#> 5                                Hipertensión esencial (primaria)
+#> 6                 Tumor maligno de la mama, parte no especificada
+```
+
+Si además de la glosa necesitas la metadata completa (capítulo, grupo,
+notas de inclusión/exclusión), usa
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
+que devuelve un `tibble` estructurado listo para un
+[`left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html):
+
+``` r
+
+# Obtención de metadata completa vía lookup + join
+metadata <- cie_lookup(
+  code = unique(egresos$DIAG1_NORM),
+  full_description = TRUE
+)
+
+egresos_metadata <- egresos |>
+  left_join(metadata, by = c("DIAG1_NORM" = "codigo"))
+```
+
+## Paso 3: Encontrar códigos cuando no sabes el código con `cie_search()`
+
+Volvamos a tu reporte de diabetes: sospechas que en la base hay egresos
+por diabetes, pero ¿qué códigos exactos cubre el catálogo? En vez de
+hojear el PDF, buscas por texto.
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
+usa similitud Jaro-Winkler, así que tolera errores tipográficos (aquí
+buscamos “diabetis” a propósito):
+
+``` r
+
+# Búsqueda tolerante: "diabetis" en lugar de "diabetes"
+cie_search(text = "diabetis", threshold = 0.7)
+#> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
-#>  1 B15.0  Hepatitis aguda tipo A, con coma hepático              0.333 B15 HEPA…
-#>  2 B15.9  Hepatitis aguda tipo A, sin coma hepático              0.333 B15 HEPA…
-#>  3 B16.0  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…
-#>  4 B16.1  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…
-#>  5 B16.2  Hepatitis aguda tipo B, sin agente delta, con coma he… 0.333 B16 HEPA…
-#>  6 B16.9  Hepatitis aguda tipo B, sin agente delta y sin coma h… 0.333 B16 HEPA…
-#>  7 B19.0  Hepatitis viral no especificada, con coma hepático     0.333 B19 HEPA…
-#>  8 B19.9  Hepatitis viral no especificada, sin  coma hepático    0.333 B19 HEPA…
-#>  9 E03.5  Coma mixedematoso                                      0.333 E03 OTRO…
-#> 10 E10.0  Diabetes mellitus tipo 1 con coma                      0.333 E10 DIAB…
-#> # ℹ 12 more rows
+#>  1 E10    Diabetes mellitus insulinodependiente                  0.917 E10 DIAB…
+#>  2 E10.0  Diabetes mellitus tipo 1 con coma                      0.917 E10 DIAB…
+#>  3 E10.1  Diabetes mellitus tipo 1 con cetoacidosis              0.917 E10 DIAB…
+#>  4 E10.2  Diabetes mellitus tipo 1 con complicaciones renales    0.917 E10 DIAB…
+#>  5 E10.3  Diabetes mellitus tipo 1 con complicaciones oftálmicas 0.917 E10 DIAB…
+#>  6 E10.4  Diabetes mellitus tipo 1 con complicaciones neurológi… 0.917 E10 DIAB…
+#>  7 E10.5  Diabetes mellitus tipo 1 con complicaciones  circulat… 0.917 E10 DIAB…
+#>  8 E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp… 0.917 E10 DIAB…
+#>  9 E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples  0.917 E10 DIAB…
+#> 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi… 0.917 E10 DIAB…
+#> # ℹ 40 more rows
 ```
 
-## Charlson and Elixhauser comorbidity indices
+El resultado incluye un `score` de similitud para evaluar la
+confiabilidad de cada coincidencia. Ahora sabes que `E11.9` y `E14.9` de
+tu base corresponden a diabetes y puedes filtrar tu reporte con
+criterio.
 
-The Charlson and Elixhauser indices are widely used in clinical research
-and risk adjustment.
-[`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
-computes these indices from a data frame containing patient identifiers
-and their associated diagnostic codes.
+## Cuando la búsqueda no entrega resultados
 
-This function requires the `comorbidity` package. Install it with
-`install.packages("comorbidity")` if needed:
+Es normal que algunas consultas no encuentren nada, y conviene saber
+cómo se comporta el paquete en esos casos: **las funciones nunca fallan
+con un error por ausencia de resultados; devuelven un `tibble` vacío con
+la estructura de columnas correcta** y un mensaje informativo.
+
+Si buscas un código que no existe en el catálogo:
 
 ``` r
 
-# Requires: install.packages("comorbidity")
-patient_df <- data.frame(
-  patient_id  = c(1, 1, 2, 2, 3),
-  diagnosis   = c("E11.0", "I50.9", "C50.9", "N18.5", "J44.0")
+cie_lookup("XYZ123")
+#> ✖ Código no encontrado: "XYZ123"
+#> # A tibble: 0 × 11
+#> # ℹ 11 variables: codigo <chr>, descripcion <chr>, categoria <chr>,
+#> #   seccion <chr>, capitulo_nombre <chr>, inclusion <chr>, exclusion <chr>,
+#> #   capitulo <chr>, es_daga <lgl>, es_cruz <lgl>, uso_cl <chr>
+```
+
+Si el umbral de
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
+es demasiado estricto para el término ingresado:
+
+``` r
+
+cie_search("zzzqwerty", threshold = 0.95)
+#> ✖ Sin coincidencias >= threshold 0.95
+#> # A tibble: 0 × 4
+#> # ℹ 4 variables: codigo <chr>, descripcion <chr>, score <dbl>, categoria <chr>
+```
+
+En ambos casos el flujo no se interrumpe: puedes verificar
+`nrow(resultado) == 0` y reaccionar (bajar el `threshold`, revisar la
+ortografía o validar el código). Para chequear rápidamente qué códigos
+de un vector son válidos según el catálogo, usa
+[`cie_validate_vector()`](https://rodotasso.github.io/ciecl/reference/cie_validate_vector.md):
+
+``` r
+
+cie_validate_vector(c("E11.0", "XYZ123", "I10X"))
+#> [1]  TRUE FALSE  TRUE
+```
+
+## Paso 4: Estratificar riesgo con `cie_comorbid()`
+
+El último nivel del reporte es la complejidad de los pacientes.
+[`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
+mapea los diagnósticos a los índices de Charlson o Elixhauser y devuelve
+una matriz de comorbilidades por paciente, lista para modelos
+estadísticos:
+
+``` r
+
+# Requiere el paquete 'comorbidity' instalado
+# Cálculo del Índice de Charlson consolidado por paciente
+comorbilidades <- cie_comorbid(
+  data = egresos,
+  id = "PACIENTE_ID",
+  code = "DIAG1",
+  map = "charlson"
 )
 
-cie_comorbid(patient_df, id = "patient_id", code = "diagnosis", map = "charlson")
-#> # A tibble: 3 × 19
-#>   patient_id    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab
-#>        <dbl> <int> <int> <int> <int>    <int> <int>  <int> <int> <int> <int>
-#> 1          1     0     1     0     0        0     0      0     0     0     1
-#> 2          2     0     0     0     0        0     0      0     0     0     0
-#> 3          3     0     0     0     0        0     1      0     0     0     0
+head(comorbilidades, 10)
+#> # A tibble: 10 × 19
+#>    PACIENTE_ID    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab
+#>          <int> <int> <int> <int> <int>    <int> <int>  <int> <int> <int> <int>
+#>  1           1     0     0     0     0        0     0      0     0     0     1
+#>  2           2     0     0     0     0        0     0      0     0     0     0
+#>  3           3     0     0     0     0        0     0      0     0     0     1
+#>  4           4     0     1     0     0        0     1      0     0     0     0
+#>  5           5     0     1     0     0        0     0      0     0     0     1
+#>  6           6     0     0     0     0        0     1      0     0     0     1
+#>  7           7     0     0     0     0        0     0      0     0     0     0
+#>  8           8     0     0     0     0        0     0      0     0     0     1
+#>  9           9     0     0     0     0        0     1      0     0     0     0
+#> 10          10     0     0     0     0        0     0      0     0     0     1
 #> # ℹ 8 more variables: diabwc <int>, hp <int>, rend <int>, canc <int>,
 #> #   msld <int>, metacanc <int>, aids <int>, score_charlson <dbl>
 ```
 
-The result is a data frame with one row per patient and columns for each
-condition in the selected index, plus a weighted total score.
+## Resumen del flujo
 
-## Formatted tables with gt
+El recorrido de esta guía cubre el ciclo completo desde la base cruda
+hasta el insumo analítico:
 
-For reports and presentations,
-[`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md)
-generates an enriched HTML table of all codes within a category using
-the `gt` package. Requires `gt` to be installed:
+1.  **Estandarización**: corrección de formatos con
+    [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md).
+2.  **Contextualización**: glosas oficiales con
+    [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
+    y metadata con
+    [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md).
+3.  **Exploración**: búsqueda de códigos por texto con
+    [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
+    tolerante a errores y con comportamiento predecible cuando no hay
+    resultados.
+4.  **Agregación**: índices de comorbilidad con
+    [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md).
 
-``` r
+¿No sabes cuál función usar en otro escenario? Ejecuta
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
+para ver una tabla comparativa con la función recomendada y un ejemplo
+por caso.
 
-# Requires: install.packages("gt")
-cie_table("E11")
-```
+## Para seguir aprendiendo
 
-| CIE-10 Chile: E11 |  |
-|----|----|
-| Fuente: MINSAL/DEIS v2018 |  |
-| Codigo | Diagnostico |
-| E11 | Diabetes mellitus no insulinodependiente |
-| E11.0 | Diabetes mellitus tipo 2 con coma |
-| E11.1 | Diabetes mellitus tipo 2 con cetoacidosis |
-| E11.2 | Diabetes mellitus tipo 2 con complicaciones renales |
-| E11.3 | Diabetes mellitus tipo 2 con complicaciones oftálmicas |
-| E11.4 | Diabetes mellitus tipo 2 con complicaciones neurológicas |
-| E11.5 | Diabetes mellitus tipo 2 con complicaciones circulatorias periféricas |
-| E11.6 | Diabetes mellitus tipo 2 con otras complicaciones especificadas |
-| E11.7 | Diabetes mellitus tipo 2 con complicaciones múltiples |
-| E11.8 | Diabetes mellitus tipo 2 con complicaciones no especificadas |
-| E11.9 | Diabetes mellitus tipo 2 sin complicaciones |
+- [Guía de instalación y
+  configuración](https://rodotasso.github.io/ciecl/articles/instalacion.md):
+  instalación y credenciales para la API CIE-11 de la OMS.
+- [Introducción a ciecl: CIE-10 Chile en
+  R](https://rodotasso.github.io/ciecl/articles/ciecl-es.md): recorrido
+  por función, incluyendo consultas SQL directas con
+  [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
+  y tablas formateadas con
+  [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md).
+- [Idiomas y
+  normalización](https://rodotasso.github.io/ciecl/articles/idiomas.md):
+  búsqueda en español e inglés y manejo de tildes.
 
-## Data source
+------------------------------------------------------------------------
 
-The data included in `ciecl` comes from the official ICD-10 catalog
-published by the Chilean Ministry of Health through the Department of
-Health Statistics and Information (DEIS):
-
-- FIC Chile Center: <https://deis.minsal.cl/centrofic/>
-- DEIS Repository: <https://deis.minsal.cl>
-
-## Further information
-
-- Report issues or suggestions:
-  <https://github.com/RodoTasso/ciecl/issues>
-- Package repository: <https://github.com/RodoTasso/ciecl>
+**Fuente de datos:** Esta herramienta utiliza el catálogo CIE-10 oficial
+para Chile, gestionado por el DEIS del Ministerio de Salud. Más detalles
+en [deis.minsal.cl](https://deis.minsal.cl).

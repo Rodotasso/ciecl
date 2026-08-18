@@ -1,8 +1,8 @@
-# Normalizar codigos CIE-10 a formato con punto
+# Normalizar códigos CIE-10 a formato con punto
 
-Convierte codigos CIE-10 de diferentes formatos al formato estandar (con
-punto). Maneja multiples variaciones de entrada comunes en datos
-clinicos.
+Convierte códigos CIE-10 de diferentes formatos al formato estándar (con
+punto). Maneja múltiples variaciones de entrada comunes en datos
+clínicos.
 
 ## Usage
 
@@ -26,11 +26,11 @@ cie_normalize(
 
 - codes:
 
-  Character vector de codigos en cualquier formato
+  Character vector de códigos en cualquier formato
 
 - search_db:
 
-  Logical, buscar codigo en base de datos si no se encuentra exacto
+  Logical, buscar código en base de datos si no se encuentra exacto
   (default TRUE)
 
 - codigos:
@@ -43,39 +43,40 @@ cie_normalize(
 
 ## Value
 
-Character vector con codigos normalizados al formato con punto
+Character vector con códigos normalizados al formato con punto
 
 ## Details
 
-La normalizacion incluye:
+La normalización incluye:
 
-- Conversion a mayusculas
+- Conversión a mayúsculas
 
-- Eliminacion de espacios (inicio, fin e internos)
+- Eliminación de espacios (inicio, fin e internos)
 
-- Eliminacion de simbolos daga y asterisco (codificacion dual)
+- Eliminación de símbolos daga y asterisco (codificación dual)
 
-- Conversion de guiones a puntos (I10-0 -\> I10.0)
+- Conversión de guiones a puntos (I10-0 -\> I10.0)
 
-- Eliminacion de puntos iniciales (.I10 -\> I10)
+- Eliminación de puntos iniciales (.I10 -\> I10)
 
-- Correccion de puntos multiples (E..11 -\> E.11)
+- Corrección de puntos múltiples (E..11 -\> E.11)
 
-- Eliminacion de sufijo X en codigos cortos (I10X -\> I10)
+- Eliminación de sufijo X en códigos cortos (I10X -\> I10)
 
-- Preservacion de X en codigos largos (placeholder 7o caracter)
+- Preservación de X en códigos largos (placeholder 7o carácter)
 
-- Agregado de punto en posicion correcta (E110 -\> E11.0)
+- Agregado de punto en posición correcta (E110 -\> E11.0)
 
-El sistema de daga/asterisco indica codificacion dual donde la daga
-marca la enfermedad subyacente y el asterisco la manifestacion. Ambos
-simbolos se eliminan para normalizacion.
+El sistema de daga/asterisco indica codificación dual donde la daga
+marca la enfermedad subyacente y el asterisco la manifestación. Ambos
+símbolos se eliminan para normalización.
 
 ## See also
 
 [`cie_validate_vector()`](https://rodotasso.github.io/ciecl/reference/cie_validate_vector.md),
 [`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
 
 Other validacion:
 [`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md),
@@ -87,7 +88,7 @@ Other validacion:
 ``` r
 cie_norm("E110")     # Retorna "E11.0"
 #> [1] "E11.0"
-cie_norm("E11")      # Retorna "E11" (categoria)
+cie_norm("E11")      # Retorna "E11" (categoría)
 #> [1] "E11"
 cie_norm("I10X")     # Retorna "I10" (elimina X)
 #> [1] "I10"

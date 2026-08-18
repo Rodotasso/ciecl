@@ -1,4 +1,4 @@
-# Listar siglas medicas (deprecated)
+# Listar siglas médicas (deprecated)
 
 **\[deprecated\]** Use
 [`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md).
@@ -13,7 +13,7 @@ cie_siglas(categoria = NULL)
 
 - categoria:
 
-  Character opcional, filtrar por categoria
+  Character opcional, filtrar por categoría
 
 ## Value
 

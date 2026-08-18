@@ -1,7 +1,7 @@
-# Mapeo manual grupos comorbilidad Chile-especifico
+# Mapeo manual de grupos de comorbilidad específicos de Chile
 
-Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL. Basado
-en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
+Agrupa códigos CIE-10 chilenos en categorías de comorbilidad MINSAL.
+Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 
 ## Usage
 

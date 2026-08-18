@@ -1,6 +1,14 @@
 # Ejecutar consultas SQL sobre CIE-10 Chile
 
-Ejecutar consultas SQL sobre CIE-10 Chile
+Permite ejecutar sentencias SQL de solo lectura sobre la tabla `cie10`,
+el mismo dataset que entrega
+[cie10_cl](https://rodotasso.github.io/ciecl/reference/cie10_cl.md).
+Útil para consultas que no están cubiertas por
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)/[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+(agregaciones, conteos por capítulo, joins con datos propios cargados en
+la misma conexión, etc.). Para aprender SQL desde cero puede revisar
+<https://www.w3schools.com/sql/> o la documentación de SQLite
+(<https://www.sqlite.org/lang_select.html>).
 
 ## Usage
 
@@ -12,22 +20,26 @@ cie10_sql(query, close = lifecycle::deprecated())
 
 - query:
 
-  String SQL valido SQLite (SELECT/WHERE/JOIN)
+  String SQL válido SQLite. Soporta `SELECT`, `WHERE`, `JOIN`, `FROM`,
+  `ORDER BY`, `GROUP BY` y `HAVING`. Por seguridad solo se permiten
+  sentencias `SELECT` (sin escritura ni múltiples sentencias).
 
 - close:
 
-  **\[deprecated\]** Ignorado - la conexion es pooled y se gestiona
-  automaticamente. Sera eliminado en una version futura.
+  **\[deprecated\]** Ignorado - la conexión es pooled y se gestiona
+  automáticamente. Será eliminado en una versión futura.
 
 ## Value
 
-tibble resultado query
+tibble con el resultado de la consulta
 
 ## See also
 
+[cie10_cl](https://rodotasso.github.io/ciecl/reference/cie10_cl.md),
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),
 [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md),
-[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
+[`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
 
 Other sql_backend:
 [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md),

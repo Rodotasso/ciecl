@@ -1,12 +1,12 @@
-# Busqueda difusa (fuzzy) de terminos medicos CIE-10
+# Búsqueda difusa (fuzzy) de términos médicos CIE-10
 
-Busca en descripciones CIE-10 usando multiples estrategias:
+Busca en descripciones CIE-10 usando múltiples estrategias:
 
-1.  Expansion de siglas medicas (IAM, TBC, DM, etc.)
+1.  Expansión de siglas médicas (IAM, TBC, DM, etc.)
 
-2.  Busqueda exacta por subcadena (mas rapida)
+2.  Búsqueda exacta por subcadena (más rápida)
 
-3.  Busqueda fuzzy con Jaro-Winkler (tolera typos)
+3.  Búsqueda fuzzy con Jaro-Winkler (tolera typos)
 
 ## Usage
 
@@ -30,7 +30,7 @@ cie_search(
 
 - text:
 
-  String termino medico en espanol o sigla (ej. "diabetes", "IAM",
+  String término médico en español o sigla (ej. "diabetes", "IAM",
   "TBC")
 
 - threshold:
@@ -39,15 +39,15 @@ cie_search(
 
 - max_results:
 
-  Integer, maximo resultados a retornar (default 50)
+  Integer, máximo resultados a retornar (default 50)
 
 - field:
 
-  Character, campo busqueda ("descripcion" o "inclusion")
+  Character, campo búsqueda ("descripcion" o "inclusion")
 
 - only_fuzzy:
 
-  Logical, usar solo busqueda fuzzy sin busqueda exacta (default FALSE)
+  Logical, usar solo búsqueda fuzzy sin búsqueda exacta (default FALSE)
 
 - verbose:
 
@@ -59,14 +59,14 @@ cie_search(
   Logical, incluir columna `uso_cl` en el output (default FALSE). El
   default difiere de
   [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-  (TRUE) para preservar el contrato historico de cada funcion. Valores
+  (TRUE) para preservar el contrato histórico de cada función. Valores
   posibles: `"principal"`, `"legado"`, `"causa_externa"`,
   `"etiologico"`, `"causa_externa | principal"`.
 
 - only_uso_cl:
 
-  Logical, filtrar a codigos vigentes de uso clinico en Chile (default
-  FALSE). Cuando es TRUE, excluye los codigos con `uso_cl == "legado"`.
+  Logical, filtrar a códigos vigentes de uso clínico en Chile (default
+  FALSE). Cuando es TRUE, excluye los códigos con `uso_cl == "legado"`.
 
 - texto:
 
@@ -83,13 +83,14 @@ cie_search(
 ## Value
 
 tibble ordenado por score descendente (1.0 = coincidencia exacta). Si el
-text corresponde a una sigla medica, se expande automaticamente antes de
+text corresponde a una sigla médica, se expande automáticamente antes de
 buscar.
 
 ## Details
 
-La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
-Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
+La búsqueda es tolerante a tildes: "neumonia" (sin tilde) encuentra
+"neumonía" (con tilde) en el catálogo. Soporta siglas médicas comunes:
+"IAM" busca "infarto agudo miocardio".
 
 ## See also
 
@@ -106,7 +107,7 @@ Other search:
 ## Examples
 
 ``` r
-# Busqueda basica
+# Búsqueda básica
 cie_search("diabetes")
 #> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
@@ -126,7 +127,7 @@ cie_search("diabetes")
 if (FALSE) { # interactive()
 cie_search("neumonia")
 
-# Busqueda por siglas medicas
+# Búsqueda por siglas médicas
 cie_search("IAM")
 cie_search("DM2")
 
@@ -135,7 +136,7 @@ cie_search("diabetis")
 
 # Buscar en inclusiones
 cie_search("bacteriana", field = "inclusion")
-# Filtrar a codigos vigentes Chile (excluye 'legado')
+# Filtrar a códigos vigentes Chile (excluye 'legado')
 cie_search("diabetes", only_uso_cl = TRUE)
 # Mostrar la columna uso_cl en el output
 cie_search("diabetes", include_uso_cl = TRUE)

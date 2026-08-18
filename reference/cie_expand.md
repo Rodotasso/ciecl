@@ -1,6 +1,6 @@
-# Expandir codigo jerarquico (ej. E11 -\> E11.0-E11.9)
+# Expandir código jerárquico (ej. E11 -\> E11.0-E11.9)
 
-Expandir codigo jerarquico (ej. E11 -\> E11.0-E11.9)
+Expandir código jerárquico (ej. E11 -\> E11.0-E11.9)
 
 ## Usage
 
@@ -12,7 +12,7 @@ cie_expand(code, codigo = lifecycle::deprecated())
 
 - code:
 
-  String codigo padre (ej. "E11")
+  String código padre (ej. "E11")
 
 - codigo:
 
@@ -20,13 +20,14 @@ cie_expand(code, codigo = lifecycle::deprecated())
 
 ## Value
 
-Character vector con todos los codigos hijos del codigo padre. Vector
-vacio si el codigo no existe en la base de datos.
+Character vector con todos los códigos hijos del código padre. Vector
+vacío si el código no existe en la base de datos.
 
 ## See also
 
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md),
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
 
 Other validacion:
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md),

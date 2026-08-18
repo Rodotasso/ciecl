@@ -1,10 +1,10 @@
-# Generar tabla HTML interactiva GT de codigo CIE-10
+# Generar tabla HTML interactiva GT de código CIE-10
 
-Muestra la jerarquia de un codigo CIE-10 (categoria + subcategorias)
+Muestra la jerarquía de un código CIE-10 (categoría + subcategorías)
 como una tabla `gt`. Las columnas "Incluye" y "Excluye" pueden aparecer
-vacias en subcategorias: el catalogo MINSAL/DEIS no puebla esos campos
-en todos los niveles (suelen estar solo en la categoria de 3 digitos).
-Para evitar confusion visual, los `NA` se reemplazan por un guion largo
+vacías en subcategorías: el catálogo MINSAL/DEIS no puebla esos campos
+en todos los niveles (suelen estar solo en la categoría de 3 dígitos).
+Para evitar confusión visual, los `NA` se reemplazan por un guion largo
 (em dash).
 
 ## Usage
@@ -17,7 +17,7 @@ cie_table(code, codigo = lifecycle::deprecated())
 
 - code:
 
-  String codigo (ej. `"E11"` muestra la jerarquia).
+  String código (ej. `"E11"` muestra la jerarquía).
 
 - codigo:
 
@@ -30,7 +30,8 @@ Objeto de clase `gt_tbl` (tabla HTML interactiva).
 ## See also
 
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md),
-[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
+[`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md),
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
 
 ## Examples
 

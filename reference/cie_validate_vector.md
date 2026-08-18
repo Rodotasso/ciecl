@@ -1,6 +1,6 @@
-# Validar vector de codigos CIE-10 formato
+# Validar vector de códigos CIE-10 formato
 
-Validar vector de codigos CIE-10 formato
+Validar vector de códigos CIE-10 formato
 
 ## Usage
 
@@ -12,7 +12,7 @@ cie_validate_vector(codes, strict = FALSE, codigos = lifecycle::deprecated())
 
 - codes:
 
-  Character vector codigos (ej. c("E11.0", "Z00.0"))
+  Character vector códigos (ej. c("E11.0", "Z00.0"))
 
 - strict:
 
@@ -24,8 +24,8 @@ cie_validate_vector(codes, strict = FALSE, codigos = lifecycle::deprecated())
 
 ## Value
 
-Logical vector de la misma longitud que `codes`. TRUE si el codigo tiene
-formato CIE-10 valido (y existe en DB si `strict = TRUE`).
+Logical vector de la misma longitud que `codes`. TRUE si el código tiene
+formato CIE-10 válido (y existe en DB si `strict = TRUE`).
 
 ## See also
 

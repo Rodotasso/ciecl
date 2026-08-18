@@ -30,17 +30,17 @@ Características principales:
 
 - **Catálogo oficial CIE-10 Chile** (MINSAL/DEIS v2018) embebido como
   dataset
+- **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
+- **API CIE-11 OMS** para búsqueda en la clasificación internacional
+  vigente
 - **Validación y normalización vectorizada**: acepta `E110`, `E11.0`,
   `e 11 0`, `I10-0`, etc.
 - **Búsqueda fuzzy Jaro-Winkler** tolerante a errores tipográficos
-- **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
 - **Cálculo de comorbilidades Charlson/Elixhauser** con `comorbidity`
 - **Consultas SQL directas** sobre el catálogo completo con SQLite +
   FTS5
 - **Expansión jerárquica de categorías** (ej: `E11` → `E11.0`, `E11.1`,
   …, `E11.9`)
-- **API CIE-11 OMS** vía
-  [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
 
 El dataset está establecido por el [Decreto
 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) del MINSAL como
@@ -128,6 +128,11 @@ cie_search("IAM")
 #> # ℹ 40 more rows
 ```
 
+¿No sabes cuál función usar?
+[`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
+muestra una tabla comparativa con el escenario, la función recomendada y
+un ejemplo para cada caso.
+
 ``` r
 
 # Comorbilidades (requiere: install.packages("comorbidity"))
@@ -159,11 +164,6 @@ Catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
   Chile](https://deis.minsal.cl/centrofic/)
 - Dominio público según [Decreto
   356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
-
-## Desarrollo
-
-Este paquete fue desarrollado con asistencia de Claude (Anthropic), con
-verificación y validación humana de todo el código y la documentación.
 
 ## Contribuir
 
@@ -207,15 +207,15 @@ Universidad de Chile
 ### Funciones para encontrar códigos y descripciones
 
 - [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md)
-  : Busqueda difusa (fuzzy) de terminos medicos CIE-10
+  : Búsqueda difusa (fuzzy) de términos médicos CIE-10
 - [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
-  : Busqueda exacta por codigo CIE-10
+  : Búsqueda exacta por código CIE-10
 - [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-  : Obtener descripcion de codigos CIE-10 (vector)
+  : Obtener descripción de códigos CIE-10 (vector)
 - [`cie_short()`](https://rodotasso.github.io/ciecl/reference/cie_short.md)
-  : Listar siglas medicas soportadas
+  : Listar siglas médicas soportadas
 - [`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md)
-  : Guia de funciones de busqueda CIE-10
+  : Guía de funciones de búsqueda CIE-10
 
 ## Datos y Catálogos
 
@@ -224,7 +224,7 @@ Universidad de Chile
 - [`cie10_cl`](https://rodotasso.github.io/ciecl/reference/cie10_cl.md)
   : Dataset CIE-10 Chile oficial MINSAL/DEIS v2018
 - [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md)
-  : Generar tabla HTML interactiva GT de codigo CIE-10
+  : Generar tabla HTML interactiva GT de código CIE-10
 
 ## Base de Datos SQL
 
@@ -233,52 +233,56 @@ Universidad de Chile
 - [`cie10_sql()`](https://rodotasso.github.io/ciecl/reference/cie10_sql.md)
   : Ejecutar consultas SQL sobre CIE-10 Chile
 - [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md)
-  : Limpiar cache SQLite (forzar rebuild)
+  : Limpiar caché SQLite local (forzar rebuild)
 - [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
-  : Cerrar conexion pooled SQLite
+  : Cerrar conexión pooled SQLite
 
 ## API CIE-11
 
 ### Conexión con servidores de la OMS
 
 - [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
-  : Buscar codigos CIE-11 via API OMS
+  : Buscar códigos CIE-11 vía API OMS
+- [`get_icd_api_key()`](https://rodotasso.github.io/ciecl/reference/get_icd_api_key.md)
+  : Obtener la API key de la OMS desde el entorno
 
 ## Análisis y Comorbilidad
 
 - [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md)
   : Calcular comorbilidades Charlson/Elixhauser para Chile
 - [`cie_map_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_map_comorbid.md)
-  : Mapeo manual grupos comorbilidad Chile-especifico
+  : Mapeo manual de grupos de comorbilidad específicos de Chile
 
 ## Utilidades y Validación
 
 - [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
   [`cie_normalize()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-  : Normalizar codigos CIE-10 a formato con punto
+  : Normalizar códigos CIE-10 a formato con punto
 - [`cie_expand()`](https://rodotasso.github.io/ciecl/reference/cie_expand.md)
-  : Expandir codigo jerarquico (ej. E11 -\> E11.0-E11.9)
+  : Expandir código jerárquico (ej. E11 -\> E11.0-E11.9)
 - [`cie_validate_vector()`](https://rodotasso.github.io/ciecl/reference/cie_validate_vector.md)
-  : Validar vector de codigos CIE-10 formato
+  : Validar vector de códigos CIE-10 formato
 
 # Articles
 
 ### Documentación en Español
 
+- [Primeros pasos con ciecl: un reporte de egresos
+  hospitalarios](https://rodotasso.github.io/ciecl/articles/ciecl.md):
 - [Introducción a ciecl: CIE-10 Chile en
   R](https://rodotasso.github.io/ciecl/articles/ciecl-es.md):
-- [Caso de Uso: Análisis de Egresos Hospitalarios (DEIS
-  Chile)](https://rodotasso.github.io/ciecl/articles/caso-uso-egresos.md):
 - [Soporte de idiomas e
   internacionalización](https://rodotasso.github.io/ciecl/articles/idiomas.md):
-- [Guia de Instalacion y
-  Configuracion](https://rodotasso.github.io/ciecl/articles/instalacion.md):
+- [Guía de Instalación y
+  Configuración](https://rodotasso.github.io/ciecl/articles/instalacion.md):
 
 ### English Documentation
 
+- [Getting started with ciecl: a hospital discharge
+  report](https://rodotasso.github.io/ciecl/articles/case-study-discharges.md):
 - [Introduction to ciecl: Chilean ICD-10 in
-  R](https://rodotasso.github.io/ciecl/articles/ciecl.md):
-- [Case Study: Hospital Discharge Analysis (DEIS
-  Chile)](https://rodotasso.github.io/ciecl/articles/case-study-discharges.md):
+  R](https://rodotasso.github.io/ciecl/articles/ciecl-en.md):
+- [Language support and
+  internationalization](https://rodotasso.github.io/ciecl/articles/languages.md):
 - [Installation and Configuration
   Guide](https://rodotasso.github.io/ciecl/articles/installation.md):

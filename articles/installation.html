@@ -35,22 +35,24 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as">
 <li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
-    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Primeros pasos con ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-es.html">Introducción a ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Instalación</a></li>
     <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Getting Started with ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-en.html">Introduction to ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/languages.html">Languages and Normalization</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
@@ -59,8 +61,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma">
-<li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+<li><a class="dropdown-item" href="../index.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../README.en.html">English (README)</a></li>
   </ul>
 </li>
 <li class="nav-item"><form class="form-inline" role="search">
@@ -91,7 +93,7 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-08-10</h4>
+            <h4 data-toc-skip class="date">2026-08-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/installation.Rmd" class="external-link"><code>vignettes/installation.Rmd</code></a></small>
       <div class="d-none name"><code>installation.Rmd</code></div>
@@ -99,105 +101,90 @@ Suazo</h4>
 
     
     
-<p>The <code>ciecl</code> package is designed to work with ICD-10 and
-ICD-11 classifications in the Chilean clinical context. This guide
-covers the recommended installation, system requirements, and the
-configuration of external credentials.</p>
 <div class="section level2">
-<h2 id="basic-installation">Basic Installation<a class="anchor" aria-label="anchor" href="#basic-installation"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The easiest way to install <code>ciecl</code> is using the
-<code>pak</code> package, which automatically manages system
-dependencies and R package requirements.</p>
+<p>The simplest way to install <code>ciecl</code> is with the <a href="https://pak.r-lib.org/" class="external-link"><code>pak</code></a> package, which
+automatically resolves R and system dependencies.</p>
 <div class="section level3">
-<h3 id="from-cran-stable-version">From CRAN (Stable Version)<a class="anchor" aria-label="anchor" href="#from-cran-stable-version"></a>
+<h3 id="from-cran-stable-version">From CRAN (stable version)<a class="anchor" aria-label="anchor" href="#from-cran-stable-version"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install pak if you don't have it</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"pak"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Install ciecl</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="from-github-development-version">From GitHub (Development Version)<a class="anchor" aria-label="anchor" href="#from-github-development-version"></a>
+<h3 id="from-github-development-version">From GitHub (development version)<a class="anchor" aria-label="anchor" href="#from-github-development-version"></a>
 </h3>
-<p>To use the latest features from the <code>rev-ropensci</code>
-branch:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl@rev-ropensci"</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="installation-with-optional-dependencies">Installation with Optional Dependencies<a class="anchor" aria-label="anchor" href="#installation-with-optional-dependencies"></a>
-</h2>
-<p>The package has minimal dependencies for core functionality. To
-enable all features, including comorbidity indices and interactive
-tables:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
+<p>To also install all optional dependencies (comorbidities, GT tables,
+ICD-11 API):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Full installation with all optional packages</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
-<h3 id="dependencies-by-feature">Dependencies by Feature<a class="anchor" aria-label="anchor" href="#dependencies-by-feature"></a>
+<h3 id="dependencies-by-feature">Dependencies by feature<a class="anchor" aria-label="anchor" href="#dependencies-by-feature"></a>
 </h3>
+<p>The package core (ICD-10 code lookup and search) requires no optional
+packages. These are the suggested dependencies by task:</p>
 <table class="table">
 <colgroup>
-<col width="21%">
+<col width="28%">
+<col width="28%">
 <col width="43%">
-<col width="34%">
 </colgroup>
 <thead><tr class="header">
 <th>Feature</th>
-<th>Required Package</th>
+<th>Package</th>
 <th>Installation</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Charlson/Elixhauser Comorbidities</td>
+<td>Charlson/Elixhauser comorbidity indices with
+<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>
+</td>
 <td><code>comorbidity</code></td>
 <td><code>install.packages("comorbidity")</code></td>
 </tr>
 <tr class="even">
-<td>Interactive GT Tables</td>
+<td>Formatted HTML tables with <code><a href="../reference/cie_table.html">cie_table()</a></code>
+</td>
 <td><code>gt</code></td>
 <td><code>install.packages("gt")</code></td>
 </tr>
 <tr class="odd">
-<td>WHO ICD-11 API</td>
-<td><code>httr2</code></td>
-<td><code>install.packages("httr2")</code></td>
-</tr>
-<tr class="even">
-<td>Read MINSAL Excel Files</td>
+<td>Read MINSAL Excel files</td>
 <td><code>readxl</code></td>
 <td><code>install.packages("readxl")</code></td>
+</tr>
+<tr class="even">
+<td>Export results to Excel</td>
+<td><code>writexl</code></td>
+<td><code>install.packages("writexl")</code></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section level2">
-<h2 id="system-requirements">System Requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
+<h2 id="system-requirements">System requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
 </h2>
-<p>The package uses a local SQLite database to ensure high performance
-in vectorized searches.</p>
 <div class="section level3">
 <h3 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
 </h3>
-<p>No additional configuration needed. The installation works out of the
+<p>No additional dependencies: the installation works out of the
 box.</p>
 </div>
 <div class="section level3">
 <h3 id="macos">macOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h3>
-<p>Install the Xcode Command Line Tools if you plan to compile from
-source:</p>
+<p>Install the Xcode Command Line Tools if you compile from source:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">xcode-select</span> <span class="at">--install</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="linux-ubuntudebian">Linux (Ubuntu/Debian)<a class="anchor" aria-label="anchor" href="#linux-ubuntudebian"></a>
 </h3>
-<p>Execute the following to install system requirements:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> <span class="dt">\</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  r-base-dev <span class="dt">\</span></span>
@@ -216,51 +203,100 @@ source:</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="icd-11-api-configuration-optional">ICD-11 API Configuration (Optional)<a class="anchor" aria-label="anchor" href="#icd-11-api-configuration-optional"></a>
+<h2 id="icd-11-api-configuration-optional">ICD-11 API Configuration (optional)<a class="anchor" aria-label="anchor" href="#icd-11-api-configuration-optional"></a>
 </h2>
-<p>To use <code><a href="../reference/cie11_search.html">cie11_search()</a></code> and access the WHO ICD-11
-international classification, you need free credentials.</p>
-<ol style="list-style-type: decimal">
-<li>Register at <a href="https://icd.who.int/icdapi" class="external-link">icd.who.int/icdapi</a>.</li>
-<li>Obtain your <strong>Client ID</strong> and <strong>Client
-Secret</strong>.</li>
-</ol>
+<p>The CIE-10 functions (the core of the package) work without
+credentials. You only need free WHO credentials to use
+<code><a href="../reference/cie11_search.html">cie11_search()</a></code>, which queries the WHO ICD-11
+classification.</p>
+<blockquote>
+<p><strong>Security:</strong> never write the literal key in your
+scripts (not even via <code>api_key = "..."</code>): sharing the code
+would expose your credentials. The recommended way is the
+<code>ICD_API_KEY</code> environment variable, set with
+<code>usethis::edit_r_environ()</code> (Option B) or via
+<code>keyring</code> (Option A). The <code>api_key</code> argument of
+<code><a href="../reference/cie11_search.html">cie11_search()</a></code> exists only for exceptional cases
+(e.g. multiple keys or environments where env vars cannot be set).</p>
+</blockquote>
 <div class="section level3">
-<h3 id="credential-management">Credential Management<a class="anchor" aria-label="anchor" href="#credential-management"></a>
+<h3 id="step-1-get-credentials">Step 1: Get credentials<a class="anchor" aria-label="anchor" href="#step-1-get-credentials"></a>
 </h3>
-<p><strong>Option A: Using <code>keyring</code>
-(Recommended)</strong></p>
-<p>The <code>keyring</code> package stores secrets in the OS native
-keychain (macOS Keychain, Windows Credential Store, Linux Secret
-Service), avoiding plain text secrets in your environment files.</p>
+<ol style="list-style-type: decimal">
+<li>Visit <a href="https://icd.who.int/icdapi" class="external-link uri">https://icd.who.int/icdapi</a>
+</li>
+<li>Register with your email (free)</li>
+<li>You will receive a <code>Client ID</code> and a
+<code>Client Secret</code>
+</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="step-2-store-the-credentials">Step 2: Store the credentials<a class="anchor" aria-label="anchor" href="#step-2-store-the-credentials"></a>
+</h3>
+<p><strong>Option A: <code>keyring</code> (recommended)</strong></p>
+<p>The <a href="https://keyring.r-lib.org/" class="external-link"><code>keyring</code></a>
+package stores secrets in the OS native keychain (macOS Keychain,
+Windows Credential Store, Linux Secret Service), avoiding plain-text
+secrets in <code>.Renviron</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Store credentials once (it will prompt for them)</span></span>
-<span><span class="co"># Format: "client_id:client_secret"</span></span>
+<code class="sourceCode R"><span><span class="co"># Once: store "client_id:client_secret" in the keychain</span></span>
 <span><span class="fu">keyring</span><span class="fu">::</span><span class="fu">key_set</span><span class="op">(</span><span class="st">"ciecl_icd11"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Use them in your session</span></span>
+<span><span class="co"># In each session where you use the API</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ICD_API_KEY <span class="op">=</span> <span class="fu">keyring</span><span class="fu">::</span><span class="fu">key_get</span><span class="op">(</span><span class="st">"ciecl_icd11"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Option B: Using <code>.Renviron</code> File</strong></p>
-<p>Add the following line to your <code>~/.Renviron</code> file (you can
-use <code>usethis::edit_r_environ()</code>):</p>
+<p><strong>Option B: <code>.Renviron</code> file</strong></p>
+<p>Create or edit <code>~/.Renviron</code> (for example with
+<code>usethis::edit_r_environ()</code> if you have <code>usethis</code>
+installed) and add:</p>
 <pre><code><span><span class="va">ICD_API_KEY</span><span class="op">=</span><span class="va">your_client_id</span><span class="op">:</span><span class="va">your_client_secret</span></span></code></pre>
-<p>Restart R for the changes to take effect. Ensure
-<code>.Renviron</code> is not tracked by Git.</p>
+<p>Restart R for it to take effect. Do not commit <code>.Renviron</code>
+to Git.</p>
+<p><strong>Option C: Current session only (temporary)</strong></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>ICD_API_KEY <span class="op">=</span> <span class="st">"your_client_id:your_client_secret"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-3-verify-the-configuration">Step 3: Verify the configuration<a class="anchor" aria-label="anchor" href="#step-3-verify-the-configuration"></a>
+</h3>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Check that the environment variable is set</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"ICD_API_KEY"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Test an ICD-11 search</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rodotasso.github.io/ciecl/">ciecl</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cie11_search.html">cie11_search</a></span><span class="op">(</span><span class="st">"diabetes"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="verify-installation">Verify Installation<a class="anchor" aria-label="anchor" href="#verify-installation"></a>
+<h2 id="sqlite-cache">SQLite cache<a class="anchor" aria-label="anchor" href="#sqlite-cache"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>The package uses a local SQLite database for efficient searches. It
+is created automatically on first use, in the user data directory:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show the cache location</span></span>
+<span><span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">R_user_dir</a></span><span class="op">(</span><span class="st">"ciecl"</span>, <span class="st">"data"</span><span class="op">)</span></span></code></pre></div>
+<p>You can change that location by setting the
+<code>CIECL_CACHE_DIR</code> environment variable before loading the
+package. To force a rebuild of the database (for example, after updating
+the package):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rodotasso.github.io/ciecl/">ciecl</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cie10_clear_cache.html">cie10_clear_cache</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="verify-the-installation">Verify the installation<a class="anchor" aria-label="anchor" href="#verify-the-installation"></a>
+</h2>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rodotasso.github.io/ciecl/">ciecl</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Check package version</span></span>
+<span><span class="co"># Check that the package loads correctly</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Verify catalog access</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cie10_cl</span><span class="op">)</span> <span class="co"># Should return ~39,873 records</span></span>
+<span><span class="co"># Verify catalogue access</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cie10_cl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Test basic lookup</span></span>
+<span><span class="co"># Test a basic lookup</span></span>
 <span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Test fuzzy search</span></span>
@@ -270,20 +306,37 @@ use <code>usethis::edit_r_environ()</code>):</p>
 <h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
 </h2>
 <div class="section level3">
-<h3 id="connection-to-local-database">Connection to Local Database<a class="anchor" aria-label="anchor" href="#connection-to-local-database"></a>
+<h3 id="error-package-ciecl-is-not-available">Error: “package ‘ciecl’ is not available”<a class="anchor" aria-label="anchor" href="#error-package-ciecl-is-not-available"></a>
 </h3>
-<p>If you encounter errors related to the database connection or corrupt
-data, force a rebuild of the local cache:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ciecl</span><span class="fu">::</span><span class="fu"><a href="../reference/cie10_clear_cache.html">cie10_clear_cache</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Check that a CRAN repository is configured in your R session, then
+install as usual:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="manual-proxy-configuration">Manual Proxy Configuration<a class="anchor" aria-label="anchor" href="#manual-proxy-configuration"></a>
+<h3 id="compilation-error-on-linux">Compilation error on Linux<a class="anchor" aria-label="anchor" href="#compilation-error-on-linux"></a>
 </h3>
-<p>If you are behind a corporate proxy, configure your R environment
-before using the WHO API:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>https_proxy <span class="op">=</span> <span class="st">"http://your-proxy-url:port"</span><span class="op">)</span></span></code></pre></div>
+<p>Install the system dependencies listed in the “System requirements”
+section and try the installation again.</p>
+</div>
+<div class="section level3">
+<h3 id="the-icd-11-api-does-not-respond">The ICD-11 API does not respond<a class="anchor" aria-label="anchor" href="#the-icd-11-api-does-not-respond"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>Check that the credential is set:
+<code>Sys.getenv("ICD_API_KEY")</code> must not return an empty
+string.</li>
+<li>Check your internet connection.</li>
+<li>Check the WHO service status at <a href="https://icd.who.int/icdapi" class="external-link uri">https://icd.who.int/icdapi</a>: if it is down, the ICD-10
+functions keep working because they do not depend on the API.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="corrupt-cache">Corrupt cache<a class="anchor" aria-label="anchor" href="#corrupt-cache"></a>
+</h3>
+<p>Clear the cache and restart R:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ciecl</span><span class="fu">::</span><span class="fu"><a href="../reference/cie10_clear_cache.html">cie10_clear_cache</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

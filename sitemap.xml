@@ -7,13 +7,14 @@
 <url><loc>https://rodotasso.github.io/ciecl/README.en.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/SECURITY.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/case-study-discharges.html</loc></url>
-<url><loc>https://rodotasso.github.io/ciecl/articles/caso-uso-egresos.html</loc></url>
+<url><loc>https://rodotasso.github.io/ciecl/articles/ciecl-en.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/ciecl-es.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/ciecl.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/idiomas.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/index.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/instalacion.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/articles/installation.html</loc></url>
+<url><loc>https://rodotasso.github.io/ciecl/articles/languages.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/authors.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/index.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/news/index.html</loc></url>
@@ -37,6 +38,7 @@
 <url><loc>https://rodotasso.github.io/ciecl/reference/cie_table.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/reference/cie_validate_vector.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/reference/ciecl-package.html</loc></url>
+<url><loc>https://rodotasso.github.io/ciecl/reference/get_icd_api_key.html</loc></url>
 <url><loc>https://rodotasso.github.io/ciecl/reference/index.html</loc></url>
 </urlset>
 

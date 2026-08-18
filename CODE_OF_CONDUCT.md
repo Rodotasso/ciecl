@@ -56,61 +56,61 @@ Covenant](https://www.contributor-covenant.org), version 2.1.
 
 ------------------------------------------------------------------------
 
-# Codigo de Conducta del Contribuyente
+# Código de Conducta del Contribuyente
 
 ## Nuestro compromiso
 
-En el interes de fomentar un ambiente abierto y acogedor, nosotros como
+En el interés de fomentar un ambiente abierto y acogedor, nosotros como
 contribuyentes y mantenedores nos comprometemos a hacer de la
-participacion en nuestro proyecto y nuestra comunidad una experiencia
-libre de acoso para todos, independientemente de la edad, tamanio
-corporal, discapacidad, etnia, identidad y expresion de genero, nivel de
-experiencia, nacionalidad, apariencia personal, raza, religion o
-identidad y orientacion sexual.
+participación en nuestro proyecto y nuestra comunidad una experiencia
+libre de acoso para todos, independientemente de la edad, tamaño
+corporal, discapacidad, etnia, identidad y expresión de género, nivel de
+experiencia, nacionalidad, apariencia personal, raza, religión o
+identidad y orientación sexual.
 
-## Nuestros estandares
+## Nuestros estándares
 
 Ejemplos de comportamiento que contribuyen a crear un ambiente positivo
 incluyen:
 
 - Usar un lenguaje acogedor e inclusivo
 - Respetar puntos de vista y experiencias diferentes
-- Aceptar con gracia la critica constructiva
+- Aceptar con gracia la crítica constructiva
 - Enfocarse en lo que es mejor para la comunidad
-- Mostrar empatia hacia otros miembros de la comunidad
+- Mostrar empatía hacia otros miembros de la comunidad
 
 Ejemplos de comportamiento inaceptable incluyen:
 
-- Uso de lenguaje o imagenes sexualizadas y atencion o avances sexuales
+- Uso de lenguaje o imágenes sexualizadas y atención o avances sexuales
   no deseados
 - Trolling, comentarios insultantes/despectivos y ataques personales o
-  politicos
-- Acoso publico o privado
-- Publicar informacion privada de otros sin permiso explicito
-- Otra conducta que razonablemente podria considerarse inapropiada en un
+  políticos
+- Acoso público o privado
+- Publicar información privada de otros sin permiso explícito
+- Otra conducta que razonablemente podría considerarse inapropiada en un
   entorno profesional
 
 ## Nuestras responsabilidades
 
-Los mantenedores del proyecto son responsables de aclarar los estandares
+Los mantenedores del proyecto son responsables de aclarar los estándares
 de comportamiento aceptable y se espera que tomen medidas correctivas
 apropiadas y justas en respuesta a cualquier instancia de comportamiento
 inaceptable.
 
 ## Alcance
 
-Este codigo de conducta aplica tanto dentro de los espacios del proyecto
-como en espacios publicos cuando un individuo representa al proyecto o
+Este código de conducta aplica tanto dentro de los espacios del proyecto
+como en espacios públicos cuando un individuo representa al proyecto o
 su comunidad.
 
-## Aplicacion
+## Aplicación
 
 Instancias de comportamiento abusivo, acosador o inaceptable pueden ser
 reportadas contactando al equipo del proyecto en <rtasso@uchile.cl>.
-Todas las quejas seran revisadas e investigadas y resultaran en una
+Todas las quejas serán revisadas e investigadas y resultarán en una
 respuesta que se considere necesaria y apropiada a las circunstancias.
 
-## Atribucion
+## Atribución
 
-Este Codigo de Conducta es una adaptacion del [Contributor
-Covenant](https://www.contributor-covenant.org), version 2.1.
+Este Código de Conducta es una adaptación del [Contributor
+Covenant](https://www.contributor-covenant.org), versión 2.1.

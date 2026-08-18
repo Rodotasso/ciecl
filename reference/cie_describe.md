@@ -1,6 +1,6 @@
-# Obtener descripcion de codigos CIE-10 (vector)
+# Obtener descripción de códigos CIE-10 (vector)
 
-Devuelve un vector character con la descripcion de cada codigo, pensado
+Devuelve un vector character con la descripción de cada código, pensado
 para usar dentro de
 [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
 sin necesidad de un `left_join` contra `cie10_cl`.
@@ -20,18 +20,18 @@ cie_describe(
 
 - codes:
 
-  Character vector de codigos CIE-10 (ej. "E11.0", c("E11.0", "I10")).
+  Character vector de códigos CIE-10 (ej. "E11.0", c("E11.0", "I10")).
 
 - normalize:
 
-  Logical, intentar normalizar los codigos antes de buscar la
-  descripcion? (default FALSE). Usar TRUE para limpiar formatos (ej.
+  Logical, intentar normalizar los códigos antes de buscar la
+  descripción? (default FALSE). Usar TRUE para limpiar formatos (ej.
   "E110" -\> "E11.0"); usar FALSE para auditar la calidad original del
   registro.
 
 - default:
 
-  Valor devuelto cuando un codigo no se encuentra en el catalogo.
+  Valor devuelto cuando un código no se encuentra en el catálogo.
   Default `NA_character_`.
 
 - codigos:
@@ -40,15 +40,15 @@ cie_describe(
 
 ## Value
 
-Character vector del mismo largo que `codes` con la descripcion oficial
-MINSAL/DEIS. `NA_character_` (o `default`) para codigos sin match.
+Character vector del mismo largo que `codes` con la descripción oficial
+MINSAL/DEIS. `NA_character_` (o `default`) para códigos sin match.
 
 ## See also
 
 [`cie_lookup()`](https://rodotasso.github.io/ciecl/reference/cie_lookup.md)
 para resultado como tibble con todas las columnas;
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-para normalizacion.
+para normalización.
 
 Other search:
 [`cie_guia_busqueda()`](https://rodotasso.github.io/ciecl/reference/cie_guia_busqueda.md),
@@ -59,7 +59,7 @@ Other search:
 ## Examples
 
 ``` r
-# Auditoria: buscar tal cual (E110 no existe sin punto)
+# Auditoría: buscar tal cual (E110 no existe sin punto)
 cie_describe("E110", normalize = FALSE)
 #> [1] NA
 
@@ -68,7 +68,7 @@ cie_describe("E110", normalize = TRUE)
 #> [1] "Diabetes mellitus tipo 2 con coma"
 
 if (FALSE) { # interactive()
-# Uso tipico en auditoria VIU (contar fallos de origen)
+# Uso típico en auditoría VIU (contar fallos de origen)
 diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 descripciones <- cie_describe(diags, normalize = FALSE)
 sum(is.na(descripciones)) # Detecta 3 errores de registro

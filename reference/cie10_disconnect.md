@@ -1,7 +1,22 @@
-# Cerrar conexion pooled SQLite
+# Cerrar conexión pooled SQLite
 
-Cierra la conexion reutilizable al archivo SQLite. Util para liberar el
-lock del archivo .db.
+`ciecl` mantiene una única conexión SQLite reutilizable ("pooled")
+abierta al archivo `cie10.db` durante la sesión, en lugar de abrir y
+cerrar una conexión por cada consulta. Mientras esa conexión está
+abierta, SQLite mantiene un "lock" (bloqueo) sobre el archivo `.db`: es
+la forma en que SQLite evita lecturas/escrituras concurrentes
+inconsistentes sobre el mismo archivo. Esta función cierra esa conexión
+y libera el lock.
+
+Conviene llamarla antes de operaciones que necesitan acceso exclusivo al
+archivo `cie10.db` —por ejemplo antes de
+[`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md)
+si se borra manualmente la caché por fuera del paquete, o al finalizar
+un proceso batch largo para no dejar el archivo bloqueado—. Si no se
+libera el lock, el archivo `.db` puede seguir abierto hasta que termine
+la sesión de R; en la práctica esto rara vez es un problema porque cada
+sesión de R tiene su propia conexión, pero impide que otro proceso
+externo (no R) edite el archivo mientras la conexión esté abierta.
 
 ## Usage
 
@@ -11,7 +26,8 @@ cie10_disconnect()
 
 ## Value
 
-No return value, called for side effects.
+Sin valor de retorno, se llama por sus efectos secundarios (cierra la
+conexión SQLite pooled).
 
 ## See also
 
@@ -25,8 +41,9 @@ Other sql_backend:
 ## Examples
 
 ``` r
-# Verificar si hay conexion activa
-# (Ejemplo omitido por usar internal environment)
+# No hay un ejemplo no interactivo: el objeto de conexion vive en un
+# entorno interno del paquete (.ciecl_env) y no es parte de la API
+# publica, por lo que no hay nada que inspeccionar desde afuera.
 
 if (FALSE) { # interactive()
 cie10_disconnect()

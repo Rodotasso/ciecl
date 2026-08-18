@@ -1,4 +1,4 @@
-# Guia de funciones de busqueda (deprecated)
+# Guía de funciones de búsqueda (deprecated)
 
 **\[deprecated\]** Use
 [`cie_guide()`](https://rodotasso.github.io/ciecl/reference/cie_guide.md).
@@ -11,7 +11,7 @@ cie_guia_busqueda()
 
 ## Value
 
-tibble con guia comparativa
+tibble con guía comparativa
 
 ## See also
 

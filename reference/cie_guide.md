@@ -1,6 +1,6 @@
-# Guia de funciones de busqueda CIE-10
+# Guía de funciones de búsqueda CIE-10
 
-Muestra tabla comparativa de cuando usar cada funcion de busqueda.
+Muestra tabla comparativa de cuándo usar cada función de búsqueda.
 
 ## Usage
 

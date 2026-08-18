@@ -15,27 +15,29 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as"><li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
-    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Primeros pasos con ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-es.html">Introducción a ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Instalación</a></li>
     <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Getting Started with ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-en.html">Introduction to ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/languages.html">Languages and Normalization</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma"><li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma"><li><a class="dropdown-item" href="../index.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../README.en.html">English (README)</a></li>
   </ul></li>
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -58,8 +60,52 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-06-20">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-06-20)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-06-20"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-08-17">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-17)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-08-17"></a></h2>
 <p><em>English summary below</em></p>
+<div class="section level3">
+<h3 id="revisión-ropensci--comentarios-de-maëlle-salmon-ms01ms20-0-9-8">Revisión rOpenSci — comentarios de Maëlle Salmon ms01–ms20 (2026-08-17)<a class="anchor" aria-label="anchor" href="#revisi%C3%B3n-ropensci--comentarios-de-ma%C3%ABlle-salmon-ms01ms20-0-9-8"></a></h3>
+<p>Segunda tanda de correcciones de la revisión formal en el issue rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>, a partir de los comentarios de <a href="https://github.com/maelle" class="external-link">@maelle</a>. Cierra todos los ítems pendientes de la revisión.</p>
+<ul><li>
+<strong><code><a href="../reference/cie11_search.html">cie11_search()</a></code></strong>: nuevo argumento <code>api_key = get_icd_api_key()</code> con la nueva función exportada <code><a href="../reference/get_icd_api_key.html">get_icd_api_key()</a></code>, que centraliza la lectura de las credenciales de la API OMS siguiendo el patrón de <code>httr2</code>. La ayuda gana una subsección “Seguridad de la API key” y las viñetas de instalación (ES/EN) agregan la nota correspondiente (ms17).</li>
+<li>
+<strong>Ejemplos offline con <code>vcr</code></strong>: los ejemplos de <code><a href="../reference/cie11_search.html">cie11_search()</a></code> ahora corren sin conexión usando cassettes de <code>vcr</code> (&gt;= 2.0.0, agregado a <code>Suggests</code>); cassette en <code>inst/_vcr/cie11_search.yml</code> y <code>tests/testthat/setup-vcr.R</code> con <code>filter_sensitive_data</code> (ms19).</li>
+<li>
+<strong>Documentación bilingüe</strong>: español primero en CONTRIBUTING y README; enlaces y orden de bullets corregidos; tildes en el índice de referencia del sitio pkgdown y en mensajes de <code>cli</code> (ms01–ms08).</li>
+<li>
+<strong>Viñetas</strong>: instalación solo con <code>pak</code>; nueva guía de inicio con caso de uso real que reemplaza a <code>caso-uso-egresos.Rmd</code>; nueva viñeta en inglés <code>vignettes/ciecl-en.Rmd</code> (ms10–ms13).</li>
+<li>
+<strong>Sitio pkgdown</strong>: footer de <code>_pkgdown.yml</code> corregido según el PR <a href="https://github.com/Rodotasso/ciecl/issues/15" class="external-link">#15</a> de la revisora (<code>developed_by</code> escalar) (ms09).</li>
+<li>
+<strong>CONTRIBUTING.md</strong>: nueva sección “Declaración de asistencia con IA” (español e inglés) (ms14).</li>
+<li>
+<strong>Mejoras de código interno</strong>: uso de <code><a href="https://rdrr.io/r/base/NA.html" class="external-link">anyNA()</a></code>, <code><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar()</a></code> y variables explicativas en las funciones revisadas (ms15, ms16, ms18).</li>
+<li>
+<strong>Tests</strong>: aserciones más específicas (<code>expect_named()</code>, <code>expect_length()</code>, <code>expect_type()</code>, <code>expect_all_false()</code>) y eliminación de <code>:::</code> en la suite de tests (ms20).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="revisión-ropensci--comentarios-de-yabellini-ybs08ybs36-0-9-8">Revisión rOpenSci — comentarios de yabellini ybs08–ybs36 (2026-06-23)<a class="anchor" aria-label="anchor" href="#revisi%C3%B3n-ropensci--comentarios-de-yabellini-ybs08ybs36-0-9-8"></a></h3>
+<p>Tanda de correcciones a partir de la revisión formal de empaquetado de <a href="https://github.com/yabellini" class="external-link">@yabellini</a> en el issue rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. Sin cambios en la API pública: no se agregan ni eliminan funciones exportadas, no cambian firmas ni se rompe compatibilidad.</p>
+<ul><li>
+<strong>Bug de documentación (<code>cie10_cl</code>)</strong>: la columna <code>uso_cl</code> estaba documentada como lógica, pero en realidad es <code>character</code> con las categorías <code>"principal"</code>, <code>"legado"</code>, <code>"etiologico"</code>, <code>"causa_externa"</code> y <code>"causa_externa | principal"</code>. Corregido el <code>@format</code> y el ejemplo roto <code>subset(cie10_cl, uso_cl == TRUE)</code>, que devolvía un conjunto vacío (ybs08, ybs09).</li>
+<li>
+<strong><code>cie10_empty_tibble()</code></strong>: se agrega la columna <code>uso_cl</code> al esquema del tibble vacío interno, evitando inconsistencias al concatenar resultados (ybs36).</li>
+<li>
+<strong>Validación de parámetros obligatorios</strong>: <code><a href="../reference/cie_norm.html">cie_norm()</a></code>, <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code>, <code><a href="../reference/cie_expand.html">cie_expand()</a></code>, <code><a href="../reference/cie_table.html">cie_table()</a></code>, <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> y <code><a href="../reference/cie_search.html">cie_search()</a></code> ahora emiten un error en castellano vía <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_abort()</a></code> cuando se las llama sin su argumento obligatorio, en lugar del mensaje en inglés de <code>rlang</code>/R base (ybs19, ybs22, ybs24, ybs27, ybs30).</li>
+<li>
+<strong><code><a href="../reference/cie10_sql.html">cie10_sql()</a></code></strong>: validación explícita de <code>query</code> (tipo character, longitud 1, no NA), captura de errores de <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">DBI::dbGetQuery()</a></code> con <code><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch()</a></code> relanzados como clase <code>ciecl_sql_error</code>, descripción y documentación de <code>query</code> ampliadas (<code>FROM</code>, <code>ORDER BY</code>, <code>GROUP BY</code>, <code>HAVING</code>) y <code>@seealso [cie10_cl]</code> (ybs12–ybs17). Terminología de los mensajes homogeneizada al castellano (consulta/palabra clave/sentencias) (ybs14).</li>
+<li>
+<strong>Ortografía de la ayuda</strong>: se corrigen las tildes faltantes en la documentación roxygen de <code><a href="../reference/cie_norm.html">cie_norm()</a></code>, <code><a href="../reference/cie_normalizar.html">cie_normalizar()</a></code>, <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code>, <code><a href="../reference/cie_expand.html">cie_expand()</a></code>, <code><a href="../reference/cie_search.html">cie_search()</a></code>, <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>, <code><a href="../reference/cie_table.html">cie_table()</a></code>, <code><a href="../reference/cie_guide.html">cie_guide()</a></code>, <code><a href="../reference/cie_describe.html">cie_describe()</a></code> y <code><a href="../reference/cie11_search.html">cie11_search()</a></code> (ybs18, ybs20, ybs21, ybs23, ybs29, ybs32, ybs33, ybs35). Las tildes de <code><a href="../reference/cie_siglas.html">cie_siglas()</a></code> —deprecated pero exportada— corresponden a ybs25, y las de <code><a href="../reference/cie_short.html">cie_short()</a></code> y <code><a href="../reference/cie_search.html">cie_search()</a></code> a ybs26.</li>
+<li>
+<strong><code><a href="../reference/cie10_clear_cache.html">cie10_clear_cache()</a></code> / <code><a href="../reference/cie10_disconnect.html">cie10_disconnect()</a></code></strong>: ayuda ampliada explicando qué es la caché SQLite, cuándo conviene forzar la reconstrucción, qué es el bloqueo del archivo <code>.db</code>, por qué ocurre y qué pasa si no se libera (ybs10, ybs11).</li>
+<li>
+<strong>Mensajes en castellano consistente</strong>: en <code><a href="../reference/cie_short.html">cie_short()</a></code> y <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code> el listado de valores usa el conector <code>" y "</code> en lugar del <code>" and "</code> que <code>cli</code> aplica por defecto al colapsar vectores; el mensaje de <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code> reemplaza <code>"DB"</code> por <code>"base de datos"</code> y agrega la tilde de <code>"Códigos"</code> mediante escape unicode, según lo sugerido en la revisión (ybs14, ybs20, ybs27).</li>
+<li>
+<strong><code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code></strong>: ahora emite un <code><a href="https://cli.r-lib.org/reference/cli_abort.html" class="external-link">cli::cli_warn()</a></code> cuando alguna entrada no tiene formato CIE-10 válido (p. ej. <code>"hola"</code> o <code>35</code>), indicando cuántas se clasificaron como <code>"Otra"</code>. El comportamiento de clasificación no cambia: los códigos CIE-10 válidos no mapeados siguen en <code>"Otra"</code> (ybs34).</li>
+<li>
+<strong><code><a href="../reference/cie_guide.html">cie_guide()</a></code></strong>: se mantiene como función, se agrega un enlace cruzado desde el README hacia ella y <code>@seealso</code> a ella desde las ayudas de las funciones de búsqueda (ybs31).</li>
+<li>
+<strong>Tests</strong>: nuevos casos de validación para <code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> y refuerzo de las aserciones de las dos ramas “sin palabras válidas” de <code><a href="../reference/cie_search.html">cie_search()</a></code>, que ahora verifican que la consulta de respaldo devuelve datos reales, no solo que no falla (ybs17, ybs28).</li>
+</ul></div>
 <div class="section level3">
 <h3 id="documentación--correcciones-revisión-ropensci-comentarios-de-yabellini-0-9-8">Documentación — Correcciones revisión rOpenSci, comentarios de yabellini (2026-06-20)<a class="anchor" aria-label="anchor" href="#documentaci%C3%B3n--correcciones-revisi%C3%B3n-ropensci-comentarios-de-yabellini-0-9-8"></a></h3>
 <p>Trabajo preparado originalmente el 2026-05-29, comiteado recien el 2026-06-20: quedo guardado en <code>git stash</code> desde el 2026-06-09 hasta su recuperacion. Sin cambios en la API publica.</p>

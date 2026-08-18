@@ -1,10 +1,10 @@
-# Listar siglas medicas soportadas
+# Listar siglas médicas soportadas
 
-Muestra todas las siglas medicas que pueden usarse en
+Muestra todas las siglas médicas que pueden usarse en
 [`cie_search()`](https://rodotasso.github.io/ciecl/reference/cie_search.md).
-"Sigla" se conserva como termino local (concepto medico chileno) en la
-columna de salida; el nombre de la funcion usa `cie_short` por
-consistencia con el ecosistema R (verbos cortos en ingles).
+"Sigla" se conserva como término local (concepto médico chileno) en la
+columna de salida; el nombre de la función usa `cie_short` por
+consistencia con el ecosistema R (verbos cortos en inglés).
 
 ## Usage
 
@@ -16,7 +16,8 @@ cie_short(category = NULL, categoria = lifecycle::deprecated())
 
 - category:
 
-  Character opcional, filtrar por categoria. Valores validos:
+  Character opcional, filtrar por categoría. Los valores (sin tildes,
+  son tokens usados también para matching interno) son:
   "cardiovascular", "respiratoria", "metabolica", "gastrointestinal",
   "infecciosa", "oncologica", "reumatologica", "neurologica",
   "psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
@@ -58,7 +59,7 @@ cie_short()
 #> 10 tep     embolia pulmonar         cardiovascular
 #> # ℹ 80 more rows
 
-# Filtrar por categoria
+# Filtrar por categoría
 cie_short("cardiovascular")
 #> # A tibble: 15 × 3
 #>    sigla   termino_busqueda              categoria     
@@ -92,7 +93,7 @@ cie_short("oncologica")
 #> 8 lh    linfoma hodgkin              oncologica
 #> 9 mm    mieloma multiple             oncologica
 
-# Buscar una sigla especifica
+# Buscar una sigla específica
 cie_short() |> dplyr::filter(sigla == "iam")
 #> # A tibble: 1 × 3
 #>   sigla termino_busqueda        categoria     

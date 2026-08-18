@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Introduction to ciecl: Chilean ICD-10 in R • ciecl</title>
+<title>Primeros pasos con ciecl: un reporte de egresos hospitalarios • ciecl</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Introduction to ciecl: Chilean ICD-10 in R">
+<meta property="og:title" content="Primeros pasos con ciecl: un reporte de egresos hospitalarios">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,22 +35,24 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+<li class="active nav-item"><a class="nav-link" href="../articles/ciecl.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Referencia</a></li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-gu-as" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Guías</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-gu-as">
 <li><h6 class="dropdown-header" data-toc-skip>Documentación en Español</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Inicio</a></li>
-    <li><a class="dropdown-item" href="../articles/caso-uso-egresos.html">Caso de Uso: Egresos Hospitalarios</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl.html">Primeros pasos con ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-es.html">Introducción a ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/instalacion.html">Guía de Instalación</a></li>
     <li><a class="dropdown-item" href="../articles/idiomas.html">Idiomas y Normalización</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>English Documentation</h6></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Getting Started</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Case Study: Hospital Discharges</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">Internationalization</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-discharges.html">Getting Started with ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/ciecl-en.html">Introduction to ciecl</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation Guide</a></li>
+    <li><a class="dropdown-item" href="../articles/languages.html">Languages and Normalization</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Novedades</a></li>
@@ -59,8 +61,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-idioma" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-language"></span> Idioma</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-idioma">
-<li><a class="dropdown-item" href="../articles/ciecl-es.html">Español (Principal)</a></li>
-    <li><a class="dropdown-item" href="../articles/ciecl.html">English (Documentation)</a></li>
+<li><a class="dropdown-item" href="../index.html">Español (Principal)</a></li>
+    <li><a class="dropdown-item" href="../README.en.html">English (README)</a></li>
   </ul>
 </li>
 <li class="nav-item"><form class="form-inline" role="search">
@@ -87,11 +89,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Introduction to ciecl: Chilean ICD-10 in R</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Primeros pasos con ciecl: un reporte de egresos hospitalarios</h1>
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-08-10</h4>
+            <h4 data-toc-skip class="date">2026-08-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/ciecl.Rmd" class="external-link"><code>vignettes/ciecl.Rmd</code></a></small>
       <div class="d-none name"><code>ciecl.Rmd</code></div>
@@ -99,747 +101,292 @@ Suazo</h4>
 
     
     
-<blockquote>
-<p><strong>Version 0.9.8</strong>: Available on CRAN with SQLite
-optimizations, XLSX support, and standardized English arguments.</p>
-</blockquote>
 <div class="section level2">
-<h2 id="the-problem-working-with-chilean-diagnostic-codes-in-r">The problem: working with Chilean diagnostic codes in R<a class="anchor" aria-label="anchor" href="#the-problem-working-with-chilean-diagnostic-codes-in-r"></a>
+<h2 id="para-quién-es-esta-guía">¿Para quién es esta guía?<a class="anchor" aria-label="anchor" href="#para-qui%C3%A9n-es-esta-gu%C3%ADa"></a>
 </h2>
-<p>Chilean health information systems — DEIS, GRD, REM — store diagnoses
-using the ICD-10 classification in its official MINSAL/DEIS v2018
-version. Analysts working with these datasets in R typically have to
-cross-reference PDF catalogs, Excel tables, or ministry websites to look
-up codes, which breaks the analytical workflow.</p>
-<p><code>ciecl</code> solves this by embedding all <strong>39,877 ICD-10
-codes</strong> from the official catalog directly into R, with functions
-for fast lookup, hierarchical expansion, fuzzy search, and comorbidity
-scoring.</p>
+<p>Imagina que trabajas en la unidad de estadística de un hospital y
+cada mes eres la persona encargada de elaborar el <strong>reporte de
+egresos por diabetes</strong> para la dirección del servicio. Recibes la
+base de egresos hospitalarios, y tu objetivo es responder preguntas
+concretas: ¿cuántos egresos tuvieron como diagnóstico principal una
+diabetes?, ¿de qué tipo?, ¿qué tan complejos eran esos pacientes?</p>
+<p>El problema es que la base llega con códigos CIE-10 en formatos
+inconsistentes y sin descripciones: para interpretarlos tendrías que
+consultar a mano el catálogo oficial en PDF o Excel. <code>ciecl</code>
+elimina ese paso: incorpora el catálogo oficial CIE-10 de Chile
+(MINSAL/DEIS v2018) dentro de R y te permite normalizar, describir,
+buscar y analizar los códigos directamente sobre tu base.</p>
+<p>Esta guía recorre ese flujo completo, de lo básico a lo avanzado.
+Solo necesitas conocimientos básicos de R; si además usas
+<code>dplyr</code>, los ejemplos encajan directo en tus pipelines.</p>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="los-datos-egresos-hospitalarios-del-deis">Los datos: egresos hospitalarios del DEIS<a class="anchor" aria-label="anchor" href="#los-datos-egresos-hospitalarios-del-deis"></a>
 </h2>
-<p>The package is available on CRAN:</p>
+<p>Las bases de <strong>Egresos Hospitalarios</strong> las publica el
+Departamento de Estadísticas e Información de Salud (DEIS) del
+Ministerio de Salud de Chile. Cada fila es un alta hospitalaria y la
+columna <code>DIAG1</code> contiene el diagnóstico principal codificado
+en CIE-10.</p>
+<p>En la práctica, estos archivos llegan con dos variaciones de formato
+muy comunes:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Formatos compactos</strong>: códigos sin punto decimal (ej:
+<code>J189</code> en lugar de <code>J18.9</code>).</li>
+<li>
+<strong>Sufijos de relleno</strong>: una letra <code>X</code> para
+completar la longitud del campo en categorías de 3 dígitos (ej:
+<code>I10X</code> para hipertensión esencial).</li>
+</ol>
+<p>Generemos un conjunto de datos sintético que replica la estructura y
+las anomalías típicas de los archivos del DEIS:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span></code></pre></div>
-<p>To install the development version with the latest fixes:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requires the pak package</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="direct-sql-queries-against-the-catalog">Direct SQL queries against the catalog<a class="anchor" aria-label="anchor" href="#direct-sql-queries-against-the-catalog"></a>
-</h2>
-<p><code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> exposes the full catalog through a local
-SQLite database, allowing you to filter with the full expressiveness of
-SQL. This is useful when you know the code structure but not the exact
-label — for instance, to retrieve all subcodes within a category.</p>
-<p>The example below fetches the first five type 2 diabetes codes
-(category E11):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie10_sql.html">cie10_sql</a></span><span class="op">(</span><span class="st">"SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%' LIMIT 5"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
-<span><span class="co">#&gt;   codigo descripcion                                           </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11    Diabetes mellitus no insulinodependiente              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> E11.0  Diabetes mellitus tipo 2 con coma                     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> E11.1  Diabetes mellitus tipo 2 con cetoacidosis             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> E11.2  Diabetes mellitus tipo 2 con complicaciones renales   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> E11.3  Diabetes mellitus tipo 2 con complicaciones oftálmicas</span></span></code></pre></div>
-<p>Only <code>SELECT</code> queries are accepted, protecting catalog
-integrity.</p>
-</div>
-<div class="section level2">
-<h2 id="looking-up-known-codes">Looking up known codes<a class="anchor" aria-label="anchor" href="#looking-up-known-codes"></a>
-</h2>
-<p>When codes are already present in your data — such as hospital
-discharge diagnoses — <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> retrieves the official
-description for one or more codes at once.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Single code</span></span>
-<span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11.0"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 11</span></span></span>
-<span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
-<p>The function accepts vectors, making it straightforward to use inside
-a <code>dplyr</code> pipeline:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Multiple codes from different chapters</span></span>
-<span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"Z00"</span>, <span class="st">"J44.0"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 11</span></span></span>
-<span><span class="co">#&gt;   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> J44.0  Enfermedad pulmo… J44 OTRA… J40-J4… Cap.10  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
-<p>When working at the category level (three-digit codes), you may need
-all subcodes within a category. The <code>expand = TRUE</code> argument
-traverses the hierarchy and returns the parent category together with
-all its children:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"E11"</span>, expand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 11</span></span></span>
-<span><span class="co">#&gt;    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> E11.0  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> E11.1  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> E11.2  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> E11.3  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> E11.4  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> E11.5  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> E11.6  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: capitulo &lt;chr&gt;, es_daga &lt;int&gt;, es_cruz &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="extracting-descriptions-for-use-in-tables-and-plots">Extracting descriptions for use in tables and plots<a class="anchor" aria-label="anchor" href="#extracting-descriptions-for-use-in-tables-and-plots"></a>
-</h2>
-<p>When you only need the description text — without the full structure
-returned by <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code> — <code><a href="../reference/cie_describe.html">cie_describe()</a></code>
-returns a character vector of descriptions in the same order as the
-input codes. This is designed for use inside <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> or as
-axis labels in plots:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Diabetes mellitus tipo 2 con coma" "Hipertensión esencial (primaria)"</span></span></code></pre></div>
-<p>A typical use case with hospital discharge data:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">discharges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id          <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
-<span>  diag_code   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I10"</span>, <span class="st">"J44.0"</span>, <span class="st">"E11.0"</span><span class="op">)</span></span>
+<span><span class="co"># Simulación de 200 registros con formatos típicos del DEIS Chile</span></span>
+<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  ID_EGRESO <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">200</span>,</span>
+<span>  PACIENTE_ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  ANO       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">:</span><span class="fl">2022</span>, <span class="fl">200</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  DIAG1     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"J189"</span>, <span class="st">"O800"</span>, <span class="st">"Z380"</span>, <span class="st">"K359"</span>, <span class="st">"N390"</span>,</span>
+<span>      <span class="st">"I10X"</span>, <span class="st">"J449"</span>, <span class="st">"E119"</span>, <span class="st">"O829"</span>, <span class="st">"J069"</span>,</span>
+<span>      <span class="st">"K922"</span>, <span class="st">"N185"</span>, <span class="st">"I509"</span>, <span class="st">"C509"</span>, <span class="st">"A099"</span>,</span>
+<span>      <span class="st">"N40X"</span>, <span class="st">"K800"</span>, <span class="st">"I259"</span>, <span class="st">"J180"</span>, <span class="st">"E149"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    size    <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>    replace <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">discharges</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>description <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">diag_code</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id diag_code</span></span>
-<span><span class="co">#&gt; 1  1     E11.0</span></span>
-<span><span class="co">#&gt; 2  2       I10</span></span>
-<span><span class="co">#&gt; 3  3     J44.0</span></span>
-<span><span class="co">#&gt; 4  4     E11.0</span></span>
-<span><span class="co">#&gt;                                                                                        description</span></span>
-<span><span class="co">#&gt; 1                                                                Diabetes mellitus tipo 2 con coma</span></span>
-<span><span class="co">#&gt; 2                                                                 Hipertensión esencial (primaria)</span></span>
-<span><span class="co">#&gt; 3 Enfermedad pulmonar obstructiva crónica con infección aguda de las vías respiratorias inferiores</span></span>
-<span><span class="co">#&gt; 4                                                                Diabetes mellitus tipo 2 con coma</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   ID_EGRESO PACIENTE_ID  ANO DIAG1</span></span>
+<span><span class="co">#&gt; 1         1          49 2018  J189</span></span>
+<span><span class="co">#&gt; 2         2          37 2022  E119</span></span>
+<span><span class="co">#&gt; 3         3           1 2021  E149</span></span>
+<span><span class="co">#&gt; 4         4          25 2018  N390</span></span>
+<span><span class="co">#&gt; 5         5          10 2022  I10X</span></span>
+<span><span class="co">#&gt; 6         6          36 2021  C509</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="fuzzy-search-with-tolerance-for-misspellings">Fuzzy search with tolerance for misspellings<a class="anchor" aria-label="anchor" href="#fuzzy-search-with-tolerance-for-misspellings"></a>
+<h2 id="paso-1-normalizar-los-códigos-con-cie_norm">Paso 1: Normalizar los códigos con <code>cie_norm()</code><a class="anchor" aria-label="anchor" href="#paso-1-normalizar-los-c%C3%B3digos-con-cie_norm"></a>
 </h2>
-<p>Clinical text data often contains spelling errors, abbreviations, or
-non-standard terms. <code><a href="../reference/cie_search.html">cie_search()</a></code> uses Jaro-Winkler string
-similarity to find matching codes even when the search term contains
-typos.</p>
-<p>The <code>threshold</code> parameter controls strictness: higher
-values require closer matches. A range of 0.70 to 0.85 works well in
-practice:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># "diabetis" instead of "diabetes" — the typo does not prevent finding the code</span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"diabetis with coma"</span>, threshold <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 22 × 4</span></span></span>
+<p>Antes de cualquier análisis hay que estandarizar <code>DIAG1</code>.
+<code><a href="../reference/cie_norm.html">cie_norm()</a></code> aplica las reglas de codificación oficial del
+MINSAL de forma vectorizada: elimina la <code>X</code> de relleno,
+inserta el punto decimal en la posición correcta y limpia espacios,
+guiones y símbolos especiales (como † o *).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Limpieza y estandarización de diagnósticos en el flujo de trabajo</span></span>
+<span><span class="va">egresos</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    DIAG1_NORM <span class="op">=</span> <span class="fu"><a href="../reference/cie_norm.html">cie_norm</a></span><span class="op">(</span>codes <span class="op">=</span> <span class="va">DIAG1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Comparación entre formato original y normalizado</span></span>
+<span><span class="va">egresos</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DIAG1</span>, <span class="va">DIAG1_NORM</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   DIAG1 DIAG1_NORM</span></span>
+<span><span class="co">#&gt; 1  J189      J18.9</span></span>
+<span><span class="co">#&gt; 2  E119      E11.9</span></span>
+<span><span class="co">#&gt; 3  E149      E14.9</span></span>
+<span><span class="co">#&gt; 4  N390      N39.0</span></span>
+<span><span class="co">#&gt; 5  I10X        I10</span></span></code></pre></div>
+<p>Con esto, <code>I10X</code> quedó como <code>I10</code> y
+<code>J189</code> como <code>J18.9</code>: los códigos ya son
+comparables con el catálogo oficial.</p>
+</div>
+<div class="section level2">
+<h2 id="paso-2-agregar-las-descripciones-oficiales-con-cie_describe">Paso 2: Agregar las descripciones oficiales con
+<code>cie_describe()</code><a class="anchor" aria-label="anchor" href="#paso-2-agregar-las-descripciones-oficiales-con-cie_describe"></a>
+</h2>
+<p>Para el reporte necesitas las glosas clínicas, no solo los códigos.
+<code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve directamente un vector de
+caracteres, por lo que se integra en un <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> sin joins
+temporales:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Integración directa de descripciones al dataframe principal</span></span>
+<span><span class="va">egresos_full</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    descripcion <span class="op">=</span> <span class="fu"><a href="../reference/cie_describe.html">cie_describe</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">egresos_full</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ID_EGRESO</span>, <span class="va">DIAG1</span>, <span class="va">descripcion</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   ID_EGRESO DIAG1</span></span>
+<span><span class="co">#&gt; 1         1  J189</span></span>
+<span><span class="co">#&gt; 2         2  E119</span></span>
+<span><span class="co">#&gt; 3         3  E149</span></span>
+<span><span class="co">#&gt; 4         4  N390</span></span>
+<span><span class="co">#&gt; 5         5  I10X</span></span>
+<span><span class="co">#&gt; 6         6  C509</span></span>
+<span><span class="co">#&gt;                                                       descripcion</span></span>
+<span><span class="co">#&gt; 1                                       Neumonía, no especificada</span></span>
+<span><span class="co">#&gt; 2                     Diabetes mellitus tipo 2 sin complicaciones</span></span>
+<span><span class="co">#&gt; 3 Diabetes mellitus, no especificada, sin mención de complicación</span></span>
+<span><span class="co">#&gt; 4              Infección de vías urinarias, sitio no especificado</span></span>
+<span><span class="co">#&gt; 5                                Hipertensión esencial (primaria)</span></span>
+<span><span class="co">#&gt; 6                 Tumor maligno de la mama, parte no especificada</span></span></code></pre></div>
+<p>Si además de la glosa necesitas la metadata completa (capítulo,
+grupo, notas de inclusión/exclusión), usa <code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>, que
+devuelve un <code>tibble</code> estructurado listo para un
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Obtención de metadata completa vía lookup + join</span></span>
+<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span></span>
+<span>  code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">$</span><span class="va">DIAG1_NORM</span><span class="op">)</span>,</span>
+<span>  full_description <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">egresos_metadata</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">metadata</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIAG1_NORM"</span> <span class="op">=</span> <span class="st">"codigo"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="paso-3-encontrar-códigos-cuando-no-sabes-el-código-con-cie_search">Paso 3: Encontrar códigos cuando no sabes el código con
+<code>cie_search()</code><a class="anchor" aria-label="anchor" href="#paso-3-encontrar-c%C3%B3digos-cuando-no-sabes-el-c%C3%B3digo-con-cie_search"></a>
+</h2>
+<p>Volvamos a tu reporte de diabetes: sospechas que en la base hay
+egresos por diabetes, pero ¿qué códigos exactos cubre el catálogo? En
+vez de hojear el PDF, buscas por texto. <code><a href="../reference/cie_search.html">cie_search()</a></code> usa
+similitud Jaro-Winkler, así que tolera errores tipográficos (aquí
+buscamos “diabetis” a propósito):</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Búsqueda tolerante: "diabetis" en lugar de "diabetes"</span></span>
+<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"diabetis"</span>, threshold <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> B15.0  Hepatitis aguda tipo A, con coma hepático              0.333 B15 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> B15.9  Hepatitis aguda tipo A, sin coma hepático              0.333 B15 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> B16.0  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> B16.1  Hepatitis aguda tipo B, con agente delta (coinfección… 0.333 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> B16.2  Hepatitis aguda tipo B, sin agente delta, con coma he… 0.333 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> B16.9  Hepatitis aguda tipo B, sin agente delta y sin coma h… 0.333 B16 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B19.0  Hepatitis viral no especificada, con coma hepático     0.333 B19 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B19.9  Hepatitis viral no especificada, sin  coma hepático    0.333 B19 HEPA…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E03.5  Coma mixedematoso                                      0.333 E03 OTRO…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E10.0  Diabetes mellitus tipo 1 con coma                      0.333 E10 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 12 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> E10    Diabetes mellitus insulinodependiente                  0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> E10.0  Diabetes mellitus tipo 1 con coma                      0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> E10.1  Diabetes mellitus tipo 1 con cetoacidosis              0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> E10.2  Diabetes mellitus tipo 1 con complicaciones renales    0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> E10.3  Diabetes mellitus tipo 1 con complicaciones oftálmicas 0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> E10.4  Diabetes mellitus tipo 1 con complicaciones neurológi… 0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> E10.5  Diabetes mellitus tipo 1 con complicaciones  circulat… 0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp… 0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples  0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E10.8  Diabetes mellitus tipo 1 con complicaciones no especi… 0.917 E10 DIAB…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
+<p>El resultado incluye un <code>score</code> de similitud para evaluar
+la confiabilidad de cada coincidencia. Ahora sabes que
+<code>E11.9</code> y <code>E14.9</code> de tu base corresponden a
+diabetes y puedes filtrar tu reporte con criterio.</p>
 </div>
 <div class="section level2">
-<h2 id="charlson-and-elixhauser-comorbidity-indices">Charlson and Elixhauser comorbidity indices<a class="anchor" aria-label="anchor" href="#charlson-and-elixhauser-comorbidity-indices"></a>
+<h2 id="cuando-la-búsqueda-no-entrega-resultados">Cuando la búsqueda no entrega resultados<a class="anchor" aria-label="anchor" href="#cuando-la-b%C3%BAsqueda-no-entrega-resultados"></a>
 </h2>
-<p>The Charlson and Elixhauser indices are widely used in clinical
-research and risk adjustment. <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> computes these
-indices from a data frame containing patient identifiers and their
-associated diagnostic codes.</p>
-<p>This function requires the <code>comorbidity</code> package. Install
-it with <code>install.packages("comorbidity")</code> if needed:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requires: install.packages("comorbidity")</span></span>
-<span><span class="va">patient_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  patient_id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  diagnosis   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"I50.9"</span>, <span class="st">"C50.9"</span>, <span class="st">"N18.5"</span>, <span class="st">"J44.0"</span><span class="op">)</span></span>
+<p>Es normal que algunas consultas no encuentren nada, y conviene saber
+cómo se comporta el paquete en esos casos: <strong>las funciones nunca
+fallan con un error por ausencia de resultados; devuelven un
+<code>tibble</code> vacío con la estructura de columnas
+correcta</strong> y un mensaje informativo.</p>
+<p>Si buscas un código que no existe en el catálogo:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"XYZ123"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Código no encontrado: <span style="color: #0000BB;">"XYZ123"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 11</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 variables: codigo &lt;chr&gt;, descripcion &lt;chr&gt;, categoria &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   seccion &lt;chr&gt;, capitulo_nombre &lt;chr&gt;, inclusion &lt;chr&gt;, exclusion &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   capitulo &lt;chr&gt;, es_daga &lt;lgl&gt;, es_cruz &lt;lgl&gt;, uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
+<p>Si el umbral de <code><a href="../reference/cie_search.html">cie_search()</a></code> es demasiado estricto para
+el término ingresado:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"zzzqwerty"</span>, threshold <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Sin coincidencias &gt;= threshold <span style="color: #0000BB;">0.95</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 variables: codigo &lt;chr&gt;, descripcion &lt;chr&gt;, score &lt;dbl&gt;, categoria &lt;chr&gt;</span></span></span></code></pre></div>
+<p>En ambos casos el flujo no se interrumpe: puedes verificar
+<code>nrow(resultado) == 0</code> y reaccionar (bajar el
+<code>threshold</code>, revisar la ortografía o validar el código). Para
+chequear rápidamente qué códigos de un vector son válidos según el
+catálogo, usa <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_validate_vector.html">cie_validate_vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"XYZ123"</span>, <span class="st">"I10X"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  TRUE FALSE  TRUE</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="paso-4-estratificar-riesgo-con-cie_comorbid">Paso 4: Estratificar riesgo con <code>cie_comorbid()</code><a class="anchor" aria-label="anchor" href="#paso-4-estratificar-riesgo-con-cie_comorbid"></a>
+</h2>
+<p>El último nivel del reporte es la complejidad de los pacientes.
+<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> mapea los diagnósticos a los índices de
+Charlson o Elixhauser y devuelve una matriz de comorbilidades por
+paciente, lista para modelos estadísticos:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Requiere el paquete 'comorbidity' instalado</span></span>
+<span><span class="co"># Cálculo del Índice de Charlson consolidado por paciente</span></span>
+<span><span class="va">comorbilidades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">egresos</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"PACIENTE_ID"</span>,</span>
+<span>  code <span class="op">=</span> <span class="st">"DIAG1"</span>,</span>
+<span>  map <span class="op">=</span> <span class="st">"charlson"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span><span class="va">patient_df</span>, id <span class="op">=</span> <span class="st">"patient_id"</span>, code <span class="op">=</span> <span class="st">"diagnosis"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 19</span></span></span>
-<span><span class="co">#&gt;   patient_id    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab</span></span>
-<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>          1     0     1     0     0        0     0      0     0     0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>          2     0     0     0     0        0     0      0     0     0     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>          3     0     0     0     0        0     1      0     0     0     0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">comorbilidades</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 19</span></span></span>
+<span><span class="co">#&gt;    PACIENTE_ID    mi   chf   pvd  cevd dementia   cpd rheumd   pud   mld  diab</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           1     0     0     0     0        0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           2     0     0     0     0        0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           3     0     0     0     0        0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           4     0     1     0     0        0     1      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           5     0     1     0     0        0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           6     0     0     0     0        0     1      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           7     0     0     0     0        0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           8     0     0     0     0        0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           9     0     0     0     0        0     1      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          10     0     0     0     0        0     0      0     0     0     1</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: diabwc &lt;int&gt;, hp &lt;int&gt;, rend &lt;int&gt;, canc &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   msld &lt;int&gt;, metacanc &lt;int&gt;, aids &lt;int&gt;, score_charlson &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>The result is a data frame with one row per patient and columns for
-each condition in the selected index, plus a weighted total score.</p>
 </div>
 <div class="section level2">
-<h2 id="formatted-tables-with-gt">Formatted tables with gt<a class="anchor" aria-label="anchor" href="#formatted-tables-with-gt"></a>
+<h2 id="resumen-del-flujo">Resumen del flujo<a class="anchor" aria-label="anchor" href="#resumen-del-flujo"></a>
 </h2>
-<p>For reports and presentations, <code><a href="../reference/cie_table.html">cie_table()</a></code> generates an
-enriched HTML table of all codes within a category using the
-<code>gt</code> package. Requires <code>gt</code> to be installed:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Requires: install.packages("gt")</span></span>
-<span><span class="fu"><a href="../reference/cie_table.html">cie_table</a></span><span class="op">(</span><span class="st">"E11"</span><span class="op">)</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
-  border-style: none;
-}
-
-#mwlefoodfi p {
-  margin: 0;
-  padding: 0;
-}
-
-#mwlefoodfi .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 12px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#mwlefoodfi .gt_title {
-  color: #FFFFFF;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#mwlefoodfi .gt_subtitle {
-  color: #FFFFFF;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#mwlefoodfi .gt_heading {
-  background-color: #1F77B4;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#mwlefoodfi .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#mwlefoodfi .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#mwlefoodfi .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#mwlefoodfi .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#mwlefoodfi .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#mwlefoodfi .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#mwlefoodfi .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#mwlefoodfi .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#mwlefoodfi .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_left {
-  text-align: left;
-}
-
-#mwlefoodfi .gt_center {
-  text-align: center;
-}
-
-#mwlefoodfi .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#mwlefoodfi .gt_font_normal {
-  font-weight: normal;
-}
-
-#mwlefoodfi .gt_font_bold {
-  font-weight: bold;
-}
-
-#mwlefoodfi .gt_font_italic {
-  font-style: italic;
-}
-
-#mwlefoodfi .gt_super {
-  font-size: 65%;
-}
-
-#mwlefoodfi .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#mwlefoodfi .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#mwlefoodfi .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#mwlefoodfi .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#mwlefoodfi .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#mwlefoodfi .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#mwlefoodfi .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#mwlefoodfi .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="2" class="gt_heading gt_title gt_font_normal" style>CIE-10 Chile: E11</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="2" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Fuente: MINSAL/DEIS v2018</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="codigo">Codigo</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="descripcion">Diagnostico</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus no insulinodependiente</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.0</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con coma</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.1</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con cetoacidosis</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.2</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones renales</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.3</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones oftálmicas</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.4</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones neurológicas</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.5</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones  circulatorias periféricas</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.6</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con otras complicaciones  especificadas</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.7</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones múltiples</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.8</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 con complicaciones no especificadas</span></td>
-</tr>
-<tr>
-<td headers="codigo" class="gt_row gt_left"><span class="gt_from_md">E11.9</span></td>
-<td headers="descripcion" class="gt_row gt_left"><span class="gt_from_md">Diabetes mellitus tipo 2 sin complicaciones</span></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p>El recorrido de esta guía cubre el ciclo completo desde la base cruda
+hasta el insumo analítico:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Estandarización</strong>: corrección de formatos con
+<code><a href="../reference/cie_norm.html">cie_norm()</a></code>.</li>
+<li>
+<strong>Contextualización</strong>: glosas oficiales con
+<code><a href="../reference/cie_describe.html">cie_describe()</a></code> y metadata con
+<code><a href="../reference/cie_lookup.html">cie_lookup()</a></code>.</li>
+<li>
+<strong>Exploración</strong>: búsqueda de códigos por texto con
+<code><a href="../reference/cie_search.html">cie_search()</a></code>, tolerante a errores y con comportamiento
+predecible cuando no hay resultados.</li>
+<li>
+<strong>Agregación</strong>: índices de comorbilidad con
+<code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code>.</li>
+</ol>
+<p>¿No sabes cuál función usar en otro escenario? Ejecuta
+<code><a href="../reference/cie_guide.html">cie_guide()</a></code> para ver una tabla comparativa con la función
+recomendada y un ejemplo por caso.</p>
 </div>
 <div class="section level2">
-<h2 id="data-source">Data source<a class="anchor" aria-label="anchor" href="#data-source"></a>
-</h2>
-<p>The data included in <code>ciecl</code> comes from the official
-ICD-10 catalog published by the Chilean Ministry of Health through the
-Department of Health Statistics and Information (DEIS):</p>
-<ul>
-<li>FIC Chile Center: <a href="https://deis.minsal.cl/centrofic/" class="external-link uri">https://deis.minsal.cl/centrofic/</a>
-</li>
-<li>DEIS Repository: <a href="https://deis.minsal.cl" class="external-link uri">https://deis.minsal.cl</a>
-</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="further-information">Further information<a class="anchor" aria-label="anchor" href="#further-information"></a>
+<h2 id="para-seguir-aprendiendo">Para seguir aprendiendo<a class="anchor" aria-label="anchor" href="#para-seguir-aprendiendo"></a>
 </h2>
 <ul>
-<li>Report issues or suggestions: <a href="https://github.com/RodoTasso/ciecl/issues" class="external-link uri">https://github.com/RodoTasso/ciecl/issues</a>
-</li>
-<li>Package repository: <a href="https://github.com/RodoTasso/ciecl" class="external-link uri">https://github.com/RodoTasso/ciecl</a>
-</li>
+<li>
+<a href="instalacion.html">Guía de instalación y configuración</a>:
+instalación y credenciales para la API CIE-11 de la OMS.</li>
+<li>
+<a href="ciecl-es.html">Introducción a ciecl: CIE-10 Chile en R</a>:
+recorrido por función, incluyendo consultas SQL directas con
+<code><a href="../reference/cie10_sql.html">cie10_sql()</a></code> y tablas formateadas con
+<code><a href="../reference/cie_table.html">cie_table()</a></code>.</li>
+<li>
+<a href="idiomas.html">Idiomas y normalización</a>: búsqueda en
+español e inglés y manejo de tildes.</li>
 </ul>
+<hr>
+<p><strong>Fuente de datos:</strong> Esta herramienta utiliza el
+catálogo CIE-10 oficial para Chile, gestionado por el DEIS del
+Ministerio de Salud. Más detalles en <a href="https://deis.minsal.cl" class="external-link">deis.minsal.cl</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

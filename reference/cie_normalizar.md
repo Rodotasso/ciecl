@@ -1,4 +1,4 @@
-# Normalizar codigos CIE-10 (deprecated)
+# Normalizar códigos CIE-10 (deprecated)
 
 **\[deprecated\]**
 
@@ -15,27 +15,27 @@ cie_normalizar(
 
 - codigos:
 
-  **\[deprecated\]** Character vector de codigos. Use
+  **\[deprecated\]** Character vector de códigos. Use
   [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-  con `codes` en codigo nuevo.
+  con `codes` en código nuevo.
 
 - buscar_db:
 
-  **\[deprecated\]** Logical, buscar codigo en DB (default TRUE). Use
+  **\[deprecated\]** Logical, buscar código en DB (default TRUE). Use
   [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-  con `search_db` en codigo nuevo.
+  con `search_db` en código nuevo.
 
 ## Value
 
-Character vector con codigos normalizados
+Character vector con códigos normalizados
 
 ## Details
 
-Alias en espanol de
+Alias en español de
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md).
-Se mantiene por compatibilidad con codigo existente en CRAN. Usar
+Se mantiene por compatibilidad con código existente en CRAN. Usar
 [`cie_norm()`](https://rodotasso.github.io/ciecl/reference/cie_norm.md)
-en codigo nuevo.
+en código nuevo.
 
 ## See also
 
