@@ -68,14 +68,14 @@ get_cie10_db <- function() {
   }
 
   # Conectar
-  con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
 
   # Verificar integridad: tabla principal debe existir
 
   if (!DBI::dbExistsTable(con, "cie10")) {
     DBI::dbDisconnect(con)
     build_cache_atomic(cache_dir, db_path)
-    con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+    con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
   }
 
   # Failsafe FTS5
@@ -87,7 +87,7 @@ get_cie10_db <- function() {
   if (!cache_is_current(con)) {
     DBI::dbDisconnect(con)
     build_cache_atomic(cache_dir, db_path)
-    con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+    con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
   }
 
   # Guardar en pool
@@ -333,7 +333,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
     "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
     "\\bATTACH\\b", "\\bDETACH\\b", "\\bPRAGMA\\b", "\\bWITH\\b",
-    "\\bVACUUM\\b", "\\bREINDEX\\b"
+    "\\bVACUUM\\b", "\\bREINDEX\\b", "\\bload_extension\\b"
   )
 
   for (keyword in keywords_peligrosos) {

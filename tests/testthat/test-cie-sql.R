@@ -90,6 +90,15 @@ test_that("cie10_sql bloquea ATTACH DATABASE", {
   )
 })
 
+test_that("cie10_sql bloquea load_extension", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("SELECT load_extension('evil.dll')"),
+    class = "ciecl_unsafe_query"
+  )
+})
+
 test_that("cie10_sql bloquea PRAGMA", {
   skip_on_cran()
 
