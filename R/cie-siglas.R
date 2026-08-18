@@ -450,14 +450,15 @@ sigla_to_codigo <- function(sigla) {
   return(NULL)
 }
 
-#' Listar siglas medicas soportadas
+#' Listar siglas médicas soportadas
 #'
-#' Muestra todas las siglas medicas que pueden usarse en [cie_search()].
-#' "Sigla" se conserva como termino local (concepto medico chileno) en la
-#' columna de salida; el nombre de la funcion usa `cie_short` por
-#' consistencia con el ecosistema R (verbos cortos en ingles).
+#' Muestra todas las siglas médicas que pueden usarse en [cie_search()].
+#' "Sigla" se conserva como término local (concepto médico chileno) en la
+#' columna de salida; el nombre de la función usa `cie_short` por
+#' consistencia con el ecosistema R (verbos cortos en inglés).
 #'
-#' @param category Character opcional, filtrar por categoria. Valores validos:
+#' @param category Character opcional, filtrar por categoría. Los valores
+#'   (sin tildes, son tokens usados también para matching interno) son:
 #'   "cardiovascular", "respiratoria", "metabolica", "gastrointestinal",
 #'   "infecciosa", "oncologica", "reumatologica", "neurologica",
 #'   "psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
@@ -471,11 +472,11 @@ sigla_to_codigo <- function(sigla) {
 #' # Ver todas las siglas
 #' cie_short()
 #'
-#' # Filtrar por categoria
+#' # Filtrar por categoría
 #' cie_short("cardiovascular")
 #' cie_short("oncologica")
 #'
-#' # Buscar una sigla especifica
+#' # Buscar una sigla específica
 #' cie_short() |> dplyr::filter(sigla == "iam")
 cie_short <- function(category = NULL,
                       categoria = lifecycle::deprecated()) {
@@ -501,9 +502,13 @@ cie_short <- function(category = NULL,
     categorias_validas <- unique(resultado$categoria)
 
     if (!category %in% categorias_validas) {
+      categorias_validas_vec <- cli::cli_vec(
+        categorias_validas,
+        style = list("vec-last" = " y ")
+      )
       cli::cli_warn(c(
-        "Categoria {.val {category}} no encontrada.",
-        "i" = "Categorias validas: {.val {categorias_validas}}"
+        "Categor\u00eda {.val {category}} no encontrada.",
+        "i" = "Categor\u00edas v\u00e1lidas: {.val {categorias_validas_vec}}"
       ))
       return(resultado[0, ])
     }
@@ -514,11 +519,11 @@ cie_short <- function(category = NULL,
   return(resultado)
 }
 
-#' Listar siglas medicas (deprecated)
+#' Listar siglas médicas (deprecated)
 #'
 #' `r lifecycle::badge("deprecated")` Use [cie_short()].
 #'
-#' @param categoria Character opcional, filtrar por categoria
+#' @param categoria Character opcional, filtrar por categoría
 #' @returns tibble con columnas: sigla, termino_busqueda, categoria
 #' @family busqueda
 #' @keywords internal

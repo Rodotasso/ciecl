@@ -68,14 +68,14 @@ get_cie10_db <- function() {
   }
 
   # Conectar
-  con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
 
   # Verificar integridad: tabla principal debe existir
 
   if (!DBI::dbExistsTable(con, "cie10")) {
     DBI::dbDisconnect(con)
     build_cache_atomic(cache_dir, db_path)
-    con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+    con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
   }
 
   # Failsafe FTS5
@@ -87,7 +87,7 @@ get_cie10_db <- function() {
   if (!cache_is_current(con)) {
     DBI::dbDisconnect(con)
     build_cache_atomic(cache_dir, db_path)
-    con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+    con <- DBI::dbConnect(RSQLite::SQLite(), db_path, loadable.extensions = FALSE)
   }
 
   # Guardar en pool
@@ -275,14 +275,26 @@ cache_is_current <- function(con) {
 
 #' Ejecutar consultas SQL sobre CIE-10 Chile
 #'
-#' @param query String SQL valido SQLite (SELECT/WHERE/JOIN)
-#' @param close `r lifecycle::badge("deprecated")` Ignorado - la conexion
-#'   es pooled y se gestiona automaticamente. Sera eliminado en una
-#'   version futura.
-#' @returns tibble resultado query
+#' @description
+#' Permite ejecutar sentencias SQL de solo lectura sobre la tabla `cie10`,
+#' el mismo dataset que entrega [cie10_cl]. Útil para consultas que no
+#' están cubiertas por [cie_search()]/[cie_lookup()] (agregaciones,
+#' conteos por capítulo, joins con datos propios cargados en la misma
+#' conexión, etc.). Para aprender SQL desde cero puede revisar
+#' <https://www.w3schools.com/sql/> o la documentación de SQLite
+#' (<https://www.sqlite.org/lang_select.html>).
+#'
+#' @param query String SQL válido SQLite. Soporta `SELECT`, `WHERE`,
+#'   `JOIN`, `FROM`, `ORDER BY`, `GROUP BY` y `HAVING`. Por seguridad
+#'   solo se permiten sentencias `SELECT` (sin escritura ni múltiples
+#'   sentencias).
+#' @param close `r lifecycle::badge("deprecated")` Ignorado - la conexión
+#'   es pooled y se gestiona automáticamente. Será eliminado en una
+#'   versión futura.
+#' @returns tibble con el resultado de la consulta
 #' @family sql_backend
-#' @seealso [cie10_clear_cache()], [cie10_disconnect()],
-#'   [cie_search()]
+#' @seealso [cie10_cl], [cie10_clear_cache()], [cie10_disconnect()],
+#'   [cie_search()], [cie_guide()]
 #' @export
 #' @examples
 #' # Buscar diabetes
@@ -296,15 +308,24 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     lifecycle::deprecate_warn(
       "0.9.8",
       "cie10_sql(close = )",
-      details = "La conexion es pooled y se gestiona automaticamente."
+      details = "La conexi\u00f3n es pooled y se gestiona autom\u00e1ticamente."
     )
   }
+
+  check_required_es(missing(query), "query")
+  if (!rlang::is_string(query)) {
+    cli::cli_abort(
+      "{.arg query} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {query}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+
   # Normalizar query: eliminar espacios y saltos de linea al inicio
   query_norm <- stringr::str_trim(query)
 
   # Validacion de seguridad: solo SELECT permitido
   if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
-    cli::cli_abort("Solo queries {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
+    cli::cli_abort("Solo consultas {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
 
   # Bloquear keywords peligrosos (case-insensitive)
@@ -312,7 +333,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
     "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
     "\\bATTACH\\b", "\\bDETACH\\b", "\\bPRAGMA\\b", "\\bWITH\\b",
-    "\\bVACUUM\\b", "\\bREINDEX\\b"
+    "\\bVACUUM\\b", "\\bREINDEX\\b", "\\bload_extension\\b"
   )
 
   for (keyword in keywords_peligrosos) {
@@ -320,7 +341,12 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
       query_norm, stringr::regex(keyword, ignore_case = TRUE)
     )
     if (keyword_found) {
-      cli::cli_abort("Query contiene keyword no permitido (seguridad).", class = "ciecl_unsafe_query")
+      # Mostrar la palabra clave detectada (sin los anclajes \b del regex)
+      keyword_limpio <- stringr::str_remove_all(keyword, "\\\\b")
+      cli::cli_abort(
+        "La consulta contiene una palabra clave no permitida: {.val {keyword_limpio}} (seguridad).",
+        class = "ciecl_unsafe_query"
+      )
     }
   }
 
@@ -333,24 +359,48 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     query_sin_strings, "(?s)/\\*.*?\\*/"
   )
   if (stringr::str_detect(query_sin_strings, ";")) {
-    cli::cli_abort("Multiples statements SQL no permitidos (seguridad).", class = "ciecl_unsafe_query")
+    cli::cli_abort("M\u00faltiples sentencias SQL no permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
 
   con <- get_cie10_db()
 
-  resultado <- DBI::dbGetQuery(con, query) |> tibble::as_tibble()
+  resultado <- tryCatch(
+    DBI::dbGetQuery(con, query) |> tibble::as_tibble(),
+    error = function(e) {
+      cli::cli_abort(
+        "Error al ejecutar la consulta SQL: {conditionMessage(e)}",
+        class = "ciecl_sql_error",
+        parent = e
+      )
+    }
+  )
 
   return(resultado)
 }
 
-#' Limpiar cache SQLite (forzar rebuild)
+#' Limpiar caché SQLite local (forzar rebuild)
 #'
-#' @returns No return value, called for side effects (deletes SQLite cache).
+#' @description
+#' `ciecl` construye, en el primer uso, un archivo SQLite (`cie10.db`)
+#' a partir del dataset [cie10_cl] y lo guarda en una carpeta de datos
+#' del usuario (ver `tools::R_user_dir("ciecl", "data")`). Esa "caché"
+#' evita reconstruir la base en cada sesión. Esta función la elimina y
+#' fuerza que la próxima consulta ([cie_search()], [cie_lookup()],
+#' [cie10_sql()], etc.) la reconstruya desde cero.
+#'
+#' Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
+#' una version con un dataset CIE-10 corregido y la caché vieja quedó
+#' desactualizada, (2) se sospecha que el archivo `.db` está corrupto
+#' (errores de lectura SQL inesperados), o (3) se quiere liberar el
+#' espacio en disco que ocupa la caché.
+#'
+#' @returns Sin valor de retorno, se llama por sus efectos secundarios
+#'   (elimina la caché SQLite).
 #' @family sql_backend
 #' @seealso [cie10_sql()], [cie10_disconnect()]
 #' @export
 #' @examples
-#' # Ver ubicacion del cache
+#' # Ver ubicación de la caché
 #' tools::R_user_dir("ciecl", "data")
 #'
 #' @examplesIf interactive()
@@ -391,18 +441,36 @@ cie10_clear_cache <- function() {
   invisible(NULL)
 }
 
-#' Cerrar conexion pooled SQLite
+#' Cerrar conexión pooled SQLite
 #'
-#' Cierra la conexion reutilizable al archivo SQLite.
-#' Util para liberar el lock del archivo .db.
+#' @description
+#' `ciecl` mantiene una única conexión SQLite reutilizable ("pooled")
+#' abierta al archivo `cie10.db` durante la sesión, en lugar de abrir y
+#' cerrar una conexión por cada consulta. Mientras esa conexión está
+#' abierta, SQLite mantiene un "lock" (bloqueo) sobre el archivo `.db`:
+#' es la forma en que SQLite evita lecturas/escrituras concurrentes
+#' inconsistentes sobre el mismo archivo. Esta función cierra esa
+#' conexión y libera el lock.
 #'
-#' @returns No return value, called for side effects.
+#' Conviene llamarla antes de operaciones que necesitan acceso exclusivo
+#' al archivo `cie10.db` —por ejemplo antes de [cie10_clear_cache()] si
+#' se borra manualmente la caché por fuera del paquete, o al finalizar
+#' un proceso batch largo para no dejar el archivo bloqueado—. Si no se
+#' libera el lock, el archivo `.db` puede seguir abierto hasta que
+#' termine la sesión de R; en la práctica esto rara vez es un problema
+#' porque cada sesión de R tiene su propia conexión, pero impide que
+#' otro proceso externo (no R) edite el archivo mientras la conexión
+#' esté abierta.
+#'
+#' @returns Sin valor de retorno, se llama por sus efectos secundarios
+#'   (cierra la conexión SQLite pooled).
 #' @family sql_backend
 #' @seealso [cie10_sql()], [cie10_clear_cache()]
 #' @export
 #' @examples
-#' # Verificar si hay conexion activa
-#' # (Ejemplo omitido por usar internal environment)
+#' # No hay un ejemplo no interactivo: el objeto de conexion vive en un
+#' # entorno interno del paquete (.ciecl_env) y no es parte de la API
+#' # publica, por lo que no hay nada que inspeccionar desde afuera.
 #'
 #' @examplesIf interactive()
 #' cie10_disconnect()

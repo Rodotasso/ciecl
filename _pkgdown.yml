@@ -11,9 +11,6 @@ navbar:
     left: [intro, reference, articles, news]
     right: [lang, search, lightswitch, github]
   components:
-    intro:
-      text: "Inicio"
-      href: index.html
     reference:
       text: "Referencia"
       href: reference/index.html
@@ -22,21 +19,25 @@ navbar:
       menu:
         - text: "Documentación en Español"
         - text: "--------"
-        - text: "Guía de Inicio"
+        - text: "Primeros pasos con ciecl"
+          href: articles/ciecl.html
+        - text: "Introducción a ciecl"
+          href: articles/ciecl-es.html
+        - text: "Guía de Instalación"
           href: articles/instalacion.html
-        - text: "Caso de Uso: Egresos Hospitalarios"
-          href: articles/caso-uso-egresos.html
         - text: "Idiomas y Normalización"
           href: articles/idiomas.html
         - text: "--------"
         - text: "English Documentation"
         - text: "--------"
-        - text: "Getting Started"
-          href: articles/installation.html
-        - text: "Case Study: Hospital Discharges"
+        - text: "Getting Started with ciecl"
           href: articles/case-study-discharges.html
-        - text: "Internationalization"
-          href: articles/ciecl.html
+        - text: "Introduction to ciecl"
+          href: articles/ciecl-en.html
+        - text: "Installation Guide"
+          href: articles/installation.html
+        - text: "Languages and Normalization"
+          href: articles/languages.html
     news:
       text: "Novedades"
       href: news/index.html
@@ -45,21 +46,22 @@ navbar:
       icon: fas fa-language
       menu:
         - text: "Español (Principal)"
-          href: articles/ciecl-es.html
-        - text: "English (Documentation)"
-          href: articles/ciecl.html
+          href: index.html
+        - text: "English (README)"
+          href: README.en.html
 
 articles:
   - title: "Documentación en Español"
     contents:
+      - ciecl
       - ciecl-es
-      - caso-uso-egresos
       - idiomas
       - instalacion
   - title: "English Documentation"
     contents:
-      - ciecl
       - case-study-discharges
+      - ciecl-en
+      - languages
       - installation
 
 reference:
@@ -86,6 +88,7 @@ reference:
     subtitle: "Conexión con servidores de la OMS"
     contents:
       - cie11_search
+      - get_icd_api_key
   - title: "Análisis y Comorbilidad"
     contents:
       - cie_comorbid

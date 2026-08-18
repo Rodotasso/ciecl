@@ -1,36 +1,36 @@
-#' Obtener descripcion de codigos CIE-10 (vector)
+#' Obtener descripción de códigos CIE-10 (vector)
 #'
 #' @description
-#' Devuelve un vector character con la descripcion de cada codigo,
+#' Devuelve un vector character con la descripción de cada código,
 #' pensado para usar dentro de `dplyr::mutate()` sin necesidad de
 #' un `left_join` contra `cie10_cl`.
 #'
-#' @param codes Character vector de codigos CIE-10 (ej. "E11.0",
+#' @param codes Character vector de códigos CIE-10 (ej. "E11.0",
 #'   c("E11.0", "I10")).
-#' @param normalize Logical, intentar normalizar los codigos antes
-#'   de buscar la descripcion? (default FALSE). Usar TRUE para
+#' @param normalize Logical, intentar normalizar los códigos antes
+#'   de buscar la descripción? (default FALSE). Usar TRUE para
 #'   limpiar formatos (ej. "E110" -> "E11.0"); usar FALSE para
 #'   auditar la calidad original del registro.
-#' @param default Valor devuelto cuando un codigo no se encuentra
-#'   en el catalogo. Default `NA_character_`.
+#' @param default Valor devuelto cuando un código no se encuentra
+#'   en el catálogo. Default `NA_character_`.
 #' @param codigos `r lifecycle::badge("deprecated")` Use `codes`.
 #' @returns Character vector del mismo largo que `codes` con la
-#'   descripcion oficial MINSAL/DEIS. `NA_character_` (o `default`)
-#'   para codigos sin match.
+#'   descripción oficial MINSAL/DEIS. `NA_character_` (o `default`)
+#'   para códigos sin match.
 #' @family search
 #' @seealso [cie_lookup()] para resultado como tibble con todas
-#'   las columnas; [cie_norm()] para normalizacion.
+#'   las columnas; [cie_norm()] para normalización.
 #' @importFrom stats setNames
 #' @export
 #' @examples
-#' # Auditoria: buscar tal cual (E110 no existe sin punto)
+#' # Auditoría: buscar tal cual (E110 no existe sin punto)
 #' cie_describe("E110", normalize = FALSE)
 #'
 #' # Rescate: normalizar antes de buscar
 #' cie_describe("E110", normalize = TRUE)
 #'
 #' @examplesIf interactive()
-#' # Uso tipico en auditoria VIU (contar fallos de origen)
+#' # Uso típico en auditoría VIU (contar fallos de origen)
 #' diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 #' descripciones <- cie_describe(diags, normalize = FALSE)
 #' sum(is.na(descripciones)) # Detecta 3 errores de registro

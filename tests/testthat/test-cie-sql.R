@@ -90,6 +90,15 @@ test_that("cie10_sql bloquea ATTACH DATABASE", {
   )
 })
 
+test_that("cie10_sql bloquea load_extension", {
+  skip_on_cran()
+
+  expect_error(
+    cie10_sql("SELECT load_extension('evil.dll')"),
+    class = "ciecl_unsafe_query"
+  )
+})
+
 test_that("cie10_sql bloquea PRAGMA", {
   skip_on_cran()
 
@@ -182,7 +191,7 @@ test_that("get_cie10_db tabla tiene indices", {
 test_that("get_cie10_db usa directorio cache correcto", {
   skip_on_cran()
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   con <- get_cie10_db()
@@ -205,7 +214,7 @@ test_that("get_cie10_db tabla tiene columnas esperadas", {
 test_that("cie10_clear_cache elimina archivo db", {
   skip_on_cran()
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # Asegurar que existe
@@ -259,10 +268,10 @@ test_that("cie10_sql bloquea semicolon fuera de strings", {
 
   skip_on_cran()
 
-  # Multiples statements separados por semicolon (sin keywords peligrosos)
+  # Multiples sentencias separadas por semicolon (sin keywords peligrosos)
   expect_error(
     cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
-    "Multiples statements"
+    "sentencias SQL no permitidas"
   )
 })
 
@@ -337,7 +346,7 @@ test_that("get_cie10_db crea directorio cache si no existe", {
   # Limpiar cache para forzar recreacion
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
 
   # Conectar - debe crear directorio si no existe
   get_cie10_db()
@@ -487,7 +496,7 @@ test_that("build_cache_atomic crea cache completo", {
   # Limpiar
   suppressMessages(cie10_clear_cache())
 
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   db_path <- file.path(cache_dir, "cie10.db")
 
   # No debe existir .tmp residual despues de build exitoso
@@ -505,7 +514,7 @@ test_that("build_cache_atomic crea cache completo", {
 
 test_that(".ciecl_env tiene estructura correcta", {
   env <- .ciecl_env
-  expect_true(is.environment(env))
+  expect_type(env, "environment")
   expect_true("con" %in% ls(env, all.names = TRUE))
   expect_true("db_path" %in% ls(env, all.names = TRUE))
 })
@@ -584,7 +593,7 @@ test_that("get_cie10_db reconstruye si tabla cie10 falta", {
   skip_on_cran()
   ciecl::cie10_disconnect()
   con_direct <- DBI::dbConnect(RSQLite::SQLite(),
-    file.path(ciecl:::get_cache_dir(), "cie10.db"))
+    file.path(get_cache_dir(), "cie10.db"))
   on.exit(
     if (DBI::dbIsValid(con_direct)) suppressWarnings(DBI::dbDisconnect(con_direct)),
     add = TRUE
@@ -599,6 +608,43 @@ test_that("get_cie10_db reconstruye si tabla cie10 falta", {
 test_that("cie10_sql maneja error de ejecucion SQL", {
   skip_on_cran()
   expect_error(ciecl::cie10_sql("SELECT * FROM tabla_inexistente"))
+})
+
+test_that("cie10_sql relanza errores SQL con clase ciecl_sql_error", {
+  skip_on_cran()
+  err <- tryCatch(
+    ciecl::cie10_sql("SELECT * FROM tabla_inexistente"),
+    error = function(e) e
+  )
+  expect_s3_class(err, "ciecl_sql_error")
+})
+
+test_that("cie10_sql valida que query no sea numerico", {
+  expect_error(
+    ciecl::cie10_sql(123),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no sea un vector de longitud > 1", {
+  expect_error(
+    ciecl::cie10_sql(c("SELECT 1", "SELECT 2")),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no sea NA", {
+  expect_error(
+    ciecl::cie10_sql(NA_character_),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie10_sql valida que query no este ausente", {
+  expect_error(
+    ciecl::cie10_sql(),
+    class = "ciecl_invalid_input"
+  )
 })
 
 test_that("cache_is_current retorna FALSE cuando query falla", {
@@ -617,7 +663,7 @@ test_that("build_cache_atomic limpia .tmp residual", {
   skip_on_cran()
   withr::defer(ciecl::cie10_disconnect())
   ciecl::cie10_disconnect()
-  cache_dir <- ciecl:::get_cache_dir()
+  cache_dir <- get_cache_dir()
   tmp_file <- file.path(cache_dir, "cie10.db.tmp")
   if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
   file.create(tmp_file)

@@ -14,7 +14,7 @@ test_that("cie_describe retorna descripciones conocidas para codigos validos", {
 
   expect_match(resultado[1], "[Dd]iabetes mellitus")
   expect_match(resultado[2], "[Hh]ipertensi[oó]n")
-  expect_false(any(is.na(resultado)))
+  expect_false(anyNA(resultado))
 })
 
 test_that("cie_describe retorna NA para codigos no encontrados (normalize=FALSE)", {
@@ -74,7 +74,7 @@ test_that("cie_describe es vectorizado (sirve dentro de mutate)", {
 
   expect_equal(nrow(df), 3)
   expect_type(df$desc, "character")
-  expect_false(any(is.na(df$desc)))
+  expect_false(anyNA(df$desc))
 })
 
 test_that("cie_describe normalize valida tipo logico", {

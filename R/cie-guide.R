@@ -1,9 +1,9 @@
 #' @importFrom tibble as_tibble
 NULL
 
-#' Guia de funciones de busqueda CIE-10
+#' Guía de funciones de búsqueda CIE-10
 #'
-#' Muestra tabla comparativa de cuando usar cada funcion de busqueda.
+#' Muestra tabla comparativa de cuándo usar cada función de búsqueda.
 #'
 #' @returns tibble con guia comparativa de funciones de busqueda
 #' @family search
@@ -50,11 +50,11 @@ cie_guide <- function() {
   return(tibble::as_tibble(guia))
 }
 
-#' Guia de funciones de busqueda (deprecated)
+#' Guía de funciones de búsqueda (deprecated)
 #'
 #' `r lifecycle::badge("deprecated")` Use [cie_guide()].
 #'
-#' @returns tibble con guia comparativa
+#' @returns tibble con guía comparativa
 #' @family search
 #' @keywords internal
 #' @export

@@ -517,7 +517,7 @@ test_that("cie_comorbid map default es charlson", {
 
 test_that("cie_map_comorbid categoriza correctamente", {
   codigos <- c("E11.0", "I21.0", "INVALIDO")
-  resultado <- cie_map_comorbid(codigos)
+  expect_warning(resultado <- cie_map_comorbid(codigos), "formato CIE-10")
 
   expect_equal(nrow(resultado), 3)
   expect_equal(resultado$categoria[1], "Diabetes")
@@ -627,24 +627,41 @@ test_that("cie_map_comorbid asigna Otra a codigos no mapeados", {
   expect_equal(resultado$categoria[1], "Otra")
 })
 
-test_that("cie_map_comorbid asigna Otra a codigos invalidos", {
-  resultado <- cie_map_comorbid("INVALIDO")
+test_that("cie_map_comorbid asigna Otra a codigos invalidos y advierte", {
+  expect_warning(
+    resultado <- cie_map_comorbid("INVALIDO"),
+    "formato CIE-10"
+  )
   expect_equal(resultado$categoria[1], "Otra")
 })
 
-test_that("cie_map_comorbid asigna Otra a NA", {
-  resultado <- cie_map_comorbid(NA_character_)
+test_that("cie_map_comorbid asigna Otra a NA sin advertir", {
+  resultado <- expect_silent(cie_map_comorbid(NA_character_))
   expect_equal(resultado$categoria[1], "Otra")
 })
 
-test_that("cie_map_comorbid mezcla categorias y Otra", {
+test_that("cie_map_comorbid mezcla categorias y Otra, advierte solo por INVALIDO", {
   codigos <- c("E11.0", "Z00.0", "I50.9", "INVALIDO")
-  resultado <- cie_map_comorbid(codigos)
+  expect_warning(
+    resultado <- cie_map_comorbid(codigos),
+    "formato CIE-10"
+  )
 
   expect_equal(resultado$categoria[1], "Diabetes")
   expect_equal(resultado$categoria[2], "Otra")
   expect_equal(resultado$categoria[3], "Insuficiencia cardiaca")
   expect_equal(resultado$categoria[4], "Otra")
+})
+
+test_that("cie_map_comorbid no advierte para codigos CIE-10 validos no mapeados", {
+  expect_silent(cie_map_comorbid(c("Z00.0", "R10.0", "S62.0")))
+})
+
+test_that("cie_map_comorbid advierte con multiples codigos invalidos usando conector 'y'", {
+  expect_warning(
+    cie_map_comorbid(c("hola", "E11.0", "35")),
+    "hola.*y.*35|35.*y.*hola"
+  )
 })
 
 # ------------------------------------------------------------------------------
@@ -654,7 +671,7 @@ test_that("cie_map_comorbid mezcla categorias y Otra", {
 test_that("cie_map_comorbid output tiene columnas correctas", {
   resultado <- cie_map_comorbid(c("E11.0", "I50.9"))
 
-  expect_equal(names(resultado), c("codigo", "categoria"))
+  expect_named(resultado, c("codigo", "categoria"))
   expect_type(resultado$codigo, "character")
   expect_type(resultado$categoria, "character")
 })

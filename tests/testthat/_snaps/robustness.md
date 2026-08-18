@@ -4,7 +4,7 @@
       cie10_sql("DROP TABLE cie10")
     Condition
       Error in `cie10_sql()`:
-      ! Solo queries `SELECT` permitidas (seguridad).
+      ! Solo consultas `SELECT` permitidas (seguridad).
 
 # cie10_sql bloquea DELETE
 
@@ -12,7 +12,7 @@
       cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'")
     Condition
       Error in `cie10_sql()`:
-      ! Solo queries `SELECT` permitidas (seguridad).
+      ! Solo consultas `SELECT` permitidas (seguridad).
 
 # cie10_sql bloquea UPDATE
 
@@ -20,7 +20,7 @@
       cie10_sql("UPDATE cie10 SET descripcion = 'test' WHERE codigo = 'E11.0'")
     Condition
       Error in `cie10_sql()`:
-      ! Solo queries `SELECT` permitidas (seguridad).
+      ! Solo consultas `SELECT` permitidas (seguridad).
 
 # cie10_sql bloquea INSERT
 
@@ -29,5 +29,5 @@
         "INSERT INTO cie10 VALUES ('X99', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0)")
     Condition
       Error in `cie10_sql()`:
-      ! Solo queries `SELECT` permitidas (seguridad).
+      ! Solo consultas `SELECT` permitidas (seguridad).
 

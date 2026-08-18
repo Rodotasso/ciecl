@@ -53,3 +53,10 @@ CRAN-SUBMISSION
 # pkgdown output (generado automaticamente)
 docs/
 
+
+# Benchmark: resultados y distribucion agregada si se trackean; datos crudos no
+!benchmark/*.csv
+benchmark/diag1-codigos-reales.csv
+benchmark/*.parquet
+benchmark/datos/
+benchmark/data/

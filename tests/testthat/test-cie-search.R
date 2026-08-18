@@ -26,7 +26,7 @@ test_that("cie_lookup vectorizado elimina duplicados", {
   resultado <- cie_lookup(codigos)
 
   # No debe haber duplicados en resultado
-  expect_equal(nrow(resultado), length(unique(resultado$codigo)))
+  expect_length(unique(resultado$codigo), nrow(resultado))
 })
 
 test_that("cie_lookup puede generar descripcion_completa", {
@@ -67,7 +67,7 @@ test_that("cie_short no tiene duplicados", {
   resultado <- cie_short()
 
   # No debe haber siglas duplicadas
-  expect_equal(nrow(resultado), length(unique(resultado$sigla)))
+  expect_length(unique(resultado$sigla), nrow(resultado))
 })
 
 test_that("cie_short filtra por categoria", {
@@ -182,4 +182,9 @@ test_that("extract_cie_from_text extrae codigo de texto con ruido", {
   # Sin ruido
   resultado3 <- extract_cie_from_text("E11.0")
   expect_equal(resultado3, "E11.0")
+})
+
+test_that("cie_search sin text da error en espanol", {
+  expect_error(cie_search(), class = "ciecl_invalid_input")
+  expect_error(cie_search(), "es obligatorio")
 })

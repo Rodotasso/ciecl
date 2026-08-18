@@ -2,12 +2,12 @@
 % Please edit documentation in R/cie-utils.R
 \name{cie_validate_vector}
 \alias{cie_validate_vector}
-\title{Validar vector de codigos CIE-10 formato}
+\title{Validar vector de códigos CIE-10 formato}
 \usage{
 cie_validate_vector(codes, strict = FALSE, codigos = lifecycle::deprecated())
 }
 \arguments{
-\item{codes}{Character vector codigos (ej. c("E11.0", "Z00.0"))}
+\item{codes}{Character vector códigos (ej. c("E11.0", "Z00.0"))}
 
 \item{strict}{Logical, validar existencia en DB (default FALSE)}
 
@@ -15,10 +15,10 @@ cie_validate_vector(codes, strict = FALSE, codigos = lifecycle::deprecated())
 }
 \value{
 Logical vector de la misma longitud que \code{codes}. TRUE si el
-codigo tiene formato CIE-10 valido (y existe en DB si \code{strict = TRUE}).
+código tiene formato CIE-10 válido (y existe en DB si \code{strict = TRUE}).
 }
 \description{
-Validar vector de codigos CIE-10 formato
+Validar vector de códigos CIE-10 formato
 }
 \examples{
 cie_validate_vector(c("E11.0", "INVALIDO", "Z00"))

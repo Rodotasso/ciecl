@@ -2,12 +2,12 @@
 % Please edit documentation in R/cie-table.R
 \name{cie_table}
 \alias{cie_table}
-\title{Generar tabla HTML interactiva GT de codigo CIE-10}
+\title{Generar tabla HTML interactiva GT de código CIE-10}
 \usage{
 cie_table(code, codigo = lifecycle::deprecated())
 }
 \arguments{
-\item{code}{String codigo (ej. \code{"E11"} muestra la jerarquia).}
+\item{code}{String código (ej. \code{"E11"} muestra la jerarquía).}
 
 \item{codigo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{code}.}
 }
@@ -15,11 +15,11 @@ cie_table(code, codigo = lifecycle::deprecated())
 Objeto de clase \code{gt_tbl} (tabla HTML interactiva).
 }
 \description{
-Muestra la jerarquia de un codigo CIE-10 (categoria + subcategorias)
+Muestra la jerarquía de un código CIE-10 (categoría + subcategorías)
 como una tabla \code{gt}. Las columnas "Incluye" y "Excluye" pueden
-aparecer vacias en subcategorias: el catalogo MINSAL/DEIS no puebla
-esos campos en todos los niveles (suelen estar solo en la categoria
-de 3 digitos). Para evitar confusion visual, los \code{NA} se reemplazan
+aparecer vacías en subcategorías: el catálogo MINSAL/DEIS no puebla
+esos campos en todos los niveles (suelen estar solo en la categoría
+de 3 dígitos). Para evitar confusión visual, los \code{NA} se reemplazan
 por un guion largo (em dash).
 }
 \examples{
@@ -28,6 +28,6 @@ cie_table("E11")  # Diabetes mellitus tipo 2 completo
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}
+\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_guide]{cie_guide()}}
 }
 \concept{visualization}

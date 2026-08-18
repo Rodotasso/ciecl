@@ -1,18 +1,18 @@
-#' Generar tabla HTML interactiva GT de codigo CIE-10
+#' Generar tabla HTML interactiva GT de código CIE-10
 #'
 #' @description
-#' Muestra la jerarquia de un codigo CIE-10 (categoria + subcategorias)
+#' Muestra la jerarquía de un código CIE-10 (categoría + subcategorías)
 #' como una tabla `gt`. Las columnas "Incluye" y "Excluye" pueden
-#' aparecer vacias en subcategorias: el catalogo MINSAL/DEIS no puebla
-#' esos campos en todos los niveles (suelen estar solo en la categoria
-#' de 3 digitos). Para evitar confusion visual, los `NA` se reemplazan
+#' aparecer vacías en subcategorías: el catálogo MINSAL/DEIS no puebla
+#' esos campos en todos los niveles (suelen estar solo en la categoría
+#' de 3 dígitos). Para evitar confusión visual, los `NA` se reemplazan
 #' por un guion largo (em dash).
 #'
-#' @param code String codigo (ej. `"E11"` muestra la jerarquia).
+#' @param code String código (ej. `"E11"` muestra la jerarquía).
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
 #' @returns Objeto de clase `gt_tbl` (tabla HTML interactiva).
 #' @family visualization
-#' @seealso [cie_search()], [cie_lookup()]
+#' @seealso [cie_search()], [cie_lookup()], [cie_guide()]
 #' @export
 #' @importFrom dplyr select everything mutate across
 #' @examplesIf rlang::is_installed("gt")
@@ -27,12 +27,14 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
     code <- codigo
   }
 
+  check_required_es(missing(code), "code")
+
   rlang::check_installed("gt", reason = "para generar la tabla HTML.")
 
   datos <- cie_lookup(code, expand = TRUE)
 
   if (nrow(datos) == 0) {
-    cli::cli_abort("Codigo no encontrado: {.val {code}}", class = "ciecl_invalid_code")
+    cli::cli_abort("C\u00f3digo no encontrado: {.val {code}}", class = "ciecl_invalid_code")
   }
 
   # Reemplazar NA/vacio por em dash (U+2014) en columnas de texto.

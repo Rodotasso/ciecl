@@ -29,51 +29,52 @@ normalizar_tildes <- function(text) {
   )
 }
 
-#' Busqueda difusa (fuzzy) de terminos medicos CIE-10
+#' Búsqueda difusa (fuzzy) de términos médicos CIE-10
 #'
-#' Busca en descripciones CIE-10 usando multiples estrategias:
-#' 1. Expansion de siglas medicas (IAM, TBC, DM, etc.)
-#' 2. Busqueda exacta por subcadena (mas rapida)
-#' 3. Busqueda fuzzy con Jaro-Winkler (tolera typos)
+#' Busca en descripciones CIE-10 usando múltiples estrategias:
+#' 1. Expansión de siglas médicas (IAM, TBC, DM, etc.)
+#' 2. Búsqueda exacta por subcadena (más rápida)
+#' 3. Búsqueda fuzzy con Jaro-Winkler (tolera typos)
 #'
-#' La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
-#' Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
+#' La búsqueda es tolerante a tildes: "neumonia" (sin tilde) encuentra
+#' "neumonía" (con tilde) en el catálogo.
+#' Soporta siglas médicas comunes: "IAM" busca "infarto agudo miocardio".
 #'
-#' @param text String termino medico en espanol o sigla
+#' @param text String término médico en español o sigla
 #'   (ej. "diabetes", "IAM", "TBC")
 #' @param threshold Numeric entre 0 y 1, umbral similitud
 #'   Jaro-Winkler (default 0.70)
-#' @param max_results Integer, maximo resultados a retornar (default 50)
-#' @param field Character, campo busqueda ("descripcion" o "inclusion")
-#' @param only_fuzzy Logical, usar solo busqueda fuzzy
-#'   sin busqueda exacta (default FALSE)
+#' @param max_results Integer, máximo resultados a retornar (default 50)
+#' @param field Character, campo búsqueda ("descripcion" o "inclusion")
+#' @param only_fuzzy Logical, usar solo búsqueda fuzzy
+#'   sin búsqueda exacta (default FALSE)
 #' @param verbose Logical, mostrar mensajes informativos
 #'   (default TRUE). Usar FALSE en scripts.
 #' @param include_uso_cl Logical, incluir columna `uso_cl` en el output
 #'   (default FALSE). El default difiere de [cie_lookup()] (TRUE) para
-#'   preservar el contrato historico de cada funcion. Valores posibles:
+#'   preservar el contrato histórico de cada función. Valores posibles:
 #'   `"principal"`, `"legado"`, `"causa_externa"`, `"etiologico"`,
 #'   `"causa_externa | principal"`.
-#' @param only_uso_cl Logical, filtrar a codigos vigentes de uso clinico
-#'   en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+#' @param only_uso_cl Logical, filtrar a códigos vigentes de uso clínico
+#'   en Chile (default FALSE). Cuando es TRUE, excluye los códigos con
 #'   `uso_cl == "legado"`.
 #' @param texto `r lifecycle::badge("deprecated")` Use `text`.
 #' @param campo `r lifecycle::badge("deprecated")` Use `field`.
 #' @param solo_fuzzy `r lifecycle::badge("deprecated")` Use `only_fuzzy`.
 #' @returns tibble ordenado por score descendente (1.0 = coincidencia exacta).
-#'   Si el text corresponde a una sigla medica, se expande
-#'   automaticamente antes de buscar.
+#'   Si el text corresponde a una sigla médica, se expande
+#'   automáticamente antes de buscar.
 #' @family search
 #' @seealso [cie_lookup()], [cie_short()], [cie10_sql()]
 #' @export
 #' @examples
-#' # Busqueda basica
+#' # Búsqueda básica
 #' cie_search("diabetes")
 #'
 #' @examplesIf interactive()
 #' cie_search("neumonia")
 #'
-#' # Busqueda por siglas medicas
+#' # Búsqueda por siglas médicas
 #' cie_search("IAM")
 #' cie_search("DM2")
 #'
@@ -82,7 +83,7 @@ normalizar_tildes <- function(text) {
 #'
 #' # Buscar en inclusiones
 #' cie_search("bacteriana", field = "inclusion")
-#' # Filtrar a codigos vigentes Chile (excluye 'legado')
+#' # Filtrar a códigos vigentes Chile (excluye 'legado')
 #' cie_search("diabetes", only_uso_cl = TRUE)
 #' # Mostrar la columna uso_cl en el output
 #' cie_search("diabetes", include_uso_cl = TRUE)
@@ -119,7 +120,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     only_fuzzy <- solo_fuzzy
   }
 
-  rlang::check_required(text)
+  check_required_es(missing(text), "text")
   field <- rlang::arg_match(field)
 
   # Validacion de parametros
@@ -140,7 +141,7 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
   # Permitir siglas de 2 caracteres (DM, TB, FA, etc.)
   if (nchar(texto_limpio) < 2) {
-    cli::cli_abort("Texto minimo 2 caracteres.", class = "ciecl_invalid_input")
+    cli::cli_abort("Texto m\u00ednimo 2 caracteres.", class = "ciecl_invalid_input")
   }
 
   # Verificar si es una sigla medica y expandirla

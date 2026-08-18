@@ -4,8 +4,8 @@
       invalida <- cie_short("inexistente")
     Condition
       Warning:
-      Categoria "inexistente" no encontrada.
-      i Categorias validas: "cardiovascular", "respiratoria", "metabolica", "gastrointestinal", "infecciosa", "oncologica", "reumatologica", "neurologica", "psiquiatrica", "traumatologica", "pediatrica", and "gineco_obstetrica"
+      Categoría "inexistente" no encontrada.
+      i Categorías válidas: "cardiovascular", "respiratoria", "metabolica", "gastrointestinal", "infecciosa", "oncologica", "reumatologica", "neurologica", "psiquiatrica", "traumatologica", "pediatrica" y "gineco_obstetrica"
 
 # cie_search valida inputs
 
@@ -21,7 +21,7 @@
       cie_search("a")
     Condition
       Error in `cie_search()`:
-      ! Texto minimo 2 caracteres.
+      ! Texto mínimo 2 caracteres.
 
 ---
 
