@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.3 (2025-02-28 ucrt)",
+  "runtimePlatform": "R version 4.6.0 (2026-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -28,6 +28,13 @@
       "familyName": "Tasso Suazo",
       "email": "rtasso@uchile.cl",
       "@id": "https://orcid.org/0000-0002-1264-4933"
+    }
+  ],
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Francisca",
+      "familyName": "Jofre"
     }
   ],
   "maintainer": [
@@ -66,18 +73,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "httr2",
-      "name": "httr2",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=httr2"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "readxl",
       "name": "readxl",
       "provider": {
@@ -87,18 +82,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=readxl"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "usethis",
-      "name": "usethis",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=usethis"
     },
     {
       "@type": "SoftwareApplication",
@@ -148,19 +131,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "litedown",
-      "name": "litedown",
-      "version": ">= 0.9",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=litedown"
     },
     {
       "@type": "SoftwareApplication",
@@ -264,9 +234,58 @@
       "identifier": "utils",
       "name": "utils"
     },
+    "10": {
+      "@type": "SoftwareApplication",
+      "identifier": "lifecycle",
+      "name": "lifecycle",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lifecycle"
+    },
+    "11": {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
+      "identifier": "httr2",
+      "name": "httr2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=httr2"
+    },
+    "13": {
+      "@type": "SoftwareApplication",
+      "identifier": "cli",
+      "name": "cli",
+      "version": ">= 3.6.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cli"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "864.456KB",
+  "fileSize": "973.434KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -285,8 +304,13 @@
       "description": "R package version 0.9.8. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018"
     }
   ],
-  "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/main/NEWS.md",
   "readme": "https://github.com/Rodotasso/ciecl/blob/main/README.md",
-  "contIntegration": ["https://github.com/Rodotasso/ciecl/actions/workflows/r.yml", "https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml"],
-  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#stable"
+  "contIntegration": ["https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml", "https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml"],
+  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#stable",
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/765",
+    "provider": "https://ropensci.org"
+  }
 }
