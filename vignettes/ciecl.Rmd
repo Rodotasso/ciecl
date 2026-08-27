@@ -83,7 +83,7 @@ Con esto, `I10X` quedó como `I10` y `J189` como `J18.9`: los códigos ya son co
 
 ## Paso 2: Agregar las descripciones oficiales con `cie_describe()`
 
-Para el reporte necesitas las glosas clínicas, no solo los códigos. `cie_describe()` devuelve directamente un vector de caracteres, por lo que se integra en un `mutate()` sin joins temporales:
+Para el reporte necesitas las glosas clínicas, no solo los códigos. `cie_describe()` devuelve un vector de texto con una descripción por cada código, así que puedes agregarlo como una columna más de tu tabla con `mutate()`, sin pasos intermedios:
 
 ```{r describe}
 # Integración directa de descripciones al dataframe principal
@@ -114,10 +114,35 @@ Volvamos a tu reporte de diabetes: sospechas que en la base hay egresos por diab
 
 ```{r busqueda}
 # Búsqueda tolerante: "diabetis" en lugar de "diabetes"
-cie_search(text = "diabetis", threshold = 0.7)
+# (por defecto se muestran los 50 resultados más parecidos;
+#  ampliamos el límite porque el catálogo tiene muchos códigos de diabetes)
+resultados_busqueda <- cie_search(text = "diabetis", threshold = 0.7, max_results = 100)
+
+resultados_busqueda
 ```
 
-El resultado incluye un `score` de similitud para evaluar la confiabilidad de cada coincidencia. Ahora sabes que `E11.9` y `E14.9` de tu base corresponden a diabetes y puedes filtrar tu reporte con criterio.
+Cada resultado incluye un `score` de similitud para evaluar la confiabilidad de la coincidencia. Pero la tabla anterior lista todos los códigos de diabetes del catálogo, y no todos necesariamente están en tu base. Para saber cuáles sí, basta con cruzar los resultados de la búsqueda con los códigos que realmente aparecen en tus datos:
+
+```{r cruce}
+# ¿Qué códigos de diabetes están realmente en mi base?
+codigos_diabetes <- intersect(
+  resultados_busqueda$codigo,
+  unique(egresos$DIAG1_NORM)
+)
+
+codigos_diabetes
+```
+
+El cruce entre la búsqueda y los códigos de la base identifica qué códigos de diabetes contienen realmente tus datos, sin tener que revisar la tabla completa a mano. Con esa lista ya puedes filtrar los egresos y cerrar el reporte:
+
+```{r reporte-diabetes}
+# Reporte final: egresos por diabetes, resumidos por tipo
+egresos_full |>
+  filter(DIAG1_NORM %in% codigos_diabetes) |>
+  count(descripcion, sort = TRUE)
+```
+
+Con esto tu reporte mensual de egresos por diabetes queda listo: sabes cuántos hubo y de qué tipo, con las glosas oficiales del catálogo.
 
 ## Cuando la búsqueda no entrega resultados
 
