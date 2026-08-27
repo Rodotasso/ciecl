@@ -83,7 +83,7 @@ With this, `I10X` became `I10` and `J189` became `J18.9`: the codes are now comp
 
 ## Step 2: Add the official descriptions with `cie_describe()`
 
-For the report you need the clinical descriptions, not just the codes. `cie_describe()` directly returns a character vector, so it integrates into a `mutate()` without temporary joins:
+For the report you need the clinical descriptions, not just the codes. `cie_describe()` returns a character vector with one description per code, so you can add it as another column of your table with `mutate()`, with no intermediate steps:
 
 ```{r describe}
 # Direct integration of descriptions into the main dataframe
@@ -114,10 +114,35 @@ Back to your diabetes report: you suspect there are diabetes discharges in the d
 
 ```{r busqueda}
 # Tolerant search: "diabetis" instead of "diabetes"
-cie_search(text = "diabetis", threshold = 0.7)
+# (by default the 50 most similar results are shown;
+#  we raise the limit because the catalog has many diabetes codes)
+search_results <- cie_search(text = "diabetis", threshold = 0.7, max_results = 100)
+
+search_results
 ```
 
-The result includes a similarity `score` to assess the reliability of each match. Now you know that `E11.9` and `E14.9` in your database correspond to diabetes and you can filter your report with confidence.
+Each result includes a similarity `score` to assess the reliability of the match. But the table above lists every diabetes code in the catalog, and not all of them necessarily appear in your data. To find out which ones do, cross the search results with the codes that actually show up in your dataset:
+
+```{r cruce}
+# Which diabetes codes are actually in my data?
+diabetes_codes <- intersect(
+  search_results$codigo,
+  unique(discharges$DIAG1_NORM)
+)
+
+diabetes_codes
+```
+
+Crossing the search results with the codes in the database identifies which diabetes codes your data actually contains, without reviewing the full table by hand. With that list you can now filter the discharges and close the report:
+
+```{r reporte-diabetes}
+# Final report: diabetes discharges, summarized by type
+discharges_full |>
+  filter(DIAG1_NORM %in% diabetes_codes) |>
+  count(description, sort = TRUE)
+```
+
+With this, your monthly diabetes discharge report is ready: you know how many there were and of what type, with the official catalog descriptions.
 
 ## When a search returns no results
 
