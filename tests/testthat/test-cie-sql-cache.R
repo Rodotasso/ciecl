@@ -255,3 +255,77 @@ test_that("build_cache_atomic recupera limpiamente si build_fts falla en sesion 
   expect_false(file.exists(tmp_path))
   expect_false(file.exists(db_path))
 })
+
+# --- get_cie10_db: rebuild condicional según versión (tabla sentinela) -----
+# Una tabla extra ("sentinela") insertada a mano en el .db permite
+# distinguir rebuild de reuso: el rebuild parte de un archivo nuevo, así
+# que la sentinela desaparece; si el cache se reusa, la sentinela sobrevive.
+
+test_that("get_cie10_db no reconstruye cuando la version coincide", {
+  cache_dir <- withr::local_tempdir()
+  # CIECL_CACHE_DIR tiene precedencia en get_cache_dir() y ya viene fijada
+  # por setup.R; la sobreescribimos scoped para aislar este test.
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  con1 <- get_cie10_db()
+  expect_true(DBI::dbIsValid(con1))
+
+  # Sentinela: tabla ajena al paquete; sobrevive solo si NO hay rebuild
+  DBI::dbExecute(con1, "CREATE TABLE sentinel_table (x INTEGER)")
+  DBI::dbExecute(con1, "INSERT INTO sentinel_table VALUES (42)")
+  cie10_disconnect()
+
+  con2 <- get_cie10_db()
+  expect_true(DBI::dbExistsTable(con2, "sentinel_table"))
+  expect_equal(DBI::dbGetQuery(con2, "SELECT x FROM sentinel_table")$x, 42L)
+})
+
+test_that("get_cie10_db reconstruye cuando la version guardada difiere", {
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  con1 <- get_cie10_db()
+  DBI::dbExecute(con1, "CREATE TABLE sentinel_table (x INTEGER)")
+  # Simular un cache construido por una versión anterior del paquete
+  DBI::dbExecute(
+    con1,
+    "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'"
+  )
+  cie10_disconnect()
+
+  con2 <- get_cie10_db()
+  # El rebuild parte de un .db nuevo: la sentinela desaparece
+  expect_false(DBI::dbExistsTable(con2, "sentinel_table"))
+  # Y la metadata vuelve a registrar la versión actual del paquete
+  v <- DBI::dbGetQuery(
+    con2,
+    "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
+  )$value[1]
+  expect_equal(v, as.character(utils::packageVersion("ciecl")))
+})
+
+test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  con1 <- get_cie10_db()
+  DBI::dbExecute(con1, "CREATE TABLE sentinel_table (x INTEGER)")
+  # Simular un cache antiguo (previo al versionado) o corrupto
+  DBI::dbExecute(con1, "DROP TABLE cie10_meta")
+  cie10_disconnect()
+
+  con2 <- get_cie10_db()
+  expect_false(DBI::dbExistsTable(con2, "sentinel_table"))
+  expect_true(DBI::dbExistsTable(con2, "cie10_meta"))
+  v <- DBI::dbGetQuery(
+    con2,
+    "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
+  )$value[1]
+  expect_equal(v, as.character(utils::packageVersion("ciecl")))
+})

@@ -19,15 +19,16 @@ es la forma en que SQLite evita lecturas/escrituras concurrentes
 inconsistentes sobre el mismo archivo. Esta función cierra esa
 conexión y libera el lock.
 
-Conviene llamarla antes de operaciones que necesitan acceso exclusivo
-al archivo \code{cie10.db} —por ejemplo antes de \code{\link[=cie10_clear_cache]{cie10_clear_cache()}} si
-se borra manualmente la caché por fuera del paquete, o al finalizar
-un proceso batch largo para no dejar el archivo bloqueado—. Si no se
-libera el lock, el archivo \code{.db} puede seguir abierto hasta que
-termine la sesión de R; en la práctica esto rara vez es un problema
-porque cada sesión de R tiene su propia conexión, pero impide que
-otro proceso externo (no R) edite el archivo mientras la conexión
-esté abierta.
+Solo hace falta llamarla manualmente en dos casos: cuando se va a
+eliminar o reemplazar el archivo \code{cie10.db} por fuera del paquete
+(por ejemplo, con herramientas del sistema operativo), o al finalizar
+un proceso batch largo para no dejar el archivo bloqueado. Para usar
+\code{\link[=cie10_clear_cache]{cie10_clear_cache()}} no es necesario llamarla antes: esa función ya
+cierra la conexión pooled internamente. Si no se libera el lock, el
+archivo \code{.db} puede seguir abierto hasta que termine la sesión de R;
+en la práctica esto rara vez es un problema porque cada sesión de R
+tiene su propia conexión, pero impide que otro proceso externo (no R)
+edite el archivo mientras la conexión esté abierta.
 }
 \examples{
 # No hay un ejemplo no interactivo: el objeto de conexion vive en un
