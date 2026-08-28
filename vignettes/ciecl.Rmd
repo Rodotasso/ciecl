@@ -133,7 +133,7 @@ codigos_diabetes <- intersect(
 codigos_diabetes
 ```
 
-El cruce entre la búsqueda y los códigos de la base identifica qué códigos de diabetes contienen realmente tus datos, sin tener que revisar la tabla completa a mano. Con esa lista ya puedes filtrar los egresos y cerrar el reporte:
+Como se ve en el resultado, de todos los códigos de diabetes del catálogo solo dos están presentes en la columna `DIAG1` de tu base: `E11.9` y `E14.9`. El cruce identifica qué códigos contienen realmente tus datos, sin tener que revisar la tabla completa a mano. Con esa lista ya puedes filtrar los egresos y cerrar el reporte:
 
 ```{r reporte-diabetes}
 # Reporte final: egresos por diabetes, resumidos por tipo

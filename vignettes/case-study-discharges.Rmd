@@ -133,7 +133,7 @@ diabetes_codes <- intersect(
 diabetes_codes
 ```
 
-Crossing the search results with the codes in the database identifies which diabetes codes your data actually contains, without reviewing the full table by hand. With that list you can now filter the discharges and close the report:
+As the result shows, of all the diabetes codes in the catalog only two are present in the `DIAG1` column of your data: `E11.9` and `E14.9`. The cross identifies which codes your data actually contains, without reviewing the full table by hand. With that list you can now filter the discharges and close the report:
 
 ```{r reporte-diabetes}
 # Final report: diabetes discharges, summarized by type
