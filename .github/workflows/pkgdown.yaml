@@ -16,6 +16,7 @@ permissions: read-all
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     # Only restrict push to main; allow PRs and manual triggers
     if: ${{ github.event_name != 'push' || github.ref == 'refs/heads/main' }}
     env:

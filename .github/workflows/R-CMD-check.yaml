@@ -12,6 +12,9 @@ permissions: read-all
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
+    # Timeout por job: evita cuelgues de infra (ej. apt-get update colgado
+    # el 18-08-2026, que GitHub cancelo recien a las 6h por defecto).
+    timeout-minutes: 30
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
