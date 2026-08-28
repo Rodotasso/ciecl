@@ -2,12 +2,13 @@
 % Please edit documentation in R/cie-siglas.R
 \name{cie_short}
 \alias{cie_short}
-\title{Listar siglas medicas soportadas}
+\title{Listar siglas médicas soportadas}
 \usage{
 cie_short(category = NULL, categoria = lifecycle::deprecated())
 }
 \arguments{
-\item{category}{Character opcional, filtrar por categoria. Valores validos:
+\item{category}{Character opcional, filtrar por categoría. Los valores
+(sin tildes, son tokens usados también para matching interno) son:
 "cardiovascular", "respiratoria", "metabolica", "gastrointestinal",
 "infecciosa", "oncologica", "reumatologica", "neurologica",
 "psiquiatrica", "traumatologica", "pediatrica", "gineco_obstetrica".
@@ -19,20 +20,20 @@ Si es NULL (default), retorna todas las siglas.}
 tibble con columnas: sigla, termino_busqueda, categoria
 }
 \description{
-Muestra todas las siglas medicas que pueden usarse en \code{\link[=cie_search]{cie_search()}}.
-"Sigla" se conserva como termino local (concepto medico chileno) en la
-columna de salida; el nombre de la funcion usa \code{cie_short} por
-consistencia con el ecosistema R (verbos cortos en ingles).
+Muestra todas las siglas médicas que pueden usarse en \code{\link[=cie_search]{cie_search()}}.
+"Sigla" se conserva como término local (concepto médico chileno) en la
+columna de salida; el nombre de la función usa \code{cie_short} por
+consistencia con el ecosistema R (verbos cortos en inglés).
 }
 \examples{
 # Ver todas las siglas
 cie_short()
 
-# Filtrar por categoria
+# Filtrar por categoría
 cie_short("cardiovascular")
 cie_short("oncologica")
 
-# Buscar una sigla especifica
+# Buscar una sigla específica
 cie_short() |> dplyr::filter(sigla == "iam")
 }
 \seealso{

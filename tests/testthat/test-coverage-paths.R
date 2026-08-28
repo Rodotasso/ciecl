@@ -30,6 +30,34 @@ test_that("cie_search con field='inclusion' y termino raro retorna 0", {
   expect_s3_class(res, "data.frame")
 })
 
+test_that("cie_search: rama 'sin palabras validas tras sanitizar' carga datos reales", {
+  # ".#a .#a": cada palabra sobrevive el split (nchar >= 2) pero al
+  # sanitizar para FTS5 (solo alfanumerico) queda en 1 caracter (<2),
+  # por lo que palabras_fts queda vacio -> dispara la rama de
+  # R/cie-search.R que hace SELECT sin WHERE (carga la tabla completa).
+  res <- cie_search(".#a .#a", threshold = 0, verbose = FALSE)
+
+  expect_s3_class(res, "data.frame")
+  expect_gt(nrow(res), 0)
+  expect_true(all(c("codigo", "descripcion", "score", "categoria") %in% names(res)))
+  # Los codigos deben existir realmente en el catalogo (la query cargo
+  # la tabla cie10 real, no datos vacios/inventados)
+  expect_true(all(res$codigo %in% cie10_cl$codigo))
+})
+
+test_that("cie_search: rama 'sin palabras validas, fallback' carga datos reales", {
+  # "a b": ambas palabras tienen nchar 1 (< 2) y se descartan en el
+  # split inicial -> length(palabras) == 0 -> dispara la rama de
+  # R/cie-search.R que carga la tabla completa sin pasar por FTS5.
+  res <- cie_search("a b", verbose = FALSE)
+
+  expect_s3_class(res, "data.frame")
+  expect_gt(nrow(res), 0)
+  expect_true(all(c("codigo", "descripcion", "score", "categoria") %in% names(res)))
+  expect_true(all(res$score == 1)) # match exacto de subcadena "a b"
+  expect_true(all(res$codigo %in% cie10_cl$codigo))
+})
+
 # --- cie_lookup con extract = TRUE ----------------------------------------
 
 test_that("cie_lookup con extract=TRUE extrae codigo de texto con ruido", {

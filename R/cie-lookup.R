@@ -33,32 +33,32 @@ extract_cie_from_text <- function(text) {
   return(resultado)
 }
 
-#' Busqueda exacta por codigo CIE-10
+#' Búsqueda exacta por código CIE-10
 #'
-#' @param code Character vector de codigos
+#' @param code Character vector de códigos
 #'   (ej. "E11", "E11.0", c("E11.0", "Z00"))
 #'   o rango (ej. "E10-E14"). Acepta vectores.
 #'   Soporta formatos: con punto (E11.0),
-#'   sin punto (E110), o solo categoria (E11).
-#' @param expand Logical, expandir jerarquia completa (default FALSE)
-#' @param normalize Logical, normalizar formato de codigos
-#'   automaticamente (default TRUE)
+#'   sin punto (E110), o solo categoría (E11).
+#' @param expand Logical, expandir jerarquía completa (default FALSE)
+#' @param normalize Logical, normalizar formato de códigos
+#'   automáticamente (default TRUE)
 #' @param full_description Logical, agregar columna `descripcion_completa`
 #'   con formato "CODIGO - DESCRIPCION" (default FALSE)
-#' @param extract Logical, extraer codigo CIE-10 de texto con
+#' @param extract Logical, extraer código CIE-10 de texto con
 #'   prefijos/sufijos (default FALSE).
-#'   IMPORTANTE: Solo usar con codigo ESCALAR (longitud 1).
+#'   IMPORTANTE: Solo usar con código ESCALAR (longitud 1).
 #'   Ejemplo: "CIE:E11.0" -> "E11.0", "E11.0-confirmado" -> "E11.0".
-#'   Para vectores multiples usar extract=FALSE (default).
-#' @param check_siglas Logical, buscar siglas medicas comunes (default FALSE).
+#'   Para vectores múltiples usar extract=FALSE (default).
+#' @param check_siglas Logical, buscar siglas médicas comunes (default FALSE).
 #'   Ejemplo: "IAM" -> I21.0 (Infarto agudo miocardio)
 #' @param include_uso_cl Logical, incluir columna `uso_cl` en el output
 #'   (default TRUE). El default difiere de [cie_search()] (FALSE) para
-#'   preservar el contrato historico de cada funcion. Valores posibles:
+#'   preservar el contrato histórico de cada función. Valores posibles:
 #'   `"principal"`, `"legado"`, `"causa_externa"`, `"etiologico"`,
 #'   `"causa_externa | principal"`.
-#' @param only_uso_cl Logical, filtrar a codigos vigentes de uso clinico
-#'   en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+#' @param only_uso_cl Logical, filtrar a códigos vigentes de uso clínico
+#'   en Chile (default FALSE). Cuando es TRUE, excluye los códigos con
 #'   `uso_cl == "legado"` (es decir, conserva `principal`,
 #'   `causa_externa`, `etiologico` y sus combinaciones).
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
@@ -67,27 +67,27 @@ extract_cie_from_text <- function(text) {
 #' @param descripcion_completa `r lifecycle::badge("deprecated")` Use `full_description`.
 #' @returns tibble con codigo(s) matcheado(s)
 #' @family search
-#' @seealso [cie_search()], [cie_norm()], [cie_expand()]
+#' @seealso [cie_search()], [cie_norm()], [cie_expand()], [cie_guide()]
 #' @export
 #' @examples
-#' # Busqueda directa por codigo
+#' # Búsqueda directa por código
 #' cie_lookup("E11.0")
 #'
 #' @examplesIf interactive()
 #' cie_lookup("E110") # Sin punto
-#' cie_lookup("E11") # Solo categoria
+#' cie_lookup("E11") # Solo categoría
 #' cie_lookup("E11", expand = TRUE) # Todos E11.x
-#' # Vectorizado - multiples codigos y formatos
+#' # Vectorizado - múltiples códigos y formatos
 #' cie_lookup(c("E11.0", "Z00", "I10"))
-#' # Con descripcion completa
+#' # Con descripción completa
 #' cie_lookup("E110", full_description = TRUE)
-#' # Extraer codigo de texto con ruido (solo codigo escalar)
+#' # Extraer código de texto con ruido (solo código escalar)
 #' cie_lookup("CIE:E11.0", extract = TRUE)
 #' cie_lookup("E11.0-confirmado", extract = TRUE)
-#' # Buscar por siglas medicas
+#' # Buscar por siglas médicas
 #' cie_lookup("IAM", check_siglas = TRUE)
 #' cie_lookup("DM2", check_siglas = TRUE)
-#' # Filtrar a codigos vigentes de uso clinico Chile (excluye 'legado')
+#' # Filtrar a códigos vigentes de uso clínico Chile (excluye 'legado')
 #' cie_lookup("E11", expand = TRUE, only_uso_cl = TRUE)
 #' # Omitir columna uso_cl en el output
 #' cie_lookup("E11.0", include_uso_cl = FALSE)
@@ -126,6 +126,8 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
     )
     full_description <- descripcion_completa
   }
+
+  check_required_es(missing(code), "code")
 
   # Alias internos para mantener el cuerpo de la funcion sin cambios
   codigo <- code
@@ -291,7 +293,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
 cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Asegurar que codigo_norm es un escalar (longitud 1)
   if (length(codigo_norm) != 1) {
-    cli::cli_abort("{.fn cie_lookup_single} solo acepta un codigo a la vez.", class = "ciecl_invalid_input")
+    cli::cli_abort("{.fn cie_lookup_single} solo acepta un c\u00f3digo a la vez.", class = "ciecl_invalid_input")
   }
 
   # Manejar NA
@@ -308,7 +310,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Solo permitir caracteres validos para codigos CIE-10:
   # letras, numeros, punto, guion
   if (!stringr::str_detect(codigo_norm, "^[A-Za-z0-9.\\-]+$")) {
-    cli::cli_inform(c("x" = "Codigo con caracteres invalidos: {.val {codigo_norm}}"))
+    cli::cli_inform(c("x" = "C\u00f3digo con caracteres inv\u00e1lidos: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 
@@ -352,7 +354,7 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
   # Fix #3: Validar estrictamente codigos invalidos
   # Solo codigos CIE-10 validos existen en la base
   if (nrow(resultado) == 0) {
-    cli::cli_inform(c("x" = "Codigo no encontrado: {.val {codigo_norm}}"))
+    cli::cli_inform(c("x" = "C\u00f3digo no encontrado: {.val {codigo_norm}}"))
     return(cie10_empty_tibble())
   }
 

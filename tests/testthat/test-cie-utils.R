@@ -80,3 +80,4 @@ test_that("cie_norm preserva casos especiales", {
   expect_equal(cie_norm("A17.0+", search_db = FALSE), "A17.0")
   expect_equal(cie_norm("G01*", search_db = FALSE), "G01")
 })
+

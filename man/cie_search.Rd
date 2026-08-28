@@ -2,7 +2,7 @@
 % Please edit documentation in R/cie-search.R
 \name{cie_search}
 \alias{cie_search}
-\title{Busqueda difusa (fuzzy) de terminos medicos CIE-10}
+\title{Búsqueda difusa (fuzzy) de términos médicos CIE-10}
 \usage{
 cie_search(
   text,
@@ -19,30 +19,30 @@ cie_search(
 )
 }
 \arguments{
-\item{text}{String termino medico en espanol o sigla
+\item{text}{String término médico en español o sigla
 (ej. "diabetes", "IAM", "TBC")}
 
 \item{threshold}{Numeric entre 0 y 1, umbral similitud
 Jaro-Winkler (default 0.70)}
 
-\item{max_results}{Integer, maximo resultados a retornar (default 50)}
+\item{max_results}{Integer, máximo resultados a retornar (default 50)}
 
-\item{field}{Character, campo busqueda ("descripcion" o "inclusion")}
+\item{field}{Character, campo búsqueda ("descripcion" o "inclusion")}
 
-\item{only_fuzzy}{Logical, usar solo busqueda fuzzy
-sin busqueda exacta (default FALSE)}
+\item{only_fuzzy}{Logical, usar solo búsqueda fuzzy
+sin búsqueda exacta (default FALSE)}
 
 \item{verbose}{Logical, mostrar mensajes informativos
 (default TRUE). Usar FALSE en scripts.}
 
 \item{include_uso_cl}{Logical, incluir columna \code{uso_cl} en el output
 (default FALSE). El default difiere de \code{\link[=cie_lookup]{cie_lookup()}} (TRUE) para
-preservar el contrato historico de cada funcion. Valores posibles:
+preservar el contrato histórico de cada función. Valores posibles:
 \code{"principal"}, \code{"legado"}, \code{"causa_externa"}, \code{"etiologico"},
 \code{"causa_externa | principal"}.}
 
-\item{only_uso_cl}{Logical, filtrar a codigos vigentes de uso clinico
-en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
+\item{only_uso_cl}{Logical, filtrar a códigos vigentes de uso clínico
+en Chile (default FALSE). Cuando es TRUE, excluye los códigos con
 \code{uso_cl == "legado"}.}
 
 \item{texto}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{text}.}
@@ -53,29 +53,30 @@ en Chile (default FALSE). Cuando es TRUE, excluye los codigos con
 }
 \value{
 tibble ordenado por score descendente (1.0 = coincidencia exacta).
-Si el text corresponde a una sigla medica, se expande
-automaticamente antes de buscar.
+Si el text corresponde a una sigla médica, se expande
+automáticamente antes de buscar.
 }
 \description{
-Busca en descripciones CIE-10 usando multiples estrategias:
+Busca en descripciones CIE-10 usando múltiples estrategias:
 \enumerate{
-\item Expansion de siglas medicas (IAM, TBC, DM, etc.)
-\item Busqueda exacta por subcadena (mas rapida)
-\item Busqueda fuzzy con Jaro-Winkler (tolera typos)
+\item Expansión de siglas médicas (IAM, TBC, DM, etc.)
+\item Búsqueda exacta por subcadena (más rápida)
+\item Búsqueda fuzzy con Jaro-Winkler (tolera typos)
 }
 }
 \details{
-La busqueda es tolerante a tildes: "neumonia" encuentra "neumonia".
-Soporta siglas medicas comunes: "IAM" busca "infarto agudo miocardio".
+La búsqueda es tolerante a tildes: "neumonia" (sin tilde) encuentra
+"neumonía" (con tilde) en el catálogo.
+Soporta siglas médicas comunes: "IAM" busca "infarto agudo miocardio".
 }
 \examples{
-# Busqueda basica
+# Búsqueda básica
 cie_search("diabetes")
 
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 cie_search("neumonia")
 
-# Busqueda por siglas medicas
+# Búsqueda por siglas médicas
 cie_search("IAM")
 cie_search("DM2")
 
@@ -84,7 +85,7 @@ cie_search("diabetis")
 
 # Buscar en inclusiones
 cie_search("bacteriana", field = "inclusion")
-# Filtrar a codigos vigentes Chile (excluye 'legado')
+# Filtrar a códigos vigentes Chile (excluye 'legado')
 cie_search("diabetes", only_uso_cl = TRUE)
 # Mostrar la columna uso_cl en el output
 cie_search("diabetes", include_uso_cl = TRUE)

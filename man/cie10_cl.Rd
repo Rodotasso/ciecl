@@ -29,9 +29,11 @@ CIE-10 (valores \code{"A"} a \code{"Z"}).}
 decir, etiología en un par daga/asterisco. \code{FALSE} en caso contrario.}
 \item{es_cruz}{logical. \code{TRUE} si el código es asterisco (\code{*}),
 es decir, manifestación en un par daga/asterisco. \code{FALSE} en caso contrario.}
-\item{uso_cl}{logical. \code{TRUE} si el código tiene uso clínico registrado
-en el catálogo MINSAL/DEIS; \code{FALSE} en caso contrario. Permite filtrar
-subcategorías con actividad diagnóstica real en Chile.}
+\item{uso_cl}{character. Categoría de uso clínico del código según el
+catálogo MINSAL/DEIS: \code{"principal"}, \code{"legado"},
+\code{"causa_externa"}, \code{"etiologico"}, o la combinación
+\code{"causa_externa | principal"}. El valor \code{"legado"} identifica
+códigos sin uso clínico vigente en Chile.}
 }
 }
 \source{
@@ -49,8 +51,8 @@ filas que abarcan la totalidad de códigos del sistema de clasificación.
 data(cie10_cl)
 head(cie10_cl)
 
-# Códigos con uso clínico registrado
-subset(cie10_cl, uso_cl == TRUE) |> nrow()
+# Códigos vigentes de uso clínico en Chile (excluye categoría "legado")
+subset(cie10_cl, uso_cl != "legado") |> nrow()
 
 # Capítulos disponibles
 unique(cie10_cl$capitulo)

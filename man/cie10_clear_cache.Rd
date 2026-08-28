@@ -2,18 +2,30 @@
 % Please edit documentation in R/cie-sql.R
 \name{cie10_clear_cache}
 \alias{cie10_clear_cache}
-\title{Limpiar cache SQLite (forzar rebuild)}
+\title{Limpiar caché SQLite local (forzar rebuild)}
 \usage{
 cie10_clear_cache()
 }
 \value{
-No return value, called for side effects (deletes SQLite cache).
+Sin valor de retorno, se llama por sus efectos secundarios
+(elimina la caché SQLite).
 }
 \description{
-Limpiar cache SQLite (forzar rebuild)
+\code{ciecl} construye, en el primer uso, un archivo SQLite (\code{cie10.db})
+a partir del dataset \link{cie10_cl} y lo guarda en una carpeta de datos
+del usuario (ver \code{tools::R_user_dir("ciecl", "data")}). Esa "caché"
+evita reconstruir la base en cada sesión. Esta función la elimina y
+fuerza que la próxima consulta (\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}},
+\code{\link[=cie10_sql]{cie10_sql()}}, etc.) la reconstruya desde cero.
+
+Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
+una version con un dataset CIE-10 corregido y la caché vieja quedó
+desactualizada, (2) se sospecha que el archivo \code{.db} está corrupto
+(errores de lectura SQL inesperados), o (3) se quiere liberar el
+espacio en disco que ocupa la caché.
 }
 \examples{
-# Ver ubicacion del cache
+# Ver ubicación de la caché
 tools::R_user_dir("ciecl", "data")
 
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

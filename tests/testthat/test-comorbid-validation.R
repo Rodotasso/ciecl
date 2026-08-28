@@ -194,7 +194,7 @@ test_that("cie_map_comorbid maneja vector vacio", {
 
   expect_s3_class(resultado, "tbl_df")
   expect_length(resultado$codigo, 0)
-  expect_equal(names(resultado), c("codigo", "categoria"))
+  expect_named(resultado, c("codigo", "categoria"))
 })
 
 test_that("cie_map_comorbid maneja codigos mixtos", {

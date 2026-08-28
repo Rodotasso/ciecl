@@ -49,16 +49,17 @@ Características principales:
 
 - **Catálogo oficial CIE-10 Chile** (MINSAL/DEIS v2018) embebido como
   dataset
+- **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
+- **API CIE-11 OMS** para búsqueda en la clasificación internacional
+  vigente
 - **Validación y normalización vectorizada**: acepta `E110`, `E11.0`,
   `e 11 0`, `I10-0`, etc.
 - **Búsqueda fuzzy Jaro-Winkler** tolerante a errores tipográficos
-- **Siglas médicas chilenas** (IAM, EPOC, DM2, HTA, TBC, …)
 - **Cálculo de comorbilidades Charlson/Elixhauser** con `comorbidity`
 - **Consultas SQL directas** sobre el catálogo completo con SQLite +
   FTS5
 - **Expansión jerárquica de categorías** (ej: `E11` → `E11.0`, `E11.1`,
   …, `E11.9`)
-- **API CIE-11 OMS** vía `cie11_search()`
 
 El dataset está establecido por el [Decreto
 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) del MINSAL como
@@ -144,6 +145,9 @@ cie_search("IAM")
 #> # ℹ 40 more rows
 ```
 
+¿No sabes cuál función usar? `cie_guide()` muestra una tabla comparativa
+con el escenario, la función recomendada y un ejemplo para cada caso.
+
 ``` r
 # Comorbilidades (requiere: install.packages("comorbidity"))
 df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
@@ -171,11 +175,6 @@ Catálogo oficial **CIE-10 MINSAL/DEIS v2018**:
   Chile](https://deis.minsal.cl/centrofic/)
 - Dominio público según [Decreto
   356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
-
-## Desarrollo
-
-Este paquete fue desarrollado con asistencia de Claude (Anthropic), con
-verificación y validación humana de todo el código y la documentación.
 
 ## Contribuir
 

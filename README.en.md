@@ -47,15 +47,16 @@ Main features:
 
 - **Official Chilean CIE-10 catalogue** (MINSAL/DEIS v2018) embedded as
   a dataset
+- **Chilean medical abbreviations** (IAM, EPOC, DM2, HTA, TBC, …)
+- **WHO ICD-11 API** for searching the current international
+  classification
 - **Vectorized validation and normalization**: accepts `E110`, `E11.0`,
   `e 11 0`, `I10-0`, etc.
 - **Jaro-Winkler fuzzy search** tolerant to typos
-- **Chilean medical abbreviations** (IAM, EPOC, DM2, HTA, TBC, …)
 - **Charlson/Elixhauser comorbidity computation** using `comorbidity`
 - **Direct SQL queries** over the complete catalogue via SQLite + FTS5
 - **Hierarchical expansion of categories** (e.g., `E11` → `E11.0`,
   `E11.1`, …, `E11.9`)
-- **WHO ICD-11 API** via `cie11_search()`
 
 The dataset is established by [Decree
 356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) of Chile’s
@@ -142,6 +143,10 @@ cie_search("IAM")
 #> # ℹ 40 more rows
 ```
 
+Not sure which function to use? `cie_guide()` prints a comparison table
+with the scenario, the recommended function, and an example for each
+case.
+
 ``` r
 # Comorbilidades (requiere: install.packages("comorbidity"))
 df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
@@ -168,12 +173,8 @@ Official **CIE-10 MINSAL/DEIS v2018** catalogue:
 - Source: [DEIS](https://deis.minsal.cl) — [Centro FIC
   Chile](https://deis.minsal.cl/centrofic/)
 - Public domain under [Decree
-  356/2017](https://www.bcn.cl/leychile/navegar?i=1112064)
-
-## Development
-
-This package was developed with assistance from Claude (Anthropic), with
-human verification and validation of all code and documentation.
+  356/2017](https://www.bcn.cl/leychile/navegar?i=1112064) of Chile’s
+  Ministry of Health
 
 ## Contributing
 

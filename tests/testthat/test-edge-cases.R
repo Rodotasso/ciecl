@@ -30,9 +30,9 @@ test_that("cie_search maneja cadenas muy cortas", {
   expect_no_error(suppressMessages(cie_search("DM")))
 
   # Texto de 1 caracter o vacio debe dar error
-  expect_error(cie_search("a"), "minimo 2 caracteres")
-  expect_error(cie_search(""), "minimo 2 caracteres")
-  expect_error(cie_search(" "), "minimo 2 caracteres")
+  expect_error(cie_search("a"), "m\u00ednimo 2 caracteres")
+  expect_error(cie_search(""), "m\u00ednimo 2 caracteres")
+  expect_error(cie_search(" "), "m\u00ednimo 2 caracteres")
 })
 
 test_that("cie_search maneja threshold invalido", {
@@ -318,7 +318,7 @@ test_that("cie_validate_vector rechaza formatos invalidos", {
   )
 
   resultado <- cie_validate_vector(codigos_invalidos)
-  expect_true(all(!resultado))
+  expect_all_false(resultado)
 })
 
 test_that("cie_validate_vector normaliza antes de validar", {
@@ -573,25 +573,25 @@ test_that("cie10_sql bloquea keywords peligrosos", {
   # DROP (detectado como keyword peligroso)
   expect_error(
     cie10_sql("SELECT * FROM cie10; DROP TABLE cie10;--"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 
-  # Multiples statements sin keyword peligroso
+  # Multiples sentencias sin keyword peligroso
   expect_error(
     cie10_sql("SELECT * FROM cie10; SELECT * FROM cie10"),
-    "Multiples statements"
+    "sentencias SQL no permitidas"
   )
 
   # ATTACH (SQLite specific attack)
   expect_error(
     cie10_sql("SELECT * FROM cie10 WHERE 1=1 ATTACH DATABASE"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 
   # PRAGMA (SQLite metadata)
   expect_error(
     cie10_sql("SELECT * FROM cie10 WHERE 1=1 PRAGMA table_info"),
-    "keyword no permitido"
+    "palabra clave no permitida"
   )
 })
 

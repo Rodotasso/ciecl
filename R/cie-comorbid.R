@@ -46,14 +46,14 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   # Advertir sobre NAs en columna de codigos
   n_na <- sum(is.na(data[[code]]))
   if (n_na > 0) {
-    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que seran ignorados.")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_na}} valores NA que ser\u00e1n ignorados.")
     data <- data[!is.na(data[[code]]), ]
   }
 
   # Advertir sobre codigos vacios
   n_empty <- sum(nchar(trimws(as.character(data[[code]]))) == 0, na.rm = TRUE)
   if (n_empty > 0) {
-    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} codigos vacios que seran ignorados.")
+    cli::cli_warn("Columna {.field {code}} contiene {.val {n_empty}} c\u00f3digos vac\u00edos que ser\u00e1n ignorados.")
     data <- data[nchar(trimws(as.character(data[[code]]))) > 0, ]
   }
 
@@ -89,10 +89,9 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   return(tibble::as_tibble(resultado))
 }
 
-#' Mapeo manual grupos comorbilidad Chile-especifico
+#' Mapeo manual de grupos de comorbilidad específicos de Chile
 #'
-#' @description
-#' Agrupa codigos CIE-10 chilenos en categorias comorbilidad MINSAL.
+#' Agrupa códigos CIE-10 chilenos en categorías de comorbilidad MINSAL.
 #' Basado en Decreto 1301/2016 MINSAL + icd::icd10_map_charlson.
 #'
 #' @param codes Character vector de codigos
@@ -120,6 +119,20 @@ cie_map_comorbid <- function(codes, codigos = lifecycle::deprecated()) {
     return(tibble::tibble(
       codigo = character(0),
       categoria = character(0)
+    ))
+  }
+
+  # Advertir (sin cambiar el resultado) cuando una entrada no tiene
+  # formato CIE-10 valido: se clasifica como "Otra" igual que un codigo
+  # valido no mapeado, pero la primera es un problema de datos (ybs34).
+  # Los NA no cuentan en este warning.
+  formato_valido <- cie_validate_vector(codes)
+  invalidos <- codes[!is.na(codes) & !formato_valido]
+  if (length(invalidos) > 0) {
+    invalidos_vec <- cli::cli_vec(invalidos, style = list("vec-last" = " y "))
+    cli::cli_warn(c(
+      "{length(invalidos)} c\u00f3digo{?s} sin formato CIE-10 v\u00e1lido, clasificado{?s} como {.val Otra}.",
+      "i" = "Entradas: {.val {invalidos_vec}}"
     ))
   }
 

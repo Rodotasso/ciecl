@@ -39,9 +39,10 @@ Suggests:
     comorbidity,
     gt,
     readxl,
+    vcr (>= 2.0.0),
     withr,
     writexl,
-    testthat (>= 3.1.5),
+    testthat (>= 3.3.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
