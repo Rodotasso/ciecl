@@ -1,8 +1,42 @@
 # Changelog
 
-## ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-17)
+## ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)
 
 *English summary below*
+
+### Revisión rOpenSci — seguimiento de comentarios de Maëlle Salmon (2026-08-27)
+
+Tercera tanda, a partir del seguimiento de
+[@maelle](https://github.com/maelle) en el issue rOpenSci
+[\#765](https://github.com/Rodotasso/ciecl/issues/765). Sin cambios en
+la API pública.
+
+- **Guía de inicio mejorada**: la frase sobre
+  [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) quedó
+  en lenguaje simple; el cruce entre la búsqueda difusa y los códigos
+  presentes en la base ahora se muestra con código ejecutable
+  ([`intersect()`](https://generics.r-lib.org/reference/setops.html)),
+  explicitando de dónde salen `E11.9` y `E14.9`; la guía cierra el caso
+  de uso filtrando los egresos y resumiéndolos por tipo de diabetes. Los
+  mismos cambios se aplicaron a la gemela en inglés
+  `case-study-discharges.Rmd`, que queda sincronizada con `ciecl.Rmd`.
+- **Caché SQLite**: la ayuda de
+  [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md)
+  ahora indica que la reconstrucción tras una actualización del paquete
+  es automática (la caché guarda la versión del paquete en la tabla
+  `cie10_meta` y se reconstruye sola en el primer uso si difiere); los
+  casos de uso manual que quedan son caché corrupta o liberación de
+  disco. La ayuda de
+  [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
+  aclara que la desconexión manual solo es necesaria al borrar el `.db`
+  por fuera del paquete o al cerrar procesos batch largos. Tres tests
+  nuevos cubren el ciclo de reconstrucción por versión.
+- **[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)**:
+  la condición del ejemplo con `vcr` se movió a `@examplesIf`, de modo
+  que ya no aparece en la documentación visible.
+- **Viñetas de instalación (ES/EN)**: párrafo inicial que explica para
+  quién es la guía (personas que trabajan con bases de datos de salud y
+  pueden estar aprendiendo R) y quién puede saltársela.
 
 ### Revisión rOpenSci — comentarios de Maëlle Salmon ms01–ms20 (2026-08-17)
 
@@ -454,6 +488,29 @@ para el contexto local.
   datos.
 
 ### English Summary
+
+#### rOpenSci Review Follow-up (2026-08-27)
+
+- **Getting-started guide improved**: plain-language
+  [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
+  wording, an executable
+  [`intersect()`](https://generics.r-lib.org/reference/setops.html) step
+  showing where `E11.9`/`E14.9` come from, and a closing section that
+  filters and summarizes discharges by diabetes type. The English twin
+  `case-study-discharges.Rmd` is now in sync with `ciecl.Rmd`.
+- **SQLite cache**:
+  [`cie10_clear_cache()`](https://rodotasso.github.io/ciecl/reference/cie10_clear_cache.md)
+  docs now state that rebuilding after a package update is automatic
+  (cache stores the package version in `cie10_meta` and rebuilds on
+  first use when it differs);
+  [`cie10_disconnect()`](https://rodotasso.github.io/ciecl/reference/cie10_disconnect.md)
+  docs clarify when manual disconnection is actually needed. Three new
+  tests cover the version-based rebuild cycle.
+- **[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)**:
+  the `vcr` example guard moved to `@examplesIf`, so it no longer shows
+  in the visible documentation.
+- **Installation vignettes (ES/EN)**: opening paragraph explaining who
+  the guide is for and who can skip it.
 
 #### rOpenSci Review Response
 

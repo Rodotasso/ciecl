@@ -105,8 +105,9 @@ now comparable with the official catalog.
 
 For the report you need the clinical descriptions, not just the codes.
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-directly returns a character vector, so it integrates into a `mutate()`
-without temporary joins:
+returns a character vector with one description per code, so you can add
+it as another column of your table with `mutate()`, with no intermediate
+steps:
 
 ``` r
 
@@ -162,8 +163,12 @@ uses Jaro-Winkler similarity, so it tolerates typos (here we search for
 ``` r
 
 # Tolerant search: "diabetis" instead of "diabetes"
-cie_search(text = "diabetis", threshold = 0.7)
-#> # A tibble: 50 × 4
+# (by default the 50 most similar results are shown;
+#  we raise the limit because the catalog has many diabetes codes)
+search_results <- cie_search(text = "diabetis", threshold = 0.7, max_results = 100)
+
+search_results
+#> # A tibble: 100 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
 #>  1 E10    Diabetes mellitus insulinodependiente                  0.917 E10 DIAB…
@@ -176,12 +181,47 @@ cie_search(text = "diabetis", threshold = 0.7)
 #>  8 E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp… 0.917 E10 DIAB…
 #>  9 E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples  0.917 E10 DIAB…
 #> 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi… 0.917 E10 DIAB…
-#> # ℹ 40 more rows
+#> # ℹ 90 more rows
 ```
 
-The result includes a similarity `score` to assess the reliability of
-each match. Now you know that `E11.9` and `E14.9` in your database
-correspond to diabetes and you can filter your report with confidence.
+Each result includes a similarity `score` to assess the reliability of
+the match. But the table above lists every diabetes code in the catalog,
+and not all of them necessarily appear in your data. To find out which
+ones do, cross the search results with the codes that actually show up
+in your dataset:
+
+``` r
+
+# Which diabetes codes are actually in my data?
+diabetes_codes <- intersect(
+  search_results$codigo,
+  unique(discharges$DIAG1_NORM)
+)
+
+diabetes_codes
+#> [1] "E11.9" "E14.9"
+```
+
+As the result shows, of all the diabetes codes in the catalog only two
+are present in the `DIAG1` column of your data: `E11.9` and `E14.9`. The
+cross identifies which codes your data actually contains, without
+reviewing the full table by hand. With that list you can now filter the
+discharges and close the report:
+
+``` r
+
+# Final report: diabetes discharges, summarized by type
+discharges_full |>
+  filter(DIAG1_NORM %in% diabetes_codes) |>
+  count(description, sort = TRUE)
+#>                                                       description  n
+#> 1                     Diabetes mellitus tipo 2 sin complicaciones 14
+#> 2 Diabetes mellitus, no especificada, sin mención de complicación 12
+```
+
+With this, your monthly diabetes discharge report is ready: you know how
+many there were and of what type, with the official catalog
+descriptions.
 
 ## When a search returns no results
 

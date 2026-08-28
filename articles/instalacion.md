@@ -1,5 +1,12 @@
 # Guía de Instalación y Configuración
 
+Esta guía está pensada para personas que trabajan con bases de datos de
+salud y que quizás están recién aprendiendo R: para ellas, instalar un
+paquete desde GitHub con `pak` y configurar la API key de la OMS no son
+pasos obvios, así que aquí se explican con detalle. Si ya tienes
+experiencia con R, puedes saltarte esta viñeta: basta con
+`pak::pak("RodoTasso/ciecl")` para empezar.
+
 ## Instalación
 
 La forma más simple de instalar `ciecl` es con el paquete

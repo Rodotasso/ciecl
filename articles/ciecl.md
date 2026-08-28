@@ -108,9 +108,10 @@ son comparables con el catálogo oficial.
 
 Para el reporte necesitas las glosas clínicas, no solo los códigos.
 [`cie_describe()`](https://rodotasso.github.io/ciecl/reference/cie_describe.md)
-devuelve directamente un vector de caracteres, por lo que se integra en
-un [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) sin
-joins temporales:
+devuelve un vector de texto con una descripción por cada código, así que
+puedes agregarlo como una columna más de tu tabla con
+[`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html), sin
+pasos intermedios:
 
 ``` r
 
@@ -167,8 +168,12 @@ buscamos “diabetis” a propósito):
 ``` r
 
 # Búsqueda tolerante: "diabetis" en lugar de "diabetes"
-cie_search(text = "diabetis", threshold = 0.7)
-#> # A tibble: 50 × 4
+# (por defecto se muestran los 50 resultados más parecidos;
+#  ampliamos el límite porque el catálogo tiene muchos códigos de diabetes)
+resultados_busqueda <- cie_search(text = "diabetis", threshold = 0.7, max_results = 100)
+
+resultados_busqueda
+#> # A tibble: 100 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
 #>  1 E10    Diabetes mellitus insulinodependiente                  0.917 E10 DIAB…
@@ -181,13 +186,46 @@ cie_search(text = "diabetis", threshold = 0.7)
 #>  8 E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp… 0.917 E10 DIAB…
 #>  9 E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples  0.917 E10 DIAB…
 #> 10 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi… 0.917 E10 DIAB…
-#> # ℹ 40 more rows
+#> # ℹ 90 more rows
 ```
 
-El resultado incluye un `score` de similitud para evaluar la
-confiabilidad de cada coincidencia. Ahora sabes que `E11.9` y `E14.9` de
-tu base corresponden a diabetes y puedes filtrar tu reporte con
-criterio.
+Cada resultado incluye un `score` de similitud para evaluar la
+confiabilidad de la coincidencia. Pero la tabla anterior lista todos los
+códigos de diabetes del catálogo, y no todos necesariamente están en tu
+base. Para saber cuáles sí, basta con cruzar los resultados de la
+búsqueda con los códigos que realmente aparecen en tus datos:
+
+``` r
+
+# ¿Qué códigos de diabetes están realmente en mi base?
+codigos_diabetes <- intersect(
+  resultados_busqueda$codigo,
+  unique(egresos$DIAG1_NORM)
+)
+
+codigos_diabetes
+#> [1] "E11.9" "E14.9"
+```
+
+Como se ve en el resultado, de todos los códigos de diabetes del
+catálogo solo dos están presentes en la columna `DIAG1` de tu base:
+`E11.9` y `E14.9`. El cruce identifica qué códigos contienen realmente
+tus datos, sin tener que revisar la tabla completa a mano. Con esa lista
+ya puedes filtrar los egresos y cerrar el reporte:
+
+``` r
+
+# Reporte final: egresos por diabetes, resumidos por tipo
+egresos_full |>
+  filter(DIAG1_NORM %in% codigos_diabetes) |>
+  count(descripcion, sort = TRUE)
+#>                                                       descripcion  n
+#> 1                     Diabetes mellitus tipo 2 sin complicaciones 14
+#> 2 Diabetes mellitus, no especificada, sin mención de complicación 12
+```
+
+Con esto tu reporte mensual de egresos por diabetes queda listo: sabes
+cuántos hubo y de qué tipo, con las glosas oficiales del catálogo.
 
 ## Cuando la búsqueda no entrega resultados
 

@@ -5,21 +5,25 @@ del usuario (ver tools::R_user_dir("ciecl", "data")). Esa "caché"
 evita reconstruir la base en cada sesión. Esta función la elimina y
 fuerza que la próxima consulta (cie_search(), cie_lookup(),
 cie10_sql(), etc.) la reconstruya desde cero.
-Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
-una version con un dataset CIE-10 corregido y la caché vieja quedó
-desactualizada, (2) se sospecha que el archivo .db está corrupto
-(errores de lectura SQL inesperados), o (3) se quiere liberar el
-espacio en disco que ocupa la caché.'><meta property="og:description" content='ciecl construye, en el primer uso, un archivo SQLite (cie10.db)
+No es necesario llamarla tras actualizar el paquete: la caché guarda
+la versión del paquete con que se construyó (tabla cie10_meta) y,
+si la versión cambió, se reconstruye automáticamente en el primer
+uso. Los casos en que conviene forzar el rebuild manual son: (1) se
+sospecha que el archivo .db está corrupto (errores de lectura SQL
+inesperados), o (2) se quiere liberar el espacio en disco que ocupa
+la caché.'><meta property="og:description" content='ciecl construye, en el primer uso, un archivo SQLite (cie10.db)
 a partir del dataset cie10_cl y lo guarda en una carpeta de datos
 del usuario (ver tools::R_user_dir("ciecl", "data")). Esa "caché"
 evita reconstruir la base en cada sesión. Esta función la elimina y
 fuerza que la próxima consulta (cie_search(), cie_lookup(),
 cie10_sql(), etc.) la reconstruya desde cero.
-Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
-una version con un dataset CIE-10 corregido y la caché vieja quedó
-desactualizada, (2) se sospecha que el archivo .db está corrupto
-(errores de lectura SQL inesperados), o (3) se quiere liberar el
-espacio en disco que ocupa la caché.'><meta property="og:image" content="https://rodotasso.github.io/ciecl/logo.png"></head><body>
+No es necesario llamarla tras actualizar el paquete: la caché guarda
+la versión del paquete con que se construyó (tabla cie10_meta) y,
+si la versión cambió, se reconstruye automáticamente en el primer
+uso. Los casos en que conviene forzar el rebuild manual son: (1) se
+sospecha que el archivo .db está corrupto (errores de lectura SQL
+inesperados), o (2) se quiere liberar el espacio en disco que ocupa
+la caché.'><meta property="og:image" content="https://rodotasso.github.io/ciecl/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -87,11 +91,13 @@ del usuario (ver <code>tools::R_user_dir("ciecl", "data")</code>). Esa "caché"
 evita reconstruir la base en cada sesión. Esta función la elimina y
 fuerza que la próxima consulta (<code><a href="cie_search.html">cie_search()</a></code>, <code><a href="cie_lookup.html">cie_lookup()</a></code>,
 <code><a href="cie10_sql.html">cie10_sql()</a></code>, etc.) la reconstruya desde cero.</p>
-<p>Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
-una version con un dataset CIE-10 corregido y la caché vieja quedó
-desactualizada, (2) se sospecha que el archivo <code>.db</code> está corrupto
-(errores de lectura SQL inesperados), o (3) se quiere liberar el
-espacio en disco que ocupa la caché.</p>
+<p>No es necesario llamarla tras actualizar el paquete: la caché guarda
+la versión del paquete con que se construyó (tabla <code>cie10_meta</code>) y,
+si la versión cambió, se reconstruye automáticamente en el primer
+uso. Los casos en que conviene forzar el rebuild manual son: (1) se
+sospecha que el archivo <code>.db</code> está corrupto (errores de lectura SQL
+inesperados), o (2) se quiere liberar el espacio en disco que ocupa
+la caché.</p>
     </div>
 
     <div class="section level2">

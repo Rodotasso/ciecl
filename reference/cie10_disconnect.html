@@ -6,30 +6,32 @@ abierta, SQLite mantiene un "lock" (bloqueo) sobre el archivo .db:
 es la forma en que SQLite evita lecturas/escrituras concurrentes
 inconsistentes sobre el mismo archivo. Esta función cierra esa
 conexión y libera el lock.
-Conviene llamarla antes de operaciones que necesitan acceso exclusivo
-al archivo cie10.db —por ejemplo antes de cie10_clear_cache() si
-se borra manualmente la caché por fuera del paquete, o al finalizar
-un proceso batch largo para no dejar el archivo bloqueado—. Si no se
-libera el lock, el archivo .db puede seguir abierto hasta que
-termine la sesión de R; en la práctica esto rara vez es un problema
-porque cada sesión de R tiene su propia conexión, pero impide que
-otro proceso externo (no R) edite el archivo mientras la conexión
-esté abierta.'><meta property="og:description" content='ciecl mantiene una única conexión SQLite reutilizable ("pooled")
+Solo hace falta llamarla manualmente en dos casos: cuando se va a
+eliminar o reemplazar el archivo cie10.db por fuera del paquete
+(por ejemplo, con herramientas del sistema operativo), o al finalizar
+un proceso batch largo para no dejar el archivo bloqueado. Para usar
+cie10_clear_cache() no es necesario llamarla antes: esa función ya
+cierra la conexión pooled internamente. Si no se libera el lock, el
+archivo .db puede seguir abierto hasta que termine la sesión de R;
+en la práctica esto rara vez es un problema porque cada sesión de R
+tiene su propia conexión, pero impide que otro proceso externo (no R)
+edite el archivo mientras la conexión esté abierta.'><meta property="og:description" content='ciecl mantiene una única conexión SQLite reutilizable ("pooled")
 abierta al archivo cie10.db durante la sesión, en lugar de abrir y
 cerrar una conexión por cada consulta. Mientras esa conexión está
 abierta, SQLite mantiene un "lock" (bloqueo) sobre el archivo .db:
 es la forma en que SQLite evita lecturas/escrituras concurrentes
 inconsistentes sobre el mismo archivo. Esta función cierra esa
 conexión y libera el lock.
-Conviene llamarla antes de operaciones que necesitan acceso exclusivo
-al archivo cie10.db —por ejemplo antes de cie10_clear_cache() si
-se borra manualmente la caché por fuera del paquete, o al finalizar
-un proceso batch largo para no dejar el archivo bloqueado—. Si no se
-libera el lock, el archivo .db puede seguir abierto hasta que
-termine la sesión de R; en la práctica esto rara vez es un problema
-porque cada sesión de R tiene su propia conexión, pero impide que
-otro proceso externo (no R) edite el archivo mientras la conexión
-esté abierta.'><meta property="og:image" content="https://rodotasso.github.io/ciecl/logo.png"></head><body>
+Solo hace falta llamarla manualmente en dos casos: cuando se va a
+eliminar o reemplazar el archivo cie10.db por fuera del paquete
+(por ejemplo, con herramientas del sistema operativo), o al finalizar
+un proceso batch largo para no dejar el archivo bloqueado. Para usar
+cie10_clear_cache() no es necesario llamarla antes: esa función ya
+cierra la conexión pooled internamente. Si no se libera el lock, el
+archivo .db puede seguir abierto hasta que termine la sesión de R;
+en la práctica esto rara vez es un problema porque cada sesión de R
+tiene su propia conexión, pero impide que otro proceso externo (no R)
+edite el archivo mientras la conexión esté abierta.'><meta property="og:image" content="https://rodotasso.github.io/ciecl/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -98,15 +100,16 @@ abierta, SQLite mantiene un "lock" (bloqueo) sobre el archivo <code>.db</code>:
 es la forma en que SQLite evita lecturas/escrituras concurrentes
 inconsistentes sobre el mismo archivo. Esta función cierra esa
 conexión y libera el lock.</p>
-<p>Conviene llamarla antes de operaciones que necesitan acceso exclusivo
-al archivo <code>cie10.db</code> —por ejemplo antes de <code><a href="cie10_clear_cache.html">cie10_clear_cache()</a></code> si
-se borra manualmente la caché por fuera del paquete, o al finalizar
-un proceso batch largo para no dejar el archivo bloqueado—. Si no se
-libera el lock, el archivo <code>.db</code> puede seguir abierto hasta que
-termine la sesión de R; en la práctica esto rara vez es un problema
-porque cada sesión de R tiene su propia conexión, pero impide que
-otro proceso externo (no R) edite el archivo mientras la conexión
-esté abierta.</p>
+<p>Solo hace falta llamarla manualmente en dos casos: cuando se va a
+eliminar o reemplazar el archivo <code>cie10.db</code> por fuera del paquete
+(por ejemplo, con herramientas del sistema operativo), o al finalizar
+un proceso batch largo para no dejar el archivo bloqueado. Para usar
+<code><a href="cie10_clear_cache.html">cie10_clear_cache()</a></code> no es necesario llamarla antes: esa función ya
+cierra la conexión pooled internamente. Si no se libera el lock, el
+archivo <code>.db</code> puede seguir abierto hasta que termine la sesión de R;
+en la práctica esto rara vez es un problema porque cada sesión de R
+tiene su propia conexión, pero impide que otro proceso externo (no R)
+edite el archivo mientras la conexión esté abierta.</p>
     </div>
 
     <div class="section level2">

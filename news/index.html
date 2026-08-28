@@ -60,8 +60,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-08-17">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-17)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-08-17"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-08-27">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-08-27"></a></h2>
 <p><em>English summary below</em></p>
+<div class="section level3">
+<h3 id="revisión-ropensci--seguimiento-de-comentarios-de-maëlle-salmon-0-9-8">Revisión rOpenSci — seguimiento de comentarios de Maëlle Salmon (2026-08-27)<a class="anchor" aria-label="anchor" href="#revisi%C3%B3n-ropensci--seguimiento-de-comentarios-de-ma%C3%ABlle-salmon-0-9-8"></a></h3>
+<p>Tercera tanda, a partir del seguimiento de <a href="https://github.com/maelle" class="external-link">@maelle</a> en el issue rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. Sin cambios en la API pública.</p>
+<ul><li>
+<strong>Guía de inicio mejorada</strong>: la frase sobre <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> quedó en lenguaje simple; el cruce entre la búsqueda difusa y los códigos presentes en la base ahora se muestra con código ejecutable (<code><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect()</a></code>), explicitando de dónde salen <code>E11.9</code> y <code>E14.9</code>; la guía cierra el caso de uso filtrando los egresos y resumiéndolos por tipo de diabetes. Los mismos cambios se aplicaron a la gemela en inglés <code>case-study-discharges.Rmd</code>, que queda sincronizada con <code>ciecl.Rmd</code>.</li>
+<li>
+<strong>Caché SQLite</strong>: la ayuda de <code><a href="../reference/cie10_clear_cache.html">cie10_clear_cache()</a></code> ahora indica que la reconstrucción tras una actualización del paquete es automática (la caché guarda la versión del paquete en la tabla <code>cie10_meta</code> y se reconstruye sola en el primer uso si difiere); los casos de uso manual que quedan son caché corrupta o liberación de disco. La ayuda de <code><a href="../reference/cie10_disconnect.html">cie10_disconnect()</a></code> aclara que la desconexión manual solo es necesaria al borrar el <code>.db</code> por fuera del paquete o al cerrar procesos batch largos. Tres tests nuevos cubren el ciclo de reconstrucción por versión.</li>
+<li>
+<strong><code><a href="../reference/cie11_search.html">cie11_search()</a></code></strong>: la condición del ejemplo con <code>vcr</code> se movió a <code>@examplesIf</code>, de modo que ya no aparece en la documentación visible.</li>
+<li>
+<strong>Viñetas de instalación (ES/EN)</strong>: párrafo inicial que explica para quién es la guía (personas que trabajan con bases de datos de salud y pueden estar aprendiendo R) y quién puede saltársela.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="revisión-ropensci--comentarios-de-maëlle-salmon-ms01ms20-0-9-8">Revisión rOpenSci — comentarios de Maëlle Salmon ms01–ms20 (2026-08-17)<a class="anchor" aria-label="anchor" href="#revisi%C3%B3n-ropensci--comentarios-de-ma%C3%ABlle-salmon-ms01ms20-0-9-8"></a></h3>
 <p>Segunda tanda de correcciones de la revisión formal en el issue rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>, a partir de los comentarios de <a href="https://github.com/maelle" class="external-link">@maelle</a>. Cierra todos los ítems pendientes de la revisión.</p>
@@ -312,6 +324,17 @@
 </div>
 <div class="section level3">
 <h3 id="english-summary-0-9-8">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-9-8"></a></h3>
+<div class="section level4">
+<h4 id="ropensci-review-follow-up-0-9-8">rOpenSci Review Follow-up (2026-08-27)<a class="anchor" aria-label="anchor" href="#ropensci-review-follow-up-0-9-8"></a></h4>
+<ul><li>
+<strong>Getting-started guide improved</strong>: plain-language <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> wording, an executable <code><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect()</a></code> step showing where <code>E11.9</code>/<code>E14.9</code> come from, and a closing section that filters and summarizes discharges by diabetes type. The English twin <code>case-study-discharges.Rmd</code> is now in sync with <code>ciecl.Rmd</code>.</li>
+<li>
+<strong>SQLite cache</strong>: <code><a href="../reference/cie10_clear_cache.html">cie10_clear_cache()</a></code> docs now state that rebuilding after a package update is automatic (cache stores the package version in <code>cie10_meta</code> and rebuilds on first use when it differs); <code><a href="../reference/cie10_disconnect.html">cie10_disconnect()</a></code> docs clarify when manual disconnection is actually needed. Three new tests cover the version-based rebuild cycle.</li>
+<li>
+<strong><code><a href="../reference/cie11_search.html">cie11_search()</a></code></strong>: the <code>vcr</code> example guard moved to <code>@examplesIf</code>, so it no longer shows in the visible documentation.</li>
+<li>
+<strong>Installation vignettes (ES/EN)</strong>: opening paragraph explaining who the guide is for and who can skip it.</li>
+</ul></div>
 <div class="section level4">
 <h4 id="ropensci-review-response-0-9-8">rOpenSci Review Response<a class="anchor" aria-label="anchor" href="#ropensci-review-response-0-9-8"></a></h4>
 <p>Comprehensive update focused on API consistency and technical compliance following rOpenSci peer review.</p>

@@ -1,5 +1,12 @@
 # Installation and Configuration Guide
 
+This guide is written for people who work with health databases and may
+still be learning R: installing a package from GitHub with `pak` and
+setting up the WHO API key are not obvious steps for them, so they are
+explained here in detail. If you are already comfortable with R, you can
+skip this vignette: `pak::pak("RodoTasso/ciecl")` is all you need to get
+started.
+
 ## Installation
 
 The simplest way to install `ciecl` is with the

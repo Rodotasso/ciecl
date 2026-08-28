@@ -86,7 +86,7 @@ args(cie11_search)
 #> NULL
 
 # Requiere credenciales OMS gratuitas (https://icd.who.int/icdapi)
-if (.has_vcr) cie11_search("depresion mayor")
+cie11_search("depresion mayor")
 #> # A tibble: 10 × 3
 #>    codigo titulo                                                        capitulo
 #>    <chr>  <chr>                                                         <chr>   

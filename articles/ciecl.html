@@ -93,7 +93,7 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-08-18</h4>
+            <h4 data-toc-skip class="date">2026-08-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/ciecl.Rmd" class="external-link"><code>vignettes/ciecl.Rmd</code></a></small>
       <div class="d-none name"><code>ciecl.Rmd</code></div>
@@ -206,9 +206,9 @@ comparables con el catálogo oficial.</p>
 <code>cie_describe()</code><a class="anchor" aria-label="anchor" href="#paso-2-agregar-las-descripciones-oficiales-con-cie_describe"></a>
 </h2>
 <p>Para el reporte necesitas las glosas clínicas, no solo los códigos.
-<code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve directamente un vector de
-caracteres, por lo que se integra en un <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> sin joins
-temporales:</p>
+<code><a href="../reference/cie_describe.html">cie_describe()</a></code> devuelve un vector de texto con una
+descripción por cada código, así que puedes agregarlo como una columna
+más de tu tabla con <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>, sin pasos intermedios:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Integración directa de descripciones al dataframe principal</span></span>
 <span><span class="va">egresos_full</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
@@ -256,8 +256,12 @@ similitud Jaro-Winkler, así que tolera errores tipográficos (aquí
 buscamos “diabetis” a propósito):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Búsqueda tolerante: "diabetis" en lugar de "diabetes"</span></span>
-<span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"diabetis"</span>, threshold <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 50 × 4</span></span></span>
+<span><span class="co"># (por defecto se muestran los 50 resultados más parecidos;</span></span>
+<span><span class="co">#  ampliamos el límite porque el catálogo tiene muchos códigos de diabetes)</span></span>
+<span><span class="va">resultados_busqueda</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"diabetis"</span>, threshold <span class="op">=</span> <span class="fl">0.7</span>, max_results <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">resultados_busqueda</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 4</span></span></span>
 <span><span class="co">#&gt;    codigo descripcion                                            score categoria</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> E10    Diabetes mellitus insulinodependiente                  0.917 E10 DIAB…</span></span>
@@ -270,11 +274,39 @@ buscamos “diabetis” a propósito):</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> E10.6  Diabetes mellitus tipo 1 con otras complicaciones esp… 0.917 E10 DIAB…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples  0.917 E10 DIAB…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> E10.8  Diabetes mellitus tipo 1 con complicaciones no especi… 0.917 E10 DIAB…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre></div>
-<p>El resultado incluye un <code>score</code> de similitud para evaluar
-la confiabilidad de cada coincidencia. Ahora sabes que
-<code>E11.9</code> y <code>E14.9</code> de tu base corresponden a
-diabetes y puedes filtrar tu reporte con criterio.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
+<p>Cada resultado incluye un <code>score</code> de similitud para
+evaluar la confiabilidad de la coincidencia. Pero la tabla anterior
+lista todos los códigos de diabetes del catálogo, y no todos
+necesariamente están en tu base. Para saber cuáles sí, basta con cruzar
+los resultados de la búsqueda con los códigos que realmente aparecen en
+tus datos:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ¿Qué códigos de diabetes están realmente en mi base?</span></span>
+<span><span class="va">codigos_diabetes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect</a></span><span class="op">(</span></span>
+<span>  <span class="va">resultados_busqueda</span><span class="op">$</span><span class="va">codigo</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">$</span><span class="va">DIAG1_NORM</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">codigos_diabetes</span></span>
+<span><span class="co">#&gt; [1] "E11.9" "E14.9"</span></span></code></pre></div>
+<p>Como se ve en el resultado, de todos los códigos de diabetes del
+catálogo solo dos están presentes en la columna <code>DIAG1</code> de tu
+base: <code>E11.9</code> y <code>E14.9</code>. El cruce identifica qué
+códigos contienen realmente tus datos, sin tener que revisar la tabla
+completa a mano. Con esa lista ya puedes filtrar los egresos y cerrar el
+reporte:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Reporte final: egresos por diabetes, resumidos por tipo</span></span>
+<span><span class="va">egresos_full</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">DIAG1_NORM</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">codigos_diabetes</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">descripcion</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                                       descripcion  n</span></span>
+<span><span class="co">#&gt; 1                     Diabetes mellitus tipo 2 sin complicaciones 14</span></span>
+<span><span class="co">#&gt; 2 Diabetes mellitus, no especificada, sin mención de complicación 12</span></span></code></pre></div>
+<p>Con esto tu reporte mensual de egresos por diabetes queda listo:
+sabes cuántos hubo y de qué tipo, con las glosas oficiales del
+catálogo.</p>
 </div>
 <div class="section level2">
 <h2 id="cuando-la-búsqueda-no-entrega-resultados">Cuando la búsqueda no entrega resultados<a class="anchor" aria-label="anchor" href="#cuando-la-b%C3%BAsqueda-no-entrega-resultados"></a>
@@ -285,7 +317,7 @@ fallan con un error por ausencia de resultados; devuelven un
 <code>tibble</code> vacío con la estructura de columnas
 correcta</strong> y un mensaje informativo.</p>
 <p>Si buscas un código que no existe en el catálogo:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_lookup.html">cie_lookup</a></span><span class="op">(</span><span class="st">"XYZ123"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Código no encontrado: <span style="color: #0000BB;">"XYZ123"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 11</span></span></span>
@@ -294,7 +326,7 @@ correcta</strong> y un mensaje informativo.</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   capitulo &lt;chr&gt;, es_daga &lt;lgl&gt;, es_cruz &lt;lgl&gt;, uso_cl &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Si el umbral de <code><a href="../reference/cie_search.html">cie_search()</a></code> es demasiado estricto para
 el término ingresado:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_search.html">cie_search</a></span><span class="op">(</span><span class="st">"zzzqwerty"</span>, threshold <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Sin coincidencias &gt;= threshold <span style="color: #0000BB;">0.95</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
@@ -304,7 +336,7 @@ el término ingresado:</p>
 <code>threshold</code>, revisar la ortografía o validar el código). Para
 chequear rápidamente qué códigos de un vector son válidos según el
 catálogo, usa <code><a href="../reference/cie_validate_vector.html">cie_validate_vector()</a></code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cie_validate_vector.html">cie_validate_vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E11.0"</span>, <span class="st">"XYZ123"</span>, <span class="st">"I10X"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  TRUE FALSE  TRUE</span></span></code></pre></div>
 </div>
@@ -315,7 +347,7 @@ catálogo, usa <code><a href="../reference/cie_validate_vector.html">cie_validat
 <code><a href="../reference/cie_comorbid.html">cie_comorbid()</a></code> mapea los diagnósticos a los índices de
 Charlson o Elixhauser y devuelve una matriz de comorbilidades por
 paciente, lista para modelos estadísticos:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Requiere el paquete 'comorbidity' instalado</span></span>
 <span><span class="co"># Cálculo del Índice de Charlson consolidado por paciente</span></span>
 <span><span class="va">comorbilidades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span></span>
