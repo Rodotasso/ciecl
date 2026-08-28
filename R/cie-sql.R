@@ -388,11 +388,13 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 #' fuerza que la próxima consulta ([cie_search()], [cie_lookup()],
 #' [cie10_sql()], etc.) la reconstruya desde cero.
 #'
-#' Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
-#' una version con un dataset CIE-10 corregido y la caché vieja quedó
-#' desactualizada, (2) se sospecha que el archivo `.db` está corrupto
-#' (errores de lectura SQL inesperados), o (3) se quiere liberar el
-#' espacio en disco que ocupa la caché.
+#' No es necesario llamarla tras actualizar el paquete: la caché guarda
+#' la versión del paquete con que se construyó (tabla `cie10_meta`) y,
+#' si la versión cambió, se reconstruye automáticamente en el primer
+#' uso. Los casos en que conviene forzar el rebuild manual son: (1) se
+#' sospecha que el archivo `.db` está corrupto (errores de lectura SQL
+#' inesperados), o (2) se quiere liberar el espacio en disco que ocupa
+#' la caché.
 #'
 #' @returns Sin valor de retorno, se llama por sus efectos secundarios
 #'   (elimina la caché SQLite).
@@ -452,15 +454,16 @@ cie10_clear_cache <- function() {
 #' inconsistentes sobre el mismo archivo. Esta función cierra esa
 #' conexión y libera el lock.
 #'
-#' Conviene llamarla antes de operaciones que necesitan acceso exclusivo
-#' al archivo `cie10.db` —por ejemplo antes de [cie10_clear_cache()] si
-#' se borra manualmente la caché por fuera del paquete, o al finalizar
-#' un proceso batch largo para no dejar el archivo bloqueado—. Si no se
-#' libera el lock, el archivo `.db` puede seguir abierto hasta que
-#' termine la sesión de R; en la práctica esto rara vez es un problema
-#' porque cada sesión de R tiene su propia conexión, pero impide que
-#' otro proceso externo (no R) edite el archivo mientras la conexión
-#' esté abierta.
+#' Solo hace falta llamarla manualmente en dos casos: cuando se va a
+#' eliminar o reemplazar el archivo `cie10.db` por fuera del paquete
+#' (por ejemplo, con herramientas del sistema operativo), o al finalizar
+#' un proceso batch largo para no dejar el archivo bloqueado. Para usar
+#' [cie10_clear_cache()] no es necesario llamarla antes: esa función ya
+#' cierra la conexión pooled internamente. Si no se libera el lock, el
+#' archivo `.db` puede seguir abierto hasta que termine la sesión de R;
+#' en la práctica esto rara vez es un problema porque cada sesión de R
+#' tiene su propia conexión, pero impide que otro proceso externo (no R)
+#' edite el archivo mientras la conexión esté abierta.
 #'
 #' @returns Sin valor de retorno, se llama por sus efectos secundarios
 #'   (cierra la conexión SQLite pooled).

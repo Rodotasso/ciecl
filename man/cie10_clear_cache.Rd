@@ -18,11 +18,13 @@ evita reconstruir la base en cada sesión. Esta función la elimina y
 fuerza que la próxima consulta (\code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}},
 \code{\link[=cie10_sql]{cie10_sql()}}, etc.) la reconstruya desde cero.
 
-Es necesario forzar el rebuild cuando: (1) se actualiza el paquete a
-una version con un dataset CIE-10 corregido y la caché vieja quedó
-desactualizada, (2) se sospecha que el archivo \code{.db} está corrupto
-(errores de lectura SQL inesperados), o (3) se quiere liberar el
-espacio en disco que ocupa la caché.
+No es necesario llamarla tras actualizar el paquete: la caché guarda
+la versión del paquete con que se construyó (tabla \code{cie10_meta}) y,
+si la versión cambió, se reconstruye automáticamente en el primer
+uso. Los casos en que conviene forzar el rebuild manual son: (1) se
+sospecha que el archivo \code{.db} está corrupto (errores de lectura SQL
+inesperados), o (2) se quiere liberar el espacio en disco que ocupa
+la caché.
 }
 \examples{
 # Ver ubicación de la caché
