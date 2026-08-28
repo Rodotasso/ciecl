@@ -17,6 +17,9 @@ permissions: read-all
 jobs:
   pkgcheck:
     runs-on: ubuntu-latest
+    # Timeout amplio: el job espera a R-CMD-check/test-coverage (hasta 25 min)
+    # y luego corre pkgcheck completo en contenedor.
+    timeout-minutes: 60
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
