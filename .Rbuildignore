@@ -52,3 +52,4 @@
 ^benchmark$
 ^\.superpowers$
 ^_tmp_.*\.R$
+^\.claude$
