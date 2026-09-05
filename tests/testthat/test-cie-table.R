@@ -1,5 +1,8 @@
 # Tests para cie_table (tablas gt)
 
+# canario CRAN: unico test de cie_table() sin skip_on_cran.
+# Decision: canario (no olvido). Es la unica cobertura CRAN de la rama
+# cie_table(); lookup ligero ("E11") sobre DB cacheada + render gt acotado.
 test_that("cie_table requiere gt instalado", {
   skip_if_not_installed("gt")
 

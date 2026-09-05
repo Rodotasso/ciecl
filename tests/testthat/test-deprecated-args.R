@@ -118,12 +118,14 @@ test_that("cie_search acepta arg deprecado 'solo_fuzzy'", {
 # --- cie11_search (API) ----------------------------------------------------
 
 test_that("cie11_search acepta arg deprecado 'texto' (sin invocar API)", {
-  # Capturamos solo el warning de deprecation; despues falla por API/key
-  # pero el path deprecation queda cubierto.
+  # El path deprecation corre antes de la validacion de api_key;
+  # "fake" sin ":" aborta con ciecl_invalid_input (R/cie-api.R:100-104)
+  # antes de cualquier llamada de red. Si la clase cambia, este test
+  # debe fallar (no tragar el error).
   lifecycle::expect_deprecated(
-    tryCatch(
+    expect_error(
       cie11_search(texto = "diabetes", api_key = "fake"),
-      error = function(e) NULL
+      class = "ciecl_invalid_input"
     )
   )
 })
@@ -173,4 +175,22 @@ test_that("cie_lookup acepta arg deprecado 'descripcion_completa'", {
   )
   expect_s3_class(res, "data.frame")
   expect_true("descripcion_completa" %in% names(res))
+})
+
+# --- cie_short / cie_siglas ------------------------------------------------
+
+test_that("cie_short acepta arg deprecado 'categoria' con warning", {
+  lifecycle::expect_deprecated(res <- cie_short(categoria = "oncologica"))
+  expect_equal(res, cie_short("oncologica"))
+})
+
+test_that("cie_siglas emite warning de deprecacion completa", {
+  lifecycle::expect_deprecated(res <- cie_siglas())
+  expect_equal(res, cie_short())
+})
+
+test_that("cie_siglas pasa categoria al backend", {
+  lifecycle::expect_deprecated(res <- cie_siglas("cardiovascular"))
+  expect_equal(res, cie_short("cardiovascular"))
+  expect_true(all(res$categoria == "cardiovascular"))
 })

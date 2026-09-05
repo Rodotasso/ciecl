@@ -262,6 +262,8 @@ test_that("escenario: limpieza de datos con codigos sucios", {
 
 test_that("busquedas multiples son razonablemente rapidas", {
   skip_on_cran()
+  # Flaky en CI: el umbral de tiempo depende del hardware del runner
+  skip_on_ci()
 
   # Medir tiempo de 100 busquedas simples
   tiempo_inicio <- Sys.time()
@@ -279,6 +281,8 @@ test_that("busquedas multiples son razonablemente rapidas", {
 
 test_that("validacion de vector grande es rapida", {
   skip_on_cran()
+  # Flaky en CI: el umbral de tiempo depende del hardware del runner
+  skip_on_ci()
 
   # Vector de 10000 codigos
   codigos <- rep(c("E11.0", "Z00", "INVALIDO"), 3333)

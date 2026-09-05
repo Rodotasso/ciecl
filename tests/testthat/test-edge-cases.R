@@ -450,7 +450,8 @@ test_that("cie_comorbid rechaza dataframe vacio", {
 })
 
 test_that("cie_comorbid detecta columnas inexistentes", {
-  skip_on_cran()
+  # Canario CRAN: version sin skip_on_cran del contrato de validacion
+  # de columnas (las copias con skip fueron podadas como duplicados).
   skip_if_not_installed("comorbidity")
 
   df <- data.frame(
@@ -461,13 +462,13 @@ test_that("cie_comorbid detecta columnas inexistentes", {
   # Columna id incorrecta
   expect_error(
     cie_comorbid(df, id = "id_paciente", code = "codigo"),
-    "no existen"
+    class = "ciecl_invalid_input"
   )
 
   # Columna code incorrecta
   expect_error(
     cie_comorbid(df, id = "paciente", code = "diagnostico"),
-    "no existen"
+    class = "ciecl_invalid_input"
   )
 })
 
@@ -485,51 +486,15 @@ test_that("cie_comorbid funciona con map elixhauser", {
   expect_false("score_charlson" %in% names(resultado))
 })
 
-test_that("cie_comorbid maneja codigos con NA", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = c(1, 1, 2, 2),
-    diag = c("E11.0", NA, "I50.9", "C50.9")
-  )
-
-  # No debe crashear con NAs (warning esperado por NA values)
-  expect_no_error({
-    suppressWarnings({
-      resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
-    })
-  })
-})
-
 # ============================================================
 # PRUEBAS PARA cie10_sql()
 # ============================================================
 
+# Canario CRAN: unico test de bloqueo SQL sin skip_on_cran
+# (las replicas de UPDATE/DELETE/INSERT/ALTER viven en test-cie-sql.R).
 test_that("cie10_sql bloquea queries UPDATE", {
   expect_error(
     cie10_sql("UPDATE cie10 SET codigo = 'X' WHERE codigo = 'E11.0'"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries DELETE", {
-  expect_error(
-    cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries INSERT", {
-  expect_error(
-    cie10_sql("INSERT INTO cie10 (codigo) VALUES ('TEST')"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries ALTER", {
-  expect_error(
-    cie10_sql("ALTER TABLE cie10 ADD COLUMN test TEXT"),
     class = "ciecl_unsafe_query"
   )
 })

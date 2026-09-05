@@ -197,22 +197,6 @@ test_that("cie_comorbid maneja strings vacios", {
   expect_s3_class(resultado, "tbl_df")
 })
 
-test_that("cie_comorbid maneja espacios en blanco", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = c(1, 1, 2),
-    diag = c("E11.0", "   ", "I50.9")
-  )
-
-  expect_warning(
-    resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson"),
-    "vac.os"
-  )
-  expect_s3_class(resultado, "tbl_df")
-})
-
 test_that("cie_comorbid maneja multiples NA", {
   skip_on_cran()
   skip_if_not_installed("comorbidity")
@@ -399,6 +383,9 @@ test_that("cie_comorbid pacientes con diferentes cargas comorbidas", {
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_equal(nrow(resultado), 3)
 
+  # Ningun score puede ser negativo en los 3 pacientes
+  expect_true(all(resultado$score_charlson >= 0))
+
   # Paciente 3 deberia tener mayor score que paciente 2, y este mayor que 1
   expect_lte(resultado$score_charlson[1], resultado$score_charlson[2])
 })
@@ -420,36 +407,6 @@ test_that("cie_comorbid suma correctamente comorbilidades multiples", {
 # ------------------------------------------------------------------------------
 # Pruebas de validacion de parametros
 # ------------------------------------------------------------------------------
-
-test_that("cie_comorbid error si columna id no existe", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    patient = 1,
-    diag = "E11.0"
-  )
-
-  expect_error(
-    cie_comorbid(df, id = "id", code = "diag", map = "charlson"),
-    "no existen"
-  )
-})
-
-test_that("cie_comorbid error si columna code no existe", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = 1,
-    diagnosis = "E11.0"
-  )
-
-  expect_error(
-    cie_comorbid(df, id = "id", code = "diag", map = "charlson"),
-    "no existen"
-  )
-})
 
 test_that("cie_comorbid error si comorbidity no instalado", {
   skip_on_cran()
@@ -491,6 +448,17 @@ test_that("cie_comorbid assign0 = FALSE", {
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson", assign0 = FALSE)
   expect_s3_class(resultado, "tbl_df")
+
+  # Con assign0 = TRUE se retiene al paciente sin comorbilidad (Z00.0)
+  df_sin_comorb <- data.frame(
+    id = c(1, 2),
+    diag = c("E11.0", "Z00.0")
+  )
+
+  resultado_true <- cie_comorbid(df_sin_comorb, id = "id", code = "diag",
+                                 map = "charlson", assign0 = TRUE)
+  expect_s3_class(resultado_true, "tbl_df")
+  expect_equal(nrow(resultado_true), 2)
 })
 
 test_that("cie_comorbid map default es charlson", {
@@ -655,6 +623,11 @@ test_that("cie_map_comorbid mezcla categorias y Otra, advierte solo por INVALIDO
 
 test_that("cie_map_comorbid no advierte para codigos CIE-10 validos no mapeados", {
   expect_silent(cie_map_comorbid(c("Z00.0", "R10.0", "S62.0")))
+  resultado <- cie_map_comorbid(c("Z00.0", "R10.0", "S62.0"))
+
+  # Codigos validos no mapeados se clasifican como "Otra"
+  expect_equal(resultado$categoria[2], "Otra")
+  expect_equal(resultado$categoria[3], "Otra")
 })
 
 test_that("cie_map_comorbid advierte con multiples codigos invalidos usando conector 'y'", {

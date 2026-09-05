@@ -18,6 +18,9 @@
 # --- build_fts: failsafe FTS5 missing -------------------------------------
 
 test_that("build_fts crea tabla FTS5 sobre conexion existente", {
+  # Politica CRAN: construccion FTS5 siempre con skip
+  skip_on_cran()
+
   con <- withr::local_db_connection(
     DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   )
@@ -33,6 +36,8 @@ test_that("build_fts crea tabla FTS5 sobre conexion existente", {
 })
 
 # --- cache_is_current ------------------------------------------------------
+# canario CRAN: estos 4 tests corren sin skip en CRAN; usan SQLite
+# :memory: y no construyen el cache del paquete.
 
 test_that("cache_is_current retorna FALSE si no existe tabla cie10_meta", {
   con <- withr::local_db_connection(
@@ -84,6 +89,8 @@ test_that("cache_is_current retorna TRUE cuando version coincide", {
 # --- build_cache_atomic: ciclo completo en directorio aislado --------------
 
 test_that("build_cache_atomic crea cache_dir y construye DB completa", {
+  skip_on_cran()
+
   cache_dir <- withr::local_tempdir()
   db_path <- file.path(cache_dir, "test.db")
 
@@ -109,6 +116,8 @@ test_that("build_cache_atomic crea cache_dir y construye DB completa", {
 })
 
 test_that("build_cache_atomic crea cache_dir cuando no existe", {
+  skip_on_cran()
+
   parent <- withr::local_tempdir()
   cache_dir <- file.path(parent, "subdir_no_existe")
   db_path <- file.path(cache_dir, "test.db")
@@ -122,6 +131,8 @@ test_that("build_cache_atomic crea cache_dir cuando no existe", {
 })
 
 test_that("build_cache_atomic limpia .tmp residual antes de empezar", {
+  skip_on_cran()
+
   cache_dir <- withr::local_tempdir()
   db_path <- file.path(cache_dir, "test.db")
   tmp_path <- paste0(db_path, ".tmp")
@@ -136,40 +147,6 @@ test_that("build_cache_atomic limpia .tmp residual antes de empezar", {
   expect_false(file.exists(tmp_path))
 })
 
-# --- get_cie10_db: invalidacion por version mismatch ----------------------
-
-test_that("get_cie10_db reconstruye cache cuando version no coincide", {
-  cache_dir <- withr::local_tempdir()
-
-  # Aislar cache via env var (R_USER_CACHE_DIR alimenta R_user_dir)
-  withr::local_envvar(R_USER_CACHE_DIR = cache_dir)
-
-  # Asegurar conexion limpia y reset al final
-  cie10_disconnect()
-  withr::defer(cie10_disconnect())
-
-  # Construir cache: la primera llamada genera DB con version actual
-  con1 <- get_cie10_db()
-  expect_true(DBI::dbIsValid(con1))
-
-  # Sobrescribir la version a "0.0.0" para simular cache obsoleto
-  DBI::dbExecute(
-    con1,
-    "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'"
-  )
-
-  # Reset estado interno para forzar reevaluacion
-  cie10_disconnect()
-
-  # Volver a pedir el DB: debe detectar version mismatch y reconstruir
-  con2 <- get_cie10_db()
-  v <- DBI::dbGetQuery(
-    con2,
-    "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
-  )$value[1]
-  expect_equal(v, as.character(utils::packageVersion("ciecl")))
-})
-
 # ============================================================
 # COBERTURA: cli_progress en sesion interactiva
 # rlang::local_interactive(TRUE) fuerza is_interactive() = TRUE
@@ -179,6 +156,8 @@ test_that("get_cie10_db reconstruye cache cuando version no coincide", {
 # ============================================================
 
 test_that("build_fts emite cli_progress en sesion interactiva", {
+  skip_on_cran()
+
   rlang::local_interactive(TRUE)
 
   con <- withr::local_db_connection(
@@ -201,6 +180,8 @@ test_that("build_fts emite cli_progress en sesion interactiva", {
 })
 
 test_that("build_fts permanece silencioso con .progress = FALSE aunque interactivo", {
+  skip_on_cran()
+
   rlang::local_interactive(TRUE)
 
   con <- withr::local_db_connection(
@@ -216,6 +197,8 @@ test_that("build_fts permanece silencioso con .progress = FALSE aunque interacti
 })
 
 test_that("build_cache_atomic emite los 4 cli_progress_step en sesion interactiva", {
+  skip_on_cran()
+
   rlang::local_interactive(TRUE)
 
   cache_dir <- withr::local_tempdir()
@@ -233,6 +216,8 @@ test_that("build_cache_atomic emite los 4 cli_progress_step en sesion interactiv
 })
 
 test_that("build_cache_atomic recupera limpiamente si build_fts falla en sesion interactiva", {
+  skip_on_cran()
+
   rlang::local_interactive(TRUE)
 
   cache_dir <- withr::local_tempdir()
@@ -262,6 +247,8 @@ test_that("build_cache_atomic recupera limpiamente si build_fts falla en sesion 
 # que la sentinela desaparece; si el cache se reusa, la sentinela sobrevive.
 
 test_that("get_cie10_db no reconstruye cuando la version coincide", {
+  skip_on_cran()
+
   cache_dir <- withr::local_tempdir()
   # CIECL_CACHE_DIR tiene precedencia en get_cache_dir() y ya viene fijada
   # por setup.R; la sobreescribimos scoped para aislar este test.
@@ -283,6 +270,8 @@ test_that("get_cie10_db no reconstruye cuando la version coincide", {
 })
 
 test_that("get_cie10_db reconstruye cuando la version guardada difiere", {
+  skip_on_cran()
+
   cache_dir <- withr::local_tempdir()
   withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
   cie10_disconnect()
@@ -309,6 +298,8 @@ test_that("get_cie10_db reconstruye cuando la version guardada difiere", {
 })
 
 test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
+  skip_on_cran()
+
   cache_dir <- withr::local_tempdir()
   withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
   cie10_disconnect()

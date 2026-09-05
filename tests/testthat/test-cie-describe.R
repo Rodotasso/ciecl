@@ -2,6 +2,7 @@
 # PRUEBAS PARA cie_describe()
 # ============================================================
 
+# canario CRAN: lookup ligero sobre la DB cacheada; corre sin skip.
 test_that("cie_describe retorna character vector del mismo largo", {
   resultado <- cie_describe(c("E11.0", "I10", "Z00"))
 
@@ -10,6 +11,8 @@ test_that("cie_describe retorna character vector del mismo largo", {
 })
 
 test_that("cie_describe retorna descripciones conocidas para codigos validos", {
+  skip_on_cran()
+
   resultado <- cie_describe(c("E11.0", "I10"))
 
   expect_match(resultado[1], "[Dd]iabetes mellitus")
@@ -18,6 +21,8 @@ test_that("cie_describe retorna descripciones conocidas para codigos validos", {
 })
 
 test_that("cie_describe retorna NA para codigos no encontrados (normalize=FALSE)", {
+  skip_on_cran()
+
   # E110 sin punto NO existe en el catalogo
   resultado <- cie_describe("E110", normalize = FALSE)
 
@@ -26,6 +31,8 @@ test_that("cie_describe retorna NA para codigos no encontrados (normalize=FALSE)
 })
 
 test_that("cie_describe rescata codigos sin punto cuando normalize=TRUE", {
+  skip_on_cran()
+
   resultado <- cie_describe("E110", normalize = TRUE)
 
   expect_length(resultado, 1)
@@ -34,6 +41,8 @@ test_that("cie_describe rescata codigos sin punto cuando normalize=TRUE", {
 })
 
 test_that("cie_describe respeta argumento default", {
+  skip_on_cran()
+
   resultado <- cie_describe(
     c("E11.0", "INVALIDO"),
     normalize = FALSE,
@@ -51,6 +60,8 @@ test_that("cie_describe maneja vector vacio", {
 })
 
 test_that("cie_describe propaga NA en input", {
+  skip_on_cran()
+
   resultado <- cie_describe(c("E11.0", NA_character_))
 
   expect_length(resultado, 2)
@@ -59,6 +70,8 @@ test_that("cie_describe propaga NA en input", {
 })
 
 test_that("cie_describe conserva orden y largo del input con duplicados", {
+  skip_on_cran()
+
   diags <- c("E11.0", "E11.0", "I10", "E11.0")
   resultado <- cie_describe(diags)
 
@@ -69,6 +82,8 @@ test_that("cie_describe conserva orden y largo del input con duplicados", {
 })
 
 test_that("cie_describe es vectorizado (sirve dentro de mutate)", {
+  skip_on_cran()
+
   df <- data.frame(diag = c("E11.0", "I10", "Z00"))
   df$desc <- cie_describe(df$diag)
 
@@ -93,6 +108,8 @@ test_that("cie_describe normalize valida tipo logico", {
 })
 
 test_that("cie_describe acepta argumento espanol deprecado con warning", {
+  skip_on_cran()
+
   expect_warning(
     res <- cie_describe(codigos = c("E11.0", "I10")),
     class = "lifecycle_warning_deprecated"
@@ -102,6 +119,8 @@ test_that("cie_describe acepta argumento espanol deprecado con warning", {
 })
 
 test_that("cie_describe rescata diagnostico ambiguo en flujo de auditoria", {
+  skip_on_cran()
+
   diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 
   auditoria <- cie_describe(diags, normalize = FALSE)

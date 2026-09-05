@@ -61,6 +61,8 @@ test_that("cie_validate_vector con strict=TRUE", {
 })
 
 test_that("cie_expand funciona", {
+  skip_on_cran()
+
   # E11 (Diabetes tipo 2) tiene subcategorias .0 a .9
   hijos <- cie_expand("E11")
 
@@ -69,6 +71,7 @@ test_that("cie_expand funciona", {
   expect_true(all(grepl("^E11", hijos)))
 })
 
+# canario CRAN: expansion de codigo hoja (lookup ligero); corre sin skip.
 test_that("cie_expand maneja codigos sin hijos", {
   # Un codigo de 4 digitos final no deberia tener mas hijos
   hijos <- cie_expand("E11.0")

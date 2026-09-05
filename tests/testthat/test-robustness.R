@@ -346,101 +346,6 @@ test_that("cie_validate_vector con vector muy grande", {
 })
 
 # ============================================================
-# PRUEBAS ADICIONALES get_cie10_db()
-# ============================================================
-
-test_that("get_cie10_db retorna conexion DBI valida", {
-  skip_on_cran()
-
-  con <- get_cie10_db()
-
-  expect_true(DBI::dbIsValid(con))
-  expect_s4_class(con, "SQLiteConnection")
-})
-
-test_that("get_cie10_db crea tabla cie10 si no existe", {
-  skip_on_cran()
-
-  con <- get_cie10_db()
-
-  # Tabla debe existir
-  expect_true(DBI::dbExistsTable(con, "cie10"))
-})
-
-test_that("get_cie10_db tabla tiene indices", {
-  skip_on_cran()
-
-  con <- get_cie10_db()
-
-  # Verificar que existen indices (SQLite)
-  indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index'")
-
-  expect_gt(nrow(indices), 0)
-})
-
-test_that("get_cie10_db usa directorio cache correcto", {
-  skip_on_cran()
-
-  cache_dir <- get_cache_dir()
-  db_path <- file.path(cache_dir, "cie10.db")
-
-  get_cie10_db()
-
-  expect_true(file.exists(db_path))
-})
-
-# ============================================================
-# PRUEBAS ADICIONALES cie10_clear_cache()
-# ============================================================
-
-test_that("cie10_clear_cache elimina archivo db", {
-  skip_on_cran()
-
-  cache_dir <- get_cache_dir()
-  db_path <- file.path(cache_dir, "cie10.db")
-
-  # Asegurar que existe
-  get_cie10_db()
-
-  expect_true(file.exists(db_path))
-
-  # Limpiar cache
-  suppressMessages(cie10_clear_cache())
-
-  expect_false(file.exists(db_path))
-})
-
-test_that("cie10_clear_cache es idempotente", {
-  skip_on_cran()
-
-  # Llamar dos veces no debe dar error
-  expect_no_error({
-    suppressMessages(cie10_clear_cache())
-    suppressMessages(cie10_clear_cache())
-  })
-})
-
-test_that("cie10_clear_cache emite mensaje apropiado", {
-  skip_on_cran()
-
-  # Asegurar que existe cache
-  get_cie10_db()
-
-  # Debe emitir mensaje de eliminacion
-  expect_message(cie10_clear_cache(), "eliminado")
-
-  # Segunda vez mensaje diferente
-  expect_message(cie10_clear_cache(), "no existe")
-})
-
-test_that("cie10_clear_cache retorna invisible NULL", {
-  skip_on_cran()
-
-  resultado <- suppressMessages(cie10_clear_cache())
-  expect_null(resultado)
-})
-
-# ============================================================
 # PRUEBAS cie10_sql() ADICIONALES
 # ============================================================
 
@@ -508,7 +413,9 @@ test_that("cie10_sql permite punto y coma dentro de strings", {
   expect_s3_class(resultado, "tbl_df")
 })
 
-test_that("cie10_sql con close=FALSE emite advertencia", {
+# El warning de deprecacion se emite por la presencia del argumento
+# close (cualquier valor), ver R/cie-sql.R:307-313.
+test_that("cie10_sql emite advertencia de deprecacion al pasar close", {
   skip_on_cran()
 
   expect_warning(

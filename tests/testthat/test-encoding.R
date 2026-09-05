@@ -19,7 +19,7 @@ test_that("cie_search maneja caracteres con tildes", {
   expect_s3_class(resultado_ene, "tbl_df")
 })
 
-test_that("cie_search encuentra terminos con y sin tildes",
+test_that("cie_search fuzzy tolera typo sin tilde ('diabetis')",
   {
   skip_on_cran()
 
@@ -122,7 +122,7 @@ test_that("cie10_sql maneja comillas en queries", {
 # PRUEBAS DE UNICODE
 # ============================================================
 
-test_that("cie_search maneja caracteres unicode validos", {
+test_that("cie_search acepta input ASCII simple sin error", {
   skip_on_cran()
 
   # Caracteres unicode basicos deben ser manejados
@@ -161,7 +161,7 @@ test_that("cie_validate_vector es case-insensitive", {
   # Debe validar independientemente del case
   expect_true(cie_validate_vector("E11.0"))
   expect_true(cie_validate_vector("e11.0"))
-  expect_true(cie_validate_vector("E11.0"))
+  expect_true(cie_validate_vector("i10"))
 })
 
 test_that("cie_lookup es case-insensitive", {
@@ -169,34 +169,28 @@ test_that("cie_lookup es case-insensitive", {
 
   resultado_may <- cie_lookup("E11.0")
   resultado_min <- cie_lookup("e11.0")
-  resultado_mix <- cie_lookup("e11.0")
+  resultado_i10 <- cie_lookup("i10")
 
   expect_equal(resultado_may$codigo, resultado_min$codigo)
-  expect_equal(resultado_may$codigo, resultado_mix$codigo)
+  expect_equal(resultado_i10$codigo, "I10")
 })
 
 # ============================================================
 # PRUEBAS DE LOCALE
 # ============================================================
 
-test_that("funciones operan independientemente del locale", {
+test_that("funciones operan con locale C (collate distinto)", {
   skip_on_cran()
 
-  # Guardar locale actual
-  old_locale <- Sys.getlocale("LC_COLLATE")
+  # Forzar locale C scoped (withr restaura automaticamente); cie_lookup
+  # y cie_search no deben depender del collation del sistema
+  withr::local_locale(c(LC_COLLATE = "C"))
 
-  # Las funciones deben operar correctamente
   resultado <- cie_lookup("E11.0")
   expect_equal(nrow(resultado), 1)
 
   resultado2 <- cie_search("diabetes", threshold = 0.70)
   expect_gt(nrow(resultado2), 0)
-
-  # Restaurar locale (por si acaso cambio)
-  tryCatch(
-    Sys.setlocale("LC_COLLATE", old_locale),
-    error = function(e) NULL
-  )
 })
 
 # ============================================================
