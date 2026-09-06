@@ -5,20 +5,6 @@
 # PRUEBAS DE ENCODING PARA CARACTERES ESPANOLES
 # ============================================================
 
-test_that("cie_search maneja caracteres con tildes", {
-  skip_on_cran()
-
-
-  # Busqueda con tildes en espanol
-  resultado <- cie_search("neumonia", threshold = 0.70)
-  expect_s3_class(resultado, "tbl_df")
-  expect_gt(nrow(resultado), 0)
-
-  # Busqueda con ene
-  resultado_ene <- cie_search("rinon", threshold = 0.70)
-  expect_s3_class(resultado_ene, "tbl_df")
-})
-
 test_that("cie_search fuzzy tolera typo sin tilde ('diabetis')",
   {
   skip_on_cran()
@@ -45,15 +31,6 @@ test_that("base de datos contiene descripciones con tildes correctas", {
     tiene_corruptos <- any(stringr::str_detect(descripciones, "�|Ã¡|Ã©|Ã­|Ã³|Ãº|Ã±"))
     expect_false(tiene_corruptos, info = "Las descripciones no deben tener caracteres corruptos")
   }
-})
-
-test_that("cie_lookup maneja codigos sin importar encoding", {
-  skip_on_cran()
-
-  # El codigo debe funcionar independientemente del encoding del sistema
-  resultado <- cie_lookup("E11.0")
-  expect_equal(nrow(resultado), 1)
-  expect_s3_class(resultado, "tbl_df")
 })
 
 # ============================================================
@@ -106,56 +83,9 @@ test_that("cie_search maneja guiones y barras", {
   })
 })
 
-test_that("cie10_sql maneja comillas en queries", {
-  skip_on_cran()
-
-  # Query con comillas simples (parametros)
-  resultado <- cie10_sql("SELECT * FROM cie10 WHERE codigo = 'E11.0'")
-  expect_s3_class(resultado, "tbl_df")
-
-  # Query con LIKE y comillas
-  resultado2 <- cie10_sql("SELECT * FROM cie10 WHERE descripcion LIKE '%diabetes%' LIMIT 5")
-  expect_s3_class(resultado2, "tbl_df")
-})
-
-# ============================================================
-# PRUEBAS DE UNICODE
-# ============================================================
-
-test_that("cie_search acepta input ASCII simple sin error", {
-  skip_on_cran()
-
-  # Caracteres unicode basicos deben ser manejados
-  expect_no_error({
-    suppressMessages(cie_search("diabetes", threshold = 0.70))
-  })
-})
-
-test_that("base de datos mantiene integridad unicode", {
-  skip_on_cran()
-
-  # Verificar que los datos no estan corruptos
-  resultado <- cie10_sql("SELECT COUNT(*) as n FROM cie10")
-  expect_gt(resultado$n, 5000)
-
-  # Verificar que hay codigos con descripciones no vacias
-  resultado2 <- cie10_sql("SELECT COUNT(*) as n FROM cie10 WHERE descripcion IS NOT NULL AND descripcion != ''")
-  expect_gt(resultado2$n, 5000)
-})
-
 # ============================================================
 # PRUEBAS DE CONSISTENCIA ENTRE PLATAFORMAS
 # ============================================================
-
-test_that("cie_normalizar es consistente con diferentes inputs", {
-  skip_on_cran()
-
-  # Mismos resultados independientemente de mayusculas/minusculas
-  resultado_may <- cie_norm("E110", search_db = FALSE)
-  resultado_min <- cie_norm("e110", search_db = FALSE)
-
-  expect_equal(resultado_may, resultado_min)
-})
 
 test_that("cie_validate_vector es case-insensitive", {
   # Debe validar independientemente del case

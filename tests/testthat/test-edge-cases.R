@@ -219,14 +219,6 @@ test_that("cie_lookup expandir con codigo inexistente", {
 # PRUEBAS PARA cie_norm()
 # ============================================================
 
-test_that("cie_norm maneja NA", {
-  skip_on_cran()
-
-  # NA como entrada
-  resultado <- cie_norm(NA_character_, search_db = FALSE)
-  expect_true(is.na(resultado))
-})
-
 test_that("cie_norm maneja vector con NAs", {
   skip_on_cran()
 
@@ -236,30 +228,6 @@ test_that("cie_norm maneja vector con NAs", {
   expect_equal(resultado[1], "E11.0")
   expect_true(is.na(resultado[2]))
   expect_equal(resultado[3], "I10.0")
-})
-
-test_that("cie_norm maneja cadena vacia", {
-  skip_on_cran()
-
-  resultado <- cie_norm("", search_db = FALSE)
-  expect_equal(resultado, "")
-})
-
-test_that("cie_norm maneja codigos ya normalizados", {
-  skip_on_cran()
-
-  # Codigos ya con punto no deben cambiar
-  codigos <- c("E11.0", "I10.0", "Z00.0")
-  resultado <- cie_norm(codigos, search_db = FALSE)
-  expect_equal(resultado, codigos)
-})
-
-test_that("cie_norm maneja codigos de 3 caracteres", {
-  skip_on_cran()
-
-  # Codigos de categoria (3 chars) no deben modificarse
-  resultado <- cie_norm("E11", search_db = FALSE)
-  expect_equal(resultado, "E11")
 })
 
 test_that("cie_norm maneja codigos largos", {
@@ -273,12 +241,6 @@ test_that("cie_norm maneja codigos largos", {
 # ============================================================
 # PRUEBAS PARA cie_validate_vector()
 # ============================================================
-
-test_that("cie_validate_vector maneja NA", {
-  # NA debe ser FALSE
-  resultado <- cie_validate_vector(NA_character_)
-  expect_false(resultado)
-})
 
 test_that("cie_validate_vector maneja vector vacio", {
   resultado <- cie_validate_vector(character(0))

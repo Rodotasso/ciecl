@@ -86,6 +86,22 @@ test_that("cache_is_current retorna TRUE cuando version coincide", {
   expect_true(cache_is_current(con))
 })
 
+# canario CRAN: rama de error de cache_is_current (tryCatch,
+# R/cie-sql.R:270-272); usa SQLite temporal, no el cache del paquete.
+# (Movido desde test-cie-sql.R en fase 6D; sin skip_on_cran)
+test_that("cache_is_current retorna FALSE cuando la query falla", {
+  tmp_db <- tempfile(fileext = ".db")
+  withr::defer(unlink(tmp_db))
+  con <- DBI::dbConnect(RSQLite::SQLite(), tmp_db)
+  withr::defer(
+    if (DBI::dbIsValid(con)) suppressWarnings(DBI::dbDisconnect(con))
+  )
+
+  # Tabla cie10_meta con schema incorrecto: el SELECT falla
+  DBI::dbExecute(con, "CREATE TABLE cie10_meta (x INTEGER)")
+  expect_false(cache_is_current(con))
+})
+
 # --- build_cache_atomic: ciclo completo en directorio aislado --------------
 
 test_that("build_cache_atomic crea cache_dir y construye DB completa", {
@@ -113,6 +129,15 @@ test_that("build_cache_atomic crea cache_dir y construye DB completa", {
     "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
   )$value[1]
   expect_equal(v, as.character(utils::packageVersion("ciecl")))
+
+  # Indices inicializados en la DB construida (absorbido de
+  # test-cie-sql.R en fase 6D)
+  indices <- DBI::dbGetQuery(
+    con,
+    "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'"
+  )
+  expect_true("idx_codigo" %in% indices$name)
+  expect_true("idx_desc" %in% indices$name)
 })
 
 test_that("build_cache_atomic crea cache_dir cuando no existe", {
@@ -319,4 +344,88 @@ test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
     "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
   )$value[1]
   expect_equal(v, as.character(utils::packageVersion("ciecl")))
+})
+
+# --- get_cie10_db: failsafes sobre conexion pooled y fresh ------------------
+# Movidos desde test-cie-sql.R en fase 6D y reescritos con aislamiento
+# (CIECL_CACHE_DIR + local_tempdir): los originales operaban sobre el
+# cache real del usuario.
+
+test_that("get_cie10_db reconstruye FTS5 si falta (pooled y fresh)", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  con1 <- get_cie10_db()
+  expect_true(DBI::dbExistsTable(con1, "cie10_fts"))
+
+  # Rama pooled (R/cie-sql.R:40-42): borrar FTS5 sobre la conexion
+  # pooled viva; la siguiente llamada la reconstruye sin reconectar
+  DBI::dbExecute(con1, "DROP TABLE cie10_fts")
+  con2 <- get_cie10_db()
+  expect_identical(con2, con1)
+  expect_true(DBI::dbExistsTable(con2, "cie10_fts"))
+
+  # Rama fresh-connect (R/cie-sql.R:82-84): pool vacio y FTS5 borrada
+  # por conexion directa; se reconstruye al conectar
+  cie10_disconnect()
+  db_path <- file.path(cache_dir, "cie10.db")
+  con_direct <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  DBI::dbExecute(con_direct, "DROP TABLE cie10_fts")
+  DBI::dbDisconnect(con_direct)
+
+  con3 <- get_cie10_db()
+  expect_true(DBI::dbExistsTable(con3, "cie10_fts"))
+})
+
+test_that("get_cie10_db reconstruye si la tabla cie10 falta", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  # Construir cache y borrar la tabla principal por conexion directa
+  get_cie10_db()
+  cie10_disconnect()
+  db_path <- file.path(cache_dir, "cie10.db")
+  con_direct <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  DBI::dbExecute(con_direct, "DROP TABLE cie10")
+  DBI::dbDisconnect(con_direct)
+
+  # Al conectar detecta la integridad rota y reconstruye
+  # (R/cie-sql.R:75-79)
+  con <- get_cie10_db()
+  expect_true(DBI::dbExistsTable(con, "cie10"))
+})
+
+# cie10_clear_cache tambien limpia .tmp residual (R/cie-sql.R:432-435).
+# Reescritura aislada del test eliminado de test-cie-sql.R en 6D: el
+# original operaba sobre el cache real; la rama NO la cubre el test de
+# .tmp de build_cache_atomic (es un helper distinto).
+test_that("cie10_clear_cache elimina .tmp residual junto al .db", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  # Simular cache construido + .tmp residual de un build interrumpido
+  get_cie10_db()
+  cie10_disconnect()
+  db_path <- file.path(cache_dir, "cie10.db")
+  tmp_path <- paste0(db_path, ".tmp")
+  file.create(tmp_path)
+  expect_true(file.exists(db_path))
+  expect_true(file.exists(tmp_path))
+
+  suppressMessages(cie10_clear_cache())
+
+  expect_false(file.exists(db_path))
+  expect_false(file.exists(tmp_path))
 })

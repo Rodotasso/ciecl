@@ -20,34 +20,23 @@ test_that("cie_comorbid calcula Charlson", {
   expect_true("score_charlson" %in% names(resultado))
 })
 
-test_that("cie_comorbid Charlson con diabetes tipo 2", {
+test_that("cie_comorbid Charlson con diabetes tipo 1 y 2", {
   skip_on_cran()
   skip_if_not_installed("comorbidity")
 
   df <- data.frame(
-    id = 1,
-    diag = "E11.0"  # Diabetes mellitus tipo 2
+    id = c(1, 2),
+    diag = c("E11.0", "E10.9")  # Diabetes mellitus tipo 2 y tipo 1
   )
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
   expect_true("score_charlson" %in% names(resultado))
-  # Diabetes sin complicaciones = 1 punto en Charlson
-  expect_gte(resultado$score_charlson[1], 0)
-})
-
-test_that("cie_comorbid Charlson con diabetes tipo 1", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = 1,
-    diag = "E10.9"  # Diabetes mellitus tipo 1
-  )
-
-  resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
-  expect_s3_class(resultado, "tbl_df")
-  expect_true("score_charlson" %in% names(resultado))
+  # Diabetes sin complicaciones = 1 punto en Charlson (valores
+  # verificados con comorbidity 1.1.0, mapa charlson_icd10_quan).
+  # as.numeric: comorbidity::score() adjunta atributos map/weights
+  expect_equal(resultado$diab, c(1, 1))
+  expect_equal(as.numeric(resultado$score_charlson), c(1, 1))
 })
 
 test_that("cie_comorbid Charlson con infarto miocardio", {
@@ -62,6 +51,9 @@ test_that("cie_comorbid Charlson con infarto miocardio", {
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
   expect_true("score_charlson" %in% names(resultado))
+  # IAM = 1 punto en Charlson (verificado con comorbidity 1.1.0)
+  expect_equal(resultado$mi[1], 1)
+  expect_equal(as.numeric(resultado$score_charlson[1]), 1)
 })
 
 test_that("cie_comorbid Charlson con cancer", {
@@ -76,6 +68,9 @@ test_that("cie_comorbid Charlson con cancer", {
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
   expect_length(resultado$id, 2)
+  # Cancer sin metastasis = 2 puntos c/u (verificado comorbidity 1.1.0)
+  expect_equal(resultado$canc, c(1, 1))
+  expect_equal(as.numeric(resultado$score_charlson), c(2, 2))
 })
 
 test_that("cie_comorbid Charlson con insuficiencia cardiaca", {
@@ -89,6 +84,9 @@ test_that("cie_comorbid Charlson con insuficiencia cardiaca", {
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
+  # ICC = 1 punto en Charlson (verificado con comorbidity 1.1.0)
+  expect_equal(resultado$chf[1], 1)
+  expect_equal(as.numeric(resultado$score_charlson[1]), 1)
 })
 
 # ------------------------------------------------------------------------------
@@ -109,56 +107,23 @@ test_that("cie_comorbid calcula Elixhauser", {
   expect_length(resultado$id, 2)
 })
 
-test_that("cie_comorbid Elixhauser con hipertension", {
+test_that("cie_comorbid Elixhauser marca binarias esperadas", {
   skip_on_cran()
   skip_if_not_installed("comorbidity")
 
+  # Un paciente por comorbilidad (valores verificados con
+  # comorbidity 1.1.0, mapa elixhauser_icd10_quan)
   df <- data.frame(
-    id = 1,
-    diag = "I10"  # Hipertension esencial
+    id = 1:4,
+    diag = c("I10", "J44.9", "E66.9", "F32.9")
   )
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "elixhauser")
   expect_s3_class(resultado, "tbl_df")
-})
-
-test_that("cie_comorbid Elixhauser con EPOC", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = 1,
-    diag = "J44.9"  # EPOC
-  )
-
-  resultado <- cie_comorbid(df, id = "id", code = "diag", map = "elixhauser")
-  expect_s3_class(resultado, "tbl_df")
-})
-
-test_that("cie_comorbid Elixhauser con obesidad", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = 1,
-    diag = "E66.9"  # Obesidad
-  )
-
-  resultado <- cie_comorbid(df, id = "id", code = "diag", map = "elixhauser")
-  expect_s3_class(resultado, "tbl_df")
-})
-
-test_that("cie_comorbid Elixhauser con depresion", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = 1,
-    diag = "F32.9"  # Episodio depresivo
-  )
-
-  resultado <- cie_comorbid(df, id = "id", code = "diag", map = "elixhauser")
-  expect_s3_class(resultado, "tbl_df")
+  expect_equal(resultado$hypunc, c(1, 0, 0, 0))  # hipertension
+  expect_equal(resultado$cpd,    c(0, 1, 0, 0))  # EPOC
+  expect_equal(resultado$obes,   c(0, 0, 1, 0))  # obesidad
+  expect_equal(resultado$depre,  c(0, 0, 0, 1))  # depresion
 })
 
 # ------------------------------------------------------------------------------
@@ -303,7 +268,9 @@ test_that("cie_comorbid con un solo paciente multiples diagnosticos", {
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_s3_class(resultado, "tbl_df")
   expect_equal(nrow(resultado), 1)
-  expect_gt(resultado$score_charlson[1], 0)
+  # 10 diagnosticos combinados = 9 puntos exactos
+  # (verificado con comorbidity 1.1.0)
+  expect_equal(as.numeric(resultado$score_charlson[1]), 9)
 })
 
 test_that("cie_comorbid con muchos pacientes", {
@@ -363,8 +330,9 @@ test_that("cie_comorbid con SIDA tiene score alto", {
   )
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
-  # SIDA = 6 puntos en Charlson original
-  expect_gte(resultado$score_charlson[1], 0)
+  # SIDA = 6 puntos en Charlson (verificado con comorbidity 1.1.0)
+  expect_equal(resultado$aids[1], 1)
+  expect_equal(as.numeric(resultado$score_charlson[1]), 6)
 })
 
 test_that("cie_comorbid pacientes con diferentes cargas comorbidas", {
@@ -383,11 +351,9 @@ test_that("cie_comorbid pacientes con diferentes cargas comorbidas", {
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
   expect_equal(nrow(resultado), 3)
 
-  # Ningun score puede ser negativo en los 3 pacientes
-  expect_true(all(resultado$score_charlson >= 0))
-
-  # Paciente 3 deberia tener mayor score que paciente 2, y este mayor que 1
-  expect_lte(resultado$score_charlson[1], resultado$score_charlson[2])
+  # Valores exactos verificados con comorbidity 1.1.0:
+  # paciente sin comorbilidades = 0, paciente 2 = 3, paciente 3 = 12
+  expect_equal(as.numeric(resultado$score_charlson), c(0, 3, 12))
 })
 
 test_that("cie_comorbid suma correctamente comorbilidades multiples", {
@@ -400,8 +366,9 @@ test_that("cie_comorbid suma correctamente comorbilidades multiples", {
   )
 
   resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
-  # Con 4 comorbilidades, score debe ser > 0
-  expect_gt(resultado$score_charlson[1], 0)
+  # 4 comorbilidades (DM2 + ICC + cancer + EPOC) = 5 puntos exactos
+  # (verificado con comorbidity 1.1.0)
+  expect_equal(as.numeric(resultado$score_charlson[1]), 5)
 })
 
 # ------------------------------------------------------------------------------
@@ -513,29 +480,14 @@ test_that("cie_map_comorbid maneja vector vacio", {
 # Pruebas de mapeo Charlson
 # ------------------------------------------------------------------------------
 
-test_that("cie_map_comorbid categoriza diabetes E10", {
-  resultado <- cie_map_comorbid("E10.9")
-  expect_equal(resultado$categoria[1], "Diabetes")
+test_that("cie_map_comorbid categoriza diabetes E10 y E11", {
+  resultado <- cie_map_comorbid(c("E10.9", "E11.0"))
+  expect_equal(resultado$categoria, c("Diabetes", "Diabetes"))
 })
 
-test_that("cie_map_comorbid categoriza diabetes E11", {
-  resultado <- cie_map_comorbid("E11.0")
-  expect_equal(resultado$categoria[1], "Diabetes")
-})
-
-test_that("cie_map_comorbid categoriza insuficiencia cardiaca", {
-  resultado <- cie_map_comorbid("I50.9")
-  expect_equal(resultado$categoria[1], "Insuficiencia cardiaca")
-})
-
-test_that("cie_map_comorbid categoriza infarto miocardio I21", {
-  resultado <- cie_map_comorbid("I21.0")
-  expect_equal(resultado$categoria[1], "Infarto miocardio")
-})
-
-test_that("cie_map_comorbid categoriza infarto miocardio I22", {
-  resultado <- cie_map_comorbid("I22.0")
-  expect_equal(resultado$categoria[1], "Infarto miocardio")
+test_that("cie_map_comorbid categoriza infarto miocardio I21 e I22", {
+  resultado <- cie_map_comorbid(c("I21.0", "I22.0"))
+  expect_true(all(resultado$categoria == "Infarto miocardio"))
 })
 
 test_that("cie_map_comorbid categoriza neoplasia maligna", {
@@ -544,33 +496,8 @@ test_that("cie_map_comorbid categoriza neoplasia maligna", {
   expect_true(all(resultado$categoria == "Neoplasia maligna"))
 })
 
-test_that("cie_map_comorbid categoriza EPOC J44", {
-  resultado <- cie_map_comorbid("J44.9")
-  expect_equal(resultado$categoria[1], "EPOC")
-})
-
-test_that("cie_map_comorbid categoriza EPOC J40", {
-  resultado <- cie_map_comorbid("J40")
-  expect_equal(resultado$categoria[1], "EPOC")
-})
-
-test_that("cie_map_comorbid categoriza EPOC J41 bronquitis cronica", {
-  resultado <- cie_map_comorbid("J41.0")
-  expect_equal(resultado$categoria[1], "EPOC")
-})
-
-test_that("cie_map_comorbid categoriza EPOC J42 bronquitis cronica NE", {
-  resultado <- cie_map_comorbid("J42")
-  expect_equal(resultado$categoria[1], "EPOC")
-})
-
-test_that("cie_map_comorbid categoriza EPOC J43 enfisema", {
-  resultado <- cie_map_comorbid("J43.9")
-  expect_equal(resultado$categoria[1], "EPOC")
-})
-
 test_that("cie_map_comorbid categoriza todo espectro EPOC J40-J44", {
-  codigos <- c("J40", "J41.0", "J42", "J43.9", "J44.1")
+  codigos <- c("J40", "J41.0", "J42", "J43.9", "J44.1", "J44.9")
   resultado <- cie_map_comorbid(codigos)
   expect_true(all(resultado$categoria == "EPOC"))
 })
@@ -654,14 +581,6 @@ test_that("cie_map_comorbid preserva orden de entrada", {
   resultado <- cie_map_comorbid(codigos)
 
   expect_equal(resultado$codigo, codigos)
-})
-
-test_that("cie_map_comorbid con un solo codigo", {
-  resultado <- cie_map_comorbid("E11.0")
-
-  expect_equal(nrow(resultado), 1)
-  expect_equal(resultado$codigo[1], "E11.0")
-  expect_equal(resultado$categoria[1], "Diabetes")
 })
 
 test_that("cie_map_comorbid con muchos codigos", {

@@ -303,41 +303,26 @@ test_that("validacion de vector grande es rapida", {
 # PRUEBAS DE INTEROPERABILIDAD CON dplyr
 # ============================================================
 
-test_that("resultados funcionan con dplyr::filter", {
+test_that("resultados son compatibles con verbos dplyr", {
   skip_on_cran()
 
-  resultado <- cie_search("diabetes", threshold = 0.70, max_results = 20)
-
-  # Filtrar con dplyr
-  filtrado <- resultado |>
+  # filter sobre resultados de busqueda
+  filtrado <- cie_search("diabetes", threshold = 0.70, max_results = 20) |>
     dplyr::filter(score > 0.80)
-
   expect_s3_class(filtrado, "tbl_df")
-})
 
-test_that("resultados funcionan con dplyr::mutate", {
-  skip_on_cran()
-
-  resultado <- cie_lookup(c("E11.0", "E11.1", "E11.2"))
-
-  # Mutar con dplyr
-  mutado <- resultado |>
+  # mutate sobre resultados de lookup
+  mutado <- cie_lookup(c("E11.0", "E11.1", "E11.2")) |>
     dplyr::mutate(codigo_corto = substr(codigo, 1, 3))
-
   expect_s3_class(mutado, "tbl_df")
   expect_true("codigo_corto" %in% names(mutado))
-})
 
-test_that("resultados funcionan con dplyr::group_by y summarise", {
-  skip_on_cran()
-
-  resultado <- cie10_sql("SELECT codigo, capitulo FROM cie10 WHERE codigo LIKE 'E1%' LIMIT 100")
-
-  # Agrupar y resumir
-  resumen <- resultado |>
+  # group_by + summarise sobre resultados SQL
+  resumen <- cie10_sql(
+    "SELECT codigo, capitulo FROM cie10 WHERE codigo LIKE 'E1%' LIMIT 100"
+  ) |>
     dplyr::group_by(capitulo) |>
     dplyr::summarise(n = dplyr::n(), .groups = "drop")
-
   expect_s3_class(resumen, "tbl_df")
   expect_true("n" %in% names(resumen))
 })

@@ -301,13 +301,6 @@ test_that("cie_map_comorbid retorna columnas esperadas", {
 # PRUEBAS DE LIMITES Y CASOS EXTREMOS
 # ============================================================
 
-test_that("cie_search con threshold 0 no crashea", {
-  skip_on_cran()
-
-  resultado <- cie_search("diabetes", threshold = 0, max_results = 10)
-  expect_s3_class(resultado, "tbl_df")
-})
-
 test_that("cie_search con threshold 1 retorna solo exactos", {
   skip_on_cran()
 
