@@ -32,3 +32,19 @@ for (p in renviron_paths) {
     break
   }
 }
+
+# -----------------------------------------------------------------------------
+# Politica de skip_on_cran() y canario CRAN
+# -----------------------------------------------------------------------------
+# Llevan skip_on_cran() los tests que NO pueden correr en CRAN porque:
+#   - requieren red (API CIE-11 de la OMS: credenciales y conexion),
+#   - dependen de paquetes opcionales de Suggests (comorbidity, gt),
+#   - son de escala/rendimiento (umbrales de tiempo inestables en hardware
+#     heterogeneo) o inspeccionan el cache SQLite local en detalle.
+# "Canario CRAN": test SIN skip_on_cran() que corre tambien en CRAN como
+# detector temprano de roturas del flujo base (p. ej. normalizar -> validar
+# -> lookup sobre la DB de datos del paquete, en test-integration.R).
+# Requisitos de todo canario: ligero, sin red, sin Suggests opcionales y
+# sin escribir fuera de tempdir (el cache ya se aísla arriba via
+# CIECL_CACHE_DIR). La mayoria de los tests corren localmente con
+# NOT_CRAN=true (arriba) y en CI; CRAN solo ejecuta los canarios.

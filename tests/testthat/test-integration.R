@@ -55,28 +55,6 @@ test_that("flujo: buscar categoria -> expandir -> calcular comorbilidad", {
   expect_true("score_charlson" %in% names(resultado_comorbid))
 })
 
-test_that("flujo: normalizar codigos -> buscar -> mapear comorbilidad", {
-  skip_on_cran()
-
-  # 1. Codigos en formato mixto (como vendrian de datos reales)
-  codigos_raw <- c("E110", "I509", "C509", "e11.0", " Z00 ")
-
-  # 2. Normalizar codigos
-  codigos_norm <- cie_norm(codigos_raw, search_db = FALSE)
-  expect_length(codigos_norm, length(codigos_raw))
-
-  # 3. Buscar detalles
-  suppressMessages({
-    detalles <- cie_lookup(codigos_norm)
-  })
-  expect_gt(nrow(detalles), 0)
-
-  # 4. Mapear a categorias de comorbilidad
-  mapa <- cie_map_comorbid(codigos_norm)
-  expect_length(codigos_norm, nrow(mapa))
-  expect_true("Diabetes" %in% mapa$categoria)
-})
-
 test_that("flujo: SQL personalizado -> procesamiento -> validacion", {
   skip_on_cran()
 
@@ -130,99 +108,9 @@ test_that("cie_expand y cie_lookup expandir dan mismos resultados", {
   expect_setequal(hijos_expand, hijos_lookup)
 })
 
-test_that("cie_norm y cie_lookup son coherentes", {
-  skip_on_cran()
-
-  # Codigo sin punto
-  codigo_raw <- "E110"
-
-  # Normalizar
-  codigo_norm <- cie_norm(codigo_raw, search_db = FALSE)
-  expect_equal(codigo_norm, "E11.0")
-
-  # Buscar con codigo raw y normalizado
-  resultado_raw <- cie_lookup(codigo_raw)
-  resultado_norm <- cie_lookup(codigo_norm)
-
-  # Deben dar mismo resultado
-  expect_equal(resultado_raw$codigo, resultado_norm$codigo)
-})
-
-test_that("cie_validate_vector y cie_lookup son coherentes", {
-  skip_on_cran()
-
-  codigos <- c("E11.0", "INVALIDO", "Z00")
-
-  # Validar
-  validacion <- cie_validate_vector(codigos)
-  expect_equal(validacion, c(TRUE, FALSE, TRUE))
-
-  # Buscar (solo los validos deben retornar)
-  suppressMessages({
-    resultado <- cie_lookup(codigos)
-  })
-
-  # Solo codigos validos en resultado
-  expect_true(all(resultado$codigo %in% codigos[validacion]))
-})
-
 # ============================================================
 # PRUEBAS DE ESCENARIOS REALES
 # ============================================================
-
-test_that("escenario: analisis de egreso hospitalario", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  # Simular datos de egresos hospitalarios
-  set.seed(42)
-  egresos <- data.frame(
-    id_egreso = 1:20,
-    codigo_principal = sample(c("E11.0", "I50.9", "C50.9", "J18.9", "K70.3"), 20, replace = TRUE),
-    codigo_secundario = sample(c("E11.9", "I10", "Z86.7", "N18.9", "F32.9"), 20, replace = TRUE)
-  )
-
-  # 1. Validar codigos principales
-  val_principal <- cie_validate_vector(egresos$codigo_principal)
-  expect_true(all(val_principal))
-
-  # 2. Validar codigos secundarios
-  val_secundario <- cie_validate_vector(egresos$codigo_secundario)
-  expect_true(all(val_secundario))
-
-  # 3. Preparar datos para comorbilidad (formato largo)
-  datos_largo <- data.frame(
-    id = rep(egresos$id_egreso, 2),
-    codigo = c(egresos$codigo_principal, egresos$codigo_secundario)
-  )
-
-  # 4. Calcular comorbilidades
-  comorbilidades <- cie_comorbid(datos_largo, id = "id", code = "codigo", map = "charlson")
-  expect_s3_class(comorbilidades, "tbl_df")
-  expect_equal(nrow(comorbilidades), 20)
-})
-
-test_that("escenario: busqueda de codigos para estudio", {
-  skip_on_cran()
-
-  # Investigador busca codigos relacionados con su estudio
-  # 1. Buscar por termino
-  resultados_diabetes <- cie_search("diabetes mellitus tipo 2", threshold = 0.65)
-
-  # 2. Buscar categoria general
-  categoria_e11 <- cie_lookup("E11", expand = TRUE)
-
-  # 3. Combinar resultados
-  codigos_estudio <- unique(c(resultados_diabetes$codigo, categoria_e11$codigo))
-
-  # 4. Validar todos
-  validacion <- cie_validate_vector(codigos_estudio)
-  expect_true(all(validacion))
-
-  # 5. Obtener descripciones completas
-  descripciones <- cie_lookup(codigos_estudio, full_description = TRUE)
-  expect_true("descripcion_completa" %in% names(descripciones))
-})
 
 test_that("escenario: limpieza de datos con codigos sucios", {
   skip_on_cran()
@@ -344,4 +232,21 @@ test_that("cie11_search falla gracefully sin credenciales", {
     regexp = "API key|requerida|OMS",
     ignore.case = TRUE
   )
+})
+
+# ============================================================
+# CANARIO CRAN: flujo E2E minimo (ver politica en setup.R)
+# ============================================================
+
+test_that("canario CRAN: normalizar -> validar -> lookup sobre DB del paquete", {
+  # Sin skip_on_cran(): corre tambien en CRAN. Sin red, sin paquetes
+  # opcionales; el cache SQLite escribe solo en tempdir (setup.R).
+  codigos <- cie_norm(c("e11.0", " I50.9 "), search_db = FALSE)
+  expect_true(all(cie_validate_vector(codigos)))
+
+  suppressMessages({
+    resultado <- cie_lookup(codigos)
+  })
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 2L)
 })

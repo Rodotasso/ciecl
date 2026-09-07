@@ -248,8 +248,9 @@ test_that("cie10_clear_cache emite mensaje apropiado", {
 test_that("cie10_clear_cache retorna invisible NULL", {
   skip_on_cran()
 
-  resultado <- suppressMessages(cie10_clear_cache())
-  expect_null(resultado)
+  res <- withVisible(suppressMessages(cie10_clear_cache()))
+  expect_null(res$value)
+  expect_false(res$visible)
 })
 
 # ============================================================
