@@ -14,27 +14,3 @@
       Error in `cie11_search()`:
       ! API key debe tener formato "client_id:client_secret"
 
-# cie11_search valida tipos de input
-
-    Code
-      cie11_search(123)
-    Condition
-      Error in `cie11_search()`:
-      ! `text` debe ser un string de largo 1, no a number.
-
----
-
-    Code
-      cie11_search(c("a", "b"))
-    Condition
-      Error in `cie11_search()`:
-      ! `text` debe ser un string de largo 1, no a character vector.
-
----
-
-    Code
-      cie11_search(NA_character_)
-    Condition
-      Error in `cie11_search()`:
-      ! `text` debe ser un string de largo 1, no a character `NA`.
-

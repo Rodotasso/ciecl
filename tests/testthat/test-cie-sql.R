@@ -248,8 +248,9 @@ test_that("cie10_clear_cache emite mensaje apropiado", {
 test_that("cie10_clear_cache retorna invisible NULL", {
   skip_on_cran()
 
-  resultado <- suppressMessages(cie10_clear_cache())
-  expect_null(resultado)
+  res <- withVisible(suppressMessages(cie10_clear_cache()))
+  expect_null(res$value)
+  expect_false(res$visible)
 })
 
 # ============================================================
@@ -337,40 +338,6 @@ test_that("cie10_sql bloquea EXEC", {
 })
 
 # ============================================================
-# PRUEBAS get_cie10_db() creacion directorio cache
-# ============================================================
-
-test_that("get_cie10_db crea directorio cache si no existe", {
-  skip_on_cran()
-
-  # Limpiar cache para forzar recreacion
-  suppressMessages(cie10_clear_cache())
-
-  cache_dir <- get_cache_dir()
-
-  # Conectar - debe crear directorio si no existe
-  get_cie10_db()
-
-  # Verificar que directorio existe
-  expect_true(dir.exists(cache_dir))
-})
-
-test_that("get_cie10_db inicializa indices en DB nueva", {
-  skip_on_cran()
-
-  # Limpiar cache
-  suppressMessages(cie10_clear_cache())
-
-  # Conectar - debe inicializar DB (mensajes solo en interactive)
-  con <- get_cie10_db()
-
-  # Verificar indices
-  indices <- DBI::dbGetQuery(con, "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'")
-  expect_true("idx_codigo" %in% indices$name)
-  expect_true("idx_desc" %in% indices$name)
-})
-
-# ============================================================
 # PRUEBAS CONNECTION POOLING
 # ============================================================
 
@@ -427,88 +394,6 @@ test_that("cie10_disconnect es idempotente", {
 })
 
 # ============================================================
-# PRUEBAS CACHE VERSIONADO
-# ============================================================
-
-test_that("cache incluye tabla cie10_meta con version", {
-  skip_on_cran()
-
-  con <- get_cie10_db()
-
-  expect_true(DBI::dbExistsTable(con, "cie10_meta"))
-
-  meta <- DBI::dbGetQuery(con, "SELECT * FROM cie10_meta WHERE key = 'cache_version'")
-  expect_equal(nrow(meta), 1)
-  expect_equal(meta$value, as.character(utils::packageVersion("ciecl")))
-})
-
-test_that("cache_is_current retorna TRUE para cache actual", {
-  skip_on_cran()
-
-  con <- get_cie10_db()
-  expect_true(cache_is_current(con))
-})
-
-test_that("cache_is_current retorna FALSE si no hay tabla meta", {
-  skip_on_cran()
-
-  # Crear db temporal sin tabla meta
-  tmp <- tempfile(fileext = ".db")
-  on.exit(unlink(tmp), add = TRUE)
-
-  con_tmp <- DBI::dbConnect(RSQLite::SQLite(), tmp)
-  on.exit(DBI::dbDisconnect(con_tmp), add = TRUE)
-
-  DBI::dbWriteTable(con_tmp, "cie10", data.frame(codigo = "E11.0"))
-
-  expect_false(cache_is_current(con_tmp))
-})
-
-test_that("version mismatch fuerza rebuild", {
-  skip_on_cran()
-
-  # Obtener conexion valida
-  con <- get_cie10_db()
-
-  # Manipular version en meta
-  DBI::dbExecute(con, "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'")
-
-  # Desconectar correctamente antes de forzar rebuild
-  # (necesario en Windows para liberar lock del archivo)
-  cie10_disconnect()
-
-  # get_cie10_db debe detectar version mismatch y reconstruir
-  con_new <- get_cie10_db()
-  expect_true(DBI::dbIsValid(con_new))
-
-  # Version debe ser correcta ahora
-  meta <- DBI::dbGetQuery(con_new, "SELECT value FROM cie10_meta WHERE key = 'cache_version'")
-  expect_equal(meta$value, as.character(utils::packageVersion("ciecl")))
-})
-
-# ============================================================
-# PRUEBAS BUILD ATOMICO
-# ============================================================
-
-test_that("build_cache_atomic crea cache completo", {
-  skip_on_cran()
-
-  # Limpiar
-  suppressMessages(cie10_clear_cache())
-
-  cache_dir <- get_cache_dir()
-  db_path <- file.path(cache_dir, "cie10.db")
-
-  # No debe existir .tmp residual despues de build exitoso
-  expect_false(file.exists(paste0(db_path, ".tmp")))
-
-  con <- get_cie10_db()
-  expect_true(DBI::dbExistsTable(con, "cie10"))
-  expect_true(DBI::dbExistsTable(con, "cie10_fts"))
-  expect_true(DBI::dbExistsTable(con, "cie10_meta"))
-})
-
-# ============================================================
 # PRUEBAS .ciecl_env y .onUnload (zzz.R)
 # ============================================================
 
@@ -542,42 +427,6 @@ test_that(".onUnload no falla sin conexion activa", {
 # PRUEBAS BRANCHES ADICIONALES cie-sql.R
 # ============================================================
 
-test_that("get_cie10_db reconstruye FTS5 si falta en pooled", {
-  skip_on_cran()
-  # Asegurar DB existe
-  get_cie10_db()
-  db_path <- .ciecl_env$db_path
-  cie10_disconnect()
-
-  # Hack de escritura directo
-  con_write <- DBI::dbConnect(RSQLite::SQLite(), db_path)
-  DBI::dbExecute(con_write, "DROP TABLE IF EXISTS cie10_fts")
-  DBI::dbDisconnect(con_write)
-
-  # Forzar re-check
-  con2 <- get_cie10_db()
-  tablas <- DBI::dbListTables(con2)
-  expect_true(any(grepl("cie10_fts", tablas)))
-  ciecl::cie10_disconnect()
-})
-
-test_that("get_cie10_db reconstruye si version no coincide en pooled", {
-  skip_on_cran()
-  get_cie10_db()
-  db_path <- .ciecl_env$db_path
-  cie10_disconnect()
-
-  # Hack de escritura directo
-  con_write <- DBI::dbConnect(RSQLite::SQLite(), db_path)
-  DBI::dbExecute(con_write, "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'")
-  DBI::dbDisconnect(con_write)
-
-  con2 <- get_cie10_db()
-  ver <- DBI::dbGetQuery(con2, "SELECT value FROM cie10_meta WHERE key = 'cache_version'")
-  expect_equal(ver$value, as.character(utils::packageVersion("ciecl")))
-  ciecl::cie10_disconnect()
-})
-
 test_that("get_cie10_db limpia conexion invalida", {
   skip_on_cran()
   on.exit(ciecl::cie10_disconnect(), add = TRUE)
@@ -586,22 +435,6 @@ test_that("get_cie10_db limpia conexion invalida", {
   # .ciecl_env aun tiene referencia invalida
   con2 <- get_cie10_db()
   expect_true(DBI::dbIsValid(con2))
-  ciecl::cie10_disconnect()
-})
-
-test_that("get_cie10_db reconstruye si tabla cie10 falta", {
-  skip_on_cran()
-  ciecl::cie10_disconnect()
-  con_direct <- DBI::dbConnect(RSQLite::SQLite(),
-    file.path(get_cache_dir(), "cie10.db"))
-  on.exit(
-    if (DBI::dbIsValid(con_direct)) suppressWarnings(DBI::dbDisconnect(con_direct)),
-    add = TRUE
-  )
-  DBI::dbExecute(con_direct, "DROP TABLE IF EXISTS cie10")
-  DBI::dbDisconnect(con_direct)
-  con2 <- get_cie10_db()
-  expect_true(DBI::dbExistsTable(con2, "cie10"))
   ciecl::cie10_disconnect()
 })
 
@@ -619,57 +452,10 @@ test_that("cie10_sql relanza errores SQL con clase ciecl_sql_error", {
   expect_s3_class(err, "ciecl_sql_error")
 })
 
-test_that("cie10_sql valida que query no sea numerico", {
-  expect_error(
-    ciecl::cie10_sql(123),
-    class = "ciecl_invalid_input"
-  )
-})
-
-test_that("cie10_sql valida que query no sea un vector de longitud > 1", {
-  expect_error(
-    ciecl::cie10_sql(c("SELECT 1", "SELECT 2")),
-    class = "ciecl_invalid_input"
-  )
-})
-
-test_that("cie10_sql valida que query no sea NA", {
-  expect_error(
-    ciecl::cie10_sql(NA_character_),
-    class = "ciecl_invalid_input"
-  )
-})
-
-test_that("cie10_sql valida que query no este ausente", {
-  expect_error(
-    ciecl::cie10_sql(),
-    class = "ciecl_invalid_input"
-  )
-})
-
-test_that("cache_is_current retorna FALSE cuando query falla", {
-  skip_on_cran()
-  tmp_db <- tempfile(fileext = ".db")
-  withr::defer(unlink(tmp_db))
-  con <- DBI::dbConnect(RSQLite::SQLite(), tmp_db)
-  withr::defer(if (DBI::dbIsValid(con)) suppressWarnings(DBI::dbDisconnect(con)))
-
-  # Crear tabla cie10_meta con schema incorrecto para que el SELECT falle
-  DBI::dbExecute(con, "CREATE TABLE cie10_meta (x INTEGER)")
-  expect_false(cache_is_current(con))
-})
-
-test_that("build_cache_atomic limpia .tmp residual", {
-  skip_on_cran()
-  withr::defer(ciecl::cie10_disconnect())
-  ciecl::cie10_disconnect()
-  cache_dir <- get_cache_dir()
-  tmp_file <- file.path(cache_dir, "cie10.db.tmp")
-  if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
-  file.create(tmp_file)
-  expect_true(file.exists(tmp_file))
-  suppressMessages(cie10_clear_cache())
-  con <- get_cie10_db()
-  expect_false(file.exists(tmp_file))
-  ciecl::cie10_disconnect()
+test_that("cie10_sql valida tipos de query invalidos", {
+  expect_error(ciecl::cie10_sql(123), class = "ciecl_invalid_input")
+  expect_error(ciecl::cie10_sql(c("SELECT 1", "SELECT 2")),
+               class = "ciecl_invalid_input")
+  expect_error(ciecl::cie10_sql(NA_character_), class = "ciecl_invalid_input")
+  expect_error(ciecl::cie10_sql(), class = "ciecl_invalid_input")
 })

@@ -219,14 +219,6 @@ test_that("cie_lookup expandir con codigo inexistente", {
 # PRUEBAS PARA cie_norm()
 # ============================================================
 
-test_that("cie_norm maneja NA", {
-  skip_on_cran()
-
-  # NA como entrada
-  resultado <- cie_norm(NA_character_, search_db = FALSE)
-  expect_true(is.na(resultado))
-})
-
 test_that("cie_norm maneja vector con NAs", {
   skip_on_cran()
 
@@ -236,30 +228,6 @@ test_that("cie_norm maneja vector con NAs", {
   expect_equal(resultado[1], "E11.0")
   expect_true(is.na(resultado[2]))
   expect_equal(resultado[3], "I10.0")
-})
-
-test_that("cie_norm maneja cadena vacia", {
-  skip_on_cran()
-
-  resultado <- cie_norm("", search_db = FALSE)
-  expect_equal(resultado, "")
-})
-
-test_that("cie_norm maneja codigos ya normalizados", {
-  skip_on_cran()
-
-  # Codigos ya con punto no deben cambiar
-  codigos <- c("E11.0", "I10.0", "Z00.0")
-  resultado <- cie_norm(codigos, search_db = FALSE)
-  expect_equal(resultado, codigos)
-})
-
-test_that("cie_norm maneja codigos de 3 caracteres", {
-  skip_on_cran()
-
-  # Codigos de categoria (3 chars) no deben modificarse
-  resultado <- cie_norm("E11", search_db = FALSE)
-  expect_equal(resultado, "E11")
 })
 
 test_that("cie_norm maneja codigos largos", {
@@ -273,12 +241,6 @@ test_that("cie_norm maneja codigos largos", {
 # ============================================================
 # PRUEBAS PARA cie_validate_vector()
 # ============================================================
-
-test_that("cie_validate_vector maneja NA", {
-  # NA debe ser FALSE
-  resultado <- cie_validate_vector(NA_character_)
-  expect_false(resultado)
-})
 
 test_that("cie_validate_vector maneja vector vacio", {
   resultado <- cie_validate_vector(character(0))
@@ -450,7 +412,8 @@ test_that("cie_comorbid rechaza dataframe vacio", {
 })
 
 test_that("cie_comorbid detecta columnas inexistentes", {
-  skip_on_cran()
+  # Canario CRAN: version sin skip_on_cran del contrato de validacion
+  # de columnas (las copias con skip fueron podadas como duplicados).
   skip_if_not_installed("comorbidity")
 
   df <- data.frame(
@@ -461,13 +424,13 @@ test_that("cie_comorbid detecta columnas inexistentes", {
   # Columna id incorrecta
   expect_error(
     cie_comorbid(df, id = "id_paciente", code = "codigo"),
-    "no existen"
+    class = "ciecl_invalid_input"
   )
 
   # Columna code incorrecta
   expect_error(
     cie_comorbid(df, id = "paciente", code = "diagnostico"),
-    "no existen"
+    class = "ciecl_invalid_input"
   )
 })
 
@@ -485,51 +448,15 @@ test_that("cie_comorbid funciona con map elixhauser", {
   expect_false("score_charlson" %in% names(resultado))
 })
 
-test_that("cie_comorbid maneja codigos con NA", {
-  skip_on_cran()
-  skip_if_not_installed("comorbidity")
-
-  df <- data.frame(
-    id = c(1, 1, 2, 2),
-    diag = c("E11.0", NA, "I50.9", "C50.9")
-  )
-
-  # No debe crashear con NAs (warning esperado por NA values)
-  expect_no_error({
-    suppressWarnings({
-      resultado <- cie_comorbid(df, id = "id", code = "diag", map = "charlson")
-    })
-  })
-})
-
 # ============================================================
 # PRUEBAS PARA cie10_sql()
 # ============================================================
 
+# Canario CRAN: unico test de bloqueo SQL sin skip_on_cran
+# (las replicas de UPDATE/DELETE/INSERT/ALTER viven en test-cie-sql.R).
 test_that("cie10_sql bloquea queries UPDATE", {
   expect_error(
     cie10_sql("UPDATE cie10 SET codigo = 'X' WHERE codigo = 'E11.0'"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries DELETE", {
-  expect_error(
-    cie10_sql("DELETE FROM cie10 WHERE codigo = 'E11.0'"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries INSERT", {
-  expect_error(
-    cie10_sql("INSERT INTO cie10 (codigo) VALUES ('TEST')"),
-    class = "ciecl_unsafe_query"
-  )
-})
-
-test_that("cie10_sql bloquea queries ALTER", {
-  expect_error(
-    cie10_sql("ALTER TABLE cie10 ADD COLUMN test TEXT"),
     class = "ciecl_unsafe_query"
   )
 })

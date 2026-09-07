@@ -242,12 +242,11 @@ test_that("sigla_to_codigo convierte siglas a codigos CIE-10", {
 
   sigla_to_codigo <- sigla_to_codigo
 
-  # IAM debe retornar codigo I21.x
+  # IAM debe retornar codigo I2x; si retorna NULL el test falla
   codigo_iam <- sigla_to_codigo("iam")
-  if (!is.null(codigo_iam)) {
-    expect_match(codigo_iam, "^I2[0-5]",
-                info = paste("IAM deberia dar I2x, dio:", codigo_iam))
-  }
+  expect_false(is.null(codigo_iam))
+  expect_match(codigo_iam, "^I2[0-5]",
+               info = paste("IAM deberia dar I2x, dio:", codigo_iam))
 })
 
 test_that("sigla_to_codigo retorna NULL para texto normal", {

@@ -1,5 +1,8 @@
 # Tests para cie_table (tablas gt)
 
+# canario CRAN: unico test de cie_table() sin skip_on_cran.
+# Decision: canario (no olvido). Es la unica cobertura CRAN de la rama
+# cie_table(); lookup ligero ("E11") sobre DB cacheada + render gt acotado.
 test_that("cie_table requiere gt instalado", {
   skip_if_not_installed("gt")
 
@@ -29,14 +32,6 @@ test_that("cie_table maneja codigo invalido", {
 # PRUEBAS ADICIONALES cie_table()
 # ============================================================
 
-test_that("cie_table genera tabla gt correctamente", {
-  skip_if_not_installed("gt")
-  skip_on_cran()
-
-  tabla <- cie_table("E11")
-  expect_s3_class(tabla, "gt_tbl")
-})
-
 test_that("cie_table genera header correcto", {
   skip_if_not_installed("gt")
   skip_on_cran()
@@ -48,24 +43,6 @@ test_that("cie_table genera header correcto", {
 
   # gt tables tienen estructura interna que podemos verificar
   expect_true("_heading" %in% names(tabla))
-})
-
-test_that("cie_table funciona con codigo categoria", {
-  skip_if_not_installed("gt")
-  skip_on_cran()
-
-  # Categoria sin punto (expande a todos los hijos)
-  tabla <- cie_table("I10")
-  expect_s3_class(tabla, "gt_tbl")
-})
-
-test_that("cie_table funciona con codigo especifico", {
-  skip_if_not_installed("gt")
-  skip_on_cran()
-
-  # Codigo especifico con punto
-  tabla <- cie_table("E11.0")
-  expect_s3_class(tabla, "gt_tbl")
 })
 
 test_that("cie_table expande jerarquia automaticamente", {

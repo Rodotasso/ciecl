@@ -6,40 +6,6 @@
 # ============================================================
 
 # ============================================================
-# PRUEBAS DE MANEJO DE ERRORES
-# ============================================================
-
-test_that("cie11_search maneja error de conexion gracefully", {
-  skip_if_not_installed("httr2")
-
-  # Con credenciales invalidas, debe dar warning y retornar tibble vacio
-  # (no debe crashear)
-  expect_warning(
-    resultado <- cie11_search("diabetes", api_key = "invalid:credentials"),
-    "Error API CIE-11"
-  )
-
-  # Debe retornar tibble vacio
-  expect_s3_class(resultado, "tbl_df")
-  expect_length(resultado$codigo, 0)
-})
-
-test_that("cie11_search retorna tibble vacio en error", {
-  skip_if_not_installed("httr2")
-
-  # Cualquier error debe retornar estructura correcta
-  suppressWarnings({
-    resultado <- cie11_search("test", api_key = "bad:key")
-  })
-
-  expect_s3_class(resultado, "tbl_df")
-  expect_true("codigo" %in% names(resultado))
-  expect_true("titulo" %in% names(resultado))
-  expect_true("capitulo" %in% names(resultado))
-  expect_length(resultado$codigo, 0)
-})
-
-# ============================================================
 # PRUEBAS DE FORMATO DE API KEY
 # ============================================================
 
@@ -57,67 +23,6 @@ test_that("cie11_search rechaza API key sin separador", {
     cie11_search("diabetes", api_key = ""),
     "client_id:client_secret"
   )
-})
-
-test_that("cie11_search acepta API key con formato correcto", {
-  skip_if_not_installed("httr2")
-
-  # Formato correcto (fallara en autenticacion, no en formato)
-  # El error no debe mencionar "client_id:client_secret"
-  error_msg <- tryCatch(
-    {
-      suppressWarnings(cie11_search("diabetes", api_key = "id:secret"))
-      "no_error"
-    },
-    error = function(e) {
-      e$message
-    },
-    warning = function(w) {
-      "warning"
-    }
-  )
-
-  # Siempre hay assertion: si no hubo error, el test pasa trivialmente;
-  # si hubo error, el mensaje no debe ser de validacion de formato.
-  if (error_msg == "no_error" || error_msg == "warning") {
-    expect_true(TRUE)
-  } else {
-    expect_no_match(error_msg, "client_id:client_secret", fixed = TRUE)
-  }
-})
-
-# ============================================================
-# PRUEBAS DE VARIABLE DE ENTORNO
-# ============================================================
-
-test_that("cie11_search usa ICD_API_KEY de environment", {
-  skip_if_not_installed("httr2")
-
-  withr::local_envvar(ICD_API_KEY = "env:key")
-
-  # Debe usar la key del environment (y fallar en autenticacion)
-  expect_warning(
-    resultado <- cie11_search("diabetes"),
-    "Error API CIE-11"
-  )
-
-  expect_s3_class(resultado, "tbl_df")
-})
-
-test_that("cie11_search prefiere argumento sobre environment", {
-  skip_if_not_installed("httr2")
-
-  withr::local_envvar(ICD_API_KEY = "env:key")
-
-  # Usar key de argumento (diferente)
-  expect_warning(
-    resultado <- cie11_search("diabetes", api_key = "arg:key"),
-    "Error API CIE-11"
-  )
-
-  # La funcion debe usar arg:key, no env:key
-  # (ambas fallaran, pero verificamos que acepta el argumento)
-  expect_s3_class(resultado, "tbl_df")
 })
 
 # ============================================================
@@ -279,6 +184,67 @@ test_that("cie11_search retorna tibble vacio con destinationEntities vacio", {
 
   expect_s3_class(resultado, "tbl_df")
   expect_equal(nrow(resultado), 0)
+})
+
+test_that("cie11_search advierte y retorna tibble vacio en error HTTP (mock)", {
+  skip_if_not_installed("httr2")
+
+  httr2::local_mocked_responses(mock_who_api(
+    search_status = 401L,
+    search_body = list(error = "invalid_client")
+  ))
+
+  # El warning externo siempre lleva el prefijo "Error API CIE-11"
+  expect_warning(
+    resultado <- cie11_search("diabetes", api_key = "invalid:credentials"),
+    "Error API CIE-11"
+  )
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_true(all(c("codigo", "titulo", "capitulo") %in% names(resultado)))
+  expect_length(resultado$codigo, 0)
+})
+
+test_that("cie11_search usa ICD_API_KEY de environment (mock)", {
+  skip_if_not_installed("httr2")
+
+  withr::local_envvar(ICD_API_KEY = "env:key")
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = data.frame(
+      theCode = "5A00",
+      title = "Diabetes mellitus",
+      chapter = "05",
+      stringsAsFactors = FALSE
+    ))
+  ))
+
+  # Sin argumento api_key: debe tomar la key del environment
+  resultado <- cie11_search("diabetes")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 1)
+})
+
+test_that("cie11_search prefiere argumento api_key sobre environment (mock)", {
+  skip_if_not_installed("httr2")
+
+  # Si la key del environment tuviera precedencia, abortaria por
+  # formato invalido (no contiene ":"); el mock solo responde si
+  # el request se construyo con la key del argumento.
+  withr::local_envvar(ICD_API_KEY = "singletoken")
+  httr2::local_mocked_responses(mock_who_api(
+    search_body = list(destinationEntities = data.frame(
+      theCode = "5A00",
+      title = "Diabetes mellitus",
+      chapter = "05",
+      stringsAsFactors = FALSE
+    ))
+  ))
+
+  resultado <- cie11_search("diabetes", api_key = "arg:key")
+
+  expect_s3_class(resultado, "tbl_df")
+  expect_equal(nrow(resultado), 1)
 })
 
 # ============================================================

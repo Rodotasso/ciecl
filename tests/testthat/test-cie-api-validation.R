@@ -19,6 +19,13 @@ test_that("cie11_search aborta con text no-string", {
   )
 })
 
+test_that("cie11_search pinea mensaje de error de tipo invalido", {
+  testthat::local_reproducible_output()
+
+  # Pineo del texto exacto del error de validacion de tipo
+  expect_snapshot(cie11_search(123), error = TRUE)
+})
+
 test_that("cie11_search aborta con text vacio (solo espacios)", {
   expect_error(
     cie11_search(text = "", api_key = "fake"),

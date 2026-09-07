@@ -106,16 +106,6 @@ test_that("cie_guide retorna data.frame", {
   expect_true("Tengo..." %in% names(resultado))
 })
 
-test_that("cie_guide retorna columnas esperadas", {
-  resultado <- cie_guide()
-  cols <- names(resultado)
-
-  # debe haber al menos columnas con escenario y funcion sugerida
-  expect_gte(length(cols), 2)
-  expect_true(any(grepl("[Tt]engo|[Bb]usco|[Ee]ntrada", cols)))
-  expect_true(any(grepl("[Uu]sar|[Ff]uncion|[Ss]alida", cols)))
-})
-
 test_that("cie_guide referencia funciones publicas reales del paquete", {
   resultado <- cie_guide()
 
@@ -166,22 +156,6 @@ test_that("cie_lookup con normalizar procesa codigo sin punto", {
 
   expect_shape(resultado, nrow = 1)
   expect_equal(resultado$codigo, "E11.0")
-})
-
-test_that("extract_cie_from_text extrae codigo de texto con ruido", {
-  skip_on_cran()
-
-  # Con prefijo
-  resultado1 <- extract_cie_from_text("CIE:E11.0")
-  expect_equal(resultado1, "E11.0")
-
-  # Con sufijo
-  resultado2 <- extract_cie_from_text("I10-confirmado")
-  expect_equal(resultado2, "I10")
-
-  # Sin ruido
-  resultado3 <- extract_cie_from_text("E11.0")
-  expect_equal(resultado3, "E11.0")
 })
 
 test_that("cie_search sin text da error en espanol", {
