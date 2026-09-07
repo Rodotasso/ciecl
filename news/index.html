@@ -63,6 +63,21 @@
 <h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-08-27">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-08-27"></a></h2>
 <p><em>English summary below</em></p>
 <div class="section level3">
+<h3 id="poda-y-endurecimiento-de-la-suite-de-tests--0-9-8">Poda y endurecimiento de la suite de tests (2026-09-05 / 2026-09-06)<a class="anchor" aria-label="anchor" href="#poda-y-endurecimiento-de-la-suite-de-tests--0-9-8"></a></h3>
+<p>Reestructuración completa de la suite de tests, en el contexto de la revisión rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. Sin cambios en <code>R/</code> ni en la API pública.</p>
+<ul><li>
+<strong>457 → 372 tests</strong> con la cobertura subiendo de 97,72 % a 98,62 %: cero líneas de <code>R/</code> perdidas, verificado con covr línea por línea en cada fase de la poda.</li>
+<li>
+<strong>Cero HTTP real en la suite</strong>: los tests de la API CIE-11 de la OMS migraron a mocks de <code>httr2</code>; el único test con red real queda protegido con <code>skip_on_cran()</code> + <code>skip_if_offline()</code> + credencial de la API.</li>
+<li>
+<strong>Tests de caché aislados</strong>: los que operaban sobre el caché real de la usuaria ahora corren en directorios temporales vía <code>CIECL_CACHE_DIR</code> + <code>withr</code>; los tests de ciclo de vida del caché viven en <code>test-cie-sql-cache.R</code>.</li>
+<li>
+<strong>Aserciones endurecidas</strong>: expectativas débiles (<code>expect_gte()</code>, conteos genéricos) reemplazadas por valores exactos verificados empíricamente contra el paquete <code>comorbidity</code>; duplicados y flujos E2E redundantes eliminados; un snapshot por mensaje de error.</li>
+<li>
+<strong>Política “canario CRAN”</strong>: documentada en <code>tests/testthat/setup.R</code>; cada archivo clave mantiene al menos un test ligero que corre también en CRAN (sin red, sin paquetes opcionales, escribiendo solo en tempdir).</li>
+<li>Nuevo archivo <code>test-cie-map-comorbid.R</code> con los tests de <code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code>, extraídos de <code>test-cie-comorbid.R</code> (que baja del límite de 600 líneas).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="revisión-ropensci--seguimiento-de-comentarios-de-maëlle-salmon-0-9-8">Revisión rOpenSci — seguimiento de comentarios de Maëlle Salmon (2026-08-27)<a class="anchor" aria-label="anchor" href="#revisi%C3%B3n-ropensci--seguimiento-de-comentarios-de-ma%C3%ABlle-salmon-0-9-8"></a></h3>
 <p>Tercera tanda, a partir del seguimiento de <a href="https://github.com/maelle" class="external-link">@maelle</a> en el issue rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. Sin cambios en la API pública.</p>
 <ul><li>
@@ -324,6 +339,21 @@
 </div>
 <div class="section level3">
 <h3 id="english-summary-0-9-8">English Summary<a class="anchor" aria-label="anchor" href="#english-summary-0-9-8"></a></h3>
+<div class="section level4">
+<h4 id="test-suite-overhaul-0-9-8">Test Suite Overhaul (2026-09-06)<a class="anchor" aria-label="anchor" href="#test-suite-overhaul-0-9-8"></a></h4>
+<p>Complete restructuring of the test suite, in the context of rOpenSci review <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. No changes to <code>R/</code> or the public API.</p>
+<ul><li>
+<strong>457 → 372 tests</strong> while coverage rose from 97.72% to 98.62%: zero <code>R/</code> lines lost, verified line by line with covr at each phase.</li>
+<li>
+<strong>No real HTTP in the suite</strong>: WHO ICD-11 API tests now use <code>httr2</code> mocks; the single live-network test is gated by <code>skip_on_cran()</code> + <code>skip_if_offline()</code> + API credentials.</li>
+<li>
+<strong>Isolated cache tests</strong>: tests that used to operate on the user’s real cache now run in temporary directories via <code>CIECL_CACHE_DIR</code> + <code>withr</code>; cache lifecycle tests live in <code>test-cie-sql-cache.R</code>.</li>
+<li>
+<strong>Hardened assertions</strong>: weak expectations (<code>expect_gte()</code>, generic counts) replaced with exact values empirically verified against the <code>comorbidity</code> package; duplicate and redundant end-to-end flows removed; one snapshot per error message.</li>
+<li>
+<strong>“CRAN canary” policy</strong>: documented in <code>tests/testthat/setup.R</code>; each key test file keeps at least one lightweight test that also runs on CRAN (no network, no optional packages, writes only to tempdir).</li>
+<li>New <code>test-cie-map-comorbid.R</code> file holding the <code><a href="../reference/cie_map_comorbid.html">cie_map_comorbid()</a></code> tests, split out of <code>test-cie-comorbid.R</code> (now under the 600-line limit).</li>
+</ul></div>
 <div class="section level4">
 <h4 id="ropensci-review-follow-up-0-9-8">rOpenSci Review Follow-up (2026-08-27)<a class="anchor" aria-label="anchor" href="#ropensci-review-follow-up-0-9-8"></a></h4>
 <ul><li>

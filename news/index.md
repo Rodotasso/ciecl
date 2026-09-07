@@ -4,6 +4,37 @@
 
 *English summary below*
 
+### Poda y endurecimiento de la suite de tests (2026-09-05 / 2026-09-06)
+
+Reestructuración completa de la suite de tests, en el contexto de la
+revisión rOpenSci
+[\#765](https://github.com/Rodotasso/ciecl/issues/765). Sin cambios en
+`R/` ni en la API pública.
+
+- **457 → 372 tests** con la cobertura subiendo de 97,72 % a 98,62 %:
+  cero líneas de `R/` perdidas, verificado con covr línea por línea en
+  cada fase de la poda.
+- **Cero HTTP real en la suite**: los tests de la API CIE-11 de la OMS
+  migraron a mocks de `httr2`; el único test con red real queda
+  protegido con `skip_on_cran()` + `skip_if_offline()` + credencial de
+  la API.
+- **Tests de caché aislados**: los que operaban sobre el caché real de
+  la usuaria ahora corren en directorios temporales vía
+  `CIECL_CACHE_DIR` + `withr`; los tests de ciclo de vida del caché
+  viven en `test-cie-sql-cache.R`.
+- **Aserciones endurecidas**: expectativas débiles (`expect_gte()`,
+  conteos genéricos) reemplazadas por valores exactos verificados
+  empíricamente contra el paquete `comorbidity`; duplicados y flujos E2E
+  redundantes eliminados; un snapshot por mensaje de error.
+- **Política “canario CRAN”**: documentada en `tests/testthat/setup.R`;
+  cada archivo clave mantiene al menos un test ligero que corre también
+  en CRAN (sin red, sin paquetes opcionales, escribiendo solo en
+  tempdir).
+- Nuevo archivo `test-cie-map-comorbid.R` con los tests de
+  [`cie_map_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_map_comorbid.md),
+  extraídos de `test-cie-comorbid.R` (que baja del límite de 600
+  líneas).
+
 ### Revisión rOpenSci — seguimiento de comentarios de Maëlle Salmon (2026-08-27)
 
 Tercera tanda, a partir del seguimiento de
@@ -488,6 +519,32 @@ para el contexto local.
   datos.
 
 ### English Summary
+
+#### Test Suite Overhaul (2026-09-06)
+
+Complete restructuring of the test suite, in the context of rOpenSci
+review [\#765](https://github.com/Rodotasso/ciecl/issues/765). No
+changes to `R/` or the public API.
+
+- **457 → 372 tests** while coverage rose from 97.72% to 98.62%: zero
+  `R/` lines lost, verified line by line with covr at each phase.
+- **No real HTTP in the suite**: WHO ICD-11 API tests now use `httr2`
+  mocks; the single live-network test is gated by `skip_on_cran()` +
+  `skip_if_offline()` + API credentials.
+- **Isolated cache tests**: tests that used to operate on the user’s
+  real cache now run in temporary directories via `CIECL_CACHE_DIR` +
+  `withr`; cache lifecycle tests live in `test-cie-sql-cache.R`.
+- **Hardened assertions**: weak expectations (`expect_gte()`, generic
+  counts) replaced with exact values empirically verified against the
+  `comorbidity` package; duplicate and redundant end-to-end flows
+  removed; one snapshot per error message.
+- **“CRAN canary” policy**: documented in `tests/testthat/setup.R`; each
+  key test file keeps at least one lightweight test that also runs on
+  CRAN (no network, no optional packages, writes only to tempdir).
+- New `test-cie-map-comorbid.R` file holding the
+  [`cie_map_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_map_comorbid.md)
+  tests, split out of `test-cie-comorbid.R` (now under the 600-line
+  limit).
 
 #### rOpenSci Review Follow-up (2026-08-27)
 
