@@ -63,6 +63,17 @@
 <h2 class="pkg-version" data-toc-text="0.9.8" id="ciecl-098-en-desarrollo-2026-04-25--2026-08-27">ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)<a class="anchor" aria-label="anchor" href="#ciecl-098-en-desarrollo-2026-04-25--2026-08-27"></a></h2>
 <p><em>English summary below</em></p>
 <div class="section level3">
+<h3 id="respuesta-a-comentarios-ropensci-0-9-8">Respuesta a comentarios rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a> (2026-09-08)<a class="anchor" aria-label="anchor" href="#respuesta-a-comentarios-ropensci-0-9-8"></a></h3>
+<p>Cambios derivados del comentario de Maëlle del 2026-09-07. Sin cambios en la API pública.</p>
+<ul><li>
+<strong>Ejemplos ejecutados en el sitio pkgdown</strong>: los ejemplos que solo corrían en sesiones interactivas ahora también se ejecutan al construir el sitio (<code>rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")</code>), de modo que las páginas de referencia muestran la salida real de las funciones. Los ejemplos de <code><a href="../reference/cie11_search.html">cie11_search()</a></code> usan cassettes de <code>vcr</code> (sin red ni credenciales); se agregó un cassette con causas frecuentes de egreso en Chile (diabetes mellitus, hipertensión esencial, neumonía).</li>
+<li>
+<strong>Nuevo test del rebuild de caché por versión</strong>: simula una actualización del paquete con <code><a href="https://testthat.r-lib.org/reference/local_mocked_bindings.html" class="external-link">testthat::local_mocked_bindings()</a></code> sobre <code><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">utils::packageVersion()</a></code> y verifica que la caché se reconstruye (sugerencia de la revisora).</li>
+<li>
+<code>Config/Needs/website</code> ahora incluye <code>vcr</code> explícitamente, garantizando su instalación en el build del sitio.</li>
+</ul><p><em>Examples on the pkgdown site now run at build time (interactive or <code>IN_PKGDOWN</code>), reference pages show real output, <code><a href="../reference/cie11_search.html">cie11_search()</a></code> examples replay enriched vcr cassettes, and a new test pins the cache-rebuild-on-version-mismatch behaviour using <code><a href="https://testthat.r-lib.org/reference/local_mocked_bindings.html" class="external-link">testthat::local_mocked_bindings()</a></code>.</em></p>
+</div>
+<div class="section level3">
 <h3 id="poda-y-endurecimiento-de-la-suite-de-tests--0-9-8">Poda y endurecimiento de la suite de tests (2026-09-05 / 2026-09-06)<a class="anchor" aria-label="anchor" href="#poda-y-endurecimiento-de-la-suite-de-tests--0-9-8"></a></h3>
 <p>Reestructuración completa de la suite de tests, en el contexto de la revisión rOpenSci <a href="https://github.com/Rodotasso/ciecl/issues/765" class="external-link">#765</a>. Sin cambios en <code>R/</code> ni en la API pública.</p>
 <ul><li>

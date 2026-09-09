@@ -46,7 +46,6 @@ Other sql_backend:
 tools::R_user_dir("ciecl", "data")
 #> [1] "/home/runner/.local/share/R/ciecl"
 
-if (FALSE) { # interactive()
 cie10_clear_cache() # Elimina cie10.db local
-}
+#> ℹ Cache no existe
 ```

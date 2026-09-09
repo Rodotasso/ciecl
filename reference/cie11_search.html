@@ -161,6 +161,35 @@ una variable de entorno).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 6A71.7 Trastorno depresivo recurrente, actualmente en remisión comp… 06      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> MB47.Y Otra alteración especificada del tono muscular y los reflejos 21      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 6A70.Z Trastorno depresivo de episodio único, sin especificación     06      </span>
+<span class="r-in"><span><span class="co"># Causas frecuentes de egreso en Chile</span></span></span>
+<span class="r-in"><span><span class="fu">cie11_search</span><span class="op">(</span><span class="st">"diabetes mellitus"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    codigo  titulo                                                       capitulo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 5A14    Diabetes mellitus, tipo no especificado                      05      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 5A13    Diabetes mellitus, otro tipo especificado                    05      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 5A13.Y  Otra diabetes mellitus especificada, otro tipo especificado  05      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> JA63.Z  Diabetes mellitus en el embarazo, sin especificación         18      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> JA63.2  Diabetes mellitus que aparece por primera vez en el embarazo 18      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> KB60.2Z Diabetes mellitus neonatal, sin especificación               19      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> KB60.2Y Otra diabetes mellitus neonatal especificada                 19      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 5A10    Diabetes mellitus tipo 1                                     05      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 5A11    Diabetes mellitus tipo 2                                     05      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 5A12    Diabetes mellitus por malnutrición                           05      </span>
+<span class="r-in"><span><span class="fu">cie11_search</span><span class="op">(</span><span class="st">"hipertension esencial"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    codigo  titulo                                      capitulo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> BA00.Z  Hipertensión esencial, sin especificación   11      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> BA00.Y  Otra hipertensión esencial especificada     11      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> KB45    Hipertensión neonatal                       19      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> JA23    Hipertensión gestacional                    18      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BA04.Z  Hipertensión secundaria, sin especificación 11      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BA04.Y  Otra hipertension secundaria especificada   11      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 9C61.01 Hipertensión ocular                         09      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> DB98.7Z Hipertensión portal, sin especificación     13      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> DB98.7Y Otra hipertensión portal especificada       13      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BA00.2  Hipertensión sistólica aislada              11      </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

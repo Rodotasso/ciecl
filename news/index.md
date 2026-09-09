@@ -4,6 +4,37 @@
 
 *English summary below*
 
+### Respuesta a comentarios rOpenSci [\#765](https://github.com/Rodotasso/ciecl/issues/765) (2026-09-08)
+
+Cambios derivados del comentario de Maëlle del 2026-09-07. Sin cambios
+en la API pública.
+
+- **Ejemplos ejecutados en el sitio pkgdown**: los ejemplos que solo
+  corrían en sesiones interactivas ahora también se ejecutan al
+  construir el sitio
+  (`rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")`),
+  de modo que las páginas de referencia muestran la salida real de las
+  funciones. Los ejemplos de
+  [`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
+  usan cassettes de `vcr` (sin red ni credenciales); se agregó un
+  cassette con causas frecuentes de egreso en Chile (diabetes mellitus,
+  hipertensión esencial, neumonía).
+- **Nuevo test del rebuild de caché por versión**: simula una
+  actualización del paquete con
+  [`testthat::local_mocked_bindings()`](https://testthat.r-lib.org/reference/local_mocked_bindings.html)
+  sobre
+  [`utils::packageVersion()`](https://rdrr.io/r/utils/packageDescription.html)
+  y verifica que la caché se reconstruye (sugerencia de la revisora).
+- `Config/Needs/website` ahora incluye `vcr` explícitamente,
+  garantizando su instalación en el build del sitio.
+
+*Examples on the pkgdown site now run at build time (interactive or
+`IN_PKGDOWN`), reference pages show real output,
+[`cie11_search()`](https://rodotasso.github.io/ciecl/reference/cie11_search.md)
+examples replay enriched vcr cassettes, and a new test pins the
+cache-rebuild-on-version-mismatch behaviour using
+[`testthat::local_mocked_bindings()`](https://testthat.r-lib.org/reference/local_mocked_bindings.html).*
+
 ### Poda y endurecimiento de la suite de tests (2026-09-05 / 2026-09-06)
 
 Reestructuración completa de la suite de tests, en el contexto de la

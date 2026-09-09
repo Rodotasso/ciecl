@@ -115,23 +115,107 @@ cie_lookup("E11.0")
 #> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
 #> #   uso_cl <chr>
 
-if (FALSE) { # interactive()
 cie_lookup("E110") # Sin punto
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 cie_lookup("E11") # Solo categoría
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11    Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 cie_lookup("E11", expand = TRUE) # Todos E11.x
+#> # A tibble: 11 × 11
+#>    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion
+#>    <chr>  <chr>            <chr>     <chr>   <chr>           <chr>     <chr>    
+#>  1 E11    Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  2 E11.0  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  3 E11.1  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  4 E11.2  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  5 E11.3  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  6 E11.4  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  7 E11.5  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  8 E11.6  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  9 E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> 10 E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> 11 E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 # Vectorizado - múltiples códigos y formatos
 cie_lookup(c("E11.0", "Z00", "I10"))
+#> # A tibble: 3 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> 2 I10    Hipertensión ese… I10 HIPE… I10-I1… Cap.09  ENFERM… NA        NA       
+#> 3 Z00    Examen general e… Z00 EXAM… Z00-Z1… Cap.21  FACTOR… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 # Con descripción completa
 cie_lookup("E110", full_description = TRUE)
+#> # A tibble: 1 × 12
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 5 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>, descripcion_completa <chr>
 # Extraer código de texto con ruido (solo código escalar)
 cie_lookup("CIE:E11.0", extract = TRUE)
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 cie_lookup("E11.0-confirmado", extract = TRUE)
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 # Buscar por siglas médicas
 cie_lookup("IAM", check_siglas = TRUE)
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 I21    Infarto agudo de… I21 INFA… I20-I2… Cap.09  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 cie_lookup("DM2", check_siglas = TRUE)
+#> # A tibble: 1 × 11
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E10.0  Diabetes mellitu… E10 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 # Filtrar a códigos vigentes de uso clínico Chile (excluye 'legado')
 cie_lookup("E11", expand = TRUE, only_uso_cl = TRUE)
+#> # A tibble: 10 × 11
+#>    codigo descripcion      categoria seccion capitulo_nombre inclusion exclusion
+#>    <chr>  <chr>            <chr>     <chr>   <chr>           <chr>     <chr>    
+#>  1 E11.0  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  2 E11.1  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  3 E11.2  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  4 E11.3  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  5 E11.4  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  6 E11.5  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  7 E11.6  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  8 E11.7  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#>  9 E11.8  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> 10 E11.9  Diabetes mellit… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 4 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>,
+#> #   uso_cl <chr>
 # Omitir columna uso_cl en el output
 cie_lookup("E11.0", include_uso_cl = FALSE)
-}
+#> # A tibble: 1 × 10
+#>   codigo descripcion       categoria seccion capitulo_nombre inclusion exclusion
+#>   <chr>  <chr>             <chr>     <chr>   <chr>           <chr>     <chr>    
+#> 1 E11.0  Diabetes mellitu… E11 DIAB… E08-E1… Cap.04  ENFERM… NA        NA       
+#> # ℹ 3 more variables: capitulo <chr>, es_daga <int>, es_cruz <int>
 ```

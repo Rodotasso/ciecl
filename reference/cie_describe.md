@@ -67,10 +67,9 @@ cie_describe("E110", normalize = FALSE)
 cie_describe("E110", normalize = TRUE)
 #> [1] "Diabetes mellitus tipo 2 con coma"
 
-if (FALSE) { # interactive()
 # Uso típico en auditoría VIU (contar fallos de origen)
 diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 descripciones <- cie_describe(diags, normalize = FALSE)
 sum(is.na(descripciones)) # Detecta 3 errores de registro
-}
+#> [1] 3
 ```

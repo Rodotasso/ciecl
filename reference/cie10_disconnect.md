@@ -47,7 +47,5 @@ Other sql_backend:
 # entorno interno del paquete (.ciecl_env) y no es parte de la API
 # publica, por lo que no hay nada que inspeccionar desde afuera.
 
-if (FALSE) { # interactive()
 cie10_disconnect()
-}
 ```
