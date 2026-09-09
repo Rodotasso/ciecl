@@ -35,7 +35,7 @@ edite el archivo mientras la conexión esté abierta.
 # entorno interno del paquete (.ciecl_env) y no es parte de la API
 # publica, por lo que no hay nada que inspeccionar desde afuera.
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 cie10_disconnect()
 \dontshow{\}) # examplesIf}
 }

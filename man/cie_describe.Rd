@@ -42,7 +42,7 @@ cie_describe("E110", normalize = FALSE)
 # Rescate: normalizar antes de buscar
 cie_describe("E110", normalize = TRUE)
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Uso típico en auditoría VIU (contar fallos de origen)
 diags <- c("E11.0", "E110", "I10X", "INVALIDO")
 descripciones <- cie_describe(diags, normalize = FALSE)

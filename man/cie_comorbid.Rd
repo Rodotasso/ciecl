@@ -27,7 +27,7 @@ Calcular comorbilidades Charlson/Elixhauser para Chile
 # Ver documentacion de parametros
 args(cie_comorbid)
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 df <- data.frame(
   id_pac = c(1, 1, 2, 2),
   diag = c("E11.0", "I21.0", "C50.9", "E10.9")

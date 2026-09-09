@@ -300,7 +300,7 @@ cache_is_current <- function(con) {
 #' # Buscar diabetes
 #' cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11%'")
 #'
-#' @examplesIf interactive()
+#' @examplesIf rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Contar por capitulo
 #' cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
 cie10_sql <- function(query, close = lifecycle::deprecated()) {
@@ -405,7 +405,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 #' # Ver ubicación de la caché
 #' tools::R_user_dir("ciecl", "data")
 #'
-#' @examplesIf interactive()
+#' @examplesIf rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' cie10_clear_cache() # Elimina cie10.db local
 cie10_clear_cache <- function() {
   # Cerrar conexion pooled antes de borrar
@@ -475,7 +475,7 @@ cie10_clear_cache <- function() {
 #' # entorno interno del paquete (.ciecl_env) y no es parte de la API
 #' # publica, por lo que no hay nada que inspeccionar desde afuera.
 #'
-#' @examplesIf interactive()
+#' @examplesIf rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' cie10_disconnect()
 cie10_disconnect <- function() {
   if (!is.null(.ciecl_env$con)) {

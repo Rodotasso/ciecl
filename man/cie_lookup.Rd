@@ -72,7 +72,7 @@ Búsqueda exacta por código CIE-10
 # Búsqueda directa por código
 cie_lookup("E11.0")
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 cie_lookup("E110") # Sin punto
 cie_lookup("E11") # Solo categoría
 cie_lookup("E11", expand = TRUE) # Todos E11.x
