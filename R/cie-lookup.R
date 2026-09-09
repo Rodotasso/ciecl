@@ -73,7 +73,7 @@ extract_cie_from_text <- function(text) {
 #' # Búsqueda directa por código
 #' cie_lookup("E11.0")
 #'
-#' @examplesIf interactive()
+#' @examplesIf rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' cie_lookup("E110") # Sin punto
 #' cie_lookup("E11") # Solo categoría
 #' cie_lookup("E11", expand = TRUE) # Todos E11.x

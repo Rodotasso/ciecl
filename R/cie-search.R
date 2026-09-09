@@ -71,7 +71,7 @@ normalizar_tildes <- function(text) {
 #' # Búsqueda básica
 #' cie_search("diabetes")
 #'
-#' @examplesIf interactive()
+#' @examplesIf rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' cie_search("neumonia")
 #'
 #' # Búsqueda por siglas médicas

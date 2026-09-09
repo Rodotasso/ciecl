@@ -32,7 +32,7 @@ conexión, etc.). Para aprender SQL desde cero puede revisar
 # Buscar diabetes
 cie10_sql("SELECT codigo, descripcion FROM cie10 WHERE codigo LIKE 'E11\%'")
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Contar por capitulo
 cie10_sql("SELECT capitulo, COUNT(*) n FROM cie10 GROUP BY capitulo")
 \dontshow{\}) # examplesIf}

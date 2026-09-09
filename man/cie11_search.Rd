@@ -73,6 +73,21 @@ vcr::eject_cassette()
 if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
 }
 \dontshow{\}) # examplesIf}
+\dontshow{if (requireNamespace("vcr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{
+.key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
+if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
+vcr::insert_example_cassette("cie11_search_cronicos", package = "ciecl",
+                             match_requests_on = c("method", "uri"))
+}
+# Causas frecuentes de egreso en Chile
+cie11_search("diabetes mellitus")
+cie11_search("hipertension esencial")
+\dontshow{
+vcr::eject_cassette()
+if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=cie_search]{cie_search()}}, \code{\link[=cie_lookup]{cie_lookup()}}, \code{\link[=cie_guide]{cie_guide()}}

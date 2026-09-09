@@ -50,6 +50,21 @@
 #' vcr::eject_cassette()
 #' if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
 #' }
+#'
+#' @examplesIf requireNamespace("vcr", quietly = TRUE)
+#' \dontshow{
+#' .key_prev <- Sys.getenv("ICD_API_KEY", unset = NA)
+#' if (is.na(.key_prev)) Sys.setenv(ICD_API_KEY = "client_id:client_secret")
+#' vcr::insert_example_cassette("cie11_search_cronicos", package = "ciecl",
+#'                              match_requests_on = c("method", "uri"))
+#' }
+#' # Causas frecuentes de egreso en Chile
+#' cie11_search("diabetes mellitus")
+#' cie11_search("hipertension esencial")
+#' \dontshow{
+#' vcr::eject_cassette()
+#' if (is.na(.key_prev)) Sys.unsetenv("ICD_API_KEY")
+#' }
 cie11_search <- function(text, api_key = get_icd_api_key(),
                          lang = c("es", "en"),
                          max_results = 10, release = "2024-01",

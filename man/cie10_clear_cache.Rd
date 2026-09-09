@@ -30,7 +30,7 @@ la caché.
 # Ver ubicación de la caché
 tools::R_user_dir("ciecl", "data")
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 cie10_clear_cache() # Elimina cie10.db local
 \dontshow{\}) # examplesIf}
 }

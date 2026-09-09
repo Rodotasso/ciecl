@@ -73,7 +73,7 @@ Soporta siglas médicas comunes: "IAM" busca "infarto agudo miocardio".
 # Búsqueda básica
 cie_search("diabetes")
 
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 cie_search("neumonia")
 
 # Búsqueda por siglas médicas

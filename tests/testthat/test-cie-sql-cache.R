@@ -346,6 +346,43 @@ test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
   expect_equal(v, as.character(utils::packageVersion("ciecl")))
 })
 
+# --- version-mismatch via local_mocked_bindings ---------------------------
+# Complemento del test con sentinela anterior: en vez de modificar la
+# metadata del .db a mano, simula que el paquete se actualizo DESPUES de
+# construir el cache (mockeando utils::packageVersion, sugerencia de
+# Maelle en rOpenSci #765), y verifica que cache_is_current() detecta el
+# desfase y get_cie10_db() dispara el rebuild.
+
+test_that("get_cie10_db reconstruye cuando packageVersion difiere (mock)", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  con1 <- get_cie10_db()
+  DBI::dbExecute(con1, "CREATE TABLE sentinel_table (x INTEGER)")
+  cie10_disconnect()
+
+  # Simular actualizacion del paquete: packageVersion("ciecl") reporta
+  # una version distinta de la registrada en cie10_meta
+  local_mocked_bindings(
+    packageVersion = function(pkg, ...) package_version("999.0.0"),
+    .package = "utils"
+  )
+
+  con2 <- get_cie10_db()
+  # El rebuild parte de un .db nuevo: la sentinela desaparece
+  expect_false(DBI::dbExistsTable(con2, "sentinel_table"))
+  # La metadata registra la version "nueva" (mockeada) del paquete
+  v <- DBI::dbGetQuery(
+    con2,
+    "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
+  )$value[1]
+  expect_equal(v, "999.0.0")
+})
+
 # --- get_cie10_db: failsafes sobre conexion pooled y fresh ------------------
 # Movidos desde test-cie-sql.R en fase 6D y reescritos con aislamiento
 # (CIECL_CACHE_DIR + local_tempdir): los originales operaban sobre el
