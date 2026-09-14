@@ -294,34 +294,6 @@ test_that("get_cie10_db no reconstruye cuando la version coincide", {
   expect_equal(DBI::dbGetQuery(con2, "SELECT x FROM sentinel_table")$x, 42L)
 })
 
-test_that("get_cie10_db reconstruye cuando la version guardada difiere", {
-  skip_on_cran()
-
-  cache_dir <- withr::local_tempdir()
-  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
-  cie10_disconnect()
-  withr::defer(cie10_disconnect())
-
-  con1 <- get_cie10_db()
-  DBI::dbExecute(con1, "CREATE TABLE sentinel_table (x INTEGER)")
-  # Simular un cache construido por una versión anterior del paquete
-  DBI::dbExecute(
-    con1,
-    "UPDATE cie10_meta SET value = '0.0.0' WHERE key = 'cache_version'"
-  )
-  cie10_disconnect()
-
-  con2 <- get_cie10_db()
-  # El rebuild parte de un .db nuevo: la sentinela desaparece
-  expect_false(DBI::dbExistsTable(con2, "sentinel_table"))
-  # Y la metadata vuelve a registrar la versión actual del paquete
-  v <- DBI::dbGetQuery(
-    con2,
-    "SELECT value FROM cie10_meta WHERE key = 'cache_version'"
-  )$value[1]
-  expect_equal(v, as.character(utils::packageVersion("ciecl")))
-})
-
 test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
   skip_on_cran()
 
@@ -347,11 +319,10 @@ test_that("get_cie10_db reconstruye cuando falta la tabla cie10_meta", {
 })
 
 # --- version-mismatch via local_mocked_bindings ---------------------------
-# Complemento del test con sentinela anterior: en vez de modificar la
-# metadata del .db a mano, simula que el paquete se actualizo DESPUES de
-# construir el cache (mockeando utils::packageVersion, sugerencia de
-# Maelle en rOpenSci #765), y verifica que cache_is_current() detecta el
-# desfase y get_cie10_db() dispara el rebuild.
+# Simula que el paquete se actualizo DESPUES de construir el cache
+# (mockeando utils::packageVersion, sugerencia de Maelle en rOpenSci
+# #765), y verifica que cache_is_current() detecta el desfase y
+# get_cie10_db() dispara el rebuild.
 
 test_that("get_cie10_db reconstruye cuando packageVersion difiere (mock)", {
   skip_on_cran()
