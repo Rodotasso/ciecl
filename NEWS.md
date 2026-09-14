@@ -2,6 +2,47 @@
 
 *English summary below*
 
+## Correcciones de robustez — auditoría interna (2026-09-13)
+
+Primera tanda (Fase A) de la auditoría interna de `R/`. Sin cambios en la
+API pública; un cambio de comportamiento acotado: `cie_expand(NA)` ahora
+aborta con error claro en lugar de retornar `character(0)` silenciosamente.
+
+* **Bug fix — rangos en `cie_lookup()`**: un rango como `"E10-E14"`
+  excluía silenciosamente las subcategorías del límite superior
+  (`E14.0`–`E14.9`), porque `BETWEEN` con collation BINARY compara
+  lexicográficamente (`'E14.9' > 'E14'`). La consulta ahora cubre el
+  prefijo del límite superior, por lo que el rango incluye todas las
+  subcategorías.
+* **Validaciones endurecidas** (errores claros con clase
+  `ciecl_invalid_input` en lugar de errores base de R): `cie_lookup()`
+  aborta si `extract = TRUE` recibe más de un código (el contrato
+  documentado es escalar); `cie_expand()` valida que `code` sea un string
+  escalar; `cie_search()` valida tipo y ausencia de `NA` en `threshold` y
+  `max_results`; `cie11_search()` valida `NA` en `max_results`.
+* **`cie_search()` — esquema de salida estable**: la columna `uso_cl`
+  ahora está presente en todos los caminos internos (FTS y fallbacks), y
+  `only_uso_cl = TRUE` filtra los códigos legado **antes** de aplicar el
+  límite `max_results` (antes podían consumir cupo del límite y truncar
+  resultados vigentes).
+* **`cie_lookup()` vectorial**: los códigos con caracteres inválidos o no
+  encontrados se informan en un mensaje agregado (como ya hacía el modo
+  escalar), en lugar de descartarse en silencio.
+* **`cie_guide()`**: la tabla de orientación recomendaba el argumento
+  deprecado `expandir = TRUE`; ahora indica el vigente `expand = TRUE`.
+
+*Bug fix: code ranges in `cie_lookup()` (e.g. `"E10-E14"`) now include the
+upper bound's subcategories (`E14.x`), previously dropped silently by the
+lexicographic `BETWEEN`. Input validation hardened (`extract = TRUE`
+scalar-only, scalar `cie_expand()` — with `NA` now aborting instead of
+silently returning `character(0)` —, typed `threshold`/`max_results` with
+explicit `NA` guards in `cie_search()` and `cie11_search()`).
+`cie_search()` output schema is now stable (`uso_cl` present on every
+internal path) and `only_uso_cl = TRUE` filters legacy codes before the
+`max_results` cap. Vector-mode `cie_lookup()` reports invalid/not-found
+codes in a single aggregate message, and `cie_guide()` now points to the
+current `expand` argument instead of the deprecated `expandir`.*
+
 ## Respuesta a comentarios rOpenSci #765 (2026-09-08)
 
 Cambios derivados del comentario de Maëlle del 2026-09-07. Sin cambios en

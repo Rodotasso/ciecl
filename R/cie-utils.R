@@ -290,9 +290,17 @@ cie_expand <- function(code, codigo = lifecycle::deprecated()) {
 
   check_required_es(missing(code), "code")
 
-  # Manejar NA o cadena vacia
-  if (length(code) == 0 || is.na(code) ||
-      nchar(stringr::str_trim(code)) == 0) {
+  # Validación escalar: el contrato documentado es un único código padre.
+  # Sin esta guarda, el || sobre un vector sería error duro (R >= 4.3).
+  if (!rlang::is_string(code)) {
+    cli::cli_abort(
+      "{.arg code} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {code}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+
+  # Manejar cadena vacía
+  if (nchar(stringr::str_trim(code)) == 0) {
     return(character(0))
   }
 

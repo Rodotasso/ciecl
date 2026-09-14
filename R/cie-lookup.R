@@ -151,6 +151,15 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
   # Fix #1: Normalizar espacios en codigos
   codigo_input <- gsub("\\s+", "", codigo_input)
 
+  # extract = TRUE solo opera en modo escalar (contrato de @param extract);
+  # sin esta guarda, el && interno sobre un vector sería error duro (R >= 4.3)
+  if (extract && length(codigo_input) != 1L) {
+    cli::cli_abort(
+      "{.arg code} debe ser un solo c\u00f3digo (longitud 1) cuando {.code extract = TRUE}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+
   # Extraer codigo de texto con ruido (prefijos/sufijos)
   if (extract) {
     codigo_input <- extract_cie_from_text(codigo_input)
@@ -206,6 +215,21 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
         )
       ]
 
+      # Informar en un solo mensaje los códigos descartados por caracteres
+      # inválidos (equivalente vectorial del informe del modo escalar)
+      invalidos <- codigos_normales[
+        !stringr::str_detect(codigos_normales, "^[A-Za-z0-9.]+$")
+      ]
+      if (length(invalidos) > 0) {
+        invalidos_vec <- cli::cli_vec(
+          invalidos,
+          style = list("vec-last" = " y ")
+        )
+        cli::cli_inform(c(
+          "x" = "C\u00f3digos con caracteres inv\u00e1lidos: {.val {invalidos_vec}}"
+        ))
+      }
+
       if (length(codigos_safe) > 0) {
         con <- get_cie10_db()
 
@@ -237,6 +261,29 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
             con, query,
             params = as.list(codigos_safe)
           ) |> tibble::as_tibble()
+        }
+
+        # Informar en un solo mensaje los códigos no encontrados en la base
+        if (expandir) {
+          # En modo expansión un código se considera encontrado si algún
+          # código del resultado tiene ese prefijo
+          encontrados <- vapply(
+            codigos_safe,
+            function(cod) any(startsWith(resultado$codigo, cod)),
+            logical(1)
+          )
+        } else {
+          encontrados <- codigos_safe %in% resultado$codigo
+        }
+        no_encontrados <- codigos_safe[!encontrados]
+        if (length(no_encontrados) > 0) {
+          no_encontrados_vec <- cli::cli_vec(
+            no_encontrados,
+            style = list("vec-last" = " y ")
+          )
+          cli::cli_inform(c(
+            "x" = "C\u00f3digos no encontrados: {.val {no_encontrados_vec}}"
+          ))
         }
       }
     }
@@ -341,8 +388,19 @@ cie_lookup_single <- function(codigo_norm, expandir = FALSE) {
       fin <- temp
     }
 
-    query <- "SELECT * FROM cie10 WHERE codigo BETWEEN ? AND ? ORDER BY codigo"
-    resultado <- DBI::dbGetQuery(con, query, params = list(inicio, fin))
+    # Incluir las subcategorías del límite superior del rango:
+    # 'E14.9' BETWEEN 'E10' AND 'E14' es falso con collation BINARY
+    # (comparación lexicográfica), así que se agrega un LIKE sobre el
+    # prefijo del límite superior para cubrir 'E14.x'
+    query <- paste(
+      "SELECT * FROM cie10",
+      "WHERE codigo BETWEEN ? AND ? OR codigo LIKE ?",
+      "ORDER BY codigo"
+    )
+    resultado <- DBI::dbGetQuery(
+      con, query,
+      params = list(inicio, fin, paste0(fin, ".%"))
+    )
   } else {
     # Exacto
     query <- "SELECT * FROM cie10 WHERE codigo = ?"

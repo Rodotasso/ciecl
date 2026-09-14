@@ -320,12 +320,13 @@ test_that("cie_expand maneja codigo vacio", {
 })
 
 test_that("cie_expand maneja NA", {
-  skip_on_cran()
-
-  suppressMessages({
-    resultado <- cie_expand(NA_character_)
-  })
-  expect_length(resultado, 0)
+  # Contrato endurecido (Fase A, auditoria 2026-09-13): input NA aborta
+  # con clase propia en lugar de retornar character(0) en silencio;
+  # corre sin skip (validacion previa a la DB, canario CRAN)
+  expect_error(
+    cie_expand(NA_character_),
+    class = "ciecl_invalid_input"
+  )
 })
 
 test_that("cie_expand maneja codigo inexistente", {

@@ -84,3 +84,13 @@ test_that("cie_norm preserva casos especiales", {
   expect_equal(cie_norm("G01*", search_db = FALSE), "G01")
 })
 
+
+test_that("cie_expand aborta con input no escalar", {
+  # Regresion: el || sobre un vector era error duro en R >= 4.3;
+  # validacion previa a la DB: corre sin skip (canario CRAN).
+  # El caso NA se cubre en test-edge-cases.R ("cie_expand maneja NA")
+  expect_error(
+    cie_expand(c("E11", "I10")),
+    class = "ciecl_invalid_input"
+  )
+})

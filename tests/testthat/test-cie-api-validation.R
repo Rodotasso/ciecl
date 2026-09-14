@@ -58,6 +58,14 @@ test_that("cie11_search aborta con max_results invalido", {
     cie11_search(text = "diabetes", max_results = c(1, 2), api_key = "fake"),
     class = "ciecl_invalid_input"
   )
+  expect_error(
+    cie11_search(text = "diabetes", max_results = NA, api_key = "fake"),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie11_search(text = "diabetes", max_results = NA_real_, api_key = "fake"),
+    class = "ciecl_invalid_input"
+  )
 })
 
 test_that("cie11_search aborta con release fuera de formato YYYY-MM", {

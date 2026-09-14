@@ -94,7 +94,7 @@ cie11_search <- function(text, api_key = get_icd_api_key(),
   }
   # Variables explicativas para la condición compuesta (legibilidad)
   is_numeric_scalar <- is.numeric(max_results) && length(max_results) == 1
-  is_positive_integer <- is_numeric_scalar &&
+  is_positive_integer <- is_numeric_scalar && !is.na(max_results) &&
     max_results >= 1 && max_results == as.integer(max_results)
   if (!is_positive_integer) {
     cli::cli_abort("{.arg max_results} debe ser un entero positivo.", class = "ciecl_invalid_input")

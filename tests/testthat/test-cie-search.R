@@ -162,3 +162,101 @@ test_that("cie_search sin text da error en espanol", {
   expect_error(cie_search(), class = "ciecl_invalid_input")
   expect_error(cie_search(), "es obligatorio")
 })
+
+# ============================================================
+# REGRESIONES FASE A (auditoria 2026-09-13)
+# ============================================================
+
+test_that("cie_lookup con rango incluye subcategorias del limite superior", {
+  skip_on_cran()
+
+  # Regresion: 'E14.9' BETWEEN 'E10' AND 'E14' es falso con collation
+  # BINARY de SQLite; el rango debe cubrir las subcategorias del limite
+  resultado <- cie_lookup("E10-E14")
+
+  expect_true("E14.0" %in% resultado$codigo)
+  expect_true("E14.9" %in% resultado$codigo)
+})
+
+test_that("cie_lookup aborta si extract = TRUE con input vectorial", {
+  # Validacion previa a la DB: corre sin skip (canario CRAN)
+  expect_error(
+    cie_lookup(c("CIE:E11.0", "CIE:I10"), extract = TRUE),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie_lookup vectorial informa codigos invalidos y no encontrados", {
+  skip_on_cran()
+
+  # Un solo mensaje agregado por tipo, no uno por codigo
+  expect_message(
+    cie_lookup(c("E11.0", "BAD!")),
+    "inv.lidos"
+  )
+  expect_message(
+    cie_lookup(c("E11.0", "B99.9")),
+    "no encontrados"
+  )
+})
+
+test_that("cie_search aborta con threshold o max_results NA o no numericos", {
+  # Validacion previa a la DB: corre sin skip (canario CRAN)
+  expect_error(
+    cie_search("diabetes", threshold = NA),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_search("diabetes", threshold = "0.5"),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_search("diabetes", max_results = NA),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_search("diabetes", max_results = "10"),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_search("diabetes", max_results = c(1, 2)),
+    class = "ciecl_invalid_input"
+  )
+})
+
+test_that("cie_search incluye uso_cl en todos los caminos internos", {
+  skip_on_cran()
+
+  # Camino FTS (control)
+  res_fts <- cie_search("diabetes", include_uso_cl = TRUE, verbose = FALSE)
+  expect_true("uso_cl" %in% names(res_fts))
+
+  # Camino fallback "sin palabras validas" (todas < 2 caracteres)
+  res_sin_palabras <- cie_search("a e", include_uso_cl = TRUE, verbose = FALSE)
+  expect_true("uso_cl" %in% names(res_sin_palabras))
+
+  # Camino fallback "FTS5 sin resultados" (typo que no matchea el indice)
+  res_sin_fts <- cie_search("diabetis", include_uso_cl = TRUE, verbose = FALSE)
+  expect_true("uso_cl" %in% names(res_sin_fts))
+
+  # Caso borde: resultado vacio tambien omite la columna si include_uso_cl = FALSE
+  res_vacio <- cie_search("zzzzzz", include_uso_cl = FALSE, verbose = FALSE)
+  expect_false("uso_cl" %in% names(res_vacio))
+})
+
+test_that("cie_search aplica only_uso_cl antes del limite max_results", {
+  skip_on_cran()
+
+  # Regresion: los codigos legado no deben consumir cupo del limite.
+  # "hipertension" tiene 20 coincidencias exactas, 3 de ellas legado
+  # (verificado contra la base MINSAL vigente): con el orden antiguo
+  # (slice_head y luego filtrar) max_results = 10 devolvia 9 filas
+  res <- cie_search(
+    "hipertension",
+    include_uso_cl = TRUE, only_uso_cl = TRUE,
+    max_results = 10, verbose = FALSE
+  )
+
+  expect_equal(nrow(res), 10)
+  expect_false(any(res$uso_cl == "legado"))
+})
