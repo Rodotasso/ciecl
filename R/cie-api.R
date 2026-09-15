@@ -29,7 +29,7 @@
 #' @seealso [cie_search()], [cie_lookup()], [cie_guide()]
 #' @export
 #' @importFrom tibble as_tibble
-#' @importFrom dplyr slice_head select matches
+#' @importFrom dplyr slice_head
 #' @examples
 #' # Ver parámetros disponibles
 #' args(cie11_search)

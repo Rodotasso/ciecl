@@ -316,6 +316,22 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
   # ESTRATEGIA 3: Fuzzy matching con Jaro-Winkler (para typos)
   # Calcular similitud de cada palabra del texto con palabras de la descripcion
+
+  # Sin candidatos para fuzzy (todas las palabras tienen < 3 chars, p. ej.
+  # un texto de solo simbolos como "!!"): iterar daria mean(numeric(0)) ->
+  # NaN en los scores. Early return con tibble vacio y el esquema estable.
+  if (length(palabras_fuzzy) == 0) {
+    resultado <- base[0, ] |>
+      dplyr::mutate(score = numeric(0)) |>
+      dplyr::select(codigo, descripcion, score, dplyr::everything())
+
+    if (verbose) {
+      cli::cli_inform(c("x" = "Sin coincidencias >= threshold {.val {threshold}}"))
+    }
+
+    return(apply_uso_cl_flags(resultado))
+  }
+
   scores_fuzzy <- vapply(seq_along(base_texto_sin_tildes), function(i) {
     texto_base <- base_texto_sin_tildes[i]
     palabras_base <- unlist(stringr::str_split(texto_base, "\\s+"))

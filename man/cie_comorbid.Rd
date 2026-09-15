@@ -18,7 +18,7 @@ cie_comorbid(data, id, code, map = c("charlson", "elixhauser"), assign0 = TRUE)
 \item{assign0}{Logical, asignar 0 si sin comorbilidad (default TRUE)}
 }
 \value{
-data.frame ancho con scores comorbilidad por paciente
+tibble ancho con scores comorbilidad por paciente
 }
 \description{
 Calcular comorbilidades Charlson/Elixhauser para Chile

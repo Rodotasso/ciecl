@@ -31,6 +31,34 @@ aborta con error claro en lugar de retornar `character(0)` silenciosamente.
 * **`cie_guide()`**: la tabla de orientación recomendaba el argumento
   deprecado `expandir = TRUE`; ahora indica el vigente `expand = TRUE`.
 
+Segunda tanda (Fase B) de la misma auditoría: ítems menores de bajo
+riesgo. Sin cambios en la API pública.
+
+* **Hardening de `cie10_sql()`**: el escaneo de palabras clave bloqueadas
+  ahora se aplica sobre la consulta ya limpia de literales de texto y
+  comentarios, eliminando falsos positivos en `SELECT` legítimas (p. ej.
+  `LIKE '%drop%'`); las protecciones vigentes no cambian.
+* **`CIECL_CACHE_DIR=""`**: una variable de entorno definida pero vacía
+  ahora se trata como no definida (fallback a `tools::R_user_dir()`);
+  antes derivaba en escribir la caché en el directorio de trabajo.
+* **`cie_norm()`**: `"E11.X"` (convención "no especificada") ya no queda
+  como `"E11."` malformado; al remover la `X` final se remueve también el
+  punto previo si lo hay.
+* **Caché SQLite**: la construcción y eliminación de la caché ahora
+  chequean el retorno de `file.rename()`/`file.remove()` y advierten con
+  un mensaje informativo si el sistema operativo rechaza la operación
+  (típico lock de archivo en Windows), en lugar de continuar en silencio.
+* **`cie_comorbid()`**: la documentación del valor de retorno ahora indica
+  correctamente `tibble` (antes decía `data.frame`), y `data`, `id` y
+  `code` se validan al inicio con errores tipados `ciecl_invalid_input`.
+* **`cie_search()` con texto de solo símbolos** (p. ej. `"!!"`): el camino
+  sin candidatos para la búsqueda difusa ahora retorna de inmediato un
+  tibble vacío con el esquema correcto; antes calculaba
+  `mean(numeric(0))` y propagaba un `NaN` silencioso en los scores.
+* **Limpieza interna**: eliminados `@importFrom` sin uso real
+  (`pull`, `rowwise`, `tribble`, `matches`, `select`); `NAMESPACE`
+  regenerado.
+
 *Bug fix: code ranges in `cie_lookup()` (e.g. `"E10-E14"`) now include the
 upper bound's subcategories (`E14.x`), previously dropped silently by the
 lexicographic `BETWEEN`. Input validation hardened (`extract = TRUE`
@@ -42,6 +70,17 @@ internal path) and `only_uso_cl = TRUE` filters legacy codes before the
 `max_results` cap. Vector-mode `cie_lookup()` reports invalid/not-found
 codes in a single aggregate message, and `cie_guide()` now points to the
 current `expand` argument instead of the deprecated `expandir`.*
+
+*Phase B (same audit, low-risk items): `cie10_sql()` keyword scanning now
+ignores string literals and comments (no more false positives on
+legitimate `SELECT`s, same protections); an empty `CIECL_CACHE_DIR` falls
+back to `tools::R_user_dir()` instead of writing to the working directory;
+`cie_norm("E11.X")` no longer leaves a dangling dot; cache build/clear now
+warn if `file.rename()`/`file.remove()` fail; `cie_comorbid()` docs
+correctly state the tibble return and `data`/`id`/`code` are validated up
+front; `cie_search()` with a symbols-only text returns an empty tibble
+with the correct schema instead of a silent `NaN`; unused `@importFrom`
+entries removed.*
 
 ## Respuesta a comentarios rOpenSci #765 (2026-09-08)
 

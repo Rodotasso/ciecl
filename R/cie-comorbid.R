@@ -1,6 +1,6 @@
-#' @importFrom dplyr filter pull rowwise
+#' @importFrom dplyr filter
 #' @importFrom stringr str_detect
-#' @importFrom tibble tibble as_tibble tribble
+#' @importFrom tibble tibble as_tibble
 NULL
 
 #' Calcular comorbilidades Charlson/Elixhauser para Chile
@@ -10,7 +10,7 @@ NULL
 #' @param code String nombre columna con codigos CIE-10 (uno por fila)
 #' @param map Character, esquema comorbilidad ("charlson" o "elixhauser")
 #' @param assign0 Logical, asignar 0 si sin comorbilidad (default TRUE)
-#' @returns data.frame ancho con scores comorbilidad por paciente
+#' @returns tibble ancho con scores comorbilidad por paciente
 #' @family comorbidities
 #' @seealso [cie_map_comorbid()], [cie_norm()]
 #' @export
@@ -29,6 +29,27 @@ cie_comorbid <- function(data, id, code, map = c("charlson", "elixhauser"),
   rlang::check_required(data)
   rlang::check_required(id)
   rlang::check_required(code)
+
+  # Validacion de inputs al inicio (patron del paquete: error tipado
+  # en lugar del error base de R con vectores de largo > 1)
+  if (!is.data.frame(data)) {
+    cli::cli_abort(
+      "{.arg data} debe ser un data.frame, no {.obj_type_friendly {data}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+  if (!rlang::is_string(id)) {
+    cli::cli_abort(
+      "{.arg id} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {id}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+  if (!rlang::is_string(code)) {
+    cli::cli_abort(
+      "{.arg code} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {code}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
 
   # Verificar que comorbidity este instalado
   rlang::check_installed("comorbidity", reason = "para calcular scores de comorbilidad (Charlson/Elixhauser).")

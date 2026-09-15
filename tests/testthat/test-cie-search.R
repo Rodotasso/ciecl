@@ -260,3 +260,17 @@ test_that("cie_search aplica only_uso_cl antes del limite max_results", {
   expect_equal(nrow(res), 10)
   expect_false(any(res$uso_cl == "legado"))
 })
+
+test_that("cie_search con texto de solo simbolos devuelve vacio sin warning", {
+  skip_on_cran()
+
+  # Regresion: "!!" no deja palabras candidatas para fuzzy; el camino
+  # antiguo calculaba mean(numeric(0)) -> NaN silencioso en los scores
+  expect_no_warning(res <- cie_search("!!", verbose = FALSE))
+  expect_s3_class(res, "tbl_df")
+  expect_equal(nrow(res), 0)
+  expect_named(res, c("codigo", "descripcion", "score", "categoria"))
+
+  # Con verbose se informa la ausencia de coincidencias
+  expect_message(cie_search("!!", verbose = TRUE), "Sin coincidencias")
+})

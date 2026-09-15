@@ -2,6 +2,29 @@
 # PRUEBAS cie_comorbid()
 # ============================================================
 
+test_that("cie_comorbid valida data, id y code al inicio", {
+  # Canario CRAN: la validacion precede a check_installed("comorbidity"),
+  # por lo que no requiere el paquete opcional
+  df <- data.frame(id = 1, diag = "E11.0")
+
+  expect_error(
+    cie_comorbid(df, id = c("id", "diag"), code = "diag"),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_comorbid(df, id = "id", code = NA_character_),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_comorbid(df, id = 1, code = "diag"),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_comorbid("no_es_df", id = "id", code = "diag"),
+    class = "ciecl_invalid_input"
+  )
+})
+
 # ------------------------------------------------------------------------------
 # Pruebas basicas de Charlson
 # ------------------------------------------------------------------------------
