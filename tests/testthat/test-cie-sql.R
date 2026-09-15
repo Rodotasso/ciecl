@@ -477,3 +477,15 @@ test_that("cie10_sql valida tipos de query invalidos", {
   expect_error(ciecl::cie10_sql(NA_character_), class = "ciecl_invalid_input")
   expect_error(ciecl::cie10_sql(), class = "ciecl_invalid_input")
 })
+
+test_that("cie10_sql acepta SELECT que comienza con comentario (F13)", {
+  res <- cie10_sql("-- conteo\nSELECT COUNT(*) AS n FROM cie10")
+  expect_equal(nrow(res), 1)
+  expect_true(res$n > 0)
+
+  res_bloque <- cie10_sql("/* conteo */\nSELECT COUNT(*) AS n FROM cie10")
+  expect_equal(nrow(res_bloque), 1)
+
+  # Query que es solo comentario sigue abortando
+  expect_error(cie10_sql("-- solo comentario"), class = "ciecl_unsafe_query")
+})

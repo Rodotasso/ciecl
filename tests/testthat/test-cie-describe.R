@@ -132,3 +132,10 @@ test_that("cie_describe rescata diagnostico ambiguo en flujo de auditoria", {
   expect_equal(sum(is.na(rescate)), 1)
   expect_true(is.na(rescate[4]))
 })
+
+test_that("cie_describe valida default (F14)", {
+  expect_error(cie_describe("E11.0", default = c("a", "b")), class = "ciecl_invalid_input")
+  expect_error(cie_describe("E11.0", default = 5), class = "ciecl_invalid_input")
+  # default valido sigue funcionando
+  expect_equal(cie_describe("INVALIDO", default = "sin datos"), "sin datos")
+})

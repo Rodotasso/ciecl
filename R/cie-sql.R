@@ -331,24 +331,26 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     )
   }
 
-  # Normalizar query: eliminar espacios y saltos de linea al inicio
+  # Normalizar query: eliminar espacios y saltos de línea al inicio
   query_norm <- stringr::str_trim(query)
 
-  # Validacion de seguridad: solo SELECT permitido
-  if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
-    cli::cli_abort("Solo consultas {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
-  }
-
-  # Remover strings, comentarios de linea (--) y comentarios de bloque
-  # (/* */) ANTES de escanear: el blocklist y el chequeo de ";" deben
-  # operar sobre el SQL ejecutable, no sobre literales legitimos
-  # (ej. LIKE '%drop%') ni comentarios
+  # Remover strings, comentarios de línea (--) y comentarios de bloque
+  # (/* */) ANTES de validar y escanear: el chequeo de SELECT, el
+  # blocklist y el chequeo de ";" deben operar sobre el SQL ejecutable,
+  # no sobre literales legítimos (ej. LIKE '%drop%') ni comentarios
   query_sin_strings <- query_norm
   query_sin_strings <- stringr::str_remove_all(query_sin_strings, "'[^']*'")
   query_sin_strings <- stringr::str_remove_all(query_sin_strings, "--[^\n]*")
   query_sin_strings <- stringr::str_remove_all(
     query_sin_strings, "(?s)/\\*.*?\\*/"
   )
+  query_sin_strings <- stringr::str_trim(query_sin_strings)
+
+  # Validación de seguridad: solo SELECT permitido (tras el strip, así
+  # una query que comienza con comentario sigue siendo válida)
+  if (!stringr::str_detect(query_sin_strings, "(?i)^SELECT")) {
+    cli::cli_abort("Solo consultas {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
+  }
 
   # Bloquear keywords peligrosos (case-insensitive) sobre el SQL ya
   # limpio de literales y comentarios

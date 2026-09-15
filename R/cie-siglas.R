@@ -3,9 +3,9 @@
 #' @importFrom dplyr filter
 NULL
 
-#' Diccionario de siglas medicas comunes en Chile
+#' Diccionario de siglas médicas comunes en Chile
 #'
-#' @returns Named list con siglas como keys y terminos de busqueda como values
+#' @returns Named list con siglas como nombres y términos de búsqueda como valores
 #' @keywords internal
 #' @noRd
 get_siglas_medicas <- function() {

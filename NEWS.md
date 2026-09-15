@@ -2,6 +2,30 @@
 
 *English summary below*
 
+## Correcciones menores — nits de auditoría (2026-09-15)
+
+Sin cambios en la API pública; un cambio de comportamiento acotado:
+`cie_table()` ahora requiere un único código; pasar un vector de largo
+>1 (uso nunca documentado) aborta con error claro en lugar del error
+de `gt`.
+
+* **Bug fix — `cie10_sql()`**: una consulta `SELECT` legítima que
+  comenzaba con un comentario (`--` o `/* */`) abortaba como "no
+  SELECT"; la validación ahora corre después de remover comentarios y
+  strings.
+* **Validaciones endurecidas** (clase `ciecl_invalid_input`):
+  `cie_table()` valida que `code` sea un string de longitud 1;
+  `cie_describe()` valida que `default` sea character escalar o `NA`.
+
+*Bug fix: `cie10_sql()` no longer rejects a legitimate `SELECT` that
+starts with a comment (`--` or `/* */`); the check now runs after
+stripping comments and string literals. Input validation hardened
+(class `ciecl_invalid_input`): `cie_table()` requires `code` to be a
+length-1 string (a behavior change: a length >1 vector, never a
+documented use, now aborts with a clear error instead of the `gt`
+error) and `cie_describe()` requires `default` to be a scalar
+character or `NA`.*
+
 ## Correcciones de robustez — auditoría interna (2026-09-13)
 
 Primera tanda (Fase A) de la auditoría interna de `R/`. Sin cambios en la

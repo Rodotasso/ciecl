@@ -8,7 +8,8 @@
 #' de 3 dígitos). Para evitar confusión visual, los `NA` se reemplazan
 #' por un guion largo (em dash).
 #'
-#' @param code String código (ej. `"E11"` muestra la jerarquía).
+#' @param code String código de longitud 1, un solo código
+#'   (ej. `"E11"` muestra la jerarquía).
 #' @param codigo `r lifecycle::badge("deprecated")` Use `code`.
 #' @returns Objeto de clase `gt_tbl` (tabla HTML interactiva).
 #' @family visualization
@@ -28,6 +29,13 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
   }
 
   check_required_es(missing(code), "code")
+
+  if (!is.character(code) || length(code) != 1L) {
+    cli::cli_abort(
+      "{.arg code} debe ser un string character de longitud 1, no {.obj_type_friendly {code}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
 
   rlang::check_installed("gt", reason = "para generar la tabla HTML.")
 
