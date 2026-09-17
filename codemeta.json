@@ -286,7 +286,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "1443.687KB",
+  "fileSize": "1468.864KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -305,7 +305,6 @@
       "description": "R package version 0.9.8. Grupo de Ciencia de Datos para Salud Publica, Escuela de Salud Publica, U. de Chile. Datos: MINSAL/DEIS v2018"
     }
   ],
-  "dateModified": "2026-09-16",
   "releaseNotes": "https://github.com/Rodotasso/ciecl/blob/main/NEWS.md",
   "readme": "https://github.com/Rodotasso/ciecl/blob/main/README.md",
   "contIntegration": ["https://github.com/Rodotasso/ciecl/actions/workflows/R-CMD-check.yaml", "https://github.com/Rodotasso/ciecl/actions/workflows/test-coverage.yaml"],
