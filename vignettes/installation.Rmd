@@ -52,7 +52,6 @@ packages. These are the suggested dependencies by task:
 | Charlson/Elixhauser comorbidity indices with `cie_comorbid()` | `comorbidity` | `install.packages("comorbidity")` |
 | Formatted HTML tables with `cie_table()` | `gt` | `install.packages("gt")` |
 | Read MINSAL Excel files | `readxl` | `install.packages("readxl")` |
-| Export results to Excel | `writexl` | `install.packages("writexl")` |
 
 ## System requirements
 

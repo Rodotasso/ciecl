@@ -1,6 +1,62 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-09-16)
 
 *English summary below*
+
+## Correcciones menores — nits de auditoría (2026-09-16)
+
+Sin cambios en la API pública; dos cambios de comportamiento acotados:
+`cie_short()` ahora valida `category` y `cie_table(NA)` aborta como
+input inválido en lugar de reportar "código no encontrado: NA".
+
+* **Validaciones endurecidas** (clase `ciecl_invalid_input`):
+  `cie_short()` valida que `category` sea NULL o un string escalar no-NA
+  (antes un vector o numérico derivaba en un error duro no tipado);
+  `cie_table()` rechaza `code = NA` como input inválido (antes caía en
+  "Código no encontrado: NA").
+* **Orden determinista en `cie_lookup()`**: el modo vector exacto
+  (`IN (...)`) ahora incluye `ORDER BY codigo`, igual que los demás
+  caminos de la función.
+* **Documentación interna corregida**: el `@returns` de
+  `sigla_to_codigo()` refleja que retorna el primer código (string de
+  longitud 1) o NULL.
+* **Limpieza de metadatos**: se completa la eliminación del
+  `@importFrom dplyr select` sin uso real (los usos en `R/` ya eran
+  calificados `dplyr::select()`); `writexl` sale de `Suggests` (sin uso
+  ejecutable en el paquete) y de las tablas de instalación de las
+  viñetas; se verificó que `Config/roxygen2/version` en DESCRIPTION es
+  el mecanismo estándar del roxygen2 vigente (reemplaza a
+  `RoxygenNote`; `document()` la re-escribe automáticamente) y se
+  mantiene con el valor correcto; `codemeta.json` registra
+  `dateModified`.
+* **README y viñetas bilingües**: los chunks de instalación y
+  comorbilidad del README ahora respetan la condicional de idioma
+  (el README en inglés ya no muestra comentarios en español); el
+  encabezado final de la viñeta en inglés se alinea al registro de la
+  española ("Collaboration and Support").
+* **Tests**: nuevas aserciones para el warning de rango invertido en
+  `cie_lookup()`, los errores tipados de `threshold`/`max_results` en
+  `cie_search()`, la coerción de `default = NA_real_`/`NaN` en
+  `cie_describe()` y el NULL del camino sin match de `sigla_to_codigo()`;
+  literales non-ASCII de `test-encoding.R` convertidos a escapes
+  `\uXXXX`.
+
+*Input validation hardened (class `ciecl_invalid_input`): `cie_short()`
+requires `category` to be NULL or a non-NA length-1 string, and
+`cie_table(NA)` now aborts as invalid input instead of reporting
+"code not found: NA". Exact vector mode in `cie_lookup()` now sorts by
+`codigo` for deterministic output. Metadata cleanup: the unused
+`@importFrom dplyr select` removal is completed (all uses were already
+qualified `dplyr::select()`), `writexl` leaves `Suggests` (no executable
+use in the package), `Config/roxygen2/version` in DESCRIPTION was
+verified to be the standard mechanism of the current roxygen2 (it
+replaces `RoxygenNote` and is rewritten automatically by `document()`)
+and is kept with its correct value, and `codemeta.json` records
+`dateModified`. README install and
+comorbidity chunks now follow the language conditional, and the English
+vignette's closing heading matches the Spanish register
+("Collaboration and Support"). Tests added for the inverted-range
+warning, typed `threshold`/`max_results` errors, `default` coercion in
+`cie_describe()`, and the NULL no-match path of `sigla_to_codigo()`.*
 
 ## Correcciones menores — nits de auditoría (2026-09-15)
 

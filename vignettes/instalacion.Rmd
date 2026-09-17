@@ -52,7 +52,6 @@ paquetes opcionales. Estas son las dependencias sugeridas según la tarea:
 | Índices de comorbilidad Charlson/Elixhauser con `cie_comorbid()` | `comorbidity` | `install.packages("comorbidity")` |
 | Tablas HTML formateadas con `cie_table()` | `gt` | `install.packages("gt")` |
 | Leer archivos Excel del MINSAL | `readxl` | `install.packages("readxl")` |
-| Exportar resultados a Excel | `writexl` | `install.packages("writexl")` |
 
 ## Requisitos del sistema
 
