@@ -28,7 +28,7 @@ cie_guide <- function() {
       "cie_lookup()",
       "cie_lookup()",
       "cie_lookup(extract = TRUE)",
-      "cie_lookup() o cie_lookup(expandir = TRUE)",
+      "cie_lookup() o cie_lookup(expand = TRUE)",
       "cie_search()",
       "cie_lookup(check_siglas = TRUE)",
       "cie_search() con threshold bajo"

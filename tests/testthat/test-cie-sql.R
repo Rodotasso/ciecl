@@ -138,6 +138,24 @@ test_that("cie10_sql permite subqueries y UNION", {
   expect_gte(nrow(r_union), 1)
 })
 
+test_that("cie10_sql no rechaza keywords del blocklist dentro de literales string", {
+  skip_on_cran()
+
+  # Regresion F4: el blocklist escanea el SQL ya limpio de literales y
+  # comentarios; un LIKE legitimo con texto bloqueable no debe gatillar
+  # la proteccion
+  res <- cie10_sql(
+    "SELECT codigo, descripcion FROM cie10 WHERE descripcion LIKE '%drop%'"
+  )
+  expect_s3_class(res, "tbl_df")
+
+  # La proteccion se mantiene: keyword fuera del literal aborta
+  expect_error(
+    cie10_sql("SELECT codigo FROM cie10 WHERE codigo = 'E11.0'; DROP TABLE cie10"),
+    class = "ciecl_unsafe_query"
+  )
+})
+
 test_that("cie10_sql permite COUNT con condicion", {
   skip_on_cran()
 
@@ -458,4 +476,16 @@ test_that("cie10_sql valida tipos de query invalidos", {
                class = "ciecl_invalid_input")
   expect_error(ciecl::cie10_sql(NA_character_), class = "ciecl_invalid_input")
   expect_error(ciecl::cie10_sql(), class = "ciecl_invalid_input")
+})
+
+test_that("cie10_sql acepta SELECT que comienza con comentario (F13)", {
+  res <- cie10_sql("-- conteo\nSELECT COUNT(*) AS n FROM cie10")
+  expect_equal(nrow(res), 1)
+  expect_true(res$n > 0)
+
+  res_bloque <- cie10_sql("/* conteo */\nSELECT COUNT(*) AS n FROM cie10")
+  expect_equal(nrow(res_bloque), 1)
+
+  # Query que es solo comentario sigue abortando
+  expect_error(cie10_sql("-- solo comentario"), class = "ciecl_unsafe_query")
 })

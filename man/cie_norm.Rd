@@ -46,7 +46,8 @@ La normalización incluye:
 \item Conversión de guiones a puntos (I10-0 -> I10.0)
 \item Eliminación de puntos iniciales (.I10 -> I10)
 \item Corrección de puntos múltiples (E..11 -> E.11)
-\item Eliminación de sufijo X en códigos cortos (I10X -> I10)
+\item Eliminación de sufijo X en códigos cortos, incluido el punto
+previo si lo hay (I10X -> I10, E11.X -> E11)
 \item Preservación de X en códigos largos (placeholder 7o carácter)
 \item Agregado de punto en posición correcta (E110 -> E11.0)
 }

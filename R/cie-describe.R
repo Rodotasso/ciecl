@@ -49,6 +49,19 @@ cie_describe <- function(codes, normalize = FALSE, default = NA_character_,
     cli::cli_abort("{.arg normalize} debe ser {.code TRUE} o {.code FALSE}.", class = "ciecl_invalid_input")
   }
 
+  default_ok <- (is.character(default) && length(default) == 1L) ||
+    (length(default) == 1L && is.na(default))
+  if (!default_ok) {
+    cli::cli_abort(
+      "{.arg default} debe ser un string character de longitud 1 o {.code NA}, no {.obj_type_friendly {default}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+
+  # Coerción a character: absorbe NA_real_/NaN/list(NA) para que los
+  # retornos tempranos sean siempre character (contrato @returns).
+  default <- as.character(default)
+
   if (length(codes) == 0) {
     return(character(0))
   }

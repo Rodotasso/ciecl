@@ -1,4 +1,4 @@
-## Submission ciecl 0.9.6
+## Submission ciecl 0.9.8
 
 This is an update of ciecl (currently 0.9.2 on CRAN) with substantial
 improvements in performance, security, testing, and documentation.
@@ -15,8 +15,9 @@ No user-facing breaking changes affecting the CRAN-published surface.
   stripping, and stricter input validation on exported functions.
 * **pkgdown site** with dark mode (light-switch), hex logo, and
   favicons.
-* **New vignette** `caso-uso-egresos` with simulated hospital discharge
-  data using DEIS essential columns.
+* **New vignettes**: `ciecl` (package overview) and
+  `case-study-discharges` (simulated hospital discharge data using
+  DEIS essential columns).
 * **Bilingual community files**: CONTRIBUTING.md, CODE_OF_CONDUCT.md,
   SECURITY.md (English + Spanish).
 * **`@family` and `@seealso`** added across all exported functions.
@@ -31,8 +32,23 @@ Full changelog in NEWS.md.
 
 ## Test results
 
-* **Tests**: 1148 PASS, 0 FAIL, 4 WARN, 14 SKIP (95.6% coverage).
-* **R CMD check**: 0 errors | 0 warnings | 2 notes.
+* **Tests**: 1059 PASS, 0 FAIL, 0 WARN, 5 SKIP (devtools::test(),
+  R 4.6.0, 2026-09-16); coverage 97.39% (covr::package_coverage(),
+  2026-09-15).
+* **R CMD check**: 0 errors | 0 warnings | 0 notes locally; the 2 notes
+  below are expected CRAN incoming NOTEs only.
+
+### Skip ratio on CRAN (~58%)
+
+About 58% of the tests call `skip_on_cran()`. This is deliberate
+("CRAN canary" policy, documented in `tests/testthat/setup.R`): the
+skipped tests rebuild the local SQLite cache (~16 s), require network
+access to the WHO ICD-11 API, depend on optional Suggests packages
+(comorbidity, gt), or assert timing thresholds that are unstable on
+heterogeneous hardware. CRAN still runs a set of lightweight canary
+tests covering the base flow (normalize -> validate -> lookup over the
+bundled dataset), with no network, no optional dependencies, and no
+writes outside tempdir.
 
 ### NOTEs explained
 
@@ -54,7 +70,7 @@ Full changelog in NEWS.md.
 
 ## Test environments
 
-* Local: Windows 11 x64, R 4.4.3
+* Local: Windows 11 x64, R 4.6.0
 * GitHub Actions R-CMD-check:
   - macOS-latest (release)
   - windows-latest (release)

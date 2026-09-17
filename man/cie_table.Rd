@@ -7,7 +7,8 @@
 cie_table(code, codigo = lifecycle::deprecated())
 }
 \arguments{
-\item{code}{String código (ej. \code{"E11"} muestra la jerarquía).}
+\item{code}{String código de longitud 1, un solo código
+(ej. \code{"E11"} muestra la jerarquía).}
 
 \item{codigo}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{code}.}
 }

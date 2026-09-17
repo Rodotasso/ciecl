@@ -8,7 +8,14 @@
 #' @keywords internal
 #' @noRd
 get_cache_dir <- function() {
-  Sys.getenv("CIECL_CACHE_DIR", unset = tools::R_user_dir("ciecl", "data"))
+  # Una env var seteada pero vacia ("") cuenta como no definida:
+  # file.path("", "cie10.db") escribiria el cache en el directorio de
+  # trabajo, fuera del directorio designado del usuario (CRAN policy)
+  env <- Sys.getenv("CIECL_CACHE_DIR", unset = NA_character_)
+  if (is.na(env) || !nzchar(env)) {
+    return(tools::R_user_dir("ciecl", "data"))
+  }
+  env
 }
 
 #' Obtener conexion SQLite pooled CIE-10
@@ -190,10 +197,14 @@ build_cache_atomic <- function(cache_dir, db_path) {
       DBI::dbDisconnect(con)
 
       # Atomico: renombrar .tmp -> .db
-      if (file.exists(db_path)) {
-        file.remove(db_path)
+      # En Windows el rename/remove puede fallar si otro proceso tiene
+      # un lock sobre el .db: no silenciar el fallo
+      if (file.exists(db_path) && !file.remove(db_path)) {
+        cli::cli_warn("No se pudo eliminar el cache previo: {.path {db_path}}")
       }
-      file.rename(tmp_path, db_path)
+      if (!file.rename(tmp_path, db_path)) {
+        cli::cli_warn("No se pudo renombrar el cache temporal a {.path {db_path}}.")
+      }
 
       if (show_progress) {
         cli::cli_progress_done(id = progress_id)
@@ -320,15 +331,29 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
     )
   }
 
-  # Normalizar query: eliminar espacios y saltos de linea al inicio
+  # Normalizar query: eliminar espacios y saltos de línea al inicio
   query_norm <- stringr::str_trim(query)
 
-  # Validacion de seguridad: solo SELECT permitido
-  if (!stringr::str_detect(query_norm, "(?i)^SELECT")) {
+  # Remover strings, comentarios de línea (--) y comentarios de bloque
+  # (/* */) ANTES de validar y escanear: el chequeo de SELECT, el
+  # blocklist y el chequeo de ";" deben operar sobre el SQL ejecutable,
+  # no sobre literales legítimos (ej. LIKE '%drop%') ni comentarios
+  query_sin_strings <- query_norm
+  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "'[^']*'")
+  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "--[^\n]*")
+  query_sin_strings <- stringr::str_remove_all(
+    query_sin_strings, "(?s)/\\*.*?\\*/"
+  )
+  query_sin_strings <- stringr::str_trim(query_sin_strings)
+
+  # Validación de seguridad: solo SELECT permitido (tras el strip, así
+  # una query que comienza con comentario sigue siendo válida)
+  if (!stringr::str_detect(query_sin_strings, "(?i)^SELECT")) {
     cli::cli_abort("Solo consultas {.code SELECT} permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
 
-  # Bloquear keywords peligrosos (case-insensitive)
+  # Bloquear keywords peligrosos (case-insensitive) sobre el SQL ya
+  # limpio de literales y comentarios
   keywords_peligrosos <- c(
     "\\bDROP\\b", "\\bDELETE\\b", "\\bUPDATE\\b", "\\bINSERT\\b",
     "\\bALTER\\b", "\\bCREATE\\b", "\\bTRUNCATE\\b", "\\bEXEC\\b",
@@ -338,7 +363,7 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
 
   for (keyword in keywords_peligrosos) {
     keyword_found <- stringr::str_detect(
-      query_norm, stringr::regex(keyword, ignore_case = TRUE)
+      query_sin_strings, stringr::regex(keyword, ignore_case = TRUE)
     )
     if (keyword_found) {
       # Mostrar la palabra clave detectada (sin los anclajes \b del regex)
@@ -351,13 +376,6 @@ cie10_sql <- function(query, close = lifecycle::deprecated()) {
   }
 
   # Bloquear multiples statements (;)
-  # Remover strings, comentarios de linea (--) y comentarios de bloque (/* */)
-  query_sin_strings <- query_norm
-  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "'[^']*'")
-  query_sin_strings <- stringr::str_remove_all(query_sin_strings, "--[^\n]*")
-  query_sin_strings <- stringr::str_remove_all(
-    query_sin_strings, "(?s)/\\*.*?\\*/"
-  )
   if (stringr::str_detect(query_sin_strings, ";")) {
     cli::cli_abort("M\u00faltiples sentencias SQL no permitidas (seguridad).", class = "ciecl_unsafe_query")
   }
@@ -421,22 +439,31 @@ cie10_clear_cache <- function() {
   db_path <- file.path(cache_dir, "cie10.db")
   tmp_path <- paste0(db_path, ".tmp")
 
+  # file.remove() devuelve logical: no silenciar el fallo (típico en
+  # Windows si otro proceso mantiene un lock sobre el archivo)
+  habia_cache <- file.exists(db_path) || file.exists(tmp_path)
   eliminados <- FALSE
 
   if (file.exists(db_path)) {
-    file.remove(db_path)
-    eliminados <- TRUE
+    if (file.remove(db_path)) {
+      eliminados <- TRUE
+    } else {
+      cli::cli_warn("No se pudo eliminar {.path {db_path}} (posible lock de otro proceso).")
+    }
   }
 
   # Limpiar .tmp residuales
   if (file.exists(tmp_path)) {
-    file.remove(tmp_path)
-    eliminados <- TRUE
+    if (file.remove(tmp_path)) {
+      eliminados <- TRUE
+    } else {
+      cli::cli_warn("No se pudo eliminar {.path {tmp_path}}.")
+    }
   }
 
   if (eliminados) {
     cli::cli_inform(c("v" = "Cache SQLite eliminado: {.path {db_path}}"))
-  } else {
+  } else if (!habia_cache) {
     cli::cli_inform(c("i" = "Cache no existe"))
   }
 

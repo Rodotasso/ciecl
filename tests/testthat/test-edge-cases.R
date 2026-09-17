@@ -156,9 +156,10 @@ test_that("cie_lookup maneja minusculas", {
 test_that("cie_lookup maneja rangos invalidos", {
   skip_on_cran()
 
-  # Rango invertido
-  suppressWarnings(
-    resultado <- cie_lookup("E14-E10")
+  # Rango invertido: warning explicito y correccion automatica
+  expect_warning(
+    resultado <- cie_lookup("E14-E10"),
+    "Rango invertido"
   )
   # Puede no encontrar resultados pero no debe crashear
   expect_s3_class(resultado, "tbl_df")
@@ -320,12 +321,13 @@ test_that("cie_expand maneja codigo vacio", {
 })
 
 test_that("cie_expand maneja NA", {
-  skip_on_cran()
-
-  suppressMessages({
-    resultado <- cie_expand(NA_character_)
-  })
-  expect_length(resultado, 0)
+  # Contrato endurecido (Fase A, auditoria 2026-09-13): input NA aborta
+  # con clase propia en lugar de retornar character(0) en silencio;
+  # corre sin skip (validacion previa a la DB, canario CRAN)
+  expect_error(
+    cie_expand(NA_character_),
+    class = "ciecl_invalid_input"
+  )
 })
 
 test_that("cie_expand maneja codigo inexistente", {

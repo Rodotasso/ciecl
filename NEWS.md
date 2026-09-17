@@ -1,6 +1,166 @@
-# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-08-27)
+# ciecl 0.9.8 (en desarrollo, 2026-04-25 → 2026-09-16)
 
 *English summary below*
+
+## Correcciones menores — nits de auditoría (2026-09-16)
+
+Sin cambios en la API pública; dos cambios de comportamiento acotados:
+`cie_short()` ahora valida `category` y `cie_table(NA)` aborta como
+input inválido en lugar de reportar "código no encontrado: NA".
+
+* **Validaciones endurecidas** (clase `ciecl_invalid_input`):
+  `cie_short()` valida que `category` sea NULL o un string escalar no-NA
+  (antes un vector o numérico derivaba en un error duro no tipado);
+  `cie_table()` rechaza `code = NA` como input inválido (antes caía en
+  "Código no encontrado: NA").
+* **Orden determinista en `cie_lookup()`**: el modo vector exacto
+  (`IN (...)`) ahora incluye `ORDER BY codigo`, igual que los demás
+  caminos de la función.
+* **Documentación interna corregida**: el `@returns` de
+  `sigla_to_codigo()` refleja que retorna el primer código (string de
+  longitud 1) o NULL.
+* **Limpieza de metadatos**: se completa la eliminación del
+  `@importFrom dplyr select` sin uso real (los usos en `R/` ya eran
+  calificados `dplyr::select()`); `writexl` sale de `Suggests` (sin uso
+  ejecutable en el paquete) y de las tablas de instalación de las
+  viñetas; se verificó que `Config/roxygen2/version` en DESCRIPTION es
+  el mecanismo estándar del roxygen2 vigente (reemplaza a
+  `RoxygenNote`; `document()` la re-escribe automáticamente) y se
+  mantiene con el valor correcto; `codemeta.json` registra
+  `dateModified`.
+* **README y viñetas bilingües**: los chunks de instalación y
+  comorbilidad del README ahora respetan la condicional de idioma
+  (el README en inglés ya no muestra comentarios en español); el
+  encabezado final de la viñeta en inglés se alinea al registro de la
+  española ("Collaboration and Support").
+* **Tests**: nuevas aserciones para el warning de rango invertido en
+  `cie_lookup()`, los errores tipados de `threshold`/`max_results` en
+  `cie_search()`, la coerción de `default = NA_real_`/`NaN` en
+  `cie_describe()` y el NULL del camino sin match de `sigla_to_codigo()`;
+  literales non-ASCII de `test-encoding.R` convertidos a escapes
+  `\uXXXX`.
+
+*Input validation hardened (class `ciecl_invalid_input`): `cie_short()`
+requires `category` to be NULL or a non-NA length-1 string, and
+`cie_table(NA)` now aborts as invalid input instead of reporting
+"code not found: NA". Exact vector mode in `cie_lookup()` now sorts by
+`codigo` for deterministic output. Metadata cleanup: the unused
+`@importFrom dplyr select` removal is completed (all uses were already
+qualified `dplyr::select()`), `writexl` leaves `Suggests` (no executable
+use in the package), `Config/roxygen2/version` in DESCRIPTION was
+verified to be the standard mechanism of the current roxygen2 (it
+replaces `RoxygenNote` and is rewritten automatically by `document()`)
+and is kept with its correct value, and `codemeta.json` records
+`dateModified`. README install and
+comorbidity chunks now follow the language conditional, and the English
+vignette's closing heading matches the Spanish register
+("Collaboration and Support"). Tests added for the inverted-range
+warning, typed `threshold`/`max_results` errors, `default` coercion in
+`cie_describe()`, and the NULL no-match path of `sigla_to_codigo()`.*
+
+## Correcciones menores — nits de auditoría (2026-09-15)
+
+Sin cambios en la API pública; un cambio de comportamiento acotado:
+`cie_table()` ahora requiere un único código; pasar un vector de largo
+>1 (uso nunca documentado) aborta con error claro en lugar del error
+de `gt`.
+
+* **Bug fix — `cie10_sql()`**: una consulta `SELECT` legítima que
+  comenzaba con un comentario (`--` o `/* */`) abortaba como "no
+  SELECT"; la validación ahora corre después de remover comentarios y
+  strings.
+* **Validaciones endurecidas** (clase `ciecl_invalid_input`):
+  `cie_table()` valida que `code` sea un string de longitud 1;
+  `cie_describe()` valida que `default` sea character escalar o `NA`.
+
+*Bug fix: `cie10_sql()` no longer rejects a legitimate `SELECT` that
+starts with a comment (`--` or `/* */`); the check now runs after
+stripping comments and string literals. Input validation hardened
+(class `ciecl_invalid_input`): `cie_table()` requires `code` to be a
+length-1 string (a behavior change: a length >1 vector, never a
+documented use, now aborts with a clear error instead of the `gt`
+error) and `cie_describe()` requires `default` to be a scalar
+character or `NA`.*
+
+## Correcciones de robustez — auditoría interna (2026-09-13)
+
+Primera tanda (Fase A) de la auditoría interna de `R/`. Sin cambios en la
+API pública; un cambio de comportamiento acotado: `cie_expand(NA)` ahora
+aborta con error claro en lugar de retornar `character(0)` silenciosamente.
+
+* **Bug fix — rangos en `cie_lookup()`**: un rango como `"E10-E14"`
+  excluía silenciosamente las subcategorías del límite superior
+  (`E14.0`–`E14.9`), porque `BETWEEN` con collation BINARY compara
+  lexicográficamente (`'E14.9' > 'E14'`). La consulta ahora cubre el
+  prefijo del límite superior, por lo que el rango incluye todas las
+  subcategorías.
+* **Validaciones endurecidas** (errores claros con clase
+  `ciecl_invalid_input` en lugar de errores base de R): `cie_lookup()`
+  aborta si `extract = TRUE` recibe más de un código (el contrato
+  documentado es escalar); `cie_expand()` valida que `code` sea un string
+  escalar; `cie_search()` valida tipo y ausencia de `NA` en `threshold` y
+  `max_results`; `cie11_search()` valida `NA` en `max_results`.
+* **`cie_search()` — esquema de salida estable**: la columna `uso_cl`
+  ahora está presente en todos los caminos internos (FTS y fallbacks), y
+  `only_uso_cl = TRUE` filtra los códigos legado **antes** de aplicar el
+  límite `max_results` (antes podían consumir cupo del límite y truncar
+  resultados vigentes).
+* **`cie_lookup()` vectorial**: los códigos con caracteres inválidos o no
+  encontrados se informan en un mensaje agregado (como ya hacía el modo
+  escalar), en lugar de descartarse en silencio.
+* **`cie_guide()`**: la tabla de orientación recomendaba el argumento
+  deprecado `expandir = TRUE`; ahora indica el vigente `expand = TRUE`.
+
+Segunda tanda (Fase B) de la misma auditoría: ítems menores de bajo
+riesgo. Sin cambios en la API pública.
+
+* **Hardening de `cie10_sql()`**: el escaneo de palabras clave bloqueadas
+  ahora se aplica sobre la consulta ya limpia de literales de texto y
+  comentarios, eliminando falsos positivos en `SELECT` legítimas (p. ej.
+  `LIKE '%drop%'`); las protecciones vigentes no cambian.
+* **`CIECL_CACHE_DIR=""`**: una variable de entorno definida pero vacía
+  ahora se trata como no definida (fallback a `tools::R_user_dir()`);
+  antes derivaba en escribir la caché en el directorio de trabajo.
+* **`cie_norm()`**: `"E11.X"` (convención "no especificada") ya no queda
+  como `"E11."` malformado; al remover la `X` final se remueve también el
+  punto previo si lo hay.
+* **Caché SQLite**: la construcción y eliminación de la caché ahora
+  chequean el retorno de `file.rename()`/`file.remove()` y advierten con
+  un mensaje informativo si el sistema operativo rechaza la operación
+  (típico lock de archivo en Windows), en lugar de continuar en silencio.
+* **`cie_comorbid()`**: la documentación del valor de retorno ahora indica
+  correctamente `tibble` (antes decía `data.frame`), y `data`, `id` y
+  `code` se validan al inicio con errores tipados `ciecl_invalid_input`.
+* **`cie_search()` con texto de solo símbolos** (p. ej. `"!!"`): el camino
+  sin candidatos para la búsqueda difusa ahora retorna de inmediato un
+  tibble vacío con el esquema correcto; antes calculaba
+  `mean(numeric(0))` y propagaba un `NaN` silencioso en los scores.
+* **Limpieza interna**: eliminados `@importFrom` sin uso real
+  (`pull`, `rowwise`, `tribble`, `matches`, `select`); `NAMESPACE`
+  regenerado.
+
+*Bug fix: code ranges in `cie_lookup()` (e.g. `"E10-E14"`) now include the
+upper bound's subcategories (`E14.x`), previously dropped silently by the
+lexicographic `BETWEEN`. Input validation hardened (`extract = TRUE`
+scalar-only, scalar `cie_expand()` — with `NA` now aborting instead of
+silently returning `character(0)` —, typed `threshold`/`max_results` with
+explicit `NA` guards in `cie_search()` and `cie11_search()`).
+`cie_search()` output schema is now stable (`uso_cl` present on every
+internal path) and `only_uso_cl = TRUE` filters legacy codes before the
+`max_results` cap. Vector-mode `cie_lookup()` reports invalid/not-found
+codes in a single aggregate message, and `cie_guide()` now points to the
+current `expand` argument instead of the deprecated `expandir`.*
+
+*Phase B (same audit, low-risk items): `cie10_sql()` keyword scanning now
+ignores string literals and comments (no more false positives on
+legitimate `SELECT`s, same protections); an empty `CIECL_CACHE_DIR` falls
+back to `tools::R_user_dir()` instead of writing to the working directory;
+`cie_norm("E11.X")` no longer leaves a dangling dot; cache build/clear now
+warn if `file.rename()`/`file.remove()` fail; `cie_comorbid()` docs
+correctly state the tibble return and `data`/`id`/`code` are validated up
+front; `cie_search()` with a symbols-only text returns an empty tibble
+with the correct schema instead of a silent `NaN`; unused `@importFrom`
+entries removed.*
 
 ## Respuesta a comentarios rOpenSci #765 (2026-09-08)
 

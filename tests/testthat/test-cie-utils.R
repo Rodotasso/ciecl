@@ -19,6 +19,15 @@ test_that("cie_norm convierte formatos correctamente", {
   expect_equal(cie_norm("T84X0XA", search_db = FALSE), "T84X0XA")
 })
 
+test_that("cie_norm no deja punto colgado al remover X final (E11.X)", {
+  # Regresion F11: la X de "no especificada" puede venir precedida de
+  # punto; remover solo la X dejaba "E11." malformado
+  expect_equal(cie_norm("E11.X", search_db = FALSE), "E11")
+  expect_equal(cie_norm("I10.X", search_db = FALSE), "I10")
+  # Sin punto previo el comportamiento historico se mantiene
+  expect_equal(cie_norm("E11X", search_db = FALSE), "E11")
+})
+
 test_that("cie_norm es vectorizado", {
   codigos <- c("E110", "I10X", "Z00")
   expect_equal(cie_norm(codigos, search_db = FALSE), c("E11.0", "I10", "Z00"))
@@ -84,3 +93,13 @@ test_that("cie_norm preserva casos especiales", {
   expect_equal(cie_norm("G01*", search_db = FALSE), "G01")
 })
 
+
+test_that("cie_expand aborta con input no escalar", {
+  # Regresion: el || sobre un vector era error duro en R >= 4.3;
+  # validacion previa a la DB: corre sin skip (canario CRAN).
+  # El caso NA se cubre en test-edge-cases.R ("cie_expand maneja NA")
+  expect_error(
+    cie_expand(c("E11", "I10")),
+    class = "ciecl_invalid_input"
+  )
+})

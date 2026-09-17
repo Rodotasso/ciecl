@@ -1,5 +1,4 @@
 #' @importFrom stringr str_trim str_split fixed
-#' @importFrom dplyr mutate filter arrange desc slice_head select everything
 #' @importFrom tibble as_tibble
 #' @importFrom stringdist stringsim
 #' @importFrom DBI dbGetQuery
@@ -130,10 +129,12 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
       class = "ciecl_invalid_input"
     )
   }
-  if (threshold < 0 || threshold > 1) {
+  if (!is.numeric(threshold) || length(threshold) != 1L ||
+      is.na(threshold) || threshold < 0 || threshold > 1) {
     cli::cli_abort("{.arg threshold} debe estar entre 0 y 1.", class = "ciecl_invalid_input")
   }
-  if (max_results < 1) {
+  if (!is.numeric(max_results) || length(max_results) != 1L ||
+      is.na(max_results) || max_results < 1) {
     cli::cli_abort("{.arg max_results} debe ser >= 1.", class = "ciecl_invalid_input")
   }
 
@@ -212,25 +213,22 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     }
   } else {
     # Sin palabras validas, cargar todo (fallback)
+    # Se incluye uso_cl para un esquema de salida estable en todos los caminos
     if (field == "descripcion") {
-      query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+      query_sql <- "SELECT codigo, descripcion, categoria, uso_cl FROM cie10"
     } else {
       field_quoted <- DBI::dbQuoteIdentifier(con, field)
       query_sql <- sprintf(
-        "SELECT codigo, descripcion, categoria, %s FROM cie10",
+        "SELECT codigo, descripcion, categoria, uso_cl, %s FROM cie10",
         field_quoted
       )
     }
   }
 
   # Helper local: aplicar flags uso_cl al output final
+  # (el filtro only_uso_cl ya se aplicó sobre `base`, antes del límite;
+  # aquí solo queda omitir la columna si include_uso_cl = FALSE)
   apply_uso_cl_flags <- function(df) {
-    if (nrow(df) == 0) {
-      return(df)
-    }
-    if (only_uso_cl && "uso_cl" %in% names(df)) {
-      df <- dplyr::filter(df, .data$uso_cl != "legado")
-    }
     if (!include_uso_cl) {
       df <- dplyr::select(df, -dplyr::any_of("uso_cl"))
     }
@@ -241,18 +239,25 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
     tibble::as_tibble()
 
   # Si FTS5 no retorno resultados, intentar carga completa para fuzzy
+  # Se incluye uso_cl para un esquema de salida estable en todos los caminos
   if (nrow(base) == 0 && length(palabras) > 0) {
     if (field == "descripcion") {
-      query_sql <- "SELECT codigo, descripcion, categoria FROM cie10"
+      query_sql <- "SELECT codigo, descripcion, categoria, uso_cl FROM cie10"
     } else {
       field_quoted <- DBI::dbQuoteIdentifier(con, field)
       query_sql <- sprintf(
-        "SELECT codigo, descripcion, categoria, %s FROM cie10",
+        "SELECT codigo, descripcion, categoria, uso_cl, %s FROM cie10",
         field_quoted
       )
     }
     base <- DBI::dbGetQuery(con, query_sql) |>
       tibble::as_tibble()
+  }
+
+  # Filtrar códigos legado ANTES de truncar con slice_head(max_results):
+  # el límite debe aplicarse sobre el conjunto solicitado por el usuario
+  if (only_uso_cl) {
+    base <- dplyr::filter(base, .data$uso_cl != "legado")
   }
 
   # Normalizar texto de la base (minusculas + sin tildes)
@@ -310,6 +315,22 @@ cie_search <- function(text, threshold = 0.70, max_results = 50,
 
   # ESTRATEGIA 3: Fuzzy matching con Jaro-Winkler (para typos)
   # Calcular similitud de cada palabra del texto con palabras de la descripcion
+
+  # Sin candidatos para fuzzy (todas las palabras tienen < 3 chars, p. ej.
+  # un texto de solo simbolos como "!!"): iterar daria mean(numeric(0)) ->
+  # NaN en los scores. Early return con tibble vacio y el esquema estable.
+  if (length(palabras_fuzzy) == 0) {
+    resultado <- base[0, ] |>
+      dplyr::mutate(score = numeric(0)) |>
+      dplyr::select(codigo, descripcion, score, dplyr::everything())
+
+    if (verbose) {
+      cli::cli_inform(c("x" = "Sin coincidencias >= threshold {.val {threshold}}"))
+    }
+
+    return(apply_uso_cl_flags(resultado))
+  }
+
   scores_fuzzy <- vapply(seq_along(base_texto_sin_tildes), function(i) {
     texto_base <- base_texto_sin_tildes[i]
     palabras_base <- unlist(stringr::str_split(texto_base, "\\s+"))

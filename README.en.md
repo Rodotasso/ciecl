@@ -70,7 +70,7 @@ institutional decree.
 # CRAN
 install.packages("ciecl")
 
-# GitHub (desarrollo)
+# GitHub (development)
 # install.packages("pak")
 pak::pak("RodoTasso/ciecl")
 ```
@@ -148,8 +148,8 @@ with the scenario, the recommended function, and an example for each
 case.
 
 ``` r
-# Comorbilidades (requiere: install.packages("comorbidity"))
-df |> cie_comorbid(id = "paciente", code = "diagnostico", map = "charlson")
+# Comorbidities (requires: install.packages("comorbidity"))
+df |> cie_comorbid(id = "patient", code = "diagnosis", map = "charlson")
 ```
 
 ## ICD-11 API (optional)

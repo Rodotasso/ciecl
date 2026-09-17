@@ -437,3 +437,55 @@ test_that("cie10_clear_cache elimina .tmp residual junto al .db", {
   expect_false(file.exists(db_path))
   expect_false(file.exists(tmp_path))
 })
+
+# --- get_cache_dir: env var vacia -------------------------------------------
+# canario CRAN: solo lee una env var y consulta tools::R_user_dir();
+# no construye cache ni escribe en disco.
+
+test_that("get_cache_dir trata CIECL_CACHE_DIR vacia como no definida", {
+  # Regresion F10: "" no debe derivar en file.path("", "cie10.db"),
+  # que escribiria el cache en el directorio de trabajo (CRAN policy)
+  withr::local_envvar(CIECL_CACHE_DIR = "")
+
+  expect_equal(get_cache_dir(), tools::R_user_dir("ciecl", "data"))
+})
+
+# --- F9: retornos de file.rename()/file.remove() no se silencian -------------
+
+test_that("build_cache_atomic advierte si el rename final falla", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  db_path <- file.path(cache_dir, "test.db")
+
+  local_mocked_bindings(
+    file.rename = function(...) FALSE,
+    .package = "base"
+  )
+
+  expect_warning(
+    build_cache_atomic(cache_dir, db_path),
+    "No se pudo renombrar"
+  )
+  # El .tmp construido queda en disco al no poder renombrarse
+  expect_true(file.exists(paste0(db_path, ".tmp")))
+})
+
+test_that("cie10_clear_cache advierte si file.remove falla", {
+  skip_on_cran()
+
+  cache_dir <- withr::local_tempdir()
+  withr::local_envvar(CIECL_CACHE_DIR = cache_dir)
+  cie10_disconnect()
+  withr::defer(cie10_disconnect())
+
+  get_cie10_db()
+  cie10_disconnect()
+
+  local_mocked_bindings(
+    file.remove = function(...) FALSE,
+    .package = "base"
+  )
+
+  expect_warning(cie10_clear_cache(), "No se pudo eliminar")
+})

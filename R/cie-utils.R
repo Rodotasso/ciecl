@@ -14,7 +14,8 @@
 #'   \item Conversión de guiones a puntos (I10-0 -> I10.0)
 #'   \item Eliminación de puntos iniciales (.I10 -> I10)
 #'   \item Corrección de puntos múltiples (E..11 -> E.11)
-#'   \item Eliminación de sufijo X en códigos cortos (I10X -> I10)
+#'   \item Eliminación de sufijo X en códigos cortos, incluido el punto
+#'     previo si lo hay (I10X -> I10, E11.X -> E11)
 #'   \item Preservación de X en códigos largos (placeholder 7o carácter)
 #'   \item Agregado de punto en posición correcta (E110 -> E11.0)
 #' }
@@ -105,11 +106,13 @@ cie_norm <- function(codes,
   codigos_norm <- stringr::str_replace_all(codigos_norm, "\\.{2,}", ".")
 
   # === MANEJO DE SUFIJO X ===
-  # Eliminar X final solo en codigos cortos (<=5 chars)
+  # Eliminar X final solo en codigos cortos (<=5 chars); si la X venia
+  # precedida de punto (E11.X, convencion "no especificada"), remover
+  # tambien el punto para no dejar "E11." malformado
   # Preservar X en codigos largos donde es placeholder obligatorio (ej. S72X01A)
   codigos_norm <- ifelse(
     nchar(codigos_norm) <= 5 & stringr::str_detect(codigos_norm, "X$"),
-    stringr::str_remove(codigos_norm, "X$"),
+    stringr::str_remove(codigos_norm, "\\.?X$"),
     codigos_norm
   )
 
@@ -290,9 +293,17 @@ cie_expand <- function(code, codigo = lifecycle::deprecated()) {
 
   check_required_es(missing(code), "code")
 
-  # Manejar NA o cadena vacia
-  if (length(code) == 0 || is.na(code) ||
-      nchar(stringr::str_trim(code)) == 0) {
+  # Validación escalar: el contrato documentado es un único código padre.
+  # Sin esta guarda, el || sobre un vector sería error duro (R >= 4.3).
+  if (!rlang::is_string(code)) {
+    cli::cli_abort(
+      "{.arg code} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {code}}.",
+      class = "ciecl_invalid_input"
+    )
+  }
+
+  # Manejar cadena vacía
+  if (nchar(stringr::str_trim(code)) == 0) {
     return(character(0))
   }
 
