@@ -28,7 +28,7 @@ test_that("base de datos contiene descripciones con tildes correctas", {
   if (nrow(resultado) > 0) {
     # Buscar caracteres corruptos comunes
     descripciones <- resultado$descripcion
-    tiene_corruptos <- any(stringr::str_detect(descripciones, "�|Ã¡|Ã©|Ã­|Ã³|Ãº|Ã±"))
+    tiene_corruptos <- any(stringr::str_detect(descripciones, "\ufffd|\u00c3\u00a1|\u00c3\u00a9|\u00c3\u00ad|\u00c3\u00b3|\u00c3\u00ba|\u00c3\u00b1"))
     expect_false(tiene_corruptos, info = "Las descripciones no deben tener caracteres corruptos")
   }
 })
@@ -148,7 +148,7 @@ test_that("similitud Jaro-Winkler funciona con tildes", {
 
   # La similitud debe funcionar aunque haya diferencias de tildes
   resultado1 <- cie_search("neumonia", threshold = 0.60)
-  resultado2 <- cie_search("neumonía", threshold = 0.60)
+  resultado2 <- cie_search("neumon\u00eda", threshold = 0.60)
 
   # Ambos deben encontrar resultados (aunque no exactamente los mismos)
   expect_s3_class(resultado1, "tbl_df")

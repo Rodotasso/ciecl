@@ -79,5 +79,5 @@ test_that("cie_table error sin gt instalado", {
 test_that("cie_table valida code escalar (F15)", {
   expect_error(cie_table(c("E11", "I10")), class = "ciecl_invalid_input")
   expect_error(cie_table(123), class = "ciecl_invalid_input")
-  expect_error(cie_table(NA_character_), class = "ciecl_invalid_code")
+  expect_error(cie_table(NA_character_), class = "ciecl_invalid_input")
 })

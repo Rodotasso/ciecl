@@ -82,6 +82,16 @@ test_that("cie_short filtra por categoria", {
   expect_length(invalida$sigla, 0)
 })
 
+test_that("cie_short valida category escalar", {
+  # Vector o numerico: error tipado, no error duro de tolower()/%in%
+  expect_error(
+    cie_short(c("cardiovascular", "oncologica")),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(cie_short(1), class = "ciecl_invalid_input")
+  expect_error(cie_short(NA_character_), class = "ciecl_invalid_input")
+})
+
 # ============================================================
 # PRUEBAS PARA cie_search() (validaciones)
 # ============================================================
@@ -92,6 +102,17 @@ test_that("cie_search valida inputs", {
   expect_snapshot(cie_search("a"), error = TRUE)
   expect_snapshot(cie_search("diabetes", threshold = 1.1), error = TRUE)
   expect_snapshot(cie_search("diabetes", max_results = 0), error = TRUE)
+})
+
+test_that("cie_search rechaza threshold y max_results fuera de rango con error tipado", {
+  expect_error(
+    cie_search("diabetes", threshold = 1.1),
+    class = "ciecl_invalid_input"
+  )
+  expect_error(
+    cie_search("diabetes", max_results = 0),
+    class = "ciecl_invalid_input"
+  )
 })
 
 # ============================================================
@@ -266,7 +287,8 @@ test_that("cie_search con texto de solo simbolos devuelve vacio sin warning", {
 
   # Regresion: "!!" no deja palabras candidatas para fuzzy; el camino
   # antiguo calculaba mean(numeric(0)) -> NaN silencioso en los scores
-  expect_no_warning(res <- cie_search("!!", verbose = FALSE))
+  # expect_no_warning() devuelve el valor evaluado: la asignacion va fuera
+  res <- expect_no_warning(cie_search("!!", verbose = FALSE))
   expect_s3_class(res, "tbl_df")
   expect_equal(nrow(res), 0)
   expect_named(res, c("codigo", "descripcion", "score", "categoria"))

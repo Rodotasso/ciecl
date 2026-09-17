@@ -139,3 +139,16 @@ test_that("cie_describe valida default (F14)", {
   # default valido sigue funcionando
   expect_equal(cie_describe("INVALIDO", default = "sin datos"), "sin datos")
 })
+
+test_that("cie_describe coerce default NA_real_/NaN a character", {
+  # ZZZ no existe en el catalogo (no es categoria CIE-10 valida)
+  # NA_real_ queda NA_character_ tras la coercion
+  resultado <- cie_describe("ZZZ", default = NA_real_)
+  expect_type(resultado, "character")
+  expect_true(is.na(resultado))
+
+  # NaN queda "NaN" (comportamiento de as.character() base)
+  resultado_nan <- cie_describe("ZZZ", default = NaN)
+  expect_type(resultado_nan, "character")
+  expect_equal(resultado_nan, "NaN")
+})

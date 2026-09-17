@@ -15,7 +15,6 @@
 #' @family visualization
 #' @seealso [cie_search()], [cie_lookup()], [cie_guide()]
 #' @export
-#' @importFrom dplyr select everything mutate across
 #' @examplesIf rlang::is_installed("gt")
 #' cie_table("E11")  # Diabetes mellitus tipo 2 completo
 cie_table <- function(code, codigo = lifecycle::deprecated()) {
@@ -30,9 +29,12 @@ cie_table <- function(code, codigo = lifecycle::deprecated()) {
 
   check_required_es(missing(code), "code")
 
-  if (!is.character(code) || length(code) != 1L) {
+  # Validación escalar: el contrato documentado es un único código.
+  # is_string() rechaza también NA_character_ (antes caía en
+  # "Código no encontrado: NA", mensaje confuso para un input inválido).
+  if (!rlang::is_string(code)) {
     cli::cli_abort(
-      "{.arg code} debe ser un string character de longitud 1, no {.obj_type_friendly {code}}.",
+      "{.arg code} debe ser un string character no-NA de longitud 1, no {.obj_type_friendly {code}}.",
       class = "ciecl_invalid_input"
     )
   }

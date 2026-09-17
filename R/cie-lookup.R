@@ -1,5 +1,4 @@
 #' @importFrom stringr str_trim str_detect str_extract str_split
-#' @importFrom dplyr select mutate bind_rows distinct
 #' @importFrom tibble as_tibble add_column
 #' @importFrom DBI dbGetQuery
 NULL
@@ -254,7 +253,7 @@ cie_lookup <- function(code, expand = FALSE, normalize = TRUE,
             collapse = ","
           )
           query <- sprintf(
-            "SELECT * FROM cie10 WHERE codigo IN (%s)",
+            "SELECT * FROM cie10 WHERE codigo IN (%s) ORDER BY codigo",
             placeholders
           )
           resultado <- DBI::dbGetQuery(

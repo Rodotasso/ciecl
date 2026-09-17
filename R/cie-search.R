@@ -1,5 +1,4 @@
 #' @importFrom stringr str_trim str_split fixed
-#' @importFrom dplyr mutate filter arrange desc slice_head select everything
 #' @importFrom tibble as_tibble
 #' @importFrom stringdist stringsim
 #' @importFrom DBI dbGetQuery

@@ -156,9 +156,10 @@ test_that("cie_lookup maneja minusculas", {
 test_that("cie_lookup maneja rangos invalidos", {
   skip_on_cran()
 
-  # Rango invertido
-  suppressWarnings(
-    resultado <- cie_lookup("E14-E10")
+  # Rango invertido: warning explicito y correccion automatica
+  expect_warning(
+    resultado <- cie_lookup("E14-E10"),
+    "Rango invertido"
   )
   # Puede no encontrar resultados pero no debe crashear
   expect_s3_class(resultado, "tbl_df")

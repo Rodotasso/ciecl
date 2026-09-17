@@ -1,6 +1,5 @@
 #' @importFrom stringr str_trim
 #' @importFrom tibble tibble
-#' @importFrom dplyr filter
 NULL
 
 #' Diccionario de siglas médicas comunes en Chile
@@ -429,7 +428,9 @@ expandir_sigla <- function(text) {
 #' Obtener codigo CIE-10 desde sigla medica
 #'
 #' @param sigla Character sigla medica (ej. "IAM", "DM2")
-#' @returns Character vector con codigos CIE-10 o NULL
+#' @returns String de longitud 1 con el primer codigo CIE-10 encontrado
+#'   para el termino de la sigla, o NULL si `sigla` no esta en el
+#'   diccionario o la busqueda fuzzy no encuentra match.
 #' @keywords internal
 #' @noRd
 sigla_to_codigo <- function(sigla) {
@@ -487,6 +488,15 @@ cie_short <- function(category = NULL,
       "cie_short(category = )"
     )
     category <- categoria
+  }
+
+  # Validación escalar: sin esta guarda, un vector llegaba a tolower() y
+  # a %in% con error duro no tipado, y un numérico reventaba en tolower().
+  if (!is.null(category) && !rlang::is_string(category)) {
+    cli::cli_abort(
+      "{.arg category} debe ser un string character no-NA de longitud 1 o {.code NULL}, no {.obj_type_friendly {category}}.",
+      class = "ciecl_invalid_input"
+    )
   }
 
   siglas <- get_siglas_medicas()

@@ -1,4 +1,3 @@
-#' @importFrom dplyr filter
 #' @importFrom stringr str_detect
 #' @importFrom tibble tibble as_tibble
 NULL

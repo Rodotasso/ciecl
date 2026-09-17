@@ -258,6 +258,17 @@ test_that("sigla_to_codigo retorna NULL para texto normal", {
   expect_null(sigla_to_codigo("cualquier texto"))
 })
 
+test_that("sigla_to_codigo retorna NULL cuando la busqueda fuzzy no tiene match", {
+  # Fija el comportamiento actual del camino sin resultados FTS
+  # (cie-siglas.R): NULL silencioso, no tibble vacio
+  sigla_to_codigo <- sigla_to_codigo
+
+  local_mocked_bindings(
+    cie_search = function(...) tibble::tibble(codigo = character(0))
+  )
+  expect_null(sigla_to_codigo("iam"))
+})
+
 # ============================================================
 # PRUEBAS cie_lookup_single()
 # ============================================================
