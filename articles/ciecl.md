@@ -151,6 +151,7 @@ metadata <- cie_lookup(
   code = unique(egresos$DIAG1_NORM),
   full_description = TRUE
 )
+#> ✖ Códigos no encontrados: "K35.9"
 
 egresos_metadata <- egresos |>
   left_join(metadata, by = c("DIAG1_NORM" = "codigo"))

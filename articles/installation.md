@@ -46,7 +46,6 @@ packages. These are the suggested dependencies by task:
 | Charlson/Elixhauser comorbidity indices with [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md) | `comorbidity` | `install.packages("comorbidity")` |
 | Formatted HTML tables with [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md) | `gt` | `install.packages("gt")` |
 | Read MINSAL Excel files | `readxl` | `install.packages("readxl")` |
-| Export results to Excel | `writexl` | `install.packages("writexl")` |
 
 ## System requirements
 

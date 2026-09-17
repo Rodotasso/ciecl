@@ -17,7 +17,8 @@ cie_table(code, codigo = lifecycle::deprecated())
 
 - code:
 
-  String código (ej. `"E11"` muestra la jerarquía).
+  String código de longitud 1, un solo código (ej. `"E11"` muestra la
+  jerarquía).
 
 - codigo:
 

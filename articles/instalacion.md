@@ -47,7 +47,6 @@ la tarea:
 | Índices de comorbilidad Charlson/Elixhauser con [`cie_comorbid()`](https://rodotasso.github.io/ciecl/reference/cie_comorbid.md) | `comorbidity` | `install.packages("comorbidity")` |
 | Tablas HTML formateadas con [`cie_table()`](https://rodotasso.github.io/ciecl/reference/cie_table.md) | `gt` | `install.packages("gt")` |
 | Leer archivos Excel del MINSAL | `readxl` | `install.packages("readxl")` |
-| Exportar resultados a Excel | `writexl` | `install.packages("writexl")` |
 
 ## Requisitos del sistema
 

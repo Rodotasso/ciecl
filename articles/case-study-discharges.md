@@ -146,6 +146,7 @@ metadata <- cie_lookup(
   code = unique(discharges$DIAG1_NORM),
   full_description = TRUE
 )
+#> ✖ Códigos no encontrados: "K35.9"
 
 discharges_metadata <- discharges |>
   left_join(metadata, by = c("DIAG1_NORM" = "codigo"))

@@ -32,7 +32,7 @@ cie_comorbid(data, id, code, map = c("charlson", "elixhauser"), assign0 = TRUE)
 
 ## Value
 
-data.frame ancho con scores comorbilidad por paciente
+tibble ancho con scores comorbilidad por paciente
 
 ## See also
 

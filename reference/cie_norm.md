@@ -61,7 +61,8 @@ La normalización incluye:
 
 - Corrección de puntos múltiples (E..11 -\> E.11)
 
-- Eliminación de sufijo X en códigos cortos (I10X -\> I10)
+- Eliminación de sufijo X en códigos cortos, incluido el punto previo si
+  lo hay (I10X -\> I10, E11.X -\> E11)
 
 - Preservación de X en códigos largos (placeholder 7o carácter)
 

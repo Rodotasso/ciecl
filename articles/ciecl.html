@@ -93,7 +93,7 @@
                         <h4 data-toc-skip class="author">Rodolfo Tasso
 Suazo</h4>
             
-            <h4 data-toc-skip class="date">2026-09-14</h4>
+            <h4 data-toc-skip class="date">2026-09-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Rodotasso/ciecl/blob/main/vignettes/ciecl.Rmd" class="external-link"><code>vignettes/ciecl.Rmd</code></a></small>
       <div class="d-none name"><code>ciecl.Rmd</code></div>
@@ -241,6 +241,7 @@ devuelve un <code>tibble</code> estructurado listo para un
 <span>  code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">egresos</span><span class="op">$</span><span class="va">DIAG1_NORM</span><span class="op">)</span>,</span>
 <span>  full_description <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Códigos no encontrados: <span style="color: #0000BB;">"K35.9"</span></span></span>
 <span></span>
 <span><span class="va">egresos_metadata</span> <span class="op">&lt;-</span> <span class="va">egresos</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">metadata</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIAG1_NORM"</span> <span class="op">=</span> <span class="st">"codigo"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

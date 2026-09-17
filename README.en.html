@@ -100,7 +100,7 @@
 <code class="sourceCode R"><span><span class="co"># CRAN</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ciecl"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># GitHub (desarrollo)</span></span>
+<span><span class="co"># GitHub (development)</span></span>
 <span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"RodoTasso/ciecl"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -172,8 +172,8 @@
 <span><span class="co">#&gt; # ℹ 40 more rows</span></span></code></pre></div>
 <p>Not sure which function to use? <code><a href="reference/cie_guide.html">cie_guide()</a></code> prints a comparison table with the scenario, the recommended function, and an example for each case.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Comorbilidades (requiere: install.packages("comorbidity"))</span></span>
-<span><span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"paciente"</span>, code <span class="op">=</span> <span class="st">"diagnostico"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Comorbidities (requires: install.packages("comorbidity"))</span></span>
+<span><span class="va">df</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/cie_comorbid.html">cie_comorbid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"patient"</span>, code <span class="op">=</span> <span class="st">"diagnosis"</span>, map <span class="op">=</span> <span class="st">"charlson"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="icd-11-api-optional">ICD-11 API (optional)<a class="anchor" aria-label="anchor" href="#icd-11-api-optional"></a></h2>

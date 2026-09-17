@@ -194,12 +194,12 @@ cie_search("diabetis")
 # Buscar en inclusiones
 cie_search("bacteriana", field = "inclusion")
 #> ✖ Sin coincidencias >= threshold 0.7
-#> # A tibble: 0 × 6
-#> # ℹ 6 variables: codigo <chr>, descripcion <chr>, score <dbl>, categoria <chr>,
-#> #   uso_cl <chr>, inclusion <chr>
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: codigo <chr>, descripcion <chr>, score <dbl>, categoria <chr>,
+#> #   inclusion <chr>
 # Filtrar a códigos vigentes Chile (excluye 'legado')
 cie_search("diabetes", only_uso_cl = TRUE)
-#> # A tibble: 45 × 4
+#> # A tibble: 50 × 4
 #>    codigo descripcion                                            score categoria
 #>    <chr>  <chr>                                                  <dbl> <chr>    
 #>  1 E10.0  Diabetes mellitus tipo 1 con coma                          1 E10 DIAB…
@@ -212,7 +212,7 @@ cie_search("diabetes", only_uso_cl = TRUE)
 #>  8 E10.7  Diabetes mellitus tipo 1 con complicaciones múltiples      1 E10 DIAB…
 #>  9 E10.8  Diabetes mellitus tipo 1 con complicaciones no especi…     1 E10 DIAB…
 #> 10 E10.9  Diabetes mellitus tipo 1 sin complicaciones                1 E10 DIAB…
-#> # ℹ 35 more rows
+#> # ℹ 40 more rows
 # Mostrar la columna uso_cl en el output
 cie_search("diabetes", include_uso_cl = TRUE)
 #> # A tibble: 50 × 5

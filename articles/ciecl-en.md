@@ -274,7 +274,7 @@ Health Statistics and Information (DEIS):
 - FIC Chile Center: <https://deis.minsal.cl/centrofic/>
 - DEIS Repository: <https://deis.minsal.cl>
 
-## Further information
+## Collaboration and Support
 
 - Report issues or suggestions:
   <https://github.com/RodoTasso/ciecl/issues>
